@@ -1,0 +1,24 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<div class="quick_link">
+	<div class="border_top top_radius_5px">
+		<img src="{$img_path}common/brands_title.png" />
+	</div>
+	<div class="border_bottom">
+	
+	<!-- {if $brand_list} -->
+    <!-- 品牌区 -->
+      <div style="list-style: none; margin: 10px 0px;padding:0;">
+        <!-- {foreach from=$brand_list item=brand} -->
+        <div><a href="{$brand.url}">{$brand.brand_name|escape:html} {if $brand.goods_num}({$brand.goods_num}){/if}</a></div>
+        <!-- {/foreach} -->
+      </div>
+	<div style="text-align:right;"><a href="brand.php#all">所有品牌</a></div>
+    <!-- {/if} -->
+
+	</div>
+</div>
+
+<div style="height:10px;"></div>
+
+

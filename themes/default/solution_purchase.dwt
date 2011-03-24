@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{if $full_page}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>{$page_title}</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="animated_favicon.gif" type="image/gif" />
+<link href="css.css" rel="stylesheet" type="text/css" />
+{* 包含脚本文件 *}
+{insert_scripts files='common.js,transport.js'}
+{* 包含脚本文件 *}
+{insert_scripts files='jquery-1.2.6.js,utils.js'}
+{insert_scripts files='ui.core.js,ui.tabs.js'}
+<script type="text/javascript">
+
+    $(function() {
+		$('#newgoods_tabs > ul').tabs( // 按分类的新产品
+		        defaults = {                    
+		             navClass: 'ui-tabs-new-nav',
+		             selectedClass: 'ui-tabs-new-selected'
+		         }
+		    );
+    });
+</script>
+
+<script src="admin/js/listtable.js" type="text/javascript"></script>
+<script src="admin/js/common.js" type="text/javascript"></script>
+
+
+
+
+        <script type="text/javascript">
+
+
+			function keep_height()
+			{
+				if(document.getElementById("operate_list").offsetHeight < document.getElementById("operate_area").offsetHeight){
+					document.getElementById("operate_list").style.height=document.getElementById("operate_area").offsetHeight + "px";
+				}
+
+			}
+
+
+
+			
+        </script>
+		
+
+</head>
+<body onload="keep_height()">
+<div id="globalWrapper">  
+	<div style="float:left;"></div>
+	<div id="wrapper">
+		<!-- #BeginLibraryItem "/library/page_header.lbi" -->
+		>	
+		<!-- #EndLibraryItem -->
+
+<div id="container" class="f_left">
+	<div class="page_header_menu">
+		<div class="f_right training_title">
+			<a href="supplier.php"><img src="{$img_path}operate/crm_icon.png" />供应商</a>
+			<a href="solution_purchase.php?act=show"><img src="{$img_path}operate/ui_order_ico.png" />采购管理</a>
+			<a href="solution_purchase.php?act=pre_purchase"><img src="{$img_path}operate/project_tracking_icon.png" />主动采购</a>
+		</div>
+	</div>
+	<div class="operate_top">
+		<div id="so_page_header">
+			<div class="f_left" style="text-indent:30px; font-size:16px;margin:15px 0px;">采购记录</div>
+			<div class="clear"></div>
+			</div>
+		<div id="page_ids">
+			<form>
+				<input type="hidden" id="hidden_agency_id">
+				<input type="hidden" id="hidden_contact_id">
+				<input type="hidden" id="hidden_agency_name">
+				<input type="hidden" id="hidden_contact_name">
+				<input type="hidden" id="hidden_order_name">
+			</form>
+		</div>
+		
+		
+	</div>
+	<div class="operate_body">
+		<div id="operate_list" class="operate_list">
+
+			
+			<!-- #BeginLibraryItem "/library/operate_my_purchase.lbi" -->
+			>
+			<!-- #EndLibraryItem -->
+			
+			
+		</div>
+		
+		<div id="operate_area" class="operate_area">
+
+			<div id="fliter_search" class="area_brand">
+			  <form action="javascript:searchInventory()" name="searchForm" style="padding-left:10px;">
+					
+					{$lang.keywords}: <input id="goods_name" name="goods_name" type="text" size="7" />
+					{$lang.brand}: <input id="brand_name" name="brand_name" type="text" size="7" />
+					价格从: <input id="start_price" type="text" size="3" /> ~ 至: <input id="end_price" type="text" size="3" />
+					
+				    <select name="sort_order" id="sort_order">
+
+				      {html_options options=$lang.order selected=$pager.order}
+
+				    </select>
+					<input type="submit" value="{$lang.button_search}" class="button" /> <input type="reset" value="重置" class="button" />
+				 </form>
+			</div>
+
+			<!-- 商品列表 -->
+			
+			<form method="post" name="listForm"  onsubmit="return confirmSubmit(this)">
+			<div class="area_step" id="listDiv">
+{/if}
+
+					<!--{foreach name=wrap from=$purchase_list item=goods}-->
+					<!--{if $goods.goods_id}-->
+					<div class="op_step" id="op_step_{$goods.goods_id}">
+						<div class="step_top">
+							<div class="f_left">
+							<a href="goods.php?id={$goods.goods_id}" style="width:60px;display:block;"> <img class="thumb grey_border" src="{$goods.goods_thumb}" alt_="{$goods.goods_name}" border="0" width="60" /></a>
+							</div>
+							<div class="f_left" style="width:150px; text-align:left;padding-top:10px;margin-left:10px;">
+				      			<a href="goods.php?id={$goods.goods_id}">
+					  				<!-- {if $goods.goods_style_name} -->
+				          				{$goods.goods_style_name}
+				          			<!-- {else} -->
+				          				{$goods.goods_name}
+				          			<!-- {/if} -->
+
+				      			</a> 
+
+
+							</div>
+							<div class="f_left" style="width:150px; text-align:left;padding-top:10px;margin-left:10px;">
+								
+			      				<!--{if $goods.promote_price > 0 } -->
+			      				<span class="goods-price red-color">{$lang.promote_price}{$goods.promote_price}</span>
+			      				<!--{else}-->
+			      				<span class="goods-price">{$lang.shop_price}{$goods.shop_price}</span>
+			      				<!--{/if}--><br>
+			
+								<span class="goods-price blue">{$lang.salebase_price}{$goods.salebase_price}</span><br>
+								<span class="goods-price blue">{$lang.brand}: {$goods.brand_name} </span><br>
+								<!--{if $purchase_status}-->
+								<span class="goods-price">{$goods.supplier_name} - {$goods.contact_name} </span>
+								<!--{/if}-->
+								
+							</div>
+							<div class="f_left" style="width:160px; text-align:left;padding-top:10px;margin-left:10px;">
+								{$lang.purchase_price}{$goods.purchase_price}<br/>
+								
+								<!--{if $purchase_status}-->
+									{$lang.purchase_count}<span class="underline bold"> {$goods.purchase_count} </span>件<br/>
+									{$lang.purchase_time}{$goods.purchase_time}<br/>
+								<!--{else}-->
+									{$lang.need_purchase_count}<span class="underline bold"> {$goods.purchase_count} </span>件<br/>
+								<!--{/if}-->
+								
+								
+							</div>
+							<div class="f_left" style="width:120px; text-align:left;padding-top:10px;margin-left:10px;">
+								<a href="solution_purchase.php?act=operate_purchase&amp;goods_id={$goods.goods_id}&full_page=1" class="add_to_purchase" target="_blank" rel="#_overlay"></a>
+								
+							</div>
+							
+							
+
+				  			<div class="clear"></div>
+						</div>
+						<div class="step_body"></div>
+					</div>
+					<!--{/if}-->
+					<!--{/foreach}-->
+					
+					
+					<!--page begin-->
+					<div id="turn-page" class="area_brand" style="text-indent:20px;">
+				  		{$lang.total_records} <span id="totalRecords">{$record_count}</span>
+				  		{$lang.total_pages} <span id="totalPages">{$page_count}</span>
+				  		{$lang.page_current} <span id="pageCurrent">{$filter.page}</span>
+				  		{$lang.page_size} <input type='text' size='1' id='pageSize' value="{$filter.page_size}" onkeypress="return listTable.changePageSize(event)" />件
+				  		<span id="page-link">
+				    		{literal}<a href="javascript:listTable.gotoPageFirst()">{/literal}{$lang.page_first}</a>
+				    		{literal}<a href="javascript:listTable.gotoPagePrev()">{/literal}{$lang.page_prev}</a>
+				    		{literal}<a href="javascript:listTable.gotoPageNext()">{/literal}{$lang.page_next}</a>
+				    		{literal}<a href="javascript:listTable.gotoPageLast()">{/literal}{$lang.page_last}</a>
+				    		<select id="gotoPage" onchange="listTable.gotoPage(this.value)">
+				      			{create_pages count=$page_count page=$filter.page}
+				    		</select>
+				  		</span>
+		      		</div>
+					<!--page end-->
+		
+					{if $full_page}	
+					
+				</div><!--listDiv end-->
+				
+			</div>
+			
+				
+			
+			<script language="JavaScript">
+			listTable.query = "query_show";
+			listTable.recordCount = {$record_count};
+			listTable.pageCount = {$page_count};
+
+			{foreach from=$filter item=item key=key}
+			listTable.filter.{$key} = '{$item}';
+			{/foreach}
+			{literal}
+			listTable.filter.order_id = {$order_id}
+
+
+
+			    /**
+			     * 搜索订单
+			     */
+			    function searchInventory()
+			    {
+			        listTable.filter['goods_name'] = document.getElementById('goods_name').value;
+			        listTable.filter['brand_name'] = document.getElementById('brand_name').value;
+			//Utils.trim(document.forms['searchForm'].elements['goods_name'].value);
+			        listTable.filter['start_price'] = document.getElementById('start_price').value;
+			        listTable.filter['end_price'] = document.getElementById('end_price').value;
+			        listTable.filter['sort_order'] = document.getElementById('sort_order').value;
+
+			        listTable.filter['page'] = 1;
+			        listTable.loadList();
+			    }
+
+			</script>
+			{/literal}
+			
+			
+
+			<div class="clear"></div>
+			</div>
+			<div class="operate_bottom">
+				<div class="user_info f_left">
+					<div >{$lang.order_user_name}{$sm_session.user_name} <br />ID:{$sm_session.user_id}</div> 
+				</div>
+
+			
+		</div>
+</div><!--container end-->
+
+<!-- #BeginLibraryItem "/library/help.lbi" -->
+<!--{if $helps}-->
+<table width="801" border="0" align="center" cellpadding="0" cellspacing="1" bgcolor="#DADADA" class="clear" style="margin:10px auto 5px auto;">
+  <tr>
+    <!-- {foreach from=$helps item=help_cat} -->
+    <td class="help-cat"><img src="images/grey_arrow.png" alt="" />{$help_cat.cat_name}</td>
+    <!-- {/foreach} -->
+  </tr>
+  <tr>
+    <!-- {foreach from=$helps item=help_cat} -->
+    <td bgcolor="#FFFFFF" valign="top"><ul>
+        <!-- {foreach from=$help_cat.article item=item} -->
+        <li><a href="{$item.url}" title="{$item.title|escape:html}">{$item.short_title}</a></li>
+        <!-- {/foreach} -->
+      </ul></td>
+    <!-- {/foreach} -->
+  </tr>
+</table>
+<!--{/if}-->
+<!-- #EndLibraryItem -->
+<!-- #BeginLibraryItem "/library/page_footer.lbi" -->
+>
+<!-- #EndLibraryItem --></div>
+<!-- End #Wrapper -->
+<div style="float:left;"></div></div><!-- End #globalWrapper -->
+</body>
+</html>
+{/if}

@@ -1,0 +1,61 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="articles_list_top"></div>
+<div class="articles_list">
+	<!-- {foreach from=$articles_list item=article} -->
+	<div class="article_cell">
+		<div class="article_title"><span class="bold">{$article.title}</span>
+			<span class="grey666 font12px">[更新时间:{$article.add_time}]</span>
+		</div>
+		<div class="article_cell_under">
+			<div class="article_logo"><img src="{$img_path}document_logo.png" width="120" height="75" /></div>
+			<div class="article_detail">
+				<div class="detail_content">{$article.brief|truncate:120:"..":true}</div>
+				<div class="download_zone">
+					<div class="f_left">标签:<a href="article.php?tag=PPT">PPT</a> <a href="article.php?tag=金融">金融</a></div>
+					<div class="f_right"><a href="article.php?id={$article.id}&act=download&file_url={$article.file_url}" style="background:none;"><img src="{$img_path}download_btn.png" /></a></div>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<!--
+			<div class="grey999">{$article.brief|truncate:160:"..":true}</div>-->
+		</div>
+	</div>
+	<!-- {/foreach} -->
+	
+	{if $articles_list}
+
+	<!-- 页码点击 -->
+	<div style="padding:20px 30px;height:20px;">
+		<form name="selectPageForm" action="{$smarty.server.PHP_SELF}" method="get" class="f_right">
+		  <div id="pager" class="pager"> 
+			<a href="{$pager.page_first}" class="page_btn">{$lang.page_first}</a> <a href="{$pager.page_prev}" class="page_btn">{$lang.page_prev}</a> 
+				<!--{foreach from=$pager.array key=key item=item}-->
+					<a href="javascript:;" onClick="javascript:selectPage({$item})" class="page_btn">{$item}</a>
+				<!--{/foreach}-->		
+			<a href="{$pager.page_next}" class="page_btn">{$lang.page_next}</a> <a href="{$pager.page_last}" class="page_btn">{$lang.page_last}</a> </span>
+
+
+		    <!--{foreach from=$pager.search key=key item=item}-->
+		    <input type="hidden" name="{$key}" value="{$item}" />
+		    <!--{/foreach}-->
+		    <input type="hidden" id="page" name="page" value="{$pager.page}" />
+		  </div>
+		</form>
+		<script type="Text/Javascript" language="JavaScript">
+		<!--
+		{literal}
+		function selectPage(page_id)
+		{
+			document.getElementById("page").value = page_id;
+			document.forms['selectPageForm'].submit();
+		}
+		{/literal}
+		//-->
+		</script>
+		
+	</div>
+
+	{else}
+		<div class="font14px" style="text-align:center;">抱歉！没有搜索到与“<span class="red-color">{$keywords}</span>”相关的资料。</div>
+	{/if}
+</div>

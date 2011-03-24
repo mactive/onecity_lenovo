@@ -1,0 +1,16 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="quick_link">
+	<div class="border_top top_radius_5px">
+		<img src="{$img_path}common/quick_link_title.png" />
+	</div>
+	<div class="border_middle">
+		<a href="case.php"><img src="{$img_path}common/case_index.png" /></a>
+	</div>
+	<div class="border_middle">
+		<a href="user.php?act=login&back_act=user.php?act=order_list"><img src="{$img_path}common/shipping_index.png" /></a>	
+	</div>
+	<div class="border_bottom">
+		<a href="article_cat.php?id=29"><img src="{$img_path}common/guide_index.png" /></a>
+	</div>
+</div>
+<div class="height_10px"></div>

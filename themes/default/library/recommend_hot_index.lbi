@@ -1,0 +1,35 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<script>
+	$(document).ready(function(){
+		$("div.element:not(:first)").hide();
+		$("h3 a").click(function(){
+			$("div.element:visible").hide("fast");//slideUp
+			$(this).parent().next().show("fast");//slideDown
+			return false;
+		});
+	});
+	</script>
+<!-- {if $hot_data} -->
+<div class="left_menu">
+<div class="nav_top_grey">
+    <span>热卖商品</span>
+    <div class="bgr"> </div>
+</div>
+<div id="accordion">
+<!--{foreach from=$hot_data item=hot}-->
+	<h3 class="toggler"><a class="title">{$hot.cat_name}</a></h3>
+		
+		<div class="element">
+		<!--{foreach from=$hot.data item=goods}-->
+		<a href="{$goods.url}" title="{$goods.name|escape:html}">
+			{$goods.name|escape:html|truncate:16:"..":true}
+		</a><br />
+		<!--{/foreach}-->
+		</div>
+		
+<!--{/foreach}-->
+</div>
+<div class="hot_accord_bottom"></div>
+<div style="height:14px;"></div>
+</div>
+<!-- {/if} -->

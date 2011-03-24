@@ -1,0 +1,43 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="f_left" style="width:550px;">
+<!-- {foreach from=$idea.comment_list item=item name=comment_list} -->
+	<div class="comment_list_cell">
+		<div class="grey666 f_left" style="width:60px;text-align:center;background:#f2f2f2;">{$item.user_name}:</div>
+		<div class="comment_cell_content">
+			<div class="f_left">{$item.content}</div>
+			<div class="rank_star_s rank_s_{$item.rank}"></div>
+			<div class="clear"></div>
+		</div>
+		<div class="grey666 f_left" style="width:100px;text-align:center;background:#f2f2f2;">{$item.add_time}</div>
+	</div>
+<!-- {/foreach} -->
+</div>
+<div class="comment_form f_left">
+	<div id="yellow_notice_{$idea.id}" class="yellow_notice" style="display:none;">评论成功！</div>
+	<form id="commentForm_{$idea.id}" method="post" action="">
+	  <table width="100%" border="1" class="table_standard table_border">
+	      <td style="vertical-align:top;" width="120">写点什么:</td>
+	      <td><textarea name="content" rows="5" id="content" class="grey999 textarea_400px"></textarea>
+				</td>
+	    </tr>
+	    <tr>
+	      <td>这个点子怎么样?</td>
+	      <td>
+			<div id="doPoint" class="doPointHandler" style="width:250px;">
+				<div class="point"><span id="item1" class="star8" v="8">
+		<small>1</small><small>2</small><small>3</small><small>4</small><small>5</small><small>6</small><small>7</small><small>8</small><small>9</small><small>10</small>
+				</span></div>
+		     	<div class="note"><strong>4</strong> <em>(很不错)</em></div>
+				<div class="pad_l_10px f_left" style="background:#fff7e7;line-height:24px;">{$lang.comment_rank_note}</div>
+				<div class="clear"><input name="comment_rank" type="hidden" value="4" /></div>
+		  	</div>
+	        <input type="hidden" name="idea_id" value="{$idea.id}" />
+			<a onclick="submitcomment({$idea.id})" class="submitcomment_btn f_left"></a>
+			<div class="clear"></div>
+	      </td>
+	    </tr>
+	  </table>
+	</form>
+</div>
+
+

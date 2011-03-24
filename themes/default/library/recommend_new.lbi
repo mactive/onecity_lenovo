@@ -1,0 +1,54 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">	
+<div class="content-div" style="margin-top:5px;">
+	<div id="newgoods_tabs">
+		<ul class="tabs_top">
+		<span class="title">新到商品</span>		
+		<!--{foreach from=$goods_by_cate item=cate}-->
+			{if $cate.data}
+			<li><a href="#fragment-{$cate.cat_id}"><span>{$cate.cat_name}</span></a></li>
+			{/if}
+		<!--{/foreach}-->
+		
+		</ul>
+	</div>
+		
+		
+	<div class="mootabs_container">
+	<!--{foreach from=$goods_by_cate item=cate}-->
+		{if $cate.data}
+		<div id="fragment-{$cate.cat_id}" class="mootabs_panel" style="">
+			<ul>
+			<!--{foreach from=$cate.data key=myId item=goods}-->
+			
+			<li class="nli{$myId}">
+			<img src="images/watermark_new_ico.gif" height="10" width="23"/>
+			<a href="{$goods.url}" title="{$goods.name|escape:html}"><strong>{$goods.name|escape:html|truncate:12:"..":true}</strong></a><br />
+			<a href="{$goods.url}"><img src="{$goods.thumb}" border="0" alt="{$goods.name|escape:html}" class="thumb" /></a><br />
+
+				<!-- {if $goods.promote_price neq 0} -->
+	        	{$lang.promote_price}<span class="goods-price">{$goods.promote_price}</span>
+	        	<!-- {else}-->
+					<!-- {if $sm_session.user_rank} -->
+						{$lang.shop_price_short}<span class="goods-price">{$goods.shop_price}</span>
+					<!-- {else}-->
+						{$lang.market_price_short}<span class="goods-price">{$goods.market_price}</span>	
+		        	<!-- {/if}-->
+
+	        	<!--{/if}-->
+	
+				
+	  		</li>
+
+			<!--{/foreach}-->
+			</ul>
+		
+			<br style="clear:both"/>
+  			<div style="text-align:right;width:95%;"><A href="../search.php?intro=new">more...</A></div>
+		</div>
+		{/if}
+	<!--{/foreach}-->
+	
+	</div>
+
+
+</div>

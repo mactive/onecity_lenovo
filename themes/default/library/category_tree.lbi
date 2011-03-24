@@ -1,0 +1,59 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<div class="quick_link">
+	<div class="border_top top_radius_5px title_style">
+		产品分类
+	</div>
+	<div class="border_bottom bottom_radius_5px">
+<ul id="nav">
+    <!--{foreach from=$categories item=cat name=cate}-->
+    <li>
+    	<div class="f_left" style="width:30px;"><A href="javascript:void(0)" onClick="doMenu(this)"></A></div>
+        <span class="f_left s_none"><A href="{$cat.url}">{$cat.name|escape:html}</A></span>
+        <ul>
+          <!--{foreach from=$cat.children item=child}-->
+          <li><A href="{$child.url}">{$child.name|escape:html}</A></li>
+          <!--{/foreach}-->
+        </ul>
+    </li>
+    <!--{/foreach}-->	
+</ul>
+
+<div class="clear"></div>
+</div>
+</div>
+<div class="height_10px"></div>
+
+<script language="javascript" type="text/javascript">
+function doMenu(obj){
+	var items=obj.parentNode.parentNode.getElementsByTagName("ul");
+	var itmUl;
+	if(items.length>0){
+		itmUl=items[0];
+	}
+	if(itmUl.className!="ex"){
+		cxAll();
+		itmUl.className="ex";
+	}else{
+		itmUl.className="cx";
+	}
+}
+function statUp(){
+	cxAll();
+	var ulDom=document.getElementById("nav");
+	var items=ulDom.getElementsByTagName("ul");
+	if (items.length>0)
+	{
+		items[0].className="ex";
+	}
+}
+function cxAll(){
+	var ulDom=document.getElementById("nav");
+	var items=ulDom.getElementsByTagName("ul");
+	for (var i=0;i<items.length;i++)
+	{
+		items[i].className="cx";
+	}
+}
+statUp();
+</script>

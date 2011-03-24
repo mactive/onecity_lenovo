@@ -1,0 +1,111 @@
+
+/* the overlayed element */
+.apple_overlay {
+	
+	/* initially overlay is hidden */
+	display:none;
+	
+	/* growing background image */
+	background-image:url(../images/white.png);
+	
+	/* 
+		width after the growing animation finishes
+		height is automatically calculated
+	*/
+	width:580px;
+	
+	margin-top:-300px;	
+	margin-left:-100px;
+	
+	/* some padding to layout nested elements nicely  */
+	padding:35px;
+
+	/* a little styling */	
+	font-size:11px;
+	overflow-y:auto; 
+	z-index:20;
+}
+
+/* default close button positioned on upper right corner */
+.apple_overlay div.close {
+	background-image:url(../images/close_apple.png);
+	position:absolute; right:5px; top:5px;
+	cursor:pointer;
+	height:35px;
+	width:35px;
+}
+/* black version of the overlay. simply uses a different background image */
+div.apple_overlay.black {
+	background-image:url(../images/transparent.png);		
+	color:#fff;
+}
+
+div.apple_overlay h2 {
+	margin:10px 0 -9px 0;
+	font-weight:bold;
+	font-size:14px;
+}
+
+div.black h2 {
+	color:#fff;
+}
+
+#triggers {
+	margin-top:10px;
+	text-align:center;
+}
+
+#triggers img {
+	background-color:#fff;
+	padding:2px;
+	margin:2px 5px;
+	cursor:pointer;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+}
+
+
+
+
+/* the overlayed element */
+.history_overlay {
+	
+	/* initially overlay is hidden */
+	display:none;
+	
+	/* growing background image */
+	
+	/* 
+		width after the growing animation finishes
+		height is automatically calculated
+	*/
+	width:550px;
+	height:400px;
+	margin-top:-300px;	
+	margin-left:-100px;
+	_margin:-100px 0px 0px -300px;
+	
+	/* some padding to layout nested elements nicely  */
+	padding:5px;
+
+	/* a little styling */	
+	font-size:11px;
+	overflow-y:auto; 
+	z-index:20;
+}
+
+/* default close button positioned on upper right corner */
+.history_overlay div.close {
+	background-image:url(../images/close_apple.png);
+	position:absolute; left:-5px; top:-5px;
+	cursor:pointer;
+	height:35px;
+	width:35px;
+}
+
+
+div.history_overlay h2 {
+	margin:10px 0 -9px 0;
+	font-weight:bold;
+	font-size:14px;
+}

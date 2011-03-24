@@ -1,0 +1,155 @@
+
+/* everything is constructed with a single background image */
+
+/* root element for tabs */
+#flowtabs {
+	
+	/* dimensions */
+	width:538px;
+	height:31px !important;
+	margin:0 !important; 
+	padding:0;	
+	
+	/* IE6 specific branch (prefixed with "_") */
+	_margin-bottom:-2px;
+}
+
+/* single tab */
+#flowtabs li { 
+	float:left; 
+	margin:0; 
+	padding:0; 
+	text-indent:0; 
+	list-style-type:none;
+}
+
+/* a- tag inside single tab */
+#flowtabs li a {
+	background: url(/tools/img/tabs/blue_panes.jpg) no-repeat;
+	display:block;
+	height: 31px;   
+	width: 189px; 	
+	padding:0px;
+	margin:0px;
+	
+	/* font decoration */
+	color:#000;
+	font-size:12px;
+	line-height:33px;
+	text-align:center;
+	text-decoration:none;
+}
+
+/* adjust the background image position on each tab */
+#flowtabs #t1 			{ background-position: 0 0; }
+#flowtabs #t2 			{ background-position: -189px 0; }
+#flowtabs #t3 			{ background-position: -378px 0; }
+#flowtabs #t4 			{ background-position: -567px 0; width:192px;}
+ 
+/* mouseover state */
+#flowtabs a:hover 		{ color:#fff;	 }
+#flowtabs #t1:hover 	{ background-position:      0 -33px; }
+#flowtabs #t2:hover 	{ background-position: -189px -33px; }
+#flowtabs #t3:hover 	{ background-position: -378px -33px; }
+#flowtabs #t4:hover 	{ background-position: -567px -33px; }
+
+/* currently selected tabs */
+#flowtabs a.current		{ cursor:default; color:#fff; line-height:34px; }
+#flowtabs #t1.current { background-position:      0 -66px; }
+#flowtabs #t2.current { background-position: -189px -66px; }
+#flowtabs #t3.current { background-position: -378px -66px; }
+#flowtabs #t4.current { background-position: -567px -66px; }
+
+
+/* panes */
+#gallery {
+	width:538px;
+	height:388px;	
+}
+
+
+/* single pane */
+#gallery div {
+	display:none;	
+	color:#fff;	
+	margin:0px;
+}
+
+/* some decorations for elements inside single pane */
+#gallery div h2 {
+	font-weight:normal;
+	color:#ddd;
+	letter-spacing:1px;
+	margin:10px 0 0 0;
+	font-size:22px;	
+}
+
+#gallery a {
+	color:#cc9;		
+	font-size:14px;
+}
+
+#gallery p, #gallery samp {
+	color:#ccc;		
+}
+
+#gallery div.narrow {
+	padding-right:160px;		
+}
+
+
+/* override the root element to enable scrolling */
+#gallery {
+	position:relative;
+	overflow:hidden;
+	clear:both;
+}
+
+/* override single pane */
+#gallery div {
+	float:left;
+	display:block;
+	width:538px;
+	cursor:pointer;
+	font-size:14px;
+}
+
+/* our additional wrapper element for the items */
+#gallery .items {
+	width:20000em;
+	position:absolute;
+	clear:both;
+	margin:0;
+	padding:0;
+}
+
+#gallery .less, #gallery .less a {
+	color:#999 !important;
+	font-size:11px;
+}
+#gallery_control{margin-top:-220px;position:absolute;text-align:center;width:538px;}
+/* prev, next, prevPage and nextPage buttons */
+a.custom {
+	background:url(../images/scrollable/hori_large.gif) no-repeat;
+	display:block;
+	width:30px;
+	height:30px;
+	float:left;
+	cursor:pointer;
+	font-size:1px;
+}
+
+/* right */
+a.next 				{ background-position: 0 -30px; float:right;margin-right:10px;}
+a.next:hover 		{ background-position:-30px -30px; }
+a.next:active 	{ background-position:-60px -30px; }
+/* left */
+a.prev				{ margin-left: 10px; float:left;} 
+a.prev:hover  		{ background-position:-30px 0; }
+a.prev:active  	{ background-position:-60px 0; }
+
+/* disabled navigational button */
+a.disabled {
+	visibility:hidden !important;		
+} 	
+

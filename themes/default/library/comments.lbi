@@ -1,0 +1,16 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<br>
+{insert_scripts files='transport.js,utils.js'}
+
+<div class="goods_main_top"></div>
+<div class="goods_main_body">
+
+    <span>用户评论 Comments</span> <br>
+
+	<div id="ECS_COMMENT" class="content"> {* SINEMALL 提醒您：动态载入comments_list.lbi，显示评论列表和评论表单 *}{insert name='comments' type=$type id=$id}</div>
+	
+</div>
+<div class="goods_main_bottom"></div>
+
+
+

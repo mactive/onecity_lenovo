@@ -1,0 +1,40 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div style="_height:388px;">
+	<div style="margin:20px 0px 10px 35px;">
+		<div style="width:187px;" class="f_left"><img src="{$img_path}title/index_news.jpg" />
+		</div>
+		<div class="index_news f_left">
+			<ul>
+			<!--{foreach from=$news_index item=article}-->
+			<li>
+				<a href="{$article.url}">{$article.title|truncate:16:"..":true} {if $article.is_new} <img src="{$img_path}watermark_new_ico.png" />{/if}</a>
+			</li>
+		    <!-- {/foreach} -->
+			</ul>
+			<a class="more f_right" href="article_cat.php?id=7">更多</a>
+			
+		</div>
+		<div class="clear"></div>
+	</div>
+	
+	<div class="separate"></div>
+	
+	<div style="margin:20px 0px 0px 35px;">
+		<div style="width:187px;" class="f_left"><img src="{$img_path}title/index_performance.jpg" />
+		</div>
+		<div class="index_news f_left">
+			<ul>
+			<!--{foreach from=$performance_index item=article}-->
+			<li>
+				<a href="{$article.url}">{$article.title|truncate:16:"..":true} {if $article.is_new} <img src="{$img_path}watermark_new_ico.png" />{/if}</a>
+			</li>
+		    <!-- {/foreach} -->
+			</ul>
+			<a class="more f_right" href="article_cat.php?id=19">更多</a>
+			
+		</div>
+		<div class="clear"></div>
+	</div>
+	
+	
+</div>

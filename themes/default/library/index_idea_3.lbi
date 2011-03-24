@@ -1,0 +1,22 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- {if $index_idea} -->
+<div class="idea_board_460"  style="margin:0;">
+	<div class="idea_board_title_{$index_idea.three.index}" style="margin:10px 0px 0px 10px;">
+		<a href="idea_cat.php?id={$index_idea.three.id}" style="display:block;width:100%;height:100%;"></a>
+	</div>
+	<div style="margin:10px 0px 0px 20px;">
+  	<!--{foreach from=$index_idea.three.data item=idea name=index_idea}-->
+	<div class="idea_board_cell">
+		<div class="idea_icon_{$smarty.foreach.index_idea.iteration}"></div>
+		<div class="f_left" style="margin-left:15px;">
+			<span class="grey999">{$idea.title}-{$idea.real_name}-{$idea.add_time}</span><br>
+			{$idea.brief}
+		</div>
+		<div class="clear"></div>
+	</div>
+    <!--{/foreach}-->
+	</div>
+  <div style="text-align:right;margin-right:20px;"><A href="idea_cat.php?id={$index_idea.three.id}">查看更多</A></div>
+</div>
+<div style="height:14px;"></div>
+<!-- {/if} -->

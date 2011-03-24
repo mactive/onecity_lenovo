@@ -1,0 +1,13 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="">
+	<div class="border_top top_radius_5px title_style">
+		浏览记录
+	</div>
+	<div class="border_bottom bottom_radius_5px">
+  		<ul class="history-list">
+    		{insert name='history'}
+  		</ul>
+		<div class="height_10px"></div>
+	</div>
+	
+</div>

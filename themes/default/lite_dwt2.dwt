@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>{$page_title}</title>
+<!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="animated_favicon.gif" type="image/gif" />
+<link href="css.css" rel="stylesheet" type="text/css" />
+{* 包含脚本文件 *}
+{insert_scripts files='common.js,user.js,transport.js'}
+{* 包含脚本文件 *}
+{insert_scripts files='jquery-1.2.6.js'}
+</head>
+<body style="overflow:hidden;">
+<div style="margin:10px;">
+	{insert_scripts files='utils.js'}
+	
+<!--*机构注册界面-->
+<!--{if $action eq 'take_agency_register'}-->
+<div class="title-div">
+	<div class="f_left"><img src="images/green_arrow.png" alt="related products"/></div>
+	<div class="f_left font14px" style="line-height:22px;padding-left:8px;">注册机构 </div>
+	<div class="clear"></div>
+</div>
+<br>
+<form action="solution_operate.php" method="post" name="formUser" onsubmit="return register();">
+  <br />
+  <table width="100%"  border="0" align="left" class="table_standard">
+	 
+    <tr>
+      <td width="25%" class="right"><strong>机构名称:</strong></td>
+      <td width="28%"><input name="agency_name" type="text" id="agency_name" /></td>
+	  <td width="47%">
+        <span id="username_notice" class="label_box"> * 请填写机构名 必填</span></td>
+    </tr>
+
+	<tr>
+      <td class="right"><strong>机构描述:</strong></td>
+      <td><textarea cols="18" rows="4" name="agency_desc"></textarea></td>
+	  <td><span id="mobile_phone_notice" class="label_box"> 机构描述</span></td>
+    </tr>
+	<tr>
+      <td class="right"><strong>税号:</strong></td>
+      <td><input name="tax_number" type="text" /></td>
+	  <td>
+		<span id="mobile_phone_notice" class="label_box"> 机构税号</span></td>
+    </tr>
+	<tr>
+      <td class="right"><strong>帐户银行:</strong></td>
+      <td><input name="bank_name" type="text"  /></td>
+	  <td>	<span id="office_phone_notice" class="label_box"> 机构帐户银行</span></td>
+    </tr>
+
+    <tr>
+      <td class="right"><strong>帐户银行帐户:</strong></td>
+      <td><input name="bank_account" type="text" /></td>
+	  <td>	<span id="msn_notice" class="label_box"> 机构帐户银行帐户</span></td>
+    </tr>
+
+    <tr>
+      <td colspan="2" class="center">
+		<input name="act" type="hidden" value="act_agency_register">			
+        <input name="Submit" type="submit" value="确认注册"></td>
+    </tr>
+    <tr>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+   
+  </table>
+  <br />
+</form>
+
+<div style="height:14px;"></div>
+
+<!--{/if}-->
+<!--#机构注册界面-->
+
+<!--*会员注册界面-->
+<!--{if $action eq 'take_contact_register'}-->
+{insert_scripts files='utils.js'}
+<div class="title-div">
+	<div class="f_left"><img src="images/green_arrow.png" alt="related products"/></div>
+	<div class="f_left font14px" style="line-height:22px;padding-left:8px;">代为客户注册 </div>
+	<div class="clear"></div>
+</div>
+<br>
+<div class="goods_main_top_710"></div>
+<div class="goods_main_body_710">
+<form action="solution_operate.php" method="post" name="formUser" onsubmit="return register();">
+  <br />
+  <table width="70%"  border="0" align="left" class="table_standard">
+	 <tr>
+          <td width="36%" class="right"><strong>所属机构:</strong></td>
+          <td width="27%"><select name="agency_id">
+			<option value="0">{$lang.select_please}</option>
+						{html_options options=$agency_list}
+		</select></td>
+		  <td width="37%">
+            <span id="" class="label_box"> * 联系人的机构</span></td>
+    </tr>
+    <tr>
+      <td width="36%" class="right"><strong>{$lang.label_username}:</strong></td>
+      <td width="27%"><input name="contact_name" type="text"/></td>
+	  <td width="37%">
+        <span id="username_notice" class="label_box"> * 请填写中文全名</span></td>
+    </tr>
+	
+    <tr>
+      <td class="right"><strong>{$lang.label_email}:</strong></td>
+      <td><input name="contact_email" type="text" /></td>
+	  <td>
+        <span id="email_notice" class="label_box"> * 有效邮箱 </span></td>
+    </tr>
+	<tr>
+      <td width="36%" class="right"><strong>{$lang.sex}</strong></td>
+      <td width="27%">
+		<input type="radio" name="contact_sex" value="0" {if $contact.contact_sex==0}checked="checked"{/if} />
+        {$lang.secrecy}&nbsp;&nbsp;
+        <input type="radio" name="contact_sex" value="1" {if $contact.contact_sex==1}checked="checked"{/if} />
+        {$lang.male}&nbsp;&nbsp;
+        <input type="radio" name="contact_sex" value="2" {if $contact.contact_sex==2}checked="checked"{/if} />
+        {$lang.female}&nbsp;&nbsp; </td>	  <td width="37%">
+        <span id="username_notice" class="label_box"> * 先生/女士</span></td>
+    </tr>
+	<tr>
+      <td class="right"><strong>{$lang.other_mobile_phone}:</strong></td>
+      <td><input name="contact_mobile_phone" type="text" ></td>
+	  <td>
+		<span id="mobile_phone_notice" class="label_box"> 方便发货和更多服务</span></td>
+    </tr>
+	<tr>
+      <td class="right"><strong>{$lang.other_office_phone}:</strong></td>
+      <td><input name="contact_office_phone" type="text"  /></td>
+	  <td>	<span id="office_phone_notice" class="label_box"> 格式:010-51271062(615)</span></td>
+    </tr>
+
+    <tr>
+      <td class="right"><strong>{$lang.other_msn}:</strong></td>
+      <td><input name="contact_msn" type="text" /></td>
+	  <td>	<span id="msn_notice" class="label_box"> 网上沟通更及时</span></td>
+    </tr>
+	
+    <tr>
+      <td class="right"><strong>{$lang.other_qq}:</strong></td>
+      <td>	<input name="contact_qq" type="text"  />
+			
+	  </td>
+	  <td><span id="qq_notice" class="label_box"> 网上沟通更方便</span></td>
+    </tr>
+    <tr>
+      <td class="right"><strong>备注:</strong></td>
+      <td>	<textarea  name="contact_desc" cols="18" rows="3"></textarea>
+			
+	  </td>
+	  <td><span id="qq_notice" class="label_box"> 个人描述</span></td>
+    </tr>
+    <tr>
+      <td colspan="2" class="center">
+		<input name="act" type="hidden" value="act_take_contract_register">			
+        <input name="Submit" type="submit" value="{$lang.confirm_register}"></td>
+    </tr>
+    <tr>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+   
+  </table>
+  <br />
+</form>
+</div>
+<div class="goods_main_bottom_710"></div>
+<div style="height:14px;"></div>
+
+<!--{/if}-->
+<!--#会员注册界面-->
+
+
+</div>
+</body>
+</html>

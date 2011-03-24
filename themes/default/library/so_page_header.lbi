@@ -1,0 +1,78 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div id="so_page_header">
+
+<div class="f_left" style="font-size:16px;padding-top:20px;padding-bottom:9px;">
+<div class="f_left" style="text-indent:30px;">项目:{$order_info.order_name} </div>
+
+<div class="f_left" style="margin:0px 10px;">
+<a style="cursor:pointer;" id="open_crm_info_btn"><img src="{$img_path}anency_choose_btn.png" /></a>
+<a style="cursor:pointer;" id="close_crm_info_btn"><img src="{$img_path}anency_shutdown_btn.png" /></a>
+{if $default_purchase_mid}<span class="font12px">这是主动采购帐户，请新建采购订单,添加商品,不用指定联系人,不用修改价格</span>{/if}
+</div>
+<div class="f_left">
+<span class="font12px">
+{if $order_info.contact_name !="" || $order_info.agency_name !=""  }
+{$order_info.agency_name}-{$order_info.contact_name}{/if}
+</span>
+
+
+<span id="span_contact_id">
+<!--{if $order_info.agency_id}-->
+<select name="contact_id" id="contact_id" onchange="edit_contact_id(this,{$order_info.agency_id})">
+	<option value="0">{$lang.select_please}联系人</option>
+	{html_options options=$custom_list selected=$order_info.contact_id}
+</select>
+<!--{/if}-->
+</span>
+
+</div>
+</div>
+
+<!--# top_bottons-->
+<div class="f_right" style="margin-top:20px;">
+
+<div class="f_left" style="margin-right:20px;">
+<a onclick="add_solution_order()" class="new_solution_order"> </a> 
+</div>
+
+<div class="f_left" style="margin-right:5px;">
+<a href="crm.php?act=take_agency_register&full_page=0" class="take_agency_register" rel="#overlay"></a>
+</div>
+
+<div class="f_left" style="margin-right:20px;">
+<a href="crm.php?act=take_contact_register&full_page=0" class="take_register" rel="#overlay"></a> 
+</div>
+
+</div>
+<!--* top_bottons-->
+
+
+<div class="clear"></div>
+
+<div id="crm_info_bar" class="font12px" style="margin-top:8px;text-indent:30px;">
+	
+	<form action="javascript:searchCRM()" name="searchCRMForm">
+		<span id="agency_name_label">机构名:</span>
+		<input id="input_agency_name" type="text"  size="10" />
+		<span id="contact_name_label">客户名:</span>
+		<input id="input_contact_name" type="text"  size="10" />
+		<input type="submit" value="{$lang.button_search}" class="button" /> <input type="reset" value="重置" class="button" />
+
+	</form>
+	
+	<div class="crm_info_div">
+	<br />
+	机构名 :
+	<!--{foreach name=wrap from=$agency_name_list item=item}-->
+		<a onclick="refresh_agency_contact({$item.agency_id},'{$item.agency_name}')" class="info">{$item.agency_id}: {$item.agency_name}</a>
+	<!--{/foreach}-->
+	<br />
+	联系人 :
+	<!--{foreach from=$contact_name_list item=item}-->
+		<a onclick="assign_contact_id({$item.user_id},'{$item.user_name}')"  class="info">{$item.user_id}: {$item.user_name}</a>
+	<!--{/foreach}-->
+	</div>
+</div><!--crm_info_bar end-->
+
+
+</div>

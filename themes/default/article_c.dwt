@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>{$page_title}</title>
+<!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="animated_favicon.gif" type="image/gif" />
+<link href="css.css" rel="stylesheet" type="text/css" />
+<link href="css/scrollable.css" rel="stylesheet" type="text/css" />
+
+{* 包含脚本文件 *}
+{insert_scripts files='common.js,jquery.tools.min.js,jquery.linscroll.js'}
+<script type="text/javascript">
+// wait until document is fully scriptable
+$(document).ready(function() {
+	// select #flowplanes and make it scrollable. use circular and navigator plugins
+	$("#gallery").scrollable({size: 1}).circular().navigator();
+	
+	$('#scrollContent').setScroll(
+        {img:'{$img_path}scrollable/white_bg.jpg',width:17},//background-image and width
+        {img:'{$img_path}scrollable/top_arrow.jpg',height:17},//up
+        {img:'{$img_path}scrollable/down_arrow.jpg',height:17},//down
+        {img:'{$img_path}scrollable/scroll_bar.jpg',height:60}//bar
+    );
+ 
+});
+</script>
+</head>
+<body>
+<div id="globalWrapper">  <div style="float:left;"></div>
+<div id="wrapper">
+<!-- #BeginLibraryItem "/library/page_header.lbi" -->
+	>
+<!-- #EndLibraryItem -->
+
+
+    <div id="container">
+      <div id="page-left" style="width:270px;">
+		<div style="margin:35px;">
+			<img src="{$article_cat_info.cat_logo}" />
+			<br>
+			<div style="margin-top:10px;">
+				<a class="more" href="article_cat.php?id={$article_cat_info.cat_id}">返回</a>
+			</div>
+			<div style="margin-top:40px;" class="font20px">
+				{$article.title}<br>-{$article.author}
+			</div>
+			<!-- {if $relate_article} -->
+				<div style="margin-top:70px;">
+				<!--{foreach from=$relate_article item=item}-->
+					<div class="f_left related_div">
+						<!-- {if $item.logo} -->
+							<a href="article.php?id={$item.article_id}" style="margin-right:15px;margin-left:-20px;"><img src="{$item.logo}" width="{if $item.title_num lt 10 }80{else}160{/if}" /></a>
+						<!-- {else} -->
+							<a href="article.php?id={$item.article_id}">{$item.title}</a>
+						<!-- {/if} -->
+						
+					</div>
+				<!--{/foreach}-->
+				</div>
+			<!-- {/if} -->
+			
+			
+			
+		</div>
+      </div>
+      <!-- End #page-left -->
+	<div id="page-middle"style="width:415px;margin-left:0px;">
+		<div id="content" class="view_content">
+			<div style="margin:20px 30px 20px 0px;">
+
+				<div class="screen_bg" style="height:330px;width:415px;">
+			  	<div id="scrollContent" style="width:400px;overflow:hidden;height:330px;line-height:25px;">
+					<div style="margin-bottom:20px;"></div>
+					{$article.content}
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="page-right" style="width:275px;">
+
+		<!-- {if $article_gallery} -->
+		<div id="gallery" style="width:275px;">
+
+
+			<!-- wrapper for scrollable items -->
+			<div class="items">
+
+				<!--{foreach from=$article_gallery item=pic name=article_gallery}-->
+					<div>
+						<img src="{$pic.img_original}" width="275"/>
+					</div>						
+				<!-- {/foreach} -->
+				
+
+			</div>
+
+		</div>
+
+		<!--{if $smarty.foreach.article_gallery.total >1}-->
+		<div id="gallery_control">
+			<a class="custom prev"></a>
+			<a class="custom next"></a>
+		</div>
+		<!-- {/if} -->
+		<!-- {/if} -->
+		
+		
+   	 </div>
+
+      <div class="clear"></div>
+    <!-- #BeginLibraryItem "/library/page_footer.lbi" -->
+	>
+	<!-- #EndLibraryItem -->
+	</div>
+  <!-- End #Wrapper -->
+  <div style="float:left;"></div></div>
+<!-- End #globalWrapper -->
+</body>
+</html>

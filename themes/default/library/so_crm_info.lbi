@@ -1,0 +1,25 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript">
+	function assign_agency_id(agencyId,agencyName){
+		var item = document.getElementById("agency_id");
+		//item.value  = agencyId;
+		refresh_agency_contact(item);
+		document.getElementById("input_agency_name").value = agencyName;
+	}
+	
+	function assign_contact_id(agencyId){
+		var item = document.getElementById("agency_id");
+		item.value  = agencyId;
+		refresh_agency_contact(item);
+	}
+</script>
+<div id="so_crm_info" class="" style="font-size:18px;text-indent:30px;">
+agency==>
+	<!--{foreach name=wrap from=$agency_name_list item=item}-->
+		<a onclick="refresh_agency_contact({$item.agency_id},'{$item.agency_name}')">{$item.agency_id}: {$item.agency_name}</a>
+	<!--{/foreach}-->
+<br>custom==>
+	<!--{foreach from=$contact_name_list item=item}-->
+		<a href="">{$item.user_id}: {$item.user_name}</a>
+	<!--{/foreach}-->
+</div>

@@ -1,0 +1,24 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="content-div">
+<div class="cate_top_grey">
+	<span>{$category_name}子分类</span>
+    <div class="bgr"></div>
+	<span class="right">{$lang.pager_1}{$pager.record_count}{$lang.pager_2}</span>
+</div>
+<div class="f_left" style="width:625px;padding-top:10px;border-left:1px solid #d3d3d3;border-right:1px solid #d3d3d3;">
+    <!--{foreach from=$sub_categories key=myId item=cat}-->	
+    <div class="f_left sub_cate" style="margin-left:5px;">
+		<div class="clear"><img src="data/categorylogo/{$cat.logo}" /></div>
+    	
+        <span class="f_left bold font14px"><A href="{$cat.url}">{$cat.name|escape:html}</A></span><br />
+        <ul style="padding-left:8px; width:142px;">
+          <!--{foreach from=$cat.children item=child}-->
+          <li>· <A href="{$child.url}">{$child.name|escape:html}</A> </li>
+          <!--{/foreach}-->
+        </ul>
+    </div>
+    <!--{/foreach}-->
+
+</div>
+<div class="nav_bot_625"> &nbsp;</div>
+</div>

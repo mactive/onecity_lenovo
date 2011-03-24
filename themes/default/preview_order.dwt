@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>{$page_title}</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="animated_favicon.gif" type="image/gif" />
+<link href="css.css" rel="stylesheet" type="text/css" />
+
+
+{* 包含脚本文件 *}
+{insert_scripts files='utils.js,transport.js'}
+
+<script src="admin/js/listtable.js" type="text/javascript"></script>
+<script src="admin/js/common.js" type="text/javascript"></script>
+
+{insert_scripts files='jquery-1.2.6.js,ui.core.js,ui.tabs.js'}
+
+</head>
+<body class="grey">
+	<div id="globalWrapper">  
+		<div style="float:left;"></div>
+		<div id="wrapper">
+			<!--{if $order_info.user_id neq $sm_session.user_id} -->
+			<!--{/if} -->
+			
+			<!-- #BeginLibraryItem "/library/page_header.lbi" -->
+			>	
+			<!-- #EndLibraryItem -->
+			
+			
+	<div id="container" class="f_left" style="margin:20px 0px;">
+		<div class="goods_main_top"></div>
+		<div class="goods_main_body" style="padding:5px;width:970px;">
+			<div style="margin:10px auto; width:737px;">  
+	<div class="area_brand">			
+			<table border="1" width="600" class="table_standard table_border"> 
+			<tbody>
+				<tr>
+					<td colspan="2">项目名:<span>{$order_info.order_name}</span></td>
+					<td >项目ID: {$order_id} </td>
+					
+				</tr>
+				<tr>
+					<td>商品种类:{$order_info.order_goods_types}种</td>
+					<td colspan="2">商品数量:{$order_info.order_count} 件 </td>
+				</tr>
+				<tr>
+					<td>总价：<span class="bold underline">{$order_info.order_amount}</span> 元</td>
+					<td colspan="2">级别：<span class="bold underline">{$order_info.order_level}万元级</span></td>
+				</tr>
+				
+				<tr>
+					<td >线材费用:<span class="bold underline">{$order_info.wire_fee}</span> 元</td>
+					<td >培训费用:<span class="bold underline">{$order_info.training_fee}</span> 元</td>
+					<td >差旅费用:<span class="bold underline">{$order_info.travel_fee}</span> 元</td>
+				</tr>
+				<tr>
+					<td colspan="3">总计:<span class="bold underline">{$order_info.all_fee}</span> 元</td>
+				</tr>
+				<tr>
+					<td >税点:{$order_info.tax_fee}%</td>
+					<td >税后:<span class="bold underline">{$order_info.order_amount_after_tax}</span> 元</td>
+					<td ></td>
+				</tr>
+			</tbody>
+			</table>
+			
+
+	</div>
+	<div class="area_step radius_5px" style="border:1px solid #ccc;padding:10px; background:#fafafa;">
+		
+		<!--{foreach from=$order_detail item=cat_info}-->
+		<div class="radius_5px" style="text-indent:5px;background:#e0e0e0; line-height:25px;margin-bottom:10px;">分类：{$cat_info.cat_name}</div>
+			<!--{foreach from=$cat_info.step_info name=wrap item=step}-->
+				<!--{if $step.step_id}-->
+				<div class="op_step" style="margin-bottom:10px;" id="op_step_{$step.goods.goods_id}">
+			<div class="step_top">
+				<div class="f_left">
+					<a href="{$step.goods.url}"> <img class="thumb grey_border" src="{$step.goods.goods_thumb}" alt_="{$step.goods.goods_name}" border="0" width="60" /></a>
+				</div>
+				
+				<div class="f_left" style="width:150px; text-align:left;padding-top:5px;margin-left:10px;">
+						<a href="{$step.goods.url}">
+		          				{$step.goods.goods_name}
+		      			</a>
+	  
+
+				</div>
+				<div class="f_left" style="width:150px; text-align:left;padding-top:5px;margin-left:10px;">
+					
+      				<!--{if $goods.promote_price neq "" } -->
+      				<span class="goods-price">{$step.goods.promote_price_formated}</span>
+      				<!--{else}-->
+      				<span class="goods-price">{$lang.shop_price}{$step.goods.shop_price_formated}</span>
+      				<!--{/if}--><br>
+				</div>
+				<div class="f_left" style="width:200px; text-align:left;padding-top:5px;margin-left:10px;">
+					{$lang.step_price} <span>{$step.step_price}</span> RMB<br/>
+					{$lang.step_count}<span>{$step.step_count}</span> 件<br/>
+				  
+				</div>
+				
+	  			<div class="clear"></div>
+			</div>
+			<div class="step_body"></div>
+		</div>
+				<!--{/if}-->
+			<!--{/foreach}-->
+		
+		<!--{/foreach}-->
+		
+		
+	</div>
+	
+	<!--{if $order_info.user_id eq $sm_session.user_id} -->
+	<div>
+		<br><br><br>
+		<span class="grey999">销售人员登录之后才会出现这个对话框</span><br>
+		<form action="solution_operate.php" method="post" >
+			是否显示单价<input type="radio" name="show_price" value="0" /> 否
+			<input type="radio" name="show_price" value="1" /> 是<br>
+			
+			补充说明:<br><textarea  name="mail_remark" cols="40" rows="4"></textarea>
+	        
+			<input type="hidden" name="act" value="send_mail" />
+			<input type="hidden" name="order_id" value="{$order_info.order_id}" /><br>
+          <input type="submit" name="submit" value="发送邮件" />
+	</div>
+	<!--{/if}-->
+	
+	</div>
+		</div>
+		<div class="goods_main_bottom"></div>
+	</div>
+	<!-- End #container -->	
+	<!--{if $order_info.user_id neq $sm_session.user_id} -->
+	
+	<!-- #BeginLibraryItem "/library/page_footer.lbi" -->
+	>
+	<!-- #EndLibraryItem -->
+	<!--{/if} -->
+	
+  </div>
+</div>
+<!-- End #globalWrapper -->
+</body>
+</html>

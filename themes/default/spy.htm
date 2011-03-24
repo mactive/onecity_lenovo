@@ -1,0 +1,98 @@
+<style type="text/css" media="screen">
+
+#sidebar {
+    color: #AFB0B1;
+    float:left;
+}
+
+#sidebar ul {
+    font-size:11px;
+    list-style-type:none;
+    margin:0;
+    padding:0;
+    position:relative;
+}
+.none {
+	background-position: 82px 0px;
+}
+
+.four {
+	background-position: 82px -48px;
+}
+
+.five {
+	background-position: 82px -60px;
+}
+
+.tags {
+	color: #fff;
+	margin: 0.5em;
+}
+
+.tags a,
+.tags span {
+	background-color: #333839;
+	font-size: 0.8em;
+	padding: 0.1em 0.8em 0.2em;
+}
+
+.tags a:link,
+.tags a:visited {
+	color: #fff;
+	text-decoration: none;	
+}
+
+.tags a:hover,
+.tags a:active {
+	background-color: #3e4448;
+	color: #fff;
+	text-decoration: none;	
+}
+
+#sidebar li {
+    overflow: hidden;
+}
+
+
+#sidebar li img {
+    float:left;
+    margin-right:8px;
+}
+
+#sidebar li .info {
+    color:#3E4548;
+    font-size:1em;
+}
+
+#sidebar .info a,
+#sidebar .info a:visited {
+    color:#3E4548;
+    text-decoration: none;
+}
+
+#sidebar .spyWrapper {
+    height: 100%;
+    overflow: hidden;
+    position: relative;    
+}
+
+
+</style>
+
+<div class="column box first" id="sidebar">
+	<h3><a href="article_cat.php?id=13">赛因新闻 &amp; 活动</a></h3>
+	<ul class="spy">
+		<!--{foreach from=$index_news item=article}-->
+		<li><div class="profile">
+			<div class="f_left" style="margin-right: 10px;"> <a href="{$article.url}"><img alt="" src="{$article.logo}" /> </a></div>
+			<div class="font11px">
+				<h4><a href="{$article.url}">{$article.title}</a></h4>
+				{$article.brief|truncate:34:"..":true}
+			</div>
+			<div class="clear"></div>
+		</div></li>
+		
+	    <!-- {/foreach} -->
+	</ul>
+	<a href="article_cat.php?id=13" class="arrow">更多活动和新闻</a>
+</div>

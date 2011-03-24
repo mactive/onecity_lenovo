@@ -1,0 +1,64 @@
+#accordion {
+	margin:0px 0px;
+}
+
+h3.toggler {
+	cursor: pointer;
+	font-weight:normal;
+	font-size: 12px;
+	color: #000000;
+	margin: 1px 0 0 0;
+	padding: 3px 5px;
+	background:url(../images/hot_accord_bg.png) repeat-x left -24px;
+}
+h3.toggler a.title{
+	cursor: pointer;
+	width:150px;
+	display:block;
+	height:18px;
+}
+
+div.element p, div.element h4 {
+	margin:0px;
+	padding:4px;
+}
+div.element {
+	padding-left:8px;
+	border:1px solid #e5e5e5;
+	background:#f4f4f4;
+	width:158px;
+}
+.hot_accord_bottom{
+	width:170px;
+	height:5px;
+	line-height:5px;
+	font-size:5px;
+	background:url(../images/hot_accord_bottom.png) no-repeat left top;
+}
+
+
+/*Tooltips*/
+a.tooltips{
+    position:relative; /*这个是关键*/
+ z-index:2;
+}
+a.tooltips:hover{
+ z-index:3;
+ background:none; /*没有这个在IE中不可用*/
+}
+a.tooltips span{
+ display: none;
+}
+a.tooltips:hover span{ /*span 标签仅在 :hover 状态时显示*/
+ display:block;
+ position:absolute;
+ top:2px;
+ left:9px;
+ width:200px;
+ border:1px solid #cccccc;
+ background:url(../images/tooltips_bg.png) repeat-x top;
+ /*background-color:#f8f8f8;*/
+ padding: 3px;
+ color:#333333;
+ text-align:left;
+}

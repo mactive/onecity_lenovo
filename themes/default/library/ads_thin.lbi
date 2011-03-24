@@ -1,0 +1,18 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!--4个专题图片-->
+<br>
+<div id="ads_thin">
+	
+</div>
+<script type="text/javascript">
+		/*修改用户ID*/
+		//点击机构 联动客户列表
+
+			var s= Math.floor(Math.random()*{$rand}+1);
+			//alert(s);
+			document.getElementById('ads_thin').innerHTML = "<img src='data/adimg/thin/ad_"+s+".jpg' />";
+	
+</script>
+<div style="height:10px;"></div>
+
+

@@ -1,0 +1,31 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div style="_height:388px;">
+	<div style="margin:20px 0px 0px 35px;height:150px;">
+		<div style="width:187px;" class="f_left"><img src="{$img_path}title/index_events.jpg" />
+		</div>
+		<div class="index_news f_left">
+			<ul>
+			<!--{foreach from=$events_index item=article}-->
+			<li>
+				<a href="{$article.url}">{$article.title|truncate:18:"..":true} 
+				{if $article.is_new} <span><img src="{$img_path}watermark_new_ico.png"/></span>{/if}</a>
+			</li>
+		    <!-- {/foreach} -->
+			</ul>
+			<a class="more f_right" href="article_cat.php?id=3">更多</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+	
+	<div style="height:207px;">
+		<!--{foreach from=$index_gallery item=item}-->
+			<div class="f_left" style="margin-left:1px;">
+				<a href="{$item.img_desc}"><img src="{$item.img_url}" height="207" width="157" /></a>
+			</div>
+		<!--{/foreach}-->
+		<div class="clear"></div>
+		
+	</div>
+	
+	
+</div>

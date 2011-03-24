@@ -1,0 +1,18 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="quick_link">
+	<div class="border_top top_radius_5px">
+    	<span>客服中心</span>
+	</div>
+	<div class="border_bottom">
+  <ul class="customer_center">
+  <!--{foreach from=$customer_center_art item=item}-->
+	<li class="title"><h3><a href="article_cat.php?id={$item.cat_id}">{$item.cat_name}</a></h3></li>
+	<!--{foreach from=$item.subarticles item=cus}-->
+		<li><a href="{$cus.url}">{$cus.title}</a></li>
+	<!--{/foreach}-->
+	</dl>
+  <!--{/foreach}-->
+  </ul>
+	</div>
+<div class="height_10px clear"></div>
+</div>

@@ -1,0 +1,7 @@
+<select name="supplier_contact_id">
+		{if $supplier_contact_list}
+		{html_options options=$supplier_contact_list selected=$step_info.supplier_contact_id}
+		{else}
+		{html_options options=$step_info.supplier_contact_list selected=$step_info.supplier_contact_id}
+		{/if}
+</select>

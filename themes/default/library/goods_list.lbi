@@ -1,0 +1,325 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div style="padding-left:4px;margin-top:10px;float:right;">
+	<div class="cate_top_grey" style="height:30px;">
+		
+		<div class="f_left font14px">
+			<!-- {if $intromode eq 'best'} -->
+	            {$lang.best_goods}
+	        <!-- {elseif $intromode eq 'new'} -->
+	            {$lang.new_goods}
+	        <!-- {elseif $intromode eq 'hot'} -->
+	            {$lang.hot_goods}
+			<!-- {elseif $intromode eq 'vip'} -->
+	            {$lang.vip_goods}
+	        <!-- {elseif $intromode eq 'promotion'} -->
+	            {$lang.promotion_goods}
+	        <!-- {else} -->
+	             {$keywords}
+	        <!-- {/if} -->	
+		</div>
+
+	<div class="f_right" style="margin:-2px 8px;">
+		
+	<form method="GET" class="sort" name="listform">
+	    <a href="javascript:;" onClick="javascript:display_mode('list')"><img src="images/display_mode_list.gif" alt="{$lang.display.list}"></a>
+	 	<a href="javascript:;" onClick="javascript:display_mode('grid')"><img src="images/display_mode_grid.gif" alt="{$lang.display.grid}"></a>
+		<!--{if $brand_id}-->
+		<select name="brand_cat" onchange="changeBrandCat(this)">
+	      {html_options options=$brand_cat_list selected=$brand_id}
+	    </select>
+		<!--{/if}-->
+		<!--{if $category}-->
+		<select name="cate_cat" onchange="changeCateCat(this)">
+	      {html_options options=$sub_categories selected=$category}
+	    </select>
+		<!--{/if}-->
+		
+		<!--{if $tmp}-->
+	    <select name="sort">
+	      {html_options options=$lang.sort selected=$pager.sort}
+	    </select>
+		<!--{/if}-->
+	
+		<input type="hidden" name="order" value="{$pager.order}" />
+	    <input type="submit" name="imageField" style="border:1px solid #666666;padding:0px 6px;" value="Go"  />
+	    <input type="hidden" name="category" value="{$category}" />
+	    <input type="hidden" name="display" value="{$pager.display}" id="display" />
+	    <input type="hidden" name="brand" value="{$brand_id}" />
+	    <input type="hidden" name="filter_attr" value="{$filter_attr}" />
+	    <input type="hidden" name="page" value="{$pager.page}" />
+	  </form>
+	  </div>
+	
+		<div class="f_right" style="maring:-2px 0px;">
+			<div class="f_left">{$lang.pager_1}{$pager.record_count}{$lang.pager_2}</div>
+			
+			  <div id="pager" class="pager"> 	
+			<form id="myForm" action="{$smarty.server.PHP_SELF}" method="get">				
+					<a class="page_btn" href="{$pager.page_first}">{$lang.page_first}</a> 
+					<a class="page_btn" href="{$pager.page_prev}">{$lang.page_prev}</a> 
+					<!--{foreach from=$pager.array key=key item=item}-->
+						<a href="{$pager.page_number}&amp;page={$item}" class="page_btn">{$item}</a>
+					<!--{/foreach}-->
+				    <input type="hidden" id="pageID" name="page" value="{$pager.page}"/>
+					<a class="page_btn" href="{$pager.page_next}">{$lang.page_next}</a> 
+					<a class="page_btn" href="{$pager.page_last}">{$lang.page_last}</a> 				
+			    <!--{foreach from=$pager.search key=key item=item}-->
+			    <input type="hidden" name="{$key}" value="{$item}" />
+			    <!--{/foreach}-->
+				
+			</form>
+
+			  </div>
+			
+		</div>
+		
+		<div class="clear"></div>
+	</div>	
+</div>
+
+<div class="content-div f_left">
+    <!-- {if $pager.display == 'list'} -->
+    <!--{foreach from=$goods_list item=goods name=glist}-->
+    <table border="0" cellpadding="5" cellspacing="1" class="goods-list" style="width:754px;{if $smarty.foreach.glist.index == 0}border-top:1px solid #e0e0e0;{/if}">
+      <tr>
+        <td width="25%" align="center">
+		<div style="padding:20px;">			
+          <a href="{$goods.url}" style="position:relative;display:block;">
+            <img src="{$goods.goods_thumb}" alt="{$goods.goods_name}" border="0"  style="border:1px solid #e0e0e0;"/>
+            <span style="position:absolute;right:10px;top:-3px;">
+              <!-- {if $goods.watermark_img eq watermark_promote_small} -->
+              <img src="images/watermark_promote_ico.gif" alt="" />
+              <!-- {else} -->
+              <!-- {if $goods.watermark_img eq watermark_new_small} -->
+              <img src="images/watermark_new_ico.gif" alt="" />
+              <!-- {else} -->
+              <!-- {if $goods.watermark_img eq watermark_hot_small} -->
+              <img src="images/watermark_hot_ico.gif" alt="" />
+              <!-- {else} -->
+              <!-- {if $goods.watermark_img eq watermark_best_small} -->
+              <img src="images/watermark_best_ico.gif" alt="" />
+              <!-- {/if} -->
+              <!-- {/if} -->
+              <!-- {/if} -->
+              <!-- {/if} -->
+            </span>
+          </a>
+		</div>
+        </td>
+        <td>
+		<div style="padding:5px;">
+		  <a href="{$goods.url}"><strong>
+          <!-- {if $goods.goods_style_name} -->
+          <span class="font14px">{$goods.goods_style_name}</span>
+          <!-- {else} -->
+          <span class="font14px">{$goods.goods_name}</span>
+          <!-- {/if} -->
+          </strong></a> <br>
+		 	<span class="grey999">{$lang.free_shipping_note}</span><br>
+          <br />
+
+          <br />
+			<a href="{$goods.url}" class="grey666"><img src="{$img_path}common/learn_more.png" /></a>
+          <br />
+			
+
+          
+	  </div>
+	  </td>
+      </tr>
+    </table>
+    <!--{/foreach}-->
+    <!-- {elseif $pager.display == 'grid'} -->
+    <div class="goods-list">
+      <ul class="product_row">
+        <!--{foreach name=wrap from=$goods_list item=goods}-->
+		
+        <li class="product <!-- {if ($smarty.foreach.wrap.iteration > $pager.record_count) or ($smarty.foreach.wrap.iteration > $size) } -->
+				_product_lastrow
+				<!-- {/if} -->" <!-- {if ($smarty.foreach.wrap.iteration % 3 eq 0) } -->
+		style="border:none;"
+		<!-- {/if} -->>
+		  <!-- {if $goods.goods_id} -->
+          <div style=" margin:0px 15px; _margin:0px 5px; position:relative;float:left;  height:170px;width:100px;">
+			<div style="text-align:left; margin:8px;">
+	            <!-- {if $goods.watermark_img eq watermark_promote_small} -->
+        		<img src="images/watermark_promote_ico.gif" alt="promote" />
+        		<!-- {else} -->
+        			<!-- {if $goods.watermark_img eq watermark_new_small} -->
+        			<img src="images/watermark_new_ico.gif" alt="new" />
+        			<!-- {else} -->
+						<!-- {if $goods.watermark_img eq watermark_best_small} -->
+        				<img src="images/watermark_best_ico.gif" alt="best" />
+        				<!-- {else} -->
+        					<!-- {if $goods.watermark_img eq watermark_hot_small} -->
+        					<img src="images/watermark_hot_ico.gif" alt="hot" />
+        					<!-- {/if} -->
+        				<!-- {/if} -->
+        			<!-- {/if} -->
+        		<!-- {/if} -->
+	          </div>
+ 			<a href="{$goods.url}" class="tooltips"> <img class="thumb" src="{$goods.goods_thumb}" alt="{$goods.goods_name}" border="0"  />{if $goods.goods_brief}<span>{$goods.goods_brief}</span>{/if}</a>
+          </div>
+		<div class="f_left" style="width:135px; text-align:left;padding-top:20px;">
+          <a href="{$goods.url}">
+		  	<!-- {if $goods.goods_style_name} -->
+	          {$goods.goods_style_name}
+	          <!-- {else} -->
+	          {$goods.goods_name}
+	          <!-- {/if} -->
+          </a> 
+		<br>
+          	<!-- {if $show_marketprice} -->
+				{$lang.market_price_short}
+				<!--{if $goods.market_price > 0} -->
+					<span class="goods-price">{$goods.market_price_formated}</span>
+	          	<!--{else}-->
+					<span class="goods-price">请来电咨询</span>
+	          	<!--{/if}--> <br>
+			<!--{/if}-->
+				
+				{$lang.shop_price_short}
+				<!--{if $goods.shop_price > 0} -->
+					<!-- {if $sm_session.user_rank || $goods.promote_price_formated} -->
+						<span class="goods-price">{$goods.shop_price_formated}</span>
+		          	<!--{else}-->
+						<span class="goods-price"><a href="user.php?act=login&back_act={$back_act}">请登录</a></span>
+		          	<!--{/if}-->
+	          	<!--{else}-->
+					<span class="goods-price">请来电咨询</span>
+	          	<!--{/if}--> <br>
+	
+	        
+	          <!--{if $goods.promote_price_formated neq "" } -->
+	          {$lang.promote_price}<span class="goods-price red-color">{$goods.promote_price_formated}</span>				
+	          <!--{/if}-->
+          
+		</div>
+          <!-- {/if} -->
+        </li>
+        <!-- {if ($smarty.foreach.wrap.iteration % 3 eq 0)  } -->
+      </ul>
+	  
+      <ul class="product_row">
+        <!-- {/if} -->
+        <!--{/foreach}-->
+      </ul>
+    </div>
+    <!-- {elseif $pager.display == 'text'} -->
+    <!--{foreach from=$goods_list item=goods}-->
+    <table border="0" cellpadding="5" cellspacing="1" class="goods-list">
+      <tr>
+        <td>        
+		<div style="padding:5px;float:left">
+			<div class="f_left" style="width:150px">
+				<a href="{$goods.url}"><strong>
+		          <!-- {if $goods.goods_style_name} -->
+		          {$goods.goods_style_name}
+		          <!-- {else} -->
+		          {$goods.goods_name}
+		          <!-- {/if} -->
+		          </strong></a>
+			</div>
+			<div class="f_left" style="width:550px;margin-left:25px;">
+				<!-- {if $goods.goods_brief} -->{$lang.goods_brief}{$goods.goods_brief}<!-- {/if} -->
+			</div>
+		</div>
+        <div style="padding:0px 5px;float:left">
+			<div class="f_left" style="width:300px;height:40px;line-height:40px;">
+				<!-- {if $show_marketprice} -->
+		          {$lang.market_price}<span class="market-price">{$goods.market_price}</span>
+		          <!-- {/if} -->
+		          <!--{if $goods.promote_price neq "" } -->
+		          {$lang.promote_price}<span class="goods-price">{$goods.promote_price}</span>
+		          <!--{else}-->
+		          {$lang.shop_price}<span class="goods-price">{$goods.shop_price}</span>
+		          <!--{/if}-->
+			</div>
+			<div class="f_left" style="width:400px;margin-left:25px;">
+				<div class="addto_cart">
+				<a href="{$goods.url}" class="add_cart"></a>
+				<a href="javascript:collect({$goods.goods_id});" class="collect"></a>
+		</div>
+			</div>
+		</div>
+        </td>
+      </tr>
+    </table>
+    <!--{/foreach}-->
+    <!-- {/if} -->
+</div>
+
+<!-- 和上面的功能一样-->
+<div style="padding-left:4px;margin-top:10px;float:right;">
+	<div class="cate_top_grey" style="height:30px;">
+		
+		<div class="f_left font14px">
+			<!-- {if $intromode eq 'best'} -->
+	            {$lang.best_goods}
+	        <!-- {elseif $intromode eq 'new'} -->
+	            {$lang.new_goods}
+	        <!-- {elseif $intromode eq 'hot'} -->
+	            {$lang.hot_goods}
+			<!-- {elseif $intromode eq 'vip'} -->
+	            {$lang.vip_goods}
+	        <!-- {elseif $intromode eq 'promotion'} -->
+	            {$lang.promotion_goods}
+	        <!-- {else} -->
+	             {$keywords}
+	        <!-- {/if} -->	
+		</div>
+
+	<div class="f_right" style="margin:-2px 8px;">
+		
+	<form method="GET" class="sort" name="listform">
+	    <a href="javascript:;" onClick="javascript:display_mode('list')"><img src="images/display_mode_list.gif" alt="{$lang.display.list}"></a>
+	 	<a href="javascript:;" onClick="javascript:display_mode('grid')"><img src="images/display_mode_grid.gif" alt="{$lang.display.grid}"></a>
+		<!--{if $brand_id}-->
+		<select name="brand_cat" onchange="changeBrandCat(this)">
+	      {html_options options=$brand_cat_list selected=}
+	    </select>
+		<!--{/if}-->
+		
+		<!--{if $tmp}-->
+	    <select name="sort">
+	      {html_options options=$lang.sort selected=$pager.sort}
+	    </select>
+		<!--{/if}-->
+	
+		<input type="hidden" name="order" value="{$pager.order}" />
+	    <input type="submit" name="imageField" style="border:1px solid #666666;padding:0px 6px;" value="Go"  />
+	    <input type="hidden" name="category" value="{$category}" />
+	    <input type="hidden" name="display" value="{$pager.display}" id="display" />
+	    <input type="hidden" name="brand" value="{$brand_id}" />
+	    <input type="hidden" name="filter_attr" value="{$filter_attr}" />
+	    <input type="hidden" name="page" value="{$pager.page}" />
+	  </form>
+	  </div>
+	
+		<div class="f_right" style="maring:-2px 0px;">
+			<div class="f_left">{$lang.pager_1}{$pager.record_count}{$lang.pager_2}</div>
+			
+			  <div id="pager" class="pager"> 	
+			<form id="myForm" action="{$smarty.server.PHP_SELF}" method="get">				
+					<a class="page_btn" href="{$pager.page_first}">{$lang.page_first}</a> 
+					<a class="page_btn" href="{$pager.page_prev}">{$lang.page_prev}</a> 
+					
+					<!--{foreach from=$pager.array key=key item=item}-->
+						<a href="{$pager.page_number}&amp;page={$item}" class="page_btn">{$item}</a>
+					<!--{/foreach}-->
+				    <input type="hidden" id="pageID" name="page" value="{$pager.page}"/>
+					<a class="page_btn" href="{$pager.page_next}">{$lang.page_next}</a> 
+					<a class="page_btn" href="{$pager.page_last}">{$lang.page_last}</a> 				
+			    <!--{foreach from=$pager.search key=key item=item}-->
+			    <input type="hidden" name="{$key}" value="{$item}" />
+			    <!--{/foreach}-->
+				
+			</form>
+
+			  </div>
+			
+		</div>
+		
+		<div class="clear"></div>
+	</div>	
+</div>

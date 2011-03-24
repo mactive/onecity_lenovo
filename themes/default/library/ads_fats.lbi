@@ -1,0 +1,9 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!--4个专题图片-->
+<div id="ads_fat">
+	<img src="data/adimg/ad_{$rand}.jpg" />
+</div>
+
+<div style="height:10px;"></div>
+
+

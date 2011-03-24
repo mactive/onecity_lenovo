@@ -1,0 +1,204 @@
+<div class="operate_area" id="listDiv">
+	<div class="area_brand">
+		<ul>
+			配单ID: {$order_id} 配单名:<span class="can_edit" id="order_{$order_id}" onclick="listTable.edit(this, 'edit_order_name', {$order_id})">{$order_info.order_name}</span><br>
+			
+		    <span id="public_note">浅蓝色背景的文字可以点击编辑</span>
+			商品种类:{$order_info.order_goods_types}种
+			商品数量:{$order_info.order_count} 件 . 商品总价：<span class="bold underline"> {$order_info.order_amount} 元</span>  级别：<span class="bold underline">{$order_info.order_level}万元级</span><br/>
+			商品总价: <span class="bold underline pad_r_8px">{$order_info.order_amount}</span> + 
+			其他费用:<span class="bold underline pad_r_8px">{$order_info.other_fee}</span> =
+			总计: <span class="bold underline pad_r_8px">{$order_info.all_fee}</span>
+			
+			总计税后: <span class="bold underline pad_r_8px">{$order_info.order_amount_after_tax}</span>
+		</ul>
+	</div>
+	
+	<div id="fliter_search" class="area_brand" style="padding:5px 0px;line-height:20px;text-indent:10px;">&nbsp;&nbsp;
+		<input type="button" class="button_refresh f_left" onclick="refresh()" />
+		<a href="javascript:;" onclick="add_order({$order_id})" class="button_a"><img src="../images/add_step_btn.png"></a>
+		
+		<a href="solution_operate.php?act=preview_order&amp;order_id={$order_id}" class="button_a" target="_blank" ><img src="../images/send_mail_btn.png"></a>
+		
+		{if $order_info.is_public eq 0}
+		<input type="button" class="button_check_order f_left" onclick="confirm_pass({$order_id})" />
+		{/if}
+		{if $order_info.is_exe eq 0 && $order_info.is_public eq 1 }
+		<input type="button" class="button_exe_order f_left" onclick="exe_order({$order_id})" />
+		{/if}
+		{if $order_info.is_exe}<input type="button" class="button_exed_order f_left" />
+		{/if}
+		
+		<a href="solution_operate.php?act=order_contract&amp;order_id={$order_id}" class="button_a"><img src="../images/order_contract_btn.png"></a>
+		
+		<input type="button" class="button_trash_order f_left" onclick="trash_order({$order_id})" />
+			
+	</div>
+	
+	<div class="area_brand" style="padding:0px; text-indent:10px;line-height:20px;">
+		{$lang.wire_fee}<span class="can_edit" id="order_{$order_id}" onclick="listTable.edit(this, 'edit_wire_fee', {$order_id},'1')">{$order_info.wire_fee}</span>
+		{$lang.travel_fee}<span class="can_edit" id="order_{$order_id}" onclick="listTable.edit(this, 'edit_travel_fee', {$order_id},'1')">{$order_info.travel_fee}</span>
+		{$lang.training_fee}<span class="can_edit" id="order_{$order_id}" onclick="listTable.edit(this, 'edit_training_fee', {$order_id},'1')">{$order_info.training_fee}</span>
+		{$lang.tax_fee}<span class="can_edit" id="order_{$order_id}" onclick="listTable.edit(this, 'edit_tax_fee', {$order_id},'1')">{$order_info.tax_fee}</span>%
+		
+	</div>
+	
+	
+	<div class="area_step">
+		
+		<!--{foreach from=$order_detail item=cat_info}-->
+		{$cat_info.cat_name}
+			<!--{foreach from=$cat_info.step_info name=wrap item=step}-->
+				<!--{if $step.step_id}-->
+				<div class="op_step" id="op_step_{$step.goods.goods_id}">
+			<div class="step_top">
+				<div class="f_left">
+					<a href="{$step.goods.url}" target="_blank"> <img class="thumb grey_border" src="{$step.goods.goods_thumb}" alt_="{$step.goods.goods_name}" border="0" width="60" /></a>
+				</div>
+				
+				<div class="f_left" style="width:150px; text-align:left;padding-top:10px;margin-left:10px;">
+						<a href="{$step.goods.url}">
+		          				{$step.goods.goods_name}
+		      			</a>
+	      			
+	      			<div style="text-align:left;margin-top:2px;">						
+						<!--{if $step.goods.is_best eq 1 } -->
+							<img src="{$img_path}skpi_small.png" height="20" width="40" /><br>
+	      				<!--{/if}--><br>
+	      			</div>
+
+				</div>
+				<div class="f_left" style="width:150px; text-align:left;padding-top:10px;margin-left:10px;">
+					
+      				<!--{if $goods.promote_price neq "" } -->
+      				<span class="goods-price">{$step.goods.promote_price_formated}</span>
+      				<!--{else}-->
+      				<span class="goods-price">{$lang.shop_price}{$step.goods.shop_price_formated}</span>
+      				<!--{/if}--><br>
+					<span class="goods-price blue">{$lang.salebase_price}{$step.goods.salebase_price_formated}</span><br>
+					<span class="goods-price blue">{$lang.goods_number}{$step.goods.goods_number} 件</span><br>
+				</div>
+				<div class="f_left" style="width:160px; text-align:left;padding-top:10px;margin-left:10px;">
+					{$lang.step_price} 
+					
+					{if $order_info.is_public == 0}
+						<span class="can_edit" id="step_price_{$step.step_id}" onclick="listTable.edit(this, 'edit_step_price', {$step.step_id},'1')">{$step.step_price}</span> RMB
+					{else}
+						<span class="can_edit" id="step_price_{$step.step_id}" 	onclick="check_and_edit(this,{$step.step_id},{$step.goods.salebase_price},{$step.goods.shop_price_num})">{$step.step_price}</span> RMB
+					{/if}
+
+						
+					<br/>
+					{$lang.step_count}<span class="can_edit" id="step_count_{$step.step_id}" onclick="listTable.edit(this, 'edit_step_count', {$step.step_id},'1')">{$step.step_count}</span> 件<br/>
+					<span class="goods-price">货期: 15 天</span>
+					
+				</div>
+				<div class="f_left" style="width:120px; text-align:left;padding-top:10px;margin-left:10px;">
+					<a class="remove_from_order" href="javascript:;" onclick="listTable.remove({$step.step_id}, '{$lang.remove_step_yn}','remove_step')"></a>
+				</div>
+				
+				
+	  			<div class="clear"></div>
+			</div>
+			<div class="step_body"></div>
+		</div>
+				<!--{/if}-->
+			<!--{/foreach}-->
+		
+		<!--{/foreach}-->
+		
+		
+	</div>
+	<div class="area_brand" style="text-indent:8px;">
+		TAG:<span class="can_edit" onclick="listTable.edit(this, 'edit_order_tag', {$order_id})">{$order_info.order_tag}</span>请用空格分割
+		{if $order_info.is_model}
+			<input type="button" class="button_cancel_model" onclick="model_order({$order_id},'cancel')" /><br>
+		{else}
+			<input type="button" class="button_model" onclick="model_order({$order_id},'done')" /><br>
+		{/if}
+	</div>
+	
+	<!--page begin-->
+	<div id="turn-page" class="area_brand" style="text-indent:8px;">
+  		{$lang.total_records} <span id="totalRecords">{$record_count}</span>
+  		{$lang.total_pages} <span id="totalPages">{$page_count}</span>
+  		{$lang.page_current} <span id="pageCurrent">{$filter.page}</span>
+  		{$lang.page_size} <input type='text' size='2' id='pageSize' value="{$filter.page_size}" onkeypress="return listTable.changePageSize(event)" />件
+  		<span id="page-link">
+    		{literal}<a href="javascript:listTable.gotoPageFirst()">{/literal}{$lang.page_first}</a>
+    		{literal}<a href="javascript:listTable.gotoPagePrev()">{/literal}{$lang.page_prev}</a>
+    		{literal}<a href="javascript:listTable.gotoPageNext()">{/literal}{$lang.page_next}</a>
+    		{literal}<a href="javascript:listTable.gotoPageLast()">{/literal}{$lang.page_last}</a>
+    		<select id="gotoPage" onchange="listTable.gotoPage(this.value)">
+      			{create_pages count=$page_count page=$filter.page}
+    		</select>
+  		</span>
+	</div>
+	<!--page end-->
+	
+</div>
+<script language="JavaScript">
+listTable.query = "query_order_detail";
+listTable.recordCount = {$record_count};
+listTable.pageCount = {$page_count};
+
+{foreach from=$filter item=item key=key}
+listTable.filter.{$key} = '{$item}';
+{/foreach}
+listTable.filter.order_id = {$order_id}
+{literal}
+
+
+
+    /**
+     * 搜索订单
+     */
+    function searchInventory()
+    {
+        listTable.filter['part_number'] = Utils.trim(document.forms['searchForm'].elements['part_number'].value);
+        listTable.filter['serial_number'] = Utils.trim(document.forms['searchForm'].elements['serial_number'].value);
+        listTable.filter['order'] = document.forms['searchForm'].elements['status'].value;
+        listTable.filter['start_time'] = document.forms['searchForm'].elements['start_time'].value;
+        listTable.filter['end_time'] = document.forms['searchForm'].elements['end_time'].value;
+        listTable.filter['start_price'] = document.forms['searchForm'].elements['start_price'].value;
+        listTable.filter['end_price'] = document.forms['searchForm'].elements['end_price'].value;
+
+        listTable.filter['page'] = 1;
+        listTable.loadList();
+    }
+
+  /**
+   * @param: bool ext 其他条件：用于转移分类
+   */
+  function confirmSubmit(frm, ext)
+  {
+      if (frm.elements['type'].value == 'drop')
+      {
+          return confirm(batch_trash_confirm);
+      }
+      else if (frm.elements['type'].value == 'inbound')
+      {
+          return confirm(batch_inbound);
+      }
+      else if (frm.elements['type'].value == 'outbound')
+      {
+          return confirm(batch_outbound);
+      }
+      else
+      {
+          return confirm(batch_transport);
+      }
+  }
+
+	function changeAction()
+ 	{
+      var frm = document.forms['listForm'];
+
+      if (!document.getElementById('btnSubmit').disabled &&
+          confirmSubmit(frm, false))
+      {
+          frm.submit();
+      }
+    }
+</script>
+{/literal}

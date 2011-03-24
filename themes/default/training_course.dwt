@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>{$page_title}</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="animated_favicon.gif" type="image/gif" />
+<link href="css.css" rel="stylesheet" type="text/css" />
+<link href="themes/default/css/tools.tabs.css" rel="stylesheet" type="text/css" />
+<link href="themes/default/css/overlay-apple.css" rel="stylesheet" type="text/css" />
+
+<!-- tab pane styling -->
+<style>
+
+/* panes */
+#panes {
+	width:970px;	
+	height:392px;
+	
+	/* must be relative so the individual panes can be absolutely positioned */
+	position:relative;
+}
+
+/* crossfading effect needs absolute positioning from the elements */
+#panes div {
+	display:none;		
+	position:absolute;
+	width:970px; 
+}
+/* panes */
+#lesson_list_detail {width:760px;float:left;margin:10px 15px;}
+#lesson_list_detail table {display:none;width:760px;}
+.about_cell_0927{width:170px;border-right:1px solid #ededed;margin-right:15px;}
+.about_cell_0928{width:280px;border-bottom:1px solid #ededed;margin-right:35px;}
+
+</style>
+
+
+
+
+{* 包含脚本文件 *}
+{insert_scripts files='common.js,jquery.tools.min.full.js'}
+
+
+
+</head>
+<body>
+<div id="globalWrapper">  <div style="float:left;"></div>
+<div id="wrapper"><!-- #BeginLibraryItem "/library/page_header.lbi" -->
+>
+<!-- #EndLibraryItem -->
+
+
+<div id="container" class="f_left">
+	<div>
+		<img border="0"  src="{$img_path}training/training_title.png"/>
+		<div class="f_right training_title">
+			<a href="training.php?act=event_list"><img src="{$img_path}training/event_icon.png" />培训</a>
+			<a href="training.php?act=course_list"><img style="height:20px;" src="{$img_path}training/course_icon.png" />课程</a>
+			<a href="training.php?act=location_list"><img src="{$img_path}training/location_icon.png" />地点</a>
+			<a href="training.php?act=video_list"><img style="height:20px;" src="{$img_path}training/video_icon.png" />视频</a>
+		</div>
+	</div>
+	<div style="height:8px;"></div>
+	
+	<!--{if $action eq 'course'} -->
+	<div style="width:184px;" class="f_left">
+		<div class="listbox f_left">
+			<div class="nav_top_lite_grey">
+				<span class="icon"><img src="{$img_path}training/course_icon.png" /></span>
+				<span class="grey333">课程列表</span>
+		    	<div class="bgr"></div>
+			</div>
+			<div class="menucontent_184">
+			
+			<!--{foreach from=$course_list item=course}-->
+				<div class="listitem border_bottom" >
+					<div style="margin: 0px 6px 0px 0px;" class="f_left">
+						<a href="training.php?act=course&amp;id={$course.course_id}"><img src="{$course.course_logo}" alt="{$course.course_name}" width="55" /></a></div>
+					<div class="f_left" style="width:113px;">
+						<h3 class="font11px"><a href="training.php?act=course&amp;id={$course.course_id}">{$course.course_name}</a></h3>
+						{$course.course_brief|escape:html|truncate:30:"..":true}
+					</div>
+					<div class="clear">&nbsp;</div>
+				</div>
+			<!--{/foreach}-->
+
+			</div>
+		</div>
+		
+		<div class="listbox f_left">
+			<div class="nav_top_lite_grey">
+				<span class="icon"><img src="{$img_path}training/goods_icon.png" /></span>
+				<span class="grey333">商品列表</span>
+		    	<div class="bgr"></div>
+			</div>
+			<div class="menucontent_184">
+			
+			<!--{foreach from=$goods_list item=goods}-->
+				<div class="listitem border_bottom" >
+					<div style="margin: 0px 6px 0px 0px;" class="f_left">
+						<a href="goods.php?id={$goods.goods_id}"><img src="{$goods.goods_thumb}" width="55" /></a></div>
+					<div class="f_left" style="width:113px;">
+						<h3 class="font11px"><a href="goods.php?id={$goods.goods_id}">{$goods.goods_name}</a></h3>
+					</div>
+					<div class="clear">&nbsp;</div>
+				</div>
+			<!--{/foreach}-->
+
+			</div>
+		</div>
+		
+		
+	</div>
+	
+	<div id="page-middle" style="width:790px;margin-left:6px;">
+		<div class="goods_main_top_790"></div>
+		<div class="goods_main_body_790" style="padding-top:20px;">
+			<div style="width:120px;text-align:right;margin:8px 20px 0px 2px;" class="f_left"><img src="{$course.course_logo}" width="100" /></div>
+			<div style="width:550px;" class="f_left">
+				<table class="table_standard">
+					<tr><td class="bold" style="width:60px;">{$lang.course_name}:</td>
+						<td class="grey666">{$course.course_name}</td></tr>
+					<tr><td class="bold" style="width:60px;">{$lang.course_brief}:</td>
+						<td class="grey666">{$course.course_brief}</td></tr>
+					<tr><td class="bold" style="width:60px;">{$lang.course_duration}:</td>
+						<td class="grey666">{$course.course_duration} 天</td></tr>
+					<tr><td class="bold" style="width:60px;">{$lang.course_cat}:</td>
+						<td class="grey666"><a href="training.php?act=course_cat&amp;id={$course.course_cat}">{$course.course_cat_name}</td></tr>
+				
+					<tr><td colspan="2">{$course.course_desc}</td></tr>
+				</table>
+				
+				
+			</div>
+		</div>
+		<div class="goods_main_bottom_790"></div>
+		
+		<div class="nav_top_lite_grey" style="margin-top:5px;width:790px;">
+			<span class="font14px grey333">课程列表</span><div class="bgr"></div>
+    	</div>		
+		<div class="goods_main_body_790 f_left">
+			<div id="lesson_list_tab" class="training_title f_right">
+				<a href="#" style="text-align:center;">列表</a>
+				<a href="#" style="text-align:center;">详细</a>
+			</div>
+
+
+
+
+			<!-- overlayed element, which is styled with external stylesheet -->
+			<div id="lesson_list_detail">
+				<table width="95%" class="table_border table_standard" border="1">
+
+				    <tr>
+					  <th width="80">{$lang.course_id}</th>
+				      <th>{$lang.lesson_name}</th>
+				      <th>{$lang.lesson_brief}</th>
+				      <th width="50">{$lang.lesson_duration}</th>
+				      <th>{$lang.course_day}</th>
+				      <th width="30">{$lang.sort_order}</th>
+				      <th width="30">{$lang.view}</th>
+				    </tr>
+					{foreach from=$lessons_list  item=item}
+					<tr><td colspan="8">Day {$item.course_day} of {$item.course_duration} </td></tr>
+						{foreach from=$item.lessons  item=lesson}
+
+				    <tr>
+					  <td class="center">{$lesson.course_name}</td>
+				      <td>{$lesson.lesson_name|escape:html}</td>
+				      <td>{$lesson.lesson_brief|truncate:36}</td>
+				      <td class="center">{$lesson.lesson_duration}小时</td>
+					  <td class="center">{$lesson.course_day}</td>
+				      <td class="center">{$lesson.sort_order}</td>
+				      <td class="center">
+				        <a href="training.php?act=lesson&lesson_id={$lesson.lesson_id}" title="{$lang.view}">{$lang.view}</a>
+				      </td>
+				    </tr>
+						{/foreach}
+					{/foreach}
+				</table>
+				
+				<table width="95%" class=" table_standard">
+					{foreach from=$lessons_list  item=item}
+					<tr><td>Day {$item.course_day} </td></tr>
+						{foreach from=$item.lessons  item=lesson}
+
+				    <tr><td><h3>{$lesson.lesson_name|escape:html}</h3>
+						{$lesson.lesson_brief}<br><br>
+					</td></tr>
+						{/foreach}
+					{/foreach}
+				</table>
+
+			
+			</div>
+			<script type="text/javascript">
+				// perform JavaScript after the document is scriptable.
+				$(function() {
+					// setup ul.tabs to work as tabs for each div directly under div.panes
+					$("div#lesson_list_tab").tabs("#lesson_list_detail > table"); //
+				});
+
+			</script>
+		</div>
+		<div class="goods_main_bottom_790"></div>
+		
+	</div>
+	<!--{/if} -->
+
+		
+</div><!--container end-->
+
+
+<!-- #BeginLibraryItem "/library/page_footer.lbi" -->
+>
+<!-- #EndLibraryItem --></div>
+<!-- End #Wrapper -->
+<div style="float:left;"></div></div><!-- End #globalWrapper -->
+</body>
+</html>

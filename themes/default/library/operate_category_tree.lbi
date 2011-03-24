@@ -1,0 +1,60 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<div class="operate_left_menu">
+<div class="operate_nav_top">
+	<div class="title f_left" style="background:url({$img_path}operate/ui_category.png) no-repeat 10px 3px;"> 
+	产品分类
+	</div>
+	<a id="open_category_tree" class="open_btn"> </a><a id="close_category_tree" class="close_btn"> </a>
+</div>
+<ul id="nav" style="background:none;padding-left:15px;">
+    <!--{foreach from=$categories item=cat}-->
+    <li>
+    	<span class="f_left"><A href="javascript:void(0)" onClick="doMenu(this)"></A></span>
+        <span class="f_left s_none"><A href="solution_operate.php?category={$cat.id}
+			{if $order_id}&amp;order_id={$order_id}{/if}">{$cat.name|escape:html}</A></span>
+        <ul>
+          <!--{foreach from=$cat.children item=child}-->
+          <li><A href="solution_operate.php?category={$child.id}
+			{if $order_id}&amp;order_id={$order_id}{/if}">{$child.name|escape:html}</A></li>
+          <!--{/foreach}-->
+        </ul>
+    </li>
+    <!--{/foreach}-->
+
+</ul>
+</div>
+<script language="javascript" type="text/javascript">		
+
+function doMenu(obj){
+	var items=obj.parentNode.parentNode.getElementsByTagName("ul");
+	var itmUl;
+	if(items.length>0){
+		itmUl=items[0];
+	}
+	if(itmUl.className!="ex"){
+		cxAll();
+		itmUl.className="ex";
+	}else{
+		itmUl.className="cx";
+	}
+}
+function statUp(){
+	cxAll();
+	var ulDom=document.getElementById("nav");
+	var items=ulDom.getElementsByTagName("ul");
+	if (items.length>0)
+	{
+		//items[0].className="ex";
+	}
+}
+function cxAll(){
+	var ulDom=document.getElementById("nav");
+	var items=ulDom.getElementsByTagName("ul");
+	for (var i=0;i<items.length;i++)
+	{
+		items[i].className="cx";
+	}
+}
+statUp();
+</script>

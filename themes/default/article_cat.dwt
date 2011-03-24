@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>{$page_title}</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="animated_favicon.gif" type="image/gif" />
+<link href="css.css" rel="stylesheet" type="text/css" />
+<link href="css/scrollable.css" rel="stylesheet" type="text/css" />
+{* 包含脚本文件 *}
+{insert_scripts files='common.js,jquery.tools.min.js'}
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		//my_order_list
+		//$("a.up_ico").hide();//slideUp
+		$("a#ico_handler").click(function(){
+			$(this).toggleClass("up_ico");
+			$(this).parent().parent().next("ul").slideToggle(300).siblings("ul").slideUp("slow");
+		});
+		
+	});
+	function close_crm_info()
+	{
+		document.getElementById("crm_info_bar").style.display="none";
+		document.getElementById("close_crm_info_btn").style.display="none";
+	}
+</script>
+
+</head>
+
+<body>
+<div id="globalWrapper">  <div style="float:left;"></div>
+<div id="wrapper">
+<!-- #BeginLibraryItem "/library/page_header.lbi" -->
+	>
+<!-- #EndLibraryItem -->
+
+
+<div id="container">
+<div id="page-left">
+	<!-- TemplateBeginEditable name="主区域左侧" -->
+	<!-- #BeginLibraryItem "/library/meter_cate.lbi" -->
+	>
+	 <!-- #EndLibraryItem -->
+
+	<!-- #BeginLibraryItem "/library/new_material.lbi" -->
+	>
+	 <!-- #EndLibraryItem -->
+
+	<!-- TemplateEndEditable -->
+</div>
+<!-- End #page-left -->
+<div id="page-middle">
+	
+	<!-- #BeginLibraryItem "/library/article_list.lbi" -->
+	>
+	{insert name='ads' id=$ads_id num=$ads_num}
+	 <!-- #EndLibraryItem -->
+	
+	
+</div>
+<!-- End #page-middle -->
+
+<div class="clear"></div>
+</div>
+<!-- #BeginLibraryItem "/library/page_footer.lbi" -->
+>
+<!-- #EndLibraryItem --></div>
+<!-- End #Wrapper -->
+<div style="float:left;"></div></div><!-- End #globalWrapper -->
+</body>
+</html>

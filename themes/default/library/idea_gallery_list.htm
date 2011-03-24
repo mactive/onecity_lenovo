@@ -1,0 +1,11 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="grey999">点击小图显示大图</div>
+<!-- {foreach from=$idea.gallery item=item} -->
+	<div class="gallery_item">
+		<img src="{$item.thumb_url}" width="120" height="120" rel="#gallery_{$item.img_id}" />
+	</div>
+	<div class="apple_overlay" id="gallery_{$item.img_id}">
+		<img src="{$item.img_original}" width="585"/><br>
+		<span>{$item.img_desc}</span>
+	</div>
+<!-- {/foreach} -->

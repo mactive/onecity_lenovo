@@ -1,0 +1,4 @@
+@charset "utf-8";
+/* CSS Document */
+
+.screen_bg{ background:url(../images/smsdown/screen_bg.gif) repeat-y; height:400px; overflow:hidden; width:435px;}

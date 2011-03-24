@@ -1,0 +1,34 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- {if $best_goods} -->
+<!--<div class="title-div">推荐</div> -->
+<div class="content-div">
+	<div class="module_top"></div>
+	<div class="module_body">
+  	<ul>
+  	<!--{foreach from=$best_goods key=myId item=goods}-->
+  	<li class="bli{$myId}">
+		<a href="{$goods.url}" style="height:100px;display:block;margin:10px 0px;"><img src="{$goods.thumb}" border="0" alt="{$goods.name|escape:html}" class="thumb" width="100" height="100" /></a>    	
+		<a href="{$goods.url}" title="{$goods.name|escape:html}">
+	
+		<strong>{$goods.goods_name|escape:html|truncate:12:"..":true}</strong></a>		<br />
+        <div style="_height:40px;">
+		<!-- {if $goods.promote_price neq 0} -->
+    	{$lang.promote_price}<span class="goods-price">{$goods.promote_price}</span>
+    	<!-- {else}-->
+			<!-- {if $sm_session.user_rank} -->
+				{$lang.shop_price_short}<span class="goods-price">{$goods.shop_price_formated}</span>
+			<!-- {else}-->
+				{$lang.market_price_short}<span class="goods-price">{$goods.market_price_formated}</span>	
+        	<!-- {/if}-->
+        	
+    	<!--{/if}-->
+		</div>
+  		</li>
+  	<!--{/foreach}-->
+  	</ul>
+  	<br style="clear:both"/>
+  	<div style="text-align:right;width:95%;"><A href="../search.php?intro=best">more...</A></div>
+  </div>
+</div>
+<!-- {/if} -->
+<br style="clear:both;height:1px;font-size:1px;line-height:1px;"/>

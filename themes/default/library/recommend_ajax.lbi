@@ -1,0 +1,33 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- {if $promotion_goods} -->
+<div class="slider-wrap">
+			特价促销
+	<div id="slider1" class="csw">
+		<div class="panelContainer">
+			<!--{foreach from=$promotion_goods name="foo" item=goods}-->
+			<div class="panel" title="{$smarty.foreach.foo.iteration}">
+				<div class="wrapper">
+						<div class="maskpng">
+						<A href="{$goods.url}">
+						<span></span>
+						<img src="{$goods.thumb}" border="0" width="120" height="120"  alt="{$goods.name|escape:html}" /></A>
+						</div>
+						<br />
+						<A href="{$goods.url}" title="{$goods.name|escape:html}">{$goods.name|escape:html}</A><br />
+						<div class="goods-price font11px">{$goods.brief|truncate:12:"..":true}</div>
+					    <div class="goods-price">{$goods.promote_price}</div>
+						<div>促销图片</div>
+				</div>
+			</div>
+			<!--{/foreach}-->
+			
+		</div><!-- .panelContainer -->
+	</div><!-- #slider1 -->
+</div><!-- .slider-wrap -->
+
+  <div style="text-align:right"><A href="../search.php?intro=promotion">more...</A></div>
+
+<div style="height:10px;"></div>
+
+
+<!-- {/if} -->

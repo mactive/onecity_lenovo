@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+<title>jQuery Autocomplete Plugin</title>
+<script type="text/javascript" src="js/lib/jquery.js"></script>
+<script type='text/javascript' src='js/lib/jquery.bgiframe.min.js'></script>
+<script type='text/javascript' src='js/lib/jquery.ajaxQueue.js'></script>
+<script type='text/javascript' src='js/lib/thickbox-compressed.js'></script>
+<script type='text/javascript' src='js/lib/jquery.autocomplete.js'></script>
+<link rel="stylesheet" type="text/css" href="themes/default/css.css" />
+
+<script type="text/javascript">
+$(function() {
+	function format(mail) {
+		return "<div class='json_left'><img height='40' src='"+mail.logo+"'/></div><div class='json_right'>" + mail.name + "<br/><span class='font10px'>" + mail.brief + "</span></div>";
+	}
+	$("#email").autocomplete('auto_search.php', {
+		multiple: false,
+		width:328,
+		max:6,
+		mustMatch: true,
+		matchContains: false,
+		scrollHeight: 400,
+		parse: function(data) {
+			return $.map(eval(data), function(row) {
+				return {
+					data: row,
+					value: row.name,
+					result: row.name + " <" + row.to + ">"
+				}
+			});
+		},
+		formatItem: function(item) {
+			return format(item);
+		}
+	}).result(function(e, item) {
+		$("#content").append("<p>selected " + format(item) + "</p>");
+		//window.open(item.url,"_self");
+		//alert(item.name);
+	});
+});
+</script>
+</head>
+
+<body>
+
+<h1 id="banner"><a href="http://bassistance.de/jquery-plugins/jquery-plugin-autocomplete/">jQuery Autocomplete Plugin</a> Demo</h1>
+
+<div id="content">
+	<form autocomplete="off">
+		<p>
+			<label>E-Mail (remote json):</label>
+			<div style="margin-left:300px;"><input id="email" size="20" type="text"/></div>
+		</p>
+		
+		<input type="submit" value="Submit" />
+	</form>
+	
+	<a href="emails.phps">Server-side script creating the JSON data</a>
+
+</div>
+</body>
+</html>

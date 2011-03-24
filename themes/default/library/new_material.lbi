@@ -1,0 +1,14 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="new_material">
+	<div class="new_material_top">
+		<img src="{$img_path}title/new_material_title_trans.png">
+	</div>
+	<div class="new_material_bottom">
+		<ul>
+			<!-- {foreach from=$article_list_new item=article} -->
+				<li><a href="article.php?id={$article.id}">{$article.add_time}{$article.title}</a></li>
+		  	<!-- {/foreach} -->
+		</ul>
+	</div>
+</div>	
+	

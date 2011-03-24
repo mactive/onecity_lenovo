@@ -1,0 +1,30 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	<div class="operate_left_menu" id="operate_interaction">
+	<div class="operate_nav_top">
+		<div class="title f_left" style="background:url({$img_path}operate/ui_category.png) no-repeat 10px 3px;"> 
+		<a style="cursor:pointer;color:#fff;" href="solution_operate.php?act=order_detail&order_id={$order_info.order_id}">订单明细</a>
+		</div>
+	</div>
+		<div>
+			<div class="pad_l_10px">商品总价: {$order_info.order_amount}元<br>
+			总计税后: {$order_info.order_amount_after_tax}元
+			</div>
+			
+			<table border="0" class="table_standard table_border_black">
+			<!--{foreach from=$order_detail item=cat_info}-->
+				<tr><td colspan="2" style="border-bottom:1px solid #333333;font-weight:bold;background:#bbbbbb;">{$cat_info.cat_name}</td></tr>
+				<!--{foreach from=$cat_info.step_info name=wrap item=step}-->
+						<tr>
+						<td><span {if $goods_id eq $step.goods_id} class="bold font14px blue-color"{/if}>{$step.step_count}</span> </td> 
+						<td style="line-height:15px;padding:5px 0px;"><span {if $goods_id eq $step.goods_id} class="bold font14px blue-color"{/if}>{$step.goods.goods_name}</span></td>
+						</tr>
+				<!--{/foreach}-->
+				
+			<!--{/foreach}-->
+			</table>
+			
+	    </div>
+	</div>
+
+

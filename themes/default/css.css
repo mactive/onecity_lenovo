@@ -1,0 +1,20 @@
+@charset "UTF-8";
+/* CSS Document */
+/*=Library*/
+/*=============================================================================================*/
+@import url("css/layout.css");/* 只要在首页出现过的区块都写在这里，包括布局的样式*/
+@import url("css/style.css");/* 页面美观辅助样式*/
+@import url("css/js_tree.css");/* 页面美观辅助样式*/
+@import url("css/operate.css");/* 页面美观辅助样式*/
+
+/* 菜单
+/*=============================================================================================*/
+@import url("css/reset.css");/*xhtml元素的设定*/
+@import url("css/boxes.css");/*xhtml元素的设定*/
+@import url("css/menu.css");/*xhtml元素的设定*/
+
+/* 菜单
+
+
+
+

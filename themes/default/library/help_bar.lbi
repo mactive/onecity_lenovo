@@ -1,0 +1,33 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="content-div">
+	<ul class="mootabs_title">
+	<div class="help_bar_top">
+		<span>客服中心</span>
+		<div class="bgr"></div>
+
+		</div>
+	</ul>
+
+
+<div class="help_bar_body">
+	<div id="help-1" class="mootabs_panel">
+	<!--客户服务 begin-->
+	<div id="foot_list">
+		<div style="height:30px;width:1px; border-left:1px solid #b6b6b6;float:left;"></div>
+		<!--{foreach from=$customer_center_art item=cate}-->
+			<ul>
+				<li class="title"><a href="article_cat.php?id={$cate.cat_id}">{$cate.cat_name}</a></li>
+				<!--{foreach from=$cate.subarticles item=sub}-->
+					<li><a target="_blank" href="{$sub.url}">{$sub.title}</a></li>
+				<!--{/foreach}-->
+		    </ul>
+		<!--{/foreach}-->
+		<div style="height:30px;width:1px; border-right:1px solid #b6b6b6;float:left;margin-left:202px;"></div>
+	  </div>
+	<!--客户服务 end-->
+	</div>
+
+</div>
+
+
+</div>

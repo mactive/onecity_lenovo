@@ -1,0 +1,133 @@
+/* 友情链接*/
+<!--{if $img_links  or $txt_links }-->
+<div style="border:1px solid #CCC;margin:5px auto 10px auto;padding:5px;">
+<!-- {if $img_links} -->
+<div style="padding:3px;">
+<!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
+<span style="width: 100px; text-align: center">
+<a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" width="88" height="31" alt="{$link.name}" border="0" /></a>
+</span>
+<!--结束图片类型的友情链接{/foreach}-->
+</div>
+<!-- {/if} -->
+<!-- {if $txt_links} -->
+<div style="padding:3px;">
+<!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
+<span style="width: 100px; text-align: center">
+[<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>]
+</span>
+<!--结束文字类型的友情链接{/foreach}-->
+</div>
+<!-- {/if} -->
+</div>
+<!--{/if}-->
+
+
+/* 产品分类*/
+<div class="title-div"><img src="../images/category.gif" alt="Category" width="158" height="39" /></div>
+<div id="cat-div" style="padding:5px 10px;">
+  <ul>
+    <!--{foreach from=$categories item=cat}-->
+    <li> <span class="parent-cat"><A href="{$cat.url}">{$cat.name|escape:html}</A></span><br />
+      <!--{foreach from=$cat.children item=child}-->
+      <span style="white-space:nowrap;"><A href="{$child.url}">{$child.name|escape:html}</A></span>
+      <!--{/foreach}-->
+    </li>
+    <!--{/foreach}-->
+  </ul>
+</div>
+
+    <li><A href="{$cat.url}" onMouseOver="doMenu(this)">{$cat.name|escape:html}</A>
+
+
+<li><a href="#" onclick="doMenu(this)">菜单2</a>
+	<ul>
+		<li><a href="#">菜单2_1</a></li>
+		<li><a href="#">菜单2_2</a></li>
+		<li><a href="#">菜单2_3</a></li>
+		<li><a href="#">菜单2_4</a></li>
+		<li><a href="#">菜单2_5</a></li>
+		<li><a href="#">菜单2_6</a></li>
+		<li><a href="#">菜单2_7</a></li>
+		<li><a href="#">菜单2_6</a></li>
+		<li><a href="#">菜单2_7</a></li>
+		<li><a href="#">菜单2_6</a></li>
+		<li><a href="#">菜单2_7</a></li>
+		<li><a href="#">菜单2_6</a></li>
+	</ul>
+</li>
+
+/* search-bar */
+<div id="search-bar">
+  <div id="search-left"><!-- TemplateBeginEditable name="导航栏下方左侧" -->
+<!-- #BeginLibraryItem "/library/ur_here.lbi" -->
+
+<div style="padding:3px 15px 0px 15px;">{$lang.ur_here} {$ur_here}</div>
+<!-- #EndLibraryItem -->
+<!-- TemplateEndEditable --></div>
+  <div id="search-right"><!-- TemplateBeginEditable name="导航栏下方右侧" -->
+<!-- #BeginLibraryItem "/library/search_form.lbi" -->
+
+<div style="padding:0px 15px;">
+<form id="searchForm" name="searchForm" method="get" action="search.php" onSubmit="return checkSearchForm()">
+<img src="../images/icon_search.gif" alt="search" />
+<select name="category" id="category" style="vertical-align:middle;">
+  <option value="0">{$lang.all_category}</option>
+  {$category_list}
+</select>
+<input name="keywords" class="textbox" type="text" id="keyword" value="{$search_keywords|escape}" />
+<input type="image" name="imageField" src="../images/btn_go.png" style="border:none;"/>
+<a href="search.php?act=advanced_search">{$lang.advanced_search}</a>
+</form>
+</div>
+{if $searchkeywords}
+<div style="padding:0px 15px;text-align: right;">
+{$lang.hot_search} : 
+{foreach from=$searchkeywords item=val}
+<a href="search.php?keywords={$val|escape}">{$val}</a>
+{/foreach}
+</div>
+{/if}
+
+<script type="text/javascript">
+{literal}
+<!--
+function checkSearchForm()
+{
+if(document.getElementById('keyword').value)
+{
+    return true;
+}
+else
+{
+    return false;
+}
+}
+-->
+{/literal}
+</script>
+
+<!-- #EndLibraryItem -->
+<!-- TemplateEndEditable --></div>
+</div>
+<!-- End #search-bar -->
+
+
+
+
+<!--{foreach from=$best_goods item=goods}-->
+<table border="0" cellpadding="3" cellspacing="1" class="goods-table" style="float: left">
+  <tr>
+    <td align="center"><a href="{$goods.url}"><img src="{$goods.thumb}" border="0" alt="{$goods.name|escape:html}" class="thumb" /></a></td>
+  </tr>
+  <tr>
+    <td><A href="{$goods.url}" title="{$goods.name|escape:html}">{$goods.short_style_name}</A><br />
+      <!-- {if $goods.promote_price neq ""} -->
+      {$lang.promote_price}<span class="goods-price">{$goods.promote_price}</span>
+      <!-- {else}-->
+      {$lang.shop_price}<span class="goods-price">{$goods.shop_price}</span>
+      <!--{/if}-->
+    </td>
+  </tr>
+</table>
+<!--{/foreach}-->

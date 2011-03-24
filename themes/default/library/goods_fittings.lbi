@@ -1,0 +1,24 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- {if $fittings} -->
+<div class="title-div">
+	<div class="f_left"><img src="../images/green_arrow.png" alt="related products"/></div>
+	<div class="f_left font14px" style="line-height:22px;padding-left:8px;"> 相关配件 Fittings</div>
+	<div class="clear"></div>
+</div>
+  <!--{foreach from=$fittings item=goods}-->
+  <table border="0" cellpadding="3" cellspacing="1" class="goods-table" style="float: left">
+    <tr>
+      <td align="center"><a href="{$goods.url}" target="_blank"><img src="{$goods.goods_thumb}" border="0" alt="{$goods.name|escape:html}" class="thumb" /></a></td>
+    </tr>
+    <tr>
+      <td><a href="{$goods.url}" target="_blank"
+        title="{$goods.goods_name|escape:html}">{$goods.short_name|escape:html}</a><br />
+        {$lang.shop_price}<span class="market-price">{$goods.shop_price}</span><br />
+        {$lang.fittings_price}<span class="goods-price">{$goods.fittings_price}</span><br />
+        <a href="javascript:addToCart({$goods.goods_id}, {$goods_id})" class="add_cart"></a>
+      </td>
+    </tr>
+  </table>
+  <!--{/foreach}-->
+<br style="clear:both"/>
+<!-- {/if} -->

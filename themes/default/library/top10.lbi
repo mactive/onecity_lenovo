@@ -1,0 +1,16 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="left_menu">
+<div class="nav_top_grey">
+    <span>销售排行 top 10</span>
+    <div class="bgr"> </div>
+</div>
+<div class="menucontent">
+  <ul class="top-list">
+    <!-- {foreach name=top_goods from=$top_goods item=goods}-->
+    <li><img src="../images/top_{$smarty.foreach.top_goods.iteration}.gif" width="12" height="11" alt="top" /> <a href="{$goods.url}" title="{$goods.name|escape:html}">{$goods.short_name}</a></li>
+    <!--{/foreach}-->
+  </ul>
+</div>
+<div class="nav_bot"></div>
+<div style="height:14px;"></div>
+</div>

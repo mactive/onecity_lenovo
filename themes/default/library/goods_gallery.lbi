@@ -1,0 +1,14 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<div id="gallery_tabs">
+			<ul>
+				<!-- {foreach from=$pictures key=myId item=picture}-->
+			        <li><a href="#gallery_tabs-{$myId}" class="imghref">
+					<img src="{if $picture.thumb_url}{$picture.thumb_url}{else}{$picture.img_url}{/if}" alt="{$goods.goods_name}" border="0" /></a></li>
+				<!--{/foreach}-->
+			</ul>
+			<!-- {foreach from=$pictures key=myId item=picture}-->
+				<div id="gallery_tabs-{$myId}"><img src="{$picture.img_url}" alt="{$goods.goods_name}" border="0" /></div>
+			<!--{/foreach}-->
+	</div>
+
+

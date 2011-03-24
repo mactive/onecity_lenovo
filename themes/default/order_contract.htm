@@ -1,0 +1,26 @@
+<div class="operate_area" id="listDiv">
+	<div class="area_brand">
+		<ul>
+			合同ID：{$contract.contract_id}
+			合同编号：{$contract.contract_sn}
+			
+			<input type="button" value="审核通过"  onclick="audit_order({$order_id})" />
+			<input type="button" value="合同PDF"  onclick="javascript:window.open( 'print_pdf.php?data=helloworld&amp;order_id={$order_id}' )" /><br><br/>
+
+		</ul>
+	</div>
+	
+
+	<div class="area_step">
+		
+		{include file="contract_templete1.htm"}
+
+		
+		
+	</div>
+
+	
+</div>	
+
+	
+	

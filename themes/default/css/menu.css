@@ -1,0 +1,115 @@
+/* CSS Document */
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * @copyright  Copyright (c) 2004-2007 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+
+/* Structure */
+
+form#g-search {
+display:block;
+}
+
+#search-bar {
+  margin:0px;
+  display: table;
+  width: 815px;
+  height:28px;
+}
+
+#search-bar #search-left {
+    position:absolute;
+}
+
+#search-bar #search-right {
+    float:right;
+    position:relative;
+    right:0;
+}
+
+#search-bar img, #search-bar input {
+  vertical-align: middle;
+}
+
+/* GLOBAL SEARCH */
+#globalsearch { width: 165px; height: 37px; position: absolute; top: 0; right: 0;background: url(../images/menu_bg_left_btm_bg_noborder.png) #FFFFFF right top no-repeat;
+				_background: url(../images/menu_bg_left_btm_bg_noborder.png) #FFFFFF right -1px no-repeat;}
+#globalsearch.active { background-position: 100% -38px; }
+#globalsearch .search-wrapper { position: relative; width: 200px; margin-top: 9px; margin-left: 11px; }
+#globalsearch .search-wrapper .left, 
+#globalsearch .search-wrapper .right { behavior:url(/Catalog/global/iepngfix/iepngfix.htc); }
+#globalsearch .search-wrapper .left { display: block; position: absolute; left: 0; top: 0; width: 20px; height: 19px; background: url(../images/searchfield_leftcap.png) left top no-repeat; 
+									_background: url(../images/searchfield_leftcap_ie.png) left top no-repeat; }
+#globalsearch .search-wrapper .right { display: block; position: absolute; left:140px; top: 0; width: 10px; height: 19px; background: url(../images/searchfield_rightcap.png) right top no-repeat; 
+									_background: url(../images/searchfield_rightcap_ie.png) right top no-repeat; }
+#globalsearch .search-wrapper input { color: #7E7E7E; }
+#globalsearch .search-wrapper .reset { position: absolute; width: 11px; height: 11px; overflow:hidden; z-index: 1; right: 4px; top: 4px; background: url(../images/close.gif); display: block; cursor: pointer; _cursor:hand; }
+#globalsearch .search-wrapper.empty .reset { display: none; }
+#globalsearch .search-wrapper input.g-prettysearch { position: absolute; width: 110px; top: 0; right: 10px; left:20px;background: url(../images/searchfield_repeat.png) center top repeat-x; border: 0px; margin: 0; padding: 3px 0 0 0; font: 11px "Lucida Grande", Geneva, Arial, sans-serif;  height:19px;
+width:120px;}
+#globalsearch label .prettyplaceholder { display: none; }
+
+/* SEARCH SHORTCUTS */
+#sp-results { position: absolute; margin-right: -2px; margin-bottom: 0; margin-left: 0; top: 61px; left: 165px; _left: 171px; height: 0; z-index:105;}
+#sp-results .inside { width: 328px; height: auto; position: absolute; top: 0; right: 0; line-height: 1px; font-size: 1px; }
+#sp-results .resultCat { position: relative; color: #f6f6f6; background: #919191; width: 308px; height: 8px; margin: 0; padding-bottom: 12px; width: 302px; font: 11px "Lucida Grande", Geneva, Arial, Verdana, sans-serif; font-weight: bold; border: 1px none #fb6bff; }
+ul.sp-results { background: url(../images/shortcuts_bg_mid_grey.png) repeat-y 0 0; _background: url(../images/shortcuts_bg_mid_grey.gif) repeat-y 0 0; color: #333; padding: 0 3px; margin: 0; width: 328px; text-align: left; font: 10px/14px "Lucida Grande", Geneva, Arial, Verdana, sans-serif; }
+.family ul.sp-results {margin: 0}
+ul.sp-results li { margin: 0 0 -3px 0; padding: 5px 10px; list-style-type: none; height: 4.6em; position: relative; border-left: 1px solid #919191; border-right: 1px solid #919191; width: 300px; }
+ul.sp-results li.viewall { width: 308px; height: 20px; text-align: right; color: #000; position: absolute; bottom: -30px; *bottom: -27px; left: 0px; background: url(../images/shortcuts_bg_foot_grey.png) no-repeat left bottom; _background: url(../images/shortcuts_bg_foot_grey.gif) no-repeat left bottom; border-style: none; }
+ul.sp-results li.viewall a { color: #fff; padding-right: 23px; background: url(../images/shortcuts_arrow.png) no-repeat 99% 50%; behavior: url(/Catalog/global/iepngfix/iepngfix.htc); padding-top: 3px; padding-bottom: 3px; font: bold 11px "Lucida Grande", Geneva, Arial, Verdana, sans-serif; }
+ul.sp-results li.hoverli { background: #b7b7b7 none repeat-x; color: #fff; cursor: pointer; }
+ul.sp-results li.hoverli h4 a { color: #fff; }
+ul.sp-results li.hoverli p { color: #f1f1f1; }
+ul.sp-results li span.text { display: block; position: absolute; left: 68px; width: 240px; }
+ul.sp-results li h4 { margin: 0; font-size: 11px; font-weight: bold; }
+ul.sp-results li p { margin: 0; font-size: 10px; overflow: hidden; height: 2.7em; color: #555; }
+ul.sp-results li a { color: #606060; text-decoration: none; }
+ul.sp-results li img, 
+ul.sp-results li .replacementimg { position: absolute; left: 10px; width: 46px; height: 46px; behavior: url(/Catalog/global/iepngfix/iepngfix.htc); }
+ul.sp-results li h4 a { color: #191919; }
+ul.sp-results li.viewall.hover { background: url(../images/shortcuts_bg_foot_grey.png) no-repeat bottom left; }
+#sp-search-spinner { position: absolute; top: 13px; right: 16px; z-index: 10; display: none; }
+#sp-search-cancel img { cursor: pointer; }
+#sp-results .firstCat { position: absolute; top: -25px; left: 0; width: 308px; height: 8px; background: url(../images/shortcuts_bg_head_grey.png) no-repeat left top; _background: url(../images/shortcuts_bg_head_grey.gif) no-repeat left top;} 
+#sp-result-none.viewall {bottom: -27px; *bottom: -27px;}
+#sp-result-none.viewall a { font-size: 10px; }
+
+.cur_location {
+	padding:0px 0px 0px 0px;
+	height:22px;
+	min-width:200px;
+	_width:750px;
+	background:url(../images/cur_location_bg.png) left top no-repeat;
+}
+.cur_location .urhere{ float:left; line-height:24px;}
+.cur_location .urhere li{float:left; height:24px; background:url(../images/chevron.png) no-repeat left 1px; 
+						_background-image:url(../images/chevron_ie.png);
+							padding-right:5px;padding-left:15px;line-height:24px;}
+.cur_location .urhere li.none_chevron{background:none; _line-height:20px;}
+.cur_location .bgr{
+	width:8px;
+	height:22px;
+	margin:0px; padding:0px;
+	float:right;
+	background:url(../images/cur_location_bg.png) right top no-repeat;
+}
+
+/************************************************************/
+/********************[ Mage_CSS_C Layout]********************/
+/************************************************************/
+
+

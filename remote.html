@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+<title>jQuery Autocomplete Plugin</title>
+<script type="text/javascript" src="js/lib/jquery.js"></script>
+<script type='text/javascript' src='js/lib/jquery.bgiframe.min.js'></script>
+<script type='text/javascript' src='js/lib/jquery.ajaxQueue.js'></script>
+<script type='text/javascript' src='js/lib/thickbox-compressed.js'></script>
+<script type='text/javascript' src='js/lib/jquery.autocomplete.js'></script>
+<link rel="stylesheet" type="text/css" href="themes/default/css.css" />
+	
+<script type="text/javascript">
+$().ready(function() {
+
+	function findValueCallback(event, data, formatted) {
+		$("<li>").html( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
+	}
+	
+	function formatItem(row) {
+		return row[0] + " (<strong>id: " + row[1] + "</strong>)";
+	}
+	function formatResult(row) {
+		return row[0].replace(/(<.+?>)/gi, '');
+	}
+	
+	$("#singleBirdRemote22").autocomplete("auto_search.php", {
+		width: 260,
+		mustMatch: true,
+		matchContains: false,
+		selectFirst: false
+	});
+	
+	$("#singleBirdRemote").autocomplete("auto_search.php", {
+		minChars: 0,
+		max: 11,
+		width: 310,
+		matchContains: true,
+		autoFill: false,
+		formatItem: function(row, i, max) {
+			return i + "/" + max + ": \"" + row.name + "\" [" + row.to + "]";
+		},
+		formatMatch: function(row, i, max) {
+			return row.name + " " + row.to;
+		},
+		formatResult: function(row) {
+			return row.to;
+		}
+	});
+	
+
+	$("#suggest4").autocomplete('auto_search.php', {
+		width: 300,
+		multiple: true,
+		matchContains: true,
+		formatItem: formatItem,
+		formatResult: formatResult
+	});
+
+	$(":text, textarea").result(findValueCallback).next().click(function() {
+		$(this).prev().search();
+	});
+	$("#singleBirdRemote").result(function(event, data, formatted) {
+		if (data)
+			$(this).parent().next().find("input").val(data[1]);
+	});
+	$("#suggest4").result(function(event, data, formatted) {
+		var hidden = $(this).parent().next().find(">:input");
+		hidden.val( (hidden.val() ? hidden.val() + ";" : hidden.val()) + data[1]);
+	});
+    
+	
+	$("#scrollChange").click(changeScrollHeight);
+	
+	
+	$("#clear").click(function() {
+		$(":input").unautocomplete();
+	});
+});
+//改变 input 显示的项的数量
+function changeOptions(){
+	var max = parseInt(window.prompt('Please type number of items to display:', jQuery.Autocompleter.defaults.max));
+	if (max > 0) {
+		$("#singleBirdRemote").setOptions({
+			max: max
+		});
+	}
+}
+
+//改变 input 的显示高度
+function changeScrollHeight() {
+    var h = parseInt(window.prompt('Please type new scroll height (number in pixels):', jQuery.Autocompleter.defaults.scrollHeight));
+    if(h > 0) {
+        $("#singleBirdRemote").setOptions({
+			scrollHeight: h
+		});
+    }
+}
+
+function changeToMonths(){
+	$("#suggest1")
+		// clear existing data
+		.val("")
+		// change the local data to months
+		.setOptions({data: months})
+		// get the label tag
+		.prev()
+		// update the label tag
+		.text("Month (local):");
+}
+</script>
+	
+</head>
+
+<body>
+
+<h1 id="banner"><a href="http://bassistance.de/jquery-plugins/jquery-plugin-autocomplete/">jQuery Autocomplete Plugin</a> Demo</h1>
+
+<div id="content">
+	
+	<form autocomplete="off">
+		<p>
+			<label>Single Bird (remote):</label>
+			<input type="text" id="singleBirdRemote" />
+			<input type="button" value="Get Value" />
+			
+			<input type="button" value="Change Max Items" onclick="changeOptions();" />
+			<input type="button" value="Change scroll height" id="scrollChange" />
+		</p>
+		<p>
+			<label>Multiple Birds (remote):</label>
+			<textarea id='suggest4'></textarea>
+			<input type="button" value="Get Value" />
+		</p>
+		
+		<input type="submit" value="Submit" />
+	</form>
+	
+	<p>
+		<a href="#TB_inline?height=155&width=400&inlineId=modalWindow" class="thickbox">Click here for an autocomplete inside a thickbox window.</a> (this should work even if it is beyond the fold)
+	</p>		
+	
+	<div id="modalWindow" style="display: none;">
+                <p>
+                        <label>E-Mail (local):</label>
+                        <input type="text" id="thickboxEmail" />
+                        <input type="button" value="Get Value" />
+                </p>
+		</div>
+		
+	<button id="clear">Remove all autocompletes</button>
+	
+	<a href="auto_search.phps">PHP script used to for remote autocomplete</a>
+	
+	<h3>Result:</h3> <ol id="result"></ol>
+
+</div>
+</body>
+</html>

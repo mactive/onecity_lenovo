@@ -1,0 +1,25 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!--4个专题图片-->
+<div class="height_5px clear" style="background:#333333;"></div>
+<br>
+<div id="ads_fat">
+
+</div>
+<script type="text/javascript">
+		/*修改用户ID*/
+		//点击机构 联动客户列表
+			
+			var s= Math.floor(Math.random()*{$rand}+1);
+			
+			//document.write(s);
+			//document.getElementById('ads_fat').innerHTML = "<img src='data/adimg/ad_"+s+".jpg' />";
+	
+</script>  
+<div style="height:10px;"></div>
+{assign var='name' value='bob'}
+The value of $name is {$name}.
+   
+{random values="1,5"} {$int_rand}-  
+       
+
+  

@@ -1,0 +1,41 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="contact_bar">
+	<div class="border_top top_radius_5px">
+		<img src="{$img_path}common/contact_title.png" />
+	</div>
+	<div class="border_bottom">
+		<table class="table_standard">
+			<tr>
+				<td class="right" width="60">联系电话:</td>
+				<td>010-51271062</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>13720028098</td>
+			</tr>
+			<tr>
+				<td class="right">技术支持:</td>
+				<td>13260450907</td>
+			</tr>
+			<tr>
+				<td class="right">传真:</td>
+				<td>010-52171026</td>
+			</tr>
+			<tr>
+				<td class="right">地址:</td>
+				<td>北京市通州区怡乐北街巴克寓所14－641室</td>
+			</tr>
+		</table>
+		<div style="background:url({$img_path}common/dot_bg1.png) repeat-x; height:5px;line-height:5px;padding:0px;"></div>
+		<table class="table_standard">
+			<tr>
+				<td class="right" width="60">工作时间:</td>
+				<td ><img src="{$img_path}common/work_time.png" /></td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<div style="height:10px;"></div>
+
+

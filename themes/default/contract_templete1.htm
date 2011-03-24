@@ -1,0 +1,79 @@
+<div class="contract_form">
+	
+	<div style="padding-left: 212px;padding-top:20px;" class="font24px">设备买卖合同
+		</div>
+
+	<div style="padding-left: 388px;">合同编号 <span class="c_word" onclick="listTable.edit(this, 'edit_contract_sn', {$order_id})"> &nbsp;&nbsp;{$contract.contract_sn} &nbsp;&nbsp;</span>号</div>
+	<div >买方：<span class="c_word"> {$contract.custom.user_name}</span> (以下简称“甲方”)</div>
+	<div>
+		<div class="f_left">联系人：<span class="c_word" onclick="listTable.edit(this, 'edit_contact_name', {$order_id})"> &nbsp;&nbsp;{$contract.contact_name}&nbsp;&nbsp;</span></div>
+		<div class="f_left">职务：<span class="c_word" onclick="listTable.edit(this, 'edit_contact_title', {$order_id})">&nbsp;&nbsp;{$contract.contact_title}&nbsp;&nbsp;</span></div>
+		<div class="f_left">电话：<span class="c_word"> {$contract.custom.office_phone}</span></div>
+		<div class="clear"></div>
+	</div>
+	<div>地址：<span class="c_word" onclick="listTable.edit(this, 'edit_contact_address', {$contract.custom.address_id})"> {$contract.custom.address}</span></div>
+	<div>卖方：<span class="c_word">赛因博客网络技术（北京）有限公司 </span>(以下简称“乙方”)</div>
+	<div>
+		<div class="f_left">联系人：<span class="c_word"> {$contract.user.user_name}</span></div>
+		<div class="f_left">职务：<span class="c_word" onclick="listTable.edit(this, 'edit_user_title', {$order_id})">&nbsp;&nbsp;{$contract.user_title}&nbsp;&nbsp;</span></div>
+		<div class="f_left">电话：<span class="c_word"> {$contract.user.office_phone}</span></div>
+		<div class="clear"></div>
+	</div>
+	<div>地址：<span class="c_word"> {$contract.user.address}</span></div>
+	<br><br>
+	<div style="padding-left:20px;">根据《中华人民共和国合同法》中的有关规定， 经甲乙双方友好协商，就甲方在乙方购</div>
+	<div>买《
+			<span class="c_word" onclick="listTable.edit(this, 'edit_contract_name', {$order_id})"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$contract.contract_name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+	音频系统及设备》达成如下协议，以兹共同遵守。</div>
+	<div>一、双方义务</div>
+	<div>甲方义务：甲方按照本合同第二项第一条支付合同款项给乙方。</div>
+	<div>乙方义务：</div>
+	<div>1、乙方于收到合同款项后将设备交付给甲方。</div>
+	<div>2、乙方必须保证提供的设备为原厂家生产的原装正品， 并随设备附带原生产厂家证明及出</div>
+	<div style="padding-left:20px;">厂合格证。设备需符合甲方使用要求、国家法律、法规及行业标准。</div>
+	<div>3、乙方提供设备与合同不符或发现错发、损坏、短缺、 破损等情况，乙方应无条件给予更</div>
+	<div style="padding-left:20px;">换、补齐，工期不顺延。</div>
+	<div>二、合同总价及付款方式</div>
+	<div>1、本合同总金额为<span class="c_word" onclick="listTable.edit(this, 'edit_order_amount', {$order_id})">{$contract.order_amount}</span>元（人民币大写<span class="c_word"> {$contract.order_amount_rmb}</span>）。</div>
+	<div>2、经甲乙双方协商同意， 本合同所涉及金额均为系统设备供货价格。</div>
+	<div>三、知识产权</div>
+	<div style="padding-left:20px;">双方互相认可并尊重各自的注册商标和商标所享有的权利及对方其它 的知识产权。除本</div>
+	<div>合同明确者规定外， 本合同不得被解释为授予对方使用乙方享有的任何其他知识产权。 乙方</div>
+	<div>同时保证在标的的制作和使用不侵犯任何第三方的专利权、 商标权和其它知识产权，乙方应</div>
+	<div>就因第三方索赔给甲方造成的损失全面补偿甲方。</div>
+	<div>四、合同生效及变更</div>
+	<div>1、本合同自双方签字盖章（甲方以个人签字为准，代签无效） 之后生效。</div>
+	<div>2、买、卖双方均无权单方面更改本合同中的任何条款， 若本合同需变更须双方协商一致，</div>
+	<div style="padding-left:20px;">以书面形式修改后生效，修改后条约与本合同同具法律效力。</div>
+	<div>3、买、卖双方应按合同的约定，全面履行完合同义务至合同终止。</div>
+	<div>4、此合同传真件对于买卖双方均有效。</div>
+	<div>5、本合同构成双方之间有关题述事宜的全部协议， 取代在此以前甲乙双方就题述事宜的传</div>
+	<div style="padding-left:20px;">真、备忘录、合同、协议及其他双方口头承诺等。</div>
+	<div>五、争议解决</div>
+	<div style="padding-left:20px;">与本合同有关或由本合同产生的所有争议，甲乙双方协商解决； 如协商不成，提交合同</div>
+	<div>签定所在地仲裁委员会仲裁；仲裁裁决的结果为终局， 对双方均有约束力。</div>
+	<div>六、附件及其它</div>
+	<div>1、本合同及其相关附件都是本合同的必要组成部分， 与本合同具有同等法律效力。</div>
+	<div>2、本合同包含以下附件：《
+		<span class="c_word" onclick="listTable.edit(this, 'edit_order_note', {$order_id})"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>音频设备采购清单》</div>
+	<div>3、本合同一式两份，甲乙双方各执一份，均具有同等法律效力。</div>
+	<div>4、本合同及相关附件经双方授权代表签字盖章后生效（ 甲方以个人签字为准，代签无效），</div>
+	<div style="padding-left:20px;">同时具有法律效力。</div>
+	<div>5、本合同中未尽事宜，应依照有关法律规定处理， 也可本着友好协商的原则解决，形成的</div>
+	<div style="padding-left:20px;">附件作为本合同的有效组成部分。</div>
+	<div>七、补充条款</div>
+	<div style="padding-left:20px;"><span class="c_word"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+	<div class="f_left">
+		<div>甲方：<span class="c_word"> {$contract.custom.user_name}</span></div>
+		<div>代表人（签盖）：</div>
+		<div>签订日期：<span class="c_word" onclick="listTable.edit(this, 'edit_order_sign_day', {$order_id})">&nbsp;&nbsp;{$contract.order_sign_day}&nbsp;&nbsp;</span></div>
+	</div>
+	<div class="f_left" style="margin-left:20px;">
+		<div>乙方：<span  class="c_word">赛因博客网络技术（北京）有限公司</span></div>
+		<div>代表人（签盖）：</div>
+		<div>签订日期：<span class="c_word" onclick="listTable.edit(this, 'edit_order_sign_day', {$order_id})">&nbsp;&nbsp;{$contract.order_sign_day}&nbsp;&nbsp;</span></div>
+	</div>
+	<div class="clear"></div>
+	<div>注：本合同传真件具有法律效力，对合同甲乙双方均有约束力。</div>
+</div>

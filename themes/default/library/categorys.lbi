@@ -1,0 +1,51 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- 分类 -->
+<!--{foreach from=$customer_center_art item=item}-->
+	<div class="category_title"><a href="article_cat.php?id={$item.cat_id}">按资料种类</a></div>
+	<ul class="category_cell">
+	
+	<!--{foreach from=$item.subarticles item=cus}-->
+		<li><a href="{$cus.url}">{$cus.title}</a></li>
+	<!--{/foreach}-->
+	</ul>
+<!--{/foreach}-->
+
+
+<div class="category_title">
+	按资料种类
+</div>
+<ul class="category_cell">
+	<li><a href=""></a></li>
+	<li><a href=""></a></li>
+	<li><a href=""></a></li>
+	<li><a href=""></a></li>
+</ul>
+<!-- {foreach from=$rank_cat_list item=cat} -->
+<li><a href="{$cat.url}">{$cat.cat_name|escape:html} </a></li>
+<!-- {/foreach} -->
+
+<div class="category_title_middle">
+	按客户对象
+</div>
+<ul class="category_cell">
+	<li><a href=""></a></li>
+	<li><a href=""></a></li>
+	<li><a href=""></a></li>
+	<li><a href=""></a></li>
+</ul>
+<div class="category_title_under">
+	按文件格式
+</div>
+
+<div><img src="{$img_path}cat_title_bg_blow.png"></div>
+<div class="content-div">
+  <div style="list-style: none; margin: 10px; padding: 0;">
+    <!-- {foreach from=$cat_list item=cat} -->
+    <div>
+	<a href="{$cat.url}">{$cat.cat_name|escape:html} {if $cat.goods_num}({$cat.goods_num}){/if}</a>
+	</div>
+    <!-- {/foreach} -->
+  </div>
+</div>
+<!-- {if $sm_session.user_rank} -->
+<!-- {/if} -->

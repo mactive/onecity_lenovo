@@ -1,0 +1,10 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="quick_link">
+	<div class="border_top top_radius_5px title_style">
+		购物车
+	</div>
+	<div class="border_bottom bottom_radius_5px">
+		{insert name='cart_info'}
+	</div>
+	<div class="height_10px"></div>
+</div>	

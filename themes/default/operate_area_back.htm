@@ -1,0 +1,98 @@
+<div class="operate_area">
+	<div class="area_brand">
+		<ul>
+			order_id : {$order_id} name:<span class="can_edit" id="order_{$order_id}" onclick="listTable.edit(this, 'edit_order_name', {$order_id})">{$order_info.order_name}</span>
+			<input type="button" value="删除订单" onclick="trash_order({$order_id})" /><br>
+			goods_types={$order_info.order_goods_types}. 
+			count={$order_info.order_count} . amount:{$order_info.order_amount}<br/>
+			
+			<!-- {if $order_info.order_tag} -->
+		        <!-- {foreach from=$tt.order_tag item=tag name=list} -->
+				<li {if $brand_id eq $brand.brand_id} class="tag" {/if} >
+					<a href="{$brand.url}">{$brand.brand_name|escape:html} {if $brand.goods_num}({$brand.goods_num}){/if}</a></li>
+					
+		        <!-- {/foreach} -->
+		    <!-- {/if} -->
+		</ul>
+	</div>
+	
+	<div id="fliter_search" class="area_brand">
+		<form method="GET" class="sort" name="listform" style="padding-left:20px;">
+		    <a href="javascript:;" onClick="javascript:display_mode('list')"><img src="images/display_mode_list<!-- {if $pager.display == 'list'} -->_act<!-- {/if} -->.gif" alt="{$lang.display.list}"></a>
+		 	<a href="javascript:;" onClick="javascript:display_mode('grid')"><img src="images/display_mode_grid<!-- {if $pager.display == 'grid'} -->_act<!-- {/if} -->.gif" alt="{$lang.display.grid}"></a>
+			
+			<input name="price_min" type="text" size="3" /> ~ <input name="price_max" type="text" size="3" />
+			<input id="keywords" name="keywords" type="text" size="5" />
+		    <select name="sort">
+
+		      {html_options options=$lang.sort selected=$pager.sort}
+
+		    </select>
+		    <select name="order">
+
+		      {html_options options=$lang.order selected=$pager.order}
+
+		    </select>
+		    <input type="image" name="imageField" src="../images/btn_go.png" alt="go" style="border:none;" />
+		    <input type="hidden" name="category" value="{$category}" />
+		    <input type="hidden" name="display" value="{$pager.display}" id="display" />
+		    <input type="hidden" name="brand" value="{$brand_id}" />
+		    <input type="hidden" name="price_min" value="{$price_min}" />
+		    <input type="hidden" name="price_max" value="{$price_max}" />
+		    <input type="hidden" name="filter_attr" value="{$filter_attr}" />
+		    <input type="hidden" name="page" value="{$pager.page}" />
+		 </form>
+	</div>
+	
+	<div class="area_step">
+		
+		<!--{foreach name=wrap from=$order_detail item=step}-->
+		<!--{if $step.step_id}-->
+		<div class="op_step" id="op_step_{$step.goods.goods_id}">
+			<div class="step_top">
+				<div class="f_left">
+					<a href="{$step.goods.url}"> <img class="thumb" src="{$step.goods.goods_thumb}" alt_="{$step.goods.goods_name}" border="0"  /></a>
+				</div>
+				
+				<div class="f_left" style="width:200px; text-align:left;padding-top:5px;margin-left:10px;">
+						<a href="{$step.goods.url}">
+		          				{$step.goods.goods_name}
+		      			</a>
+	      			
+	      			<div style="text-align:left;margin-top:2px;">
+						<!--{if $step.goods.skpi eq "skpi" } -->
+							<img src="{$img_path}skpi_small.png" height="20" width="40" /><br>
+	      				<!--{/if}-->
+	      				<!--{if $goods.promote_price neq "" } -->
+	      				<span class="goods-price">{$step.goods.promote_price}</span>
+	      				<!--{else}-->
+	      				<span class="goods-price">{$lang.shop_price}{$step.goods.shop_price}</span>
+	      				<!--{/if}--><br>
+	
+						
+						<span class="goods-price blue">{$lang.salebase_price}{$step.goods.salebase_price}</span><br>
+						<span class="goods-price blue">{$lang.goods_number}{$goods.goods_number} 件</span>
+						
+	      			</div>
+
+				</div>
+				<div class="f_left" style="width:200px; text-align:left;padding-top:5px;margin-left:10px;">
+					{$lang.step_price} <span class="can_edit" id="step_price_{$step.step_id}" onclick="listTable.edit(this, 'edit_step_price', {$step.step_id})">{$step.step_price}</span> RMB<br/>
+					{$lang.step_count}<span class="can_edit" id="step_count_{$step.step_id}" onclick="listTable.edit(this, 'edit_step_count', {$step.step_id})">{$step.step_count}</span> 件<br/>
+					<a class="remove_from_order" href="javascript:;" onclick="remove_step({$step.step_id},{$order_id})"></a>
+				</div>
+				
+	  			<div class="clear"></div>
+			</div>
+			<div class="step_body"></div>
+		</div>
+		<!--{/if}-->
+		<!--{/foreach}-->
+		
+		
+	</div>
+	<div class="area_brand">
+		增加tag
+	</div>
+	
+</div>

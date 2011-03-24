@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>{$page_title}</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="animated_favicon.gif" type="image/gif" />
+<link href="css.css" rel="stylesheet" type="text/css" />
+{if $full_page}
+
+{* 包含脚本文件 *}
+{insert_scripts files='common.js,transport.js'}
+{* 包含脚本文件 *}
+{insert_scripts files='jquery-1.2.6.js,utils.js'}
+{insert_scripts files='ui.core.js,ui.tabs.js'}
+<script type="text/javascript">
+
+    $(function() {
+		$('#newgoods_tabs > ul').tabs( // 按分类的新产品
+		        defaults = {                    
+		             navClass: 'ui-tabs-new-nav',
+		             selectedClass: 'ui-tabs-new-selected'
+		         }
+		    );
+    });
+</script>
+
+</head>
+<body>
+<div id="globalWrapper">  <div style="float:left;"></div>
+<div id="wrapper"><!-- #BeginLibraryItem "/library/page_header.lbi" -->
+>
+<!-- #EndLibraryItem -->
+
+
+<div id="container" class="f_left">
+	<div class="page_header_menu">
+		<div class="f_left" style="margin-top:15px;">
+			<div class="f_left" style="margin-right:20px;">
+				<a href="supplier.php?act=take_supplier_register" class="take_supplier_register" rel="#overlay"></a>
+			</div>
+
+			<div class="f_left" style="margin-right:10px;">
+				<a href="supplier.php?act=take_contact_register" class="take_contact_register" rel="#overlay"></a> 
+			</div>
+		</div>
+		
+		<div class="f_right training_title">
+			<a href="supplier.php"><img src="{$img_path}operate/crm_icon.png" />{$lang.supplier}</a>
+			<a href="solution_purchase.php?act=show"><img src="{$img_path}operate/ui_order_ico.png" />采购管理</a>
+			<a href="solution_operate.php?act=project_tracking"><img src="{$img_path}operate/project_tracking_icon.png" />项目跟踪</a>
+		</div>
+	</div>
+
+	<div style="height:8px;" class="clear"></div>
+	<div style="height:1px;" class="hr"></div>
+	
+	<!--# top_bottons-->
+
+	<!--* top_bottons-->
+{/if}
+	
+
+
+	<!--*库存操作页面-->
+	<!--{if $action eq 'operate_purchase' || $action eq 'edit_contact'}-->
+
+	<script type="text/javascript">
+			/*修改用户ID*/
+			//点击机构 联动客户列表
+			function change_supplier_id(new_id,stepID)
+			{
+
+				var filters = new Object;
+				filters.supplier_id = new_id.value;
+				var divID = "operate_purchase_div_"+stepID;
+				
+				Ajax.call("solution_purchase.php?act=change_supplier_id", filters, function(result)
+			  	{
+					if (result.content)
+				      {
+						  document.getElementById(divID).innerHTML = result.content;
+				      }
+			  }, "GET", "JSON");
+			}
+
+	</script>
+	<div class="crm_outer_border">
+		<div class="crm_inner_border radius_5px f_left">
+		<div class="title-div">
+		<div class="f_left"><img src="images/green_arrow.png" alt="related products"/></div>
+		<div class="f_left font14px" style="line-height:22px;padding-left:8px;">采购信息 </div>
+		<div class="clear"></div>
+	</div>
+	
+	<br>
+
+	
+	<form action="solution_purchase.php" method="post" name="formUser" onsubmit="return register();">
+			<div>
+				<table width="90%"  border="0" align="left" class="table_standard">
+					<tr>
+				          <td width="25%" class="right"><strong>所属供应商:</strong></td>
+				          <td width="27%">
+							<select name="supplier_id" onchange="change_supplier_id(this,{$purchase_info.purchase_id})">
+							<option value="0">{$lang.select_please}</option>
+										{html_options options=$supplier_list selected=$purchase_info.supplier_id}
+						</select></td>
+						  <td width="48%">
+				            <span id="" class="label_box"> * 联系人的机构</span></td>
+				    </tr>
+					
+					<tr>
+						      <td width="25%" class="right"><strong>{$lang.contact_name}:</strong></td>
+						      <td width="27%">
+								<div id="operate_purchase_div_{$purchase_info.purchase_id}">
+								{include file="supplier_contact_list.htm"}
+								</div>
+							</td>
+							  <td width="48%">
+						        <span id="" class="label_box"> * 联系人</span></td>
+						</tr>	
+				    <tr>
+				      <td class="right"><strong>{$lang.purchase_price}</strong></td>
+				      <td ><input name="purchase_price" type="text" value="{$purchase_info.purchase_price}" size="10"/></td>
+					  <td >
+				        <span id="username_notice" class="label_box"> * RMB</span></td>
+				    </tr>
+					
+					<tr>
+				      <td class="right"><strong>{$lang.purchase_count}</strong></td>
+				      <td ><input name="purchase_count" type="text" value="{$purchase_info.purchase_count}" size="3" />件 </td>
+					  <td >
+				        <span id="username_notice" class="label_box"> * 一共需要采购:{$purchase_info.purchase_count} 件</span></td>
+				    </tr>
+					<tr>
+				      <td class="right"><strong>{$lang.purchase_time}</strong></td>
+				      <td >{$purchase_info.purchase_time}</td>
+					  <td >
+				        <span id="username_notice" class="label_box"> * 当前时间</span></td>
+				    </tr>
+					<tr>
+				      <td class="right"><strong>{$lang.order_period}</strong></td>
+				      <td ><input name="order_period" type="text" value="{$purchase_info.order_period}" size="3" /></td>
+					  <td >
+				        <span id="username_notice" class="label_box"> * {$lang.day}</span></td>
+				    </tr>
+
+
+				    <tr>
+				      <td class="right"><strong>{$lang.label_desc}</strong></td>
+				      <td>	<textarea  name="purchase_desc" cols="18" rows="3">{$purchase_info.purchase_desc}</textarea>
+
+					  </td>
+					  <td><span id="qq_notice" class="label_box"> 个人描述</span></td>
+				    </tr>
+				
+					<tr>
+						<td></td>
+						<td><input name="act" type="hidden" value="{$form_action}">	
+						<input name="purchase_id" type="hidden" value="{$purchase_info.purchase_id}">	
+						<input name="goods_id" type="hidden" value="{$purchase_info.goods_id}">	
+						请确定需要修改后点击<br>
+				        <input name="Submit" type="submit" value="{$lang.purchase}"></td>
+						<td></td>
+					</tr>
+				</table>
+			</div>
+			
+	</form>
+
+	</div>
+	<!--{/if}-->
+	<!--#会员注册界面-->
+
+{if $full_page}
+				
+</div><!--container end-->
+
+
+<!-- #BeginLibraryItem "/library/page_footer.lbi" -->
+>
+<!-- #EndLibraryItem --></div>
+<!-- End #Wrapper -->
+<div style="float:left;"></div></div><!-- End #globalWrapper -->
+{/if}
+</body>
+</html>

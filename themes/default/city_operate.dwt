@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>{$page_title}</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="animated_favicon.gif" type="image/gif" />
+<link href="css.css" rel="stylesheet" type="text/css" />
+
+{* 包含脚本文件 *}
+{insert_scripts files='transport.js,utils.js,jquery-1.2.6.js'}
+<script src="admin/js/listtable.js" type="text/javascript"></script>
+<script src="admin/js/common.js" type="text/javascript"></script>
+<script type="text/javascript">   
+        $(document).ready(function(){
+//鼠标移到tr上变色  
+            $("table tr").mouseover(function(){  
+                $(this).addClass("hover_tr");  
+            });  
+            $("table tr").mouseout(function(){  
+                $(this).removeClass("hover_tr");  
+            });
+        });  
+         
+</script>
+
+</head>
+
+<body>
+{if $full_page}	
+<div id="lite_globalWrapper">
+<div id="wrapper">
+	<!-- #BeginLibraryItem "/library/page_header.lbi" -->
+	>
+	<!-- #EndLibraryItem -->
+
+
+	<div id="container">
+		<div id="page-left" style="width:168px;">
+			
+			<!-- #BeginLibraryItem "/library/mycity.lbi" -->
+			>
+			<!-- #EndLibraryItem -->
+		</div>
+		<div id="page-middle">
+
+			<div class="form-div">
+			  <form action="javascript:searchCRM()" name="searchForm">
+				<table width="100%" style="margin:10px auto;" class="table_standard table_border" border="1">
+					<tr><td>
+						<img src="images/green_arrow.png" alt=""/>
+						</td>
+						<td>
+						 搜索:
+					    	{$lang.region} <input name="region_name" type="text" id="region_name" size="10" value="{$region_name}" />&nbsp;&nbsp;&nbsp;
+					    	{$lang.city} <input name="city_name" type="text" id="city_name" size="10" value="{$city_name}" />&nbsp;&nbsp;&nbsp;
+					    	{$lang.county} <input name="county_name" type="text" id="county_name" size="10" value="{$county_name}" /> 
+							{$lang.audit_status} 
+							<select name="audit_status" id="audit_status">
+								<option value="">{$lang.select_please}</option>
+								<option value="0">{$lang.audit_cancel}</option>
+								<option value="1">{$lang.audit_confirm}</option>
+							</select> 
+					    	
+					</td>
+					<td style="padding-left:30px;"><input type="submit" value="{$lang.button_search}" class="button" /> <input type="reset" value="重置" class="button" /></td>
+					</tr>
+
+				</table>
+			  </form>
+			</div>
+			
+			<form method="post" name="listForm"  onsubmit="return confirmSubmit(this)">
+			<!-- start crm list -->
+			<div id="listDiv" class="table_div">
+			{/if}
+				<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
+				    <tr>
+					  	<th>{$lang.region}</th>
+				      	<th>{$lang.province}</th>
+				      	<th>{$lang.county}</th>
+				      	<th>{$lang.market_level}</th>
+					  	<th>上传状态</th>
+				      	<th>照片数量</th>
+					  	<th>审核状态</th>
+					  	<th>{$lang.handler}</th>
+				    
+				    </tr>
+				<!--{foreach from=$city_list item=item name=index_idea}-->
+					<tr {if $item.cat_id == $item.city_id}
+							{if $item.audit_status}
+								{if $item.is_audit_confirm}
+									class="city_audit_confirm"
+								{else}
+									class="city_audit_cancel"
+								{/if}
+							{else}
+								class="city_upload"
+							{/if}
+						{/if}>
+						<td>{$item.region}</td>
+						<td>{$item.province}</td>
+						<td>{$item.county}</td>
+						<td>{$item.market_level}</td>
+						<td>{if $item.is_upload}{$lang.upload_confirm}({$item.user_time}){else}{$lang.upload_pending}{/if}</td>
+						<td><a href="city_operate.php?act=upload_photo&cat_id={$item.cat_id}">
+							<span {if $item.photo_num}class="red-color font14px"{/if}>{$item.photo_num}</span></a></td>
+						<td>{if $item.audit_status}
+								<a href="city_operate.php?act=audit&cat_id={$item.cat_id}">
+								{$audit_title.$item.audit_status}-
+								{if $item.is_audit_confirm}
+									<span class="green-color">{$lang.audit_confirm}</span>
+								{else}
+									<span class="red-color">{$lang.audit_cancel}</span>
+								{/if}
+								</a>
+							{else}
+								{$lang.audit_pending}
+							{/if}
+							
+						</td>
+						<td>
+
+							{if $sm_session.user_rank == 1}
+								{if $item.audit_status == 0 && $item.is_upload == 0 }
+									<span class="grey999">查看 &nbsp; | &nbsp; 修改 &nbsp; | &nbsp; 传照片</span>
+								{else}
+									{if $item.is_audit_confirm && $item.audit_status}
+									<a href="city_operate.php?act=view_city&cat_id={$item.cat_id}">查看</a> &nbsp; | &nbsp;
+									<span class="grey999">修改 &nbsp; | &nbsp; 传照片</span>
+									{else}
+									<a href="city_operate.php?act=view_city&cat_id={$item.cat_id}">查看</a> &nbsp; | &nbsp;
+									<a href="city_operate.php?act=edit_city&cat_id={$item.cat_id}">修改</a> &nbsp; | &nbsp;
+									<a href="city_operate.php?act=upload_photo&cat_id={$item.cat_id}">传照片</a>
+									{/if}
+								{/if}
+								
+
+							
+							{else}
+								{if $item.is_upload && $item.photo_num}
+								<a href="city_operate.php?act=audit&cat_id={$item.cat_id}">审核</a>
+								{else}
+								<span class="grey999">资料不全</a>
+								{/if}
+							{/if}
+							
+							</td>
+					</tr>
+			    <!--{/foreach}-->
+				</table>
+{if $full_page}
+			</div>
+		 	</form>
+		
+			<script type="text/javascript" language="javascript">
+			  <!--
+			  listTable.recordCount = {$record_count};
+			  listTable.pageCount = {$page_count};
+			  listTable.query = "query_show";
+			  {foreach from=$filter item=item key=key}
+			  listTable.filter.{$key} = '{$item}';
+			  {/foreach}
+
+			  /**
+			   * 搜索订单
+			   */
+			  function searchCRM()
+			  {
+			      listTable.filter['region_name'] = document.getElementById("region_name").value;
+			      listTable.filter['county_name'] = document.getElementById("county_name").value;
+			      listTable.filter['city_name'] = document.getElementById("city_name").value;
+			      listTable.filter['audit_status'] = document.getElementById("audit_status").value;
+			      listTable.filter['page'] = 1;
+			      listTable.loadList();
+			  }
+
+			  //-->
+			</script>
+			
+			
+			<!--page begin-->
+			<div id="turn-page" class="area_brand" style="text-indent:50px; margin:10px 0px 30px;">
+		  		{$lang.total_records} <span id="totalRecords">{$record_count}</span>
+		  		{$lang.total_pages} <span id="totalPages">{$page_count}</span>
+		  		{$lang.page_current} <span id="pageCurrent">{$filter.page}</span>
+		  		{$lang.page_size} <input type='text' size='1' id='pageSize' value="{$filter.page_size}" onkeypress="return listTable.changePageSize(event)" />条
+		  		<span id="page-link">
+		    		{literal}<a href="javascript:listTable.gotoPageFirst()">{/literal}{$lang.page_first}</a>
+		    		{literal}<a href="javascript:listTable.gotoPagePrev()">{/literal}{$lang.page_prev}</a>
+		    		{literal}<a href="javascript:listTable.gotoPageNext()">{/literal}{$lang.page_next}</a>
+		    		{literal}<a href="javascript:listTable.gotoPageLast()">{/literal}{$lang.page_last}</a>
+		    		<select id="gotoPage" onchange="listTable.gotoPage(this.value)">
+		      			{create_pages count=$page_count page=$filter.page}
+		    		</select>
+		  		</span>
+			</div>
+
+			<!--page end-->
+			
+		</div>			
+		<!-- End #page-middle -->
+
+		<div class="clear"></div>
+		
+		<!-- #BeginLibraryItem "/library/page_footer.lbi" -->
+		>
+		<!-- #EndLibraryItem -->
+	</div>
+
+</div>
+<!-- End #Wrapper -->
+</div><!-- End #globalWrapper -->
+{/if}
+</body>
+</html>

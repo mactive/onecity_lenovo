@@ -1,0 +1,566 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>{$page_title}</title>
+<!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="animated_favicon.gif" type="image/gif" />
+<link href="css.css" rel="stylesheet" type="text/css" />
+{* 包含脚本文件 *}
+{insert_scripts files='common.js,user.js,transport.js'}
+{* 包含脚本文件 *}
+{insert_scripts files='jquery-1.2.6.js'}
+</head>
+<body>
+<div id="globalWrapper">
+<div id="wrapper">
+		<!-- #BeginLibraryItem "/library/page_header_index.lbi" -->
+		>
+		<!-- #EndLibraryItem -->
+
+
+
+  <div style="margin-bottom:20px;float:left;width:100%;">
+    <!--#登录界面-->
+    <!-- {if $action eq 'login'} -->
+	<script type="text/javascript" language="javascript">
+	function activatePlaceholders() {
+	var detect = navigator.userAgent.toLowerCase();
+	if (detect.indexOf("safari") > 0) return false;
+	var inputs = document.getElementsByTagName("input");
+	for (var i=0;i<inputs.length;i++) {
+	  if (inputs[i].getAttribute("type") == "text") {
+	   if (inputs[i].getAttribute("placeholder") && inputs[i].getAttribute("placeholder").length > 0) {
+	    inputs[i].value = inputs[i].getAttribute("placeholder");
+	    inputs[i].onclick = function() {
+	     if (this.value == this.getAttribute("placeholder")) {
+	      this.value = "";
+	     }
+	     return false;
+	    }
+	    inputs[i].onblur = function() {
+	     if (this.value.length < 1) {
+	      this.value = this.getAttribute("placeholder");
+	     }
+	    }
+	   }
+	  }
+	}
+	}
+	window.onload=function() {
+	activatePlaceholders();
+	}
+	</script>
+	
+	    
+	<div class="">
+      <form name="formLogin" action="user.php" method="post" onSubmit="return userLogin()">
+		<div style="margin:0px auto;width:362px;height:170px;background:url({$img_path}index_login_bg.png) no-repeat;padding-top:55px;">
+        <table width="90%" border="0" align="center" class="table_standard" style="margin-left:30px;">
+          <tr style="height:35px;">
+            <td><input name="username" type="text" size="20" tabindex="1"  placeholder="用户名.." class="input_s1" /></td>
+          </tr>
+          <tr style="height:50px;">
+            <td><input name="password" type="password" size="20" tabindex="2" class="input_s1"/></td>
+          </tr>
+          <!-- 判断是否启用验证码{if $enabled_captcha} -->
+          <tr>
+            <td align="right"><strong>{$lang.comment_captcha}:</strong></td>
+            <td><input type="text" size="8" name="captcha" />
+            <img src="captcha.php?is_login=1&{$rand}" alt="captcha" style="vertical-align: middle;cursor: pointer;" onClick="this.src='captcha.php?is_login=1&'+Math.random()" /> </td>
+          </tr>
+          <!--{/if}-->
+          <tr>
+            <td style="padding:0;"><input type="hidden" name="act" value="act_login" />
+              <input type="hidden" name="back_act" value="{$back_act}" />
+              <input type="submit" name="submit" class="index_login_btn" value="" tabindex="3" />
+			</td>
+          </tr>
+        </table>
+        </div>
+      </form>
+	</div>
+	
+	
+  </div>
+    <!--{/if}-->
+    <!--#登录界面-->
+    <!--*会员注册界面-->
+    <!--{if $action eq 'register'}-->
+    {insert_scripts files='utils.js'}
+    <div class="title-div">
+		<div class="f_left"></div>
+		<div class="f_left font14px" style="line-height:22px;padding-left:8px;">会员注册 Sign Up</div>
+		<div class="clear"></div>
+	</div>
+	<br>
+	<div class="goods_main_top"></div>
+	<div class="goods_main_body" style="width:971px; border:1px solid #e0e0e0;border-top:none;border-bottom:none;">
+    <form action="user.php" method="post" name="formUser" onsubmit="return register();">
+      <br />
+      <table width="70%"  border="0" align="left" class="table_standard">
+        <tr>
+          <td width="36%" class="right"><strong>{$lang.label_username}:</strong></td>
+          <td width="27%"><input name="username" type="text" id="username" onblur="is_registered(this.value);"/></td>
+		  <td width="37%">
+            <span id="username_notice" class="label_box"> * 您的会员名 可以是中文</span></td>
+        </tr>
+        <tr>
+          <td class="right"><strong>{$lang.label_email}:</strong></td>
+          <td><input name="email" type="text" id="email" onblur="checkEmail(this.value);"/></td>
+		  <td>
+            <span id="email_notice" class="label_box"> * 需要认证邮箱才能查看本站价格 </span></td>
+        </tr>
+        <tr>
+          <td class="right"><strong>{$lang.label_password}:</strong></td>
+          <td><input name="password" type="password" id="password" onblur="check_password(this.value);" onkeyup="checkIntensity(this.value)" /></td>
+		  <td>
+            <span id="password_notice" class="label_box"> * 不少于6位的密码</span></td>
+        </tr>
+        <tr>
+          <td class="right"><strong>{$lang.label_password_intensity}:</strong></td>
+          <td>
+            <table width="145" border="0" cellspacing="0" cellpadding="1">
+              <tr align="center">
+                <td width="33%" id="pwd_lower">{$lang.pwd_lower}</td>
+                <td width="33%" id="pwd_middle">{$lang.pwd_middle}</td>
+                <td width="33%" id="pwd_high">{$lang.pwd_high}</td>
+              </tr>
+            </table>
+          </td>
+			<td>
+		  </td>
+        </tr>
+        <tr>
+          <td class="right"><strong>{$lang.label_confirm_password}:</strong></td>
+          <td><input name="confirm_password" type="password" id="conform_password" onblur="check_conform_password(this.value);" /></td>
+		  <td>
+            <span id="conform_password_notice" class="label_box"> * 重复输入</span></td>
+        </tr>
+		<tr>
+          <td class="right"><strong>{$lang.other_real_name}:</strong></td>
+          <td><input name="other[real_name]" type="text"  /></td>
+		  <td>
+			<span id="real_name_notice" class="label_box"> 方便发货和更多服务</span></td>
+        </tr>
+		<tr>
+          <td class="right"><strong>{$lang.other_office_phone}:</strong></td>
+          <td><input name="other[office_phone]" type="text"  /></td>
+		  <td>	<span id="office_phone_notice" class="label_box"> 格式:010-51271062(615)</span></td>
+        </tr>
+        <tr>
+          <td class="right"><strong>{$lang.other_mobile_phone}:</strong></td>
+          <td><input name="other[mobile_phone]" type="text"  onblur="check_mobile_phone(this.value);"/></td>
+		  <td>
+			<span id="mobile_phone_notice" class="label_box"> 方便发货和更多服务</span></td>
+        </tr>
+        <tr>
+          <td class="right"><strong>{$lang.other_msn}:</strong></td>
+          <td><input name="other[msn]" type="text" /></td>
+		  <td>	<span id="msn_notice" class="label_box"> 网上沟通更及时</span></td>
+        </tr>
+        <tr>
+          <td class="right"><strong>{$lang.other_qq}:</strong></td>
+          <td><input name="other[qq]" type="text"  /></td>
+		  <td><span id="qq_notice" class="label_box"> 网上沟通更方便</span></td>
+        </tr>
+
+      <!-- 判断是否启用验证码{if $enabled_captcha} -->
+      <tr>
+      <td class="right"><strong>{$lang.comment_captcha}:</strong></td>
+      <td><input type="text" size="8" name="captcha" />
+      <img src="captcha.php?{$rand}" alt="captcha" style="vertical-align: middle;cursor: pointer;" onClick="this.src='captcha.php?'+Math.random()" />	</td>
+		  <td> </td>
+      </tr>
+      <!--{/if}-->
+        <tr>
+          <td>&nbsp;</td>
+          <td><label>
+            <input name="agreement" type="checkbox" value="1" checked="checked" />
+            <b>{$lang.agreement}</b></label></td>
+        </tr>
+        <tr>
+          <td colspan="2" class="center"><input name="act" type="hidden" value="act_register" >
+            <input name="Submit" type="submit" value="{$lang.confirm_register}"></td>
+        </tr>
+        <tr>
+          <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td><li style="border-bottom: 1px dashed #CECECE;width:150px;"> <a href="user.php?act=login">{$lang.want_login}</a></li>
+            <li style="border-bottom: 1px dashed #CECECE;width:150px;"> <a href="user.php?act=get_password">{$lang.forgot_password}</a></li></td>
+        </tr>
+      </table>
+      <br />
+    </form>
+	</div>
+	<div class="goods_main_bottom"></div>
+	<div style="height:14px;"></div>
+	
+    <!--{/if}-->
+    <!--#会员注册界面-->
+	
+	<!--*会员注册界面-->
+    <!--{if $action eq 'take_register'}-->
+    {insert_scripts files='utils.js'}
+    <div class="title-div">
+		<div class="f_left"></div>
+		<div class="f_left font14px" style="line-height:22px;padding-left:8px;">代为客户注册 </div>
+		<div class="clear"></div>
+	</div>
+	<br>
+	<div class="goods_main_top"></div>
+	<div class="goods_main_body">
+    <form action="user.php" method="post" name="formUser" onsubmit="return register();">
+      <br />
+      <table width="70%"  border="0" align="left" class="table_standard">
+		 <tr>
+	          <td width="36%" class="right"><strong>所属机构:</strong></td>
+	          <td width="27%"><select name="other[agency_id]">
+				<option value="0">{$lang.select_please}</option>
+							{html_options options=$agency_list}
+			</select></td>
+			  <td width="37%">
+	            <span id="" class="label_box"> * 联系人的机构</span></td>
+	    </tr>
+        <tr>
+          <td width="36%" class="right"><strong>{$lang.label_username}:</strong></td>
+          <td width="27%"><input name="username" type="text" id="username"  onblur="is_registered(this.value);"/></td>
+		  <td width="37%">
+            <span id="username_notice" class="label_box"> * 请填写中文全名</span></td>
+        </tr>
+		<script language='javascript'>
+		function getvalue()
+		{
+		var text1=document.getElementById("username").value;
+		document.getElementById("other[real_name]").value=text1;
+
+		}
+		</script>
+		<tr>
+          <td class="right"><strong>{$lang.other_contact_name}:</strong></td>
+          <td><input name="other[real_name]"  id="other[real_name]" type="text" onfocus="getvalue();" /></td>
+		  <td>
+			<span id="real_name_notice" class="label_box"> 方便发货和更多服务</span></td>
+        </tr>
+        <tr>
+          <td class="right"><strong>{$lang.label_email}:</strong></td>
+          <td><input name="email" type="text" id="email" onblur="checkEmail(this.value);"/></td>
+		  <td>
+            <span id="email_notice" class="label_box"> * 需要认证邮箱才能查看本站价格 </span></td>
+        </tr>
+		<tr>
+          <td class="right"><strong>{$lang.other_mobile_phone}:</strong></td>
+          <td><input name="other[mobile_phone]" type="text"  onblur="check_mobile_phone(this.value);"/></td>
+		  <td>
+			<span id="mobile_phone_notice" class="label_box"> 方便发货和更多服务</span></td>
+        </tr>
+		<tr>
+          <td class="right"><strong>{$lang.other_office_phone}:</strong></td>
+          <td><input name="other[office_phone]" type="text"  /></td>
+		  <td>	<span id="office_phone_notice" class="label_box"> 格式:010-51271062(615)</span></td>
+        </tr>
+
+        <tr>
+          <td class="right"><strong>{$lang.other_msn}:</strong></td>
+          <td><input name="other[msn]" type="text" /></td>
+		  <td>	<span id="msn_notice" class="label_box"> 网上沟通更及时</span></td>
+        </tr>
+		
+        <tr>
+          <td class="right"><strong>{$lang.other_qq}:</strong></td>
+          <td>	<input name="other[qq]" type="text"  />
+				<input name="other[user_rank]" type="hidden" value="{$rank_agency}">
+				<input name="other[is_validated]" type="hidden" value="1">
+				<input name="take_register" type="hidden" value="1">
+				
+		  </td>
+		  <td><span id="qq_notice" class="label_box"> 网上沟通更方便</span></td>
+        </tr>
+		
+		<tr>
+          <td class="right"><strong>{$lang.label_password}:</strong></td>
+          <td><input name="password" type="password" id="password" value="123456" onblur="check_password(this.value);" /></td>
+		  <td>
+            <span id="password_notice" class="label_box"> * 不少于6位的密码</span></td>
+        </tr>
+        
+        <tr>
+          <td class="right"><strong>{$lang.label_confirm_password}:</strong></td>
+          <td><input name="confirm_password" type="password" value="123456" id="conform_password" onblur="check_conform_password(this.value);" /></td>
+		  <td>
+            <span id="conform_password_notice" class="label_box"> * 重复输入</span></td>
+        </tr>
+
+      <!-- 判断是否启用验证码{if $enabled_captcha} -->
+      <tr>
+      <td class="right"><strong>{$lang.comment_captcha}:</strong></td>
+      <td><input type="text" size="8" name="captcha" />
+      <img src="captcha.php?{$rand}" alt="captcha" style="vertical-align: middle;cursor: pointer;" onClick="this.src='captcha.php?'+Math.random()" />	</td>
+		  <td> </td>
+      </tr>
+      <!--{/if}-->
+        <tr>
+          <td>&nbsp;</td>
+          <td><label>
+            <input name="agreement" type="checkbox" value="1" checked="checked" />
+            <b>{$lang.agreement}</b></label></td>
+        </tr>
+        <tr>
+          <td colspan="2" class="center">
+			<input name="act" type="hidden" value="act_register">			
+            <input name="Submit" type="submit" value="{$lang.confirm_register}"></td>
+        </tr>
+        <tr>
+          <td colspan="2">&nbsp;</td>
+        </tr>
+       
+      </table>
+      <br />
+    </form>
+	</div>
+	<div class="goods_main_bottom"></div>
+	<div style="height:14px;"></div>
+	
+    <!--{/if}-->
+    <!--#会员注册界面-->
+
+
+	<!--*会员注册界面-->
+    <!--{if $action eq 'send_register'}-->
+    {insert_scripts files='utils.js'}
+    <div class="title-div">
+		<div class="f_left"></div>
+		<div class="f_left font14px" style="line-height:22px;padding-left:8px;">{$register_title} </div>
+		<div class="clear"></div>
+	</div>
+	<br>
+	<div class="goods_main_top"></div>
+	<div class="goods_main_body">
+    <form action="user.php" method="post" name="formUser" onsubmit="return register();">
+      <br />
+      <table width="70%"  border="0" align="left" class="table_standard">
+        <tr>
+          <td width="36%" class="right"><strong>所选课程:</strong></td>
+          <td width="27%">	<select name="course">
+				<option value="Pro Tools 101">Pro Tools 101</option>
+				<option value="Pro Tools 110">Pro Tools 110</option>
+				<option value="Pro Tools 201">Pro Tools 201</option>
+			</select></td>
+		  <td width="37%">
+            <span id="username_notice" class="label_box"> * 按照难度从上到下</span></td>
+        </tr>
+        <tr>
+          <td width="36%" class="right"><strong>姓名:</strong></td>
+          <td width="27%"><input name="username" type="text" id="username"/></td>
+		  <td width="37%">
+            <span id="username_notice" class="label_box"> * 请填写中文全名</span></td>
+        </tr>
+        <tr>
+          <td width="36%" class="right"><strong>性别:</strong></td>
+          <td width="27%"><input name="sex" type="text" id="sex"/></td>
+		  <td width="37%">
+            <span id="username_notice" class="label_box"> * 先生/女士</span></td>
+        </tr>
+		<tr>
+          <td class="right"><strong>身份证:</strong></td>
+          <td>	<input name="id_card" type="text"  />
+		  </td>
+		  <td><span id="qq_notice" class="label_box">* 注册考试号需要</span></td>
+        </tr>
+		
+		<tr>
+          <td class="right"><strong>{$lang.other_mobile_phone}:</strong></td>
+          <td><input name="[mobile_phone]" type="text"  onblur="check_mobile_phone(this.value);"/></td>
+		  <td>
+			<span id="mobile_phone_notice" class="label_box"> * 方便于您联系</span></td>
+        </tr>
+		<tr>
+          <td class="right"><strong>{$lang.other_office_phone}:</strong></td>
+          <td><input name="office_phone" type="text"  /></td>
+		  <td>	<span id="office_phone_notice" class="label_box"> 格式:010-51271062(615)</span></td>
+        </tr>
+		<tr>
+          <td class="right"><strong>{$lang.label_email}:</strong></td>
+          <td><input name="email" type="text" id="email" onblur="checkEmail(this.value);"/></td>
+		  <td>
+            <span id="email_notice" class="label_box"> * 正确填写邮箱才能收到反馈信息 </span></td>
+        </tr>
+		<tr>
+          <td class="right"><strong>公司/机构名称:</strong></td>
+          <td><input name="agency_name"  id="agency_name" type="text" /></td>
+		  <td>
+			<span id="real_name_notice" class="label_box"> &nbsp;</span></td>
+        </tr>
+		<tr>
+          <td class="right"><strong>职位:</strong></td>
+          <td><input name="Position" type="text" /></td>
+		  <td>
+			<span id="real_name_notice" class="label_box">&nbsp; </span></td>
+        </tr>
+		<tr>
+          <td class="right"><strong>地址:</strong></td>
+          <td><input name="address"  type="text" /></td>
+		  <td>
+			<span id="real_name_notice" class="label_box"> 方便投递纸质信息</span></td>
+        </tr>
+        
+        <tr>
+          <td colspan="2" class="center">
+			
+			<input name="send_register" type="hidden" value="1">			
+			<input name="act" type="hidden" value="act_send_register">			
+            <input name="Submit" type="submit" value="{$lang.confirm_register}"></td>
+        </tr>
+        <tr>
+          <td colspan="2">&nbsp;</td>
+        </tr>
+       
+      </table>
+      <br />
+    </form>
+	</div>
+	<div class="goods_main_bottom"></div>
+	<div style="height:14px;"></div>
+	
+    <!--{/if}-->
+    <!--#会员注册界面-->
+
+
+    <!--*找回密码界面 -->
+    <!--{if $action eq 'get_password'} -->
+    {insert_scripts files='utils.js'}
+    <script type="text/javascript">
+    {foreach from=$lang.password_js item=item key=key}
+      var {$key} = "{$item}";
+    {/foreach}
+    </script>
+    <div class="title-div"><img src="images/forget.gif" width="158" height="39"  alt="" /></div>
+    <div class="content-div" style="width:970px;">
+      <form action="user.php" method="post" name="getPassword" onsubmit="return submitPwdInfo();">
+        <br />
+        <table width="70%" border="0" align="center">
+          <tr>
+            <td colspan="2" align="center"><strong>{$lang.username_and_email}</strong></td>
+          </tr>
+          <tr>
+            <td width="39%" align="right">{$lang.username}:</td>
+            <td width="61%"><input name="user_name" type="text" size="30" /></td>
+          </tr>
+          <tr>
+            <td align="right">{$lang.email}:</td>
+            <td><input name="email" type="text" size="30" /></td>
+          </tr>
+          <tr>
+            <td colspan="2" align="center"><input type="hidden" name="act" value="send_pwd_email" />
+              <input type="submit" name="submit" value="{$lang.confirm_submit}" />
+              <input name="button" type="button" onclick="history.back()" value="{$lang.back_page_up}" />            </td>
+          </tr>
+        </table>
+        <br />
+      </form>
+    </div>
+    <div class="clear"></div>
+	<!--{/if}-->
+    <!-- {if $action eq 'reset_password'} -->
+    <script type="text/javascript">
+    {foreach from=$lang.password_js item=item key=key}
+      var {$key} = "{$item}";
+    {/foreach}
+    </script>
+    <div class="title-div"><img src="images/forget.gif" width="158" height="39"  alt="" /></div>
+    <form action="user.php" method="post" name="getPassword2" onSubmit="return submitPwd()">
+      <br />
+      <table width="80%" border="0" align="center">
+        <tr>
+          <td>{$lang.new_password}</td>
+          <td><input name="new_password" type="password" size="25" /></td>
+        </tr>
+        <tr>
+          <td>{$lang.confirm_password}:</td>
+          <td><input name="confirm_password" type="password" size="25" /></td>
+        </tr>
+        <tr>
+          <td colspan="2" align="center"><input type="hidden" name="act" value="act_edit_password" />
+            <input type="hidden" name="uid" value="{$uid}" />
+            <input type="hidden" name="code" value="{$code}" />
+            <input type="submit" name="submit" value="{$lang.confirm_submit}" />          </td>
+        </tr>
+      </table>
+      <br />
+    </form>
+    <!-- {/if} -->
+	
+<!-- #EndLibraryItem --><!-- #BeginLibraryItem "/library/page_footer.lbi" -->
+<table width="801" border="0" align="center" cellpadding="5" cellspacing="0" style="margin:10px 0 20px 0;" id="footer-table">
+  <tr>
+    <td><img src="images/ecshop.gif" alt="ECSHOP" width="133" height="46" hspace="10" /></td>
+    <td width="6" id="foot-logo"><img src="images/footer_bg.gif" width="6" height="80" alt="" /></td>
+    <td> {$copyright}<br />
+      {$shop_address} {$shop_postcode} <br />
+      <!-- 客服电话{if $service_phone} -->
+      Tel: {$service_phone}
+      <!-- 结束客服电话{/if} -->
+      <!-- QQ 号码 {foreach from=$qq item=im} -->
+      <!-- {if $im} -->
+      <a href="http://wpa.qq.com/msgrd?V=1&amp;Uin={$im}&amp;Site={$shop_name}&amp;Menu=yes" target="_blank"><img src="http://wpa.qq.com/pa?p=1:{$im}:4" height="16" border="0" alt="QQ" /> {$im}</a>
+      <!-- {/if} -->
+      <!-- {/foreach} 结束QQ号码 -->
+      <!-- 淘宝旺旺 {foreach from=$ww item=im} -->
+      <!-- {if $im} -->
+      <a href="http://amos1.taobao.com/msg.ww?v=2&amp;uid={$im|escape:url}&amp;s=2" target="_blank"><img src="http://amos1.taobao.com/online.ww?v=2&amp;uid={$im|escape:url}&amp;s=2" width="16" height="16" border="0" alt="淘宝旺旺" /> {$im}</a>
+      <!-- {/if} -->
+      <!--{/foreach} 结束淘宝旺旺 -->
+      <!-- Yahoo Messenger {foreach from=$ym item=im} -->
+      <!-- {if $im} -->
+      <a href="http://edit.yahoo.com/config/send_webmesg?.target={$im}n&amp;.src=pg" target="_blank"><img src="images/yahoo.gif" width="18" height="17" border="0" alt="Yahoo Messenger" /> {$im}</a>
+      <!-- {/if} -->
+      <!-- {/foreach} 结束Yahoo Messenger -->
+      <!-- MSN Messenger {foreach from=$msn item=im} -->
+      <!-- {if $im} -->
+      <img src="images/msn.gif" width="18" height="17" border="0" alt="MSN" /> {$im}
+      <!-- {/if} -->
+      <!-- {/foreach} 结束MSN Messenger -->
+      <!-- Skype {foreach from=$skype item=im} -->
+      <!-- {if $im} -->
+      <img src="http://mystatus.skype.com/smallclassic/{$im|escape:url}" alt="Skype" /><a href="skype:{$im|escape:url}?call">{$im}</a>
+      <!-- {/if} -->
+      <!-- {/foreach} -->
+      <div>
+        <!-- 开始相关声明{foreach from=$declaration item=article} -->
+        <a href="{$article.url}" target="_blank">{$article.title}</a>
+        <!-- 相关声明{/foreach}-->
+      </div>
+      <!-- ICP 证书{if $icp_number} -->
+      <div> {$lang.icp_number}:<a href="http://www.miibeian.gov.cn/" target="_blank">{$icp_number}</a> </div>
+      <!-- 结束ICP 证书{/if} -->
+      {insert name='query_info'}<br />
+      <a href="http://www.ecshop.com" target="_blank" style="font-size:10px">Powered by <strong><span style="color: #3366FF">ECSHOP</span> <span style="color: #FF9966">{$ecs_version}</span></strong></a><br />
+    </td>
+  </tr>
+</table>
+{if $stats_code}
+<div align="center">{$stats_code}</div>
+{/if}
+
+<script type="text/javascript">
+var process_request = "{$lang.process_request}";
+</script>
+<!-- #EndLibraryItem --></div>
+
+</div><!-- End #Wrapper -->
+</div><!-- End #globalWrapper -->
+<script type="text/javascript">
+var process_request = "{$lang.process_request}";
+{foreach from=$lang.passport_js item=item key=key}
+var {$key} = "{$item}";
+{/foreach}
+var username_exist = "{$lang.username_exist}";
+</script>
+</body>
+</html>

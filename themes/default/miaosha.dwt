@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>{$page_title}</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="animated_favicon.gif" type="image/gif" />
+<link href="css.css" rel="stylesheet" type="text/css" />
+<link href="themes/default/css/jquery.countdown.css" rel="stylesheet" type="text/css" />
+<style type="text/css" media="screen">	
+	.modal {
+		background-color:#fff;
+		display:none;
+		width:350px;
+		height:200px;
+		padding:15px;
+		text-align:left;
+		border:2px solid #333;
+		float:left;
+		margin:-80px 0px 0px 140px;
+		_margin:160px 0px 0px -420px;
+		color:#333;
+		font-size:18px;
+		line-height:30px;
+		opacity:1;
+		-moz-border-radius:6px;
+		-webkit-border-radius:6px;
+		-moz-box-shadow: 0 0 50px #ccc;
+		-webkit-box-shadow: 0 0 50px #ccc;
+	}
+	
+	.modal h2 {
+		background:url(themes/default/images/info.png) 0 50% no-repeat;
+		margin:0px;
+		padding:10px 0 10px 45px;
+		border-bottom:1px solid #333;
+		font-size:20px;
+	}
+</style>
+{* 包含脚本文件 *}
+{insert_scripts files='common.js,jquery.tools.min.js,jquery.countdown.js'}
+
+		        <script type="text/javascript">
+					// What is $(document).ready ? See: http://flowplayer.org/tools/documentation/basics.html#document_ready
+					$(document).ready(function() {
+						var triggers = $("a.miaosha_btn").overlay({
+							// some mask tweaks suitable for modal dialogs
+							mask: {
+								color: '#ebecff',
+								loadSpeed: 200,
+								opacity: 0.5
+							},
+							closeOnClick: false
+						});
+						
+						
+						$("a.miaosha_btn").click(function(){
+							var miaosha_price= $("span#ms_price").html();
+							$("h2#miaosha_price_h2").html("您的秒杀价是:"+miaosha_price);
+							$("input#miaosha_price_handler").val(miaosha_price);
+						});
+
+					});
+					/*请求机制*/
+					$.get("miaosha.php?act=now_time", 
+						function(now_time_tmp){
+							var lefttime = {$goods.gmt_end_time} - now_time_tmp;
+							var promate_price = (parseInt({$goods.promote_price_org}));
+							var pasttime = now_time_tmp - {$goods.gmt_start_time};
+							$(function () {
+
+									$('#glowingLayout').countdown({until: +lefttime,  format: 'HMS', compact: true,
+									layout:
+										'<span class="image{h10}"></span><span class="image{h1}"></span>' +
+										'<span class="imageSep"></span>' +
+										'<span class="image{m10}"></span><span class="image{m1}"></span>' +
+										'<span class="imageSep"></span>' +
+										'<span class="image{s10}"></span><span class="image{s1}"></span>'});
+
+								{if $goods.goods_number > 0}	
+
+								$.extend(
+									{ 
+										showprice:function()
+										{
+											//now_2 = new Date();
+											//var now_price =  ( parseInt(now_2.getTime() / 1000) - starttime - 28800 );//8个小时的偏移量
+											var now_price_now = promate_price - pasttime * 3; //降价幅度
+											$("span#ms_price").html(now_price_now);
+											$("#ms_price_handler").value = now_price_now;
+											if(now_price_now < 0){
+												$('div#miaosha_panel').fadeOut();
+												$('div#miaosha_over').html("秒杀结束！");
+												$('div#miaosha_over').fadeIn();
+											}else{
+												
+												/*请求机制*/
+												$.get("miaosha.php?act=is_over", {goods_id:{$goods_id}}, 
+													function(goods_number){
+														if(goods_number == 0){
+															$('div#miaosha_panel').fadeOut();
+															$('div#miaosha_over').html("已经有人秒杀了,秒杀结束！");
+															$('div#miaosha_over').fadeIn();
+														}												
+												    });
+												pasttime = pasttime + 1;
+											}
+									   	}
+									});
+
+								$('a.miaosha_confirm').click(function() {
+										var buy_price = $("span#ms_price").html();
+										var max_jinbi_2 = $("input#max_jinbi").val();
+										var buy_price = $("input#miaosha_price_handler").val() - max_jinbi_2 ;
+										//addToCart({$goods_id}, 0,{$sm_session.user_id},buy_price);
+										/**/
+										var filters = "goods_id="+{$goods_id}+"&number=1&buy_price="+buy_price+"&max_jinbi="+max_jinbi_2;
+										$.ajax({
+								                url: "flow_quick.php?step=done",
+								                type: "POST",
+								                dataType: "json",
+								                data: filters,
+												complete:
+													function(){
+														$('div.yellow_notice').fadeIn();
+														location.href = 'flow_quick.php?step=finish_miaosha';
+													}
+								        });
+
+									});
+
+									setInterval("$.showprice()",1000);
+
+									//##
+								{else}
+									$('div#miaosha_panel').fadeOut();
+									$('div#miaosha_over').html("已经有人秒杀了,秒杀结束！");
+									$('div#miaosha_over').fadeIn();
+								{/if}
+
+				            });
+														
+					    });
+					
+					//var lefttime = 900;
+					
+		        </script>
+
+
+</head>
+
+<body>
+<div id="globalWrapper">
+<div id="wrapper" class="white_wrapper">
+	<!-- #BeginLibraryItem "/library/page_header_five.lbi" -->
+	>
+	<!-- #EndLibraryItem -->
+
+
+	<div id="container">
+		
+		<div id="page-middle" class="miaosha" style="width:1000px;margin:0;">			
+			<div class="title_idea_float" style="top:20px;_padding-top:15px;"><img src="{$img_path}5/miaosha_title.png" style="margin:15px 0px 0px 60px;"/></div>
+			<div class="miaosha_notice" style="display:none;">
+				<span class="font14px">活动规则:</span><br>
+				每周大奖，采用荷兰拍的方式，中午一点开始，价格每秒降1元，直到有人出价拍走<br>
+				举例：<br>
+				所有金币数量达到500的人有资格参加，消耗500金币换取一次竞拍资格。<br>
+				中午1:00开始，标价4000，每秒降1元，降到3000元的时候，A觉得价格可以接受，拍下，此时无其他人出价，所以A以3000元的价格获得iphone，而希望等到2800元出手的B则无法拿到iphone。<br>
+				<br>
+				礼品如下：<br>
+				iphone 4  2个<br>
+				ipad     2个<br>
+				itouch    5个<br>
+				共九周，每周一个
+				
+			</div>
+			<div id="miaosha_over" class="miaosha_over" style="display:none;"></div>
+		
+			
+			<div id="miaosha_panel" style="padding:300px 0px 0px 520px;color:#ffffff;font-size:20px;width:400px;height:400px;">	
+				<div class="mactive">
+					<!-- user input dialog -->
+
+					<div class="modal" id="prompt">
+						<h2 id="miaosha_price_h2">你的秒杀价格是</h2>
+						<input type="hidden" id="miaosha_price_handler" />
+							<br>
+							你可以使用<input id="max_jinbi" size="4" value="{$max_jinbi}" />金币抵购
+							<br><br>
+							{if $now_time > $goods.gmt_start_time && $now_time < $goods.gmt_end_time}
+								<a class="miaosha_confirm"></a>
+							{/if}
+					</div>
+
+				</div>
+				
+				<div style="width:100%;margin:20px 0px;" class="f_left">
+					<div class="f_left">秒杀产品:</div>
+					<div class="f_left font24px">{$goods.goods_name}</div>
+				</div>
+				
+				<div style="width:100%;" class="f_left">
+					<div class="f_left" style="padding-top:13px;">倒计时：</div>
+					<div id="glowingLayout"></div>
+				</div>
+				
+				<div style="width:100%;margin:20px 0px;" class="f_left">
+					<div class="f_left">秒杀价：</div>
+					<div class="f_left font24px">
+						￥ <span id="ms_price"></span>
+						<input type="hidden" id="ms_price_handler" />
+				        
+					</div>
+				</div>
+				
+				<div style="width:100%;margin:20px 0px;text-align:center;" class="f_left">
+					<div class="yellow_notice" style="display:none;color:#000;">秒杀成功了！！！</div>					
+					{if $goods.gmt_start_time == 0}
+						秒杀还未开始
+					{else}
+						{if $now_time > $goods.gmt_start_time && $now_time < $goods.gmt_end_time}
+						<p><a class="miaosha_btn" rel="#prompt" ></a></p>
+						
+						{else}
+						秒杀已经结束
+						{/if}
+					{/if}
+				</div>
+			</div>
+
+			
+		</div>
+		<!-- End #page-middle -->
+		<!-- #BeginLibraryItem "/library/page_footer_five.lbi" -->
+		>
+		<!-- #EndLibraryItem -->
+	</div>
+
+</div>
+<!-- End #Wrapper -->
+</div><!-- End #globalWrapper -->
+</body>
+</html>

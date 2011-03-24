@@ -1,0 +1,565 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>{$page_title}</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="animated_favicon.gif" type="image/gif" />
+<link href="css.css" rel="stylesheet" type="text/css" />
+<link rel="alternate" type="application/rss+xml" title="RSS|{$page_title}" href="{$feed_url}" />
+{* 包含脚本文件 *}
+{insert_scripts files='common.js,jquery-1.2.6.js'}
+
+{insert_scripts files='ui.core.js,ui.tabs.js,ui.accordion.js'}
+{insert_scripts files='dimensions.js,autocomplete.js'}
+        <script type="text/javascript">
+
+            $(function() {
+				$('#newgoods_tabs > ul').tabs( // 按分类的新产品
+				        defaults = {                    
+				             navClass: 'ui-tabs-new-nav',
+				             selectedClass: 'ui-tabs-new-selected'
+				         }
+				    );
+                $('#help_bar > ul').tabs();  //帮助
+				//$('#bet_good_bar > ul').tabs({ fx: { opacity: 'toggle' } }).tabs('rotate', 4000);
+            });
+        </script>
+
+		  <script>
+		  $(document).ready(function(){
+		    $("#indexhot").accordion();
+		  });
+		  </script>
+
+
+
+</head>
+
+<body>
+<div id="globalWrapper">
+<div id="wrapper"><!-- #BeginLibraryItem "/library/page_header.lbi" -->
+<table width="100%" border="0" cellpadding="0" cellspacing="3" id="page-header">
+  <tr>
+    <td id="cell-logo"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td rowspan="2"><a href="index.php" name="top" id="top"><img src="images/logo.gif" alt="shopping mall name" width="130" height="56" border="0" /></a></td>
+          <td align="right" valign="top" style="padding: 5px 10px"><a href="flow.php">{$lang.view_cart}</a> | <a href="pick_out.php">{$lang.pick_out}</a> | <a href="group_buy.php">{$lang.group_buy_goods}</a> | <a href="snatch.php">{$lang.snatch}</a> | <a href="catalog.php" onmouseover="showCatalog(this)" onmouseout="hideCatalog()" id="catalog-list">{$lang.catalog}</a> | <a href="tag_cloud.php">{$lang.tag_cloud}</a> | <a href="user.php">{$lang.user_center}</a> </td>
+        </tr>
+        <tr>
+          <td align="center"></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td id="cell-nav"><ul>
+        <li><a href="index.php">{$lang.home}</a></li>
+        <!-- {foreach name=nav_list from=$nav_list item=nav} -->
+        <!-- {if $smarty.foreach.nav_list.last}-->
+        <li style="border-right:0px;"><a href="{$nav.url}">{$nav.label}</a></li>
+        <!-- {else}-->
+        <li><a href="{$nav.url}">{$nav.label}</a></li>
+        <!-- {/if}-->
+        <!-- {/foreach} -->
+      </ul></td>
+  </tr>
+</table>
+<div id="ECS_CATALOG" class="catalog-div" style="display:none"
+onmouseover="if (this.style.display != 'block') this.style.display='block';"
+onmouseout="if (this.style.display != 'none') this.style.display = 'none';">
+  <ul>
+    <!--{assign var="level" value=0}-->
+    <!-- {foreach from=$catalog_list item=cat} -->
+    <!-- {if $level > $cat.level} -->
+  </ul>
+  <!-- {/if}-->
+  <!-- {if $level < $cat.level} -->
+  <ul>
+    <!-- {/if} -->
+    <li class="{if $cat.level eq 0}top-cate{else}snd-cate{/if}"><a href="{$cat.url}" title="{if $cat.cat_desc neq ''}{$cat.cat_desc}{/if}">{$cat.cat_name}</a></li>
+    <!--{assign var="level" value=$cat.level}-->
+    <!-- {/foreach} -->
+  </ul>
+</div>
+<!-- #EndLibraryItem -->
+
+<!-- End #search-bar -->
+<!-- TemplateBeginEditable name="通栏广告位" -->
+<!-- TemplateEndEditable -->
+<!-- End #login-news -->
+<div id="container">
+<div id="page-left">
+<!-- TemplateBeginEditable name="主区域左侧" -->
+<!-- #BeginLibraryItem "/library/brands.lbi" -->
+>
+
+<div class="left_menu">
+    <div class="nav_top_red">
+        <span>推荐厂家 </span>
+        <div class="bgr"></div>
+    </div>
+    <!-- {if $brand_list} -->
+    <!-- 品牌区 -->
+    <div class="menucontent">
+      <div style="list-style: none; margin: 10px; padding: 0;">
+        <!-- {foreach from=$brand_list item=brand} -->
+        <!-- {if $brand.brand_logo} -->
+        <div><a href="{$brand.url}">{$brand.brand_name|escape:html} {if $brand.goods_num}({$brand.goods_num}){/if}</a></div>
+        <!-- {/if} -->
+        <!-- {/foreach} -->
+      </div>
+	<div style="text-align:right;"><a href="brand.php#all">所有品牌</a></div>
+    </div>
+    <!-- {/if} -->
+	
+    <div class="nav_bot"> &nbsp;</div>
+</div>
+<br />
+<div class="clear"></div>
+
+
+ <!-- #EndLibraryItem -->
+<!-- #BeginLibraryItem "/library/recommend_hot_index.lbi" -->
+>
+	<script>
+	$(document).ready(function(){
+		$("div.element:not(:first)").hide();
+		$("h3 a").click(function(){
+			$("div.element:visible").hide("fast");//slideUp
+			$(this).parent().next().show("fast");//slideDown
+			return false;
+		});
+	});
+	</script>
+<!-- {if $hot_data} -->
+<div class="left_menu">
+<div class="nav_top_grey">
+    <span>热卖商品</span>
+    <div class="bgr"> </div>
+</div>
+<div id="accordion">
+<!--{foreach from=$hot_data item=hot}-->
+	<h3 class="toggler"><a class="title">{$hot.cat_name}</a></h3>
+		
+		<div class="element">
+		<!--{foreach from=$hot.data item=goods}-->
+		<a href="{$goods.url}" title="{$goods.name|escape:html}">
+			{$goods.name|escape:html|truncate:16:"..":true}
+		</a><br />
+		<!--{/foreach}-->
+		</div>
+		
+<!--{/foreach}-->
+</div>
+<div class="hot_accord_bottom"></div>
+<div style="height:14px;"></div>
+</div>
+<!-- {/if} -->
+
+ <!-- #EndLibraryItem -->
+<!-- TemplateEndEditable -->
+<br />
+</div>
+<!-- End #page-left -->
+<div id="page-middle">
+<!-- TemplateBeginEditable name="主区域中间" -->
+<!-- #BeginLibraryItem "/library/recommend_best.lbi" -->
+>
+<!-- {if $best_goods} -->
+<!--<div class="title-div">推荐</div> -->
+<div class="content-div">
+	<div class="module_top"></div>
+	<div class="module_body">
+  	<ul>
+  	<!--{foreach from=$best_goods key=myId item=goods}-->
+  	<li class="bli{$myId}">
+		<a href="{$goods.url}" style="height:100px;display:block;margin:10px 0px;"><img src="{$goods.thumb}" border="0" alt="{$goods.name|escape:html}" class="thumb" width="100" height="100" /></a>    	
+		<a href="{$goods.url}" title="{$goods.name|escape:html}">
+	
+		<strong>{$goods.goods_name|escape:html|truncate:12:"..":true}</strong></a>		<br />
+        <div style="_height:40px;">
+		<!-- {if $goods.promote_price neq 0} -->
+    	{$lang.promote_price}<span class="goods-price">{$goods.promote_price}</span>
+    	<!-- {else}-->
+			<!-- {if $sm_session.user_rank} -->
+				{$lang.shop_price_short}<span class="goods-price">{$goods.shop_price_formated}</span>
+			<!-- {else}-->
+				{$lang.market_price_short}<span class="goods-price">{$goods.market_price_formated}</span>	
+        	<!-- {/if}-->
+        	
+    	<!--{/if}-->
+		</div>
+  		</li>
+  	<!--{/foreach}-->
+  	</ul>
+  	<br style="clear:both"/>
+  	<div style="text-align:right;width:95%;"><A href="../search.php?intro=best">more...</A></div>
+  </div>
+</div>
+<!-- {/if} -->
+<br style="clear:both;height:1px;font-size:1px;line-height:1px;"/>
+ <!-- #EndLibraryItem -->
+<!-- #BeginLibraryItem "/library/ad_position.lbi" -->
+>
+{insert name='ads' id=$ads_id num=$ads_num}
+ <!-- #EndLibraryItem -->
+<!-- #BeginLibraryItem "/library/recommend_new.lbi" -->
+>	
+<div class="content-div" style="margin-top:5px;">
+	<div id="newgoods_tabs">
+		<ul class="tabs_top">
+		<span class="title">新到商品</span>
+		<!--{foreach from=$top_cates item=top}-->
+			<li><a href="#fragment-{$top.cat_id}"><span>{$top.cat_name|truncate:2:"":true}</span></a></li>
+		<!--{/foreach}-->
+		
+		</ul>
+	</div>
+		
+		
+	<div class="mootabs_container">
+	<!--{foreach from=$goods_by_cate item=cate}-->
+		<div id="fragment-{$cate.cat_id}" class="mootabs_panel" style="">
+			<ul>
+			<!--{foreach from=$cate.data key=myId item=goods}-->
+			
+			<li class="nli{$myId}">
+			<img src="images/watermark_new_ico.gif" height="10" width="23"/>
+			<a href="{$goods.url}" title="{$goods.name|escape:html}"><strong>{$goods.name|escape:html|truncate:12:"..":true}</strong></a><br />
+			<a href="{$goods.url}"><img src="{$goods.thumb}" border="0" alt="{$goods.name|escape:html}" class="thumb" /></a><br />
+
+				<!-- {if $goods.promote_price neq 0} -->
+	        	{$lang.promote_price}<span class="goods-price">{$goods.promote_price}</span>
+	        	<!-- {else}-->
+					<!-- {if $sm_session.user_rank} -->
+						{$lang.shop_price_short}<span class="goods-price">{$goods.shop_price}</span>
+					<!-- {else}-->
+						{$lang.market_price_short}<span class="goods-price">{$goods.market_price}</span>	
+		        	<!-- {/if}-->
+
+	        	<!--{/if}-->
+	
+				
+				<br /><span class="grey999">{$cate.cat_name}</span>
+	  		</li>
+
+			<!--{/foreach}-->
+			</ul>
+		
+			<br style="clear:both"/>
+  			<div style="text-align:right;width:95%;"><A href="../search.php?intro=new">more...</A></div>
+		</div>
+	
+	<!--{/foreach}-->
+	
+	</div>
+
+
+</div>
+ <!-- #EndLibraryItem -->
+<!-- #BeginLibraryItem "/library/help_bar.lbi" -->
+>
+<div id="help_bar">
+	<ul class="mootabs_title">
+	<div class="help_bar_top">
+		<span>帮助信息</span>
+		<li><a href="#help-1"><span class="li_left">客户服务</span><span class="li_right"></span></a></li>
+		<li><a href="#help-2"><span class="li_left">如何支付</span><span class="li_right"></span></a></li>
+		<li><a href="#help-3"><span class="li_left">联系我们</span><span class="li_right"></span></a></li>
+		<li><a href="#help-4"><span class="li_left">其他</span><span class="li_right"></span></a></li>
+		<div class="bgr"></div>
+
+		</div>
+	</ul>
+
+
+<div class="help_bar_body">
+	<div id="help-1" class="mootabs_panel">
+	<!--客户服务 begin-->
+	<div id="foot_list">
+		<div style="height:30px;width:1px; border-left:1px solid #b6b6b6;float:left;"></div>
+	    <ul>
+	      <li class="title">购物指南</li>
+			<li><a target="_blank" href="article.php?id=9">交易条款</a></li>
+			<li><a target="_blank" href="article.php?id=10>购物流程</a></li>
+			<li><a target="_blank" href="article.php?id=11">会员介绍</a></li>
+			<li><a target="_blank" href="article.php?id=12">常见问题</a></li>
+			<li><a target="_blank" href="article.php?id=13">联系客服</a></li>
+	    </ul>
+	    <ul>
+	      <li class="title">配送方式</li>
+			<li><a target="_blank" href="article.php?id=14">快递运输</a></li>
+			<li><a target="_blank" href="article.php?id=15">邮局普包</a></li>
+			<li><a target="_blank" href="article.php?id=16">特快专递(EMS)</a></li>
+			<li><a target="_blank" href="article.php?id=17">公路运输</a></li>
+			<li><a target="_blank" href="article.php?id=18">中铁快运</a></li>
+	    </ul>
+	    <ul>
+	      <li class="title">支付方式</li>
+	  		<li><a target="_blank" href="article.php?id=19">货到付款</a></li>
+			<li><a target="_blank" href="article.php?id=20">在线支付</a></li>
+			<li><a target="_blank" href="article.php?id=21">银行转账</a></li>
+			<li><a target="_blank" href="article.php?id=22">邮局汇款</a></li>
+			<li><a target="_blank" href="article.php?id=23">公司转账</a></li>
+	    </ul>
+	    <ul>
+	      <li class="title">售后服务</li>
+	  		<li><a target="_blank" href="article.php?id=24">保修(换货)</a></li>
+			<li><a target="_blank" href="article.php?id=25">退货</a></li>
+	    </ul>
+	    <ul>
+	      <li class="title"><a target="_blank" href="/user/user_center.asp">我的赛因</a></li>
+	      <li><a target="_blank" href="/user/user_order.asp">订单中心</a></li>
+	      <li><a target="_blank" href="/user/user_jyjl.asp">交易记录</a></li>
+	      <li><a target="_blank" href="/user/User_yu.asp">我的余额</a></li>
+	      <li><a target="_blank" href="/user/user_jifen.asp">我的积分</a></li>
+	    </ul>
+		<div style="height:30px;width:1px; border-right:1px solid #b6b6b6;float:left;margin-left:101px;"></div>
+	  </div>
+	<!--客户服务 end-->
+	</div>
+	<div id="help-2" class="mootabs_panel">
+	赛因网“产品直销”电话:  010-51271062 (808 / 809 / 810)<br/>
+	我们能为您在第一时间，最低的价格、最完备的信用保证提供全世界的音视频产品。你可以在不同的厂商<br/>
+	不同的类型里作出方便快捷的比较，同时我们使用最先进的购物程序，极大方便了您的购物。<br/>
+	赛因网的工作人员会在收到货款后马上用最快的递送方式发出您需要的产品，<br/>
+	真正体验赛因网拥有极好口碑的“产品直销”服务。<br/>
+	赛因网的银行帐号：<br/>
+	招商银行：吴健 6225 8801 0398 8458<br/>
+	农业银行：吴健 62284 8001 00843 76317<br/>
+	建设银行：吴健 4367 4200 1024 0209 684
+	</div>
+	<div id="help-3" class="mootabs_panel">
+	公司名称：赛因博客网络技术（北京）有限公司<br />
+	公司地址：北京建国路88号SOHO现代城D座五层<br />
+	公司电话：010 51271062/85893499（传真）<br />
+	销售咨询：010 51271062 (601 / 608 / 609 / 610 / 611) <br />
+	客户服务：010 51271062 (603 / 616 / 618 / 619 / 620) <br />
+	市场公关：010 85804262 (15 / 16 / 17) <br />
+	公司网站：http://www.sinemedia.com <br />
+	销售电邮：sales@sinemedia.com<br />
+	客服电邮：support@sinemedia.com <br />
+	市场电邮：market@sinemedia.com
+
+	</div>
+	<div id="help-4" class="mootabs_panel">
+	其他
+	</div>
+</div>
+
+
+</div>
+ <!-- #EndLibraryItem -->
+<!-- TemplateEndEditable --></div>
+<!-- End #page-middle -->
+<div id="page-right">
+<!-- TemplateBeginEditable name="主区域右侧" -->
+<!-- #BeginLibraryItem "/library/category_tree.lbi" -->
+>
+
+<div class="left_menu">
+<div class="nav_top">
+	<span>产品分类 </span>
+    <div class="bgr"></div>
+</div>
+<ul id="nav">
+    <!--{foreach from=$categories item=cat}-->
+    <li>
+    	<div class="f_left" style="width:30px;"><A href="javascript:void(0)" onClick="doMenu(this)"></A></div>
+        <span class="f_left s_none"><A href="{$cat.url}">{$cat.name|escape:html}</A></span>
+        <ul>
+          <!--{foreach from=$cat.children item=child}-->
+          <li><A href="{$child.url}">{$child.name|escape:html}</A></li>
+          <!--{/foreach}-->
+        </ul>
+    </li>
+    <!--{/foreach}-->
+
+</ul>
+<div class="nav_bot"> &nbsp;</div>
+</div>
+<div class="clear"></div>
+<script language="javascript" type="text/javascript">
+function doMenu(obj){
+	var items=obj.parentNode.parentNode.getElementsByTagName("ul");
+	var itmUl;
+	if(items.length>0){
+		itmUl=items[0];
+	}
+	if(itmUl.className!="ex"){
+		cxAll();
+		itmUl.className="ex";
+	}else{
+		itmUl.className="cx";
+	}
+}
+function statUp(){
+	cxAll();
+	var ulDom=document.getElementById("nav");
+	var items=ulDom.getElementsByTagName("ul");
+	if (items.length>0)
+	{
+		items[0].className="ex";
+	}
+}
+function cxAll(){
+	var ulDom=document.getElementById("nav");
+	var items=ulDom.getElementsByTagName("ul");
+	for (var i=0;i<items.length;i++)
+	{
+		items[i].className="cx";
+	}
+}
+statUp();
+</script>
+
+ <!-- #EndLibraryItem -->
+<!-- #BeginLibraryItem "/library/promotion_info.lbi" -->
+>
+<!-- {if $promotion_info} -->
+<!-- 促销信息 -->
+<div class="title-div"><img src="../images/promotion.gif" alt="" width="158" height="39" /></div>
+<div class="content-div">
+  <div style="list-style: none; margin: 10px; padding: 0;">
+    <!-- {foreach from=$promotion_info item=item key=key} -->
+    <!-- {if $item.type eq "snatch"} -->
+    <a href="snatch.php" title="{$lang.$item.type}">{$lang.snatch_promotion}</a>
+    <!-- {elseif $item.type eq "group_buy"} -->
+    <a href="group_buy.php" title="{$lang.$item.type}">{$lang.group_promotion}</a>
+    <!-- {elseif $item.type eq "auction"} -->
+    <a href="auction.php" title="{$lang.$item.type}">{$lang.auction_promotion}</a>
+    <!-- {elseif $item.type eq "favourable"} -->
+    <a href="activity.php" title="{$lang.$item.type}">{$lang.favourable_promotion}</a>
+    <!-- {/if} -->
+    <a href="{$item.url}" title="{$lang.$item.type} {$item.act_name}{$item.time}">{$item.act_name}</a><br />
+    <!-- {/foreach} -->
+  </div>
+</div>
+<!-- {/if} -->
+
+ <!-- #EndLibraryItem -->
+<!-- #BeginLibraryItem "/library/recommend_promotion.lbi" -->
+>
+<!-- {if $promotion_goods} -->
+<div class="left_menu">
+<div class="nav_top_grey">
+    <span>特价促销</span>
+    <div class="bgr"> </div>
+</div>
+
+<div class="menucontent">
+  <!--{foreach from=$promotion_goods item=goods}-->
+	<div class="list_g_style">
+		<div style="width:60px; height:60px;" class="f_left">
+			<A href="{$goods.url}"><img src="{$goods.thumb}" border="0" width="60" height="60"  alt="{$goods.name|escape:html}" /></A>
+		</div>
+		<div  class="f_left" style="text-align:center;padding:3px;">
+			<div style="height:8px;"></div>
+			<A href="{$goods.url}" title="{$goods.name|escape:html}">{$goods.short_name|escape:html}</A><br />
+		    <span class="goods-price">{$goods.promote_price}</span>
+		</div>
+	</div>
+
+  <!--{/foreach}-->
+  <br />
+  <br style="clear: both" />
+  <div style="text-align:right"><A href="../search.php?intro=promotion">more...</A></div>
+</div>
+  <div class="nav_bot"></div>
+<div style="height:10px;"></div>
+
+</div>
+<!-- {/if} -->
+ <!-- #EndLibraryItem -->
+<!-- TemplateEndEditable --></div>
+<!-- End #page-right -->
+<div class="clear"></div>
+</div>
+<!-- #BeginLibraryItem "/library/help.lbi" -->
+<!--{if $helps}-->
+<table width="801" border="0" align="center" cellpadding="0" cellspacing="1" bgcolor="#DADADA" class="clear" style="margin:10px auto 5px auto;">
+  <tr>
+    <!-- {foreach from=$helps item=help_cat} -->
+    <td class="help-cat"><img src="images/grey_arrow.png" alt=""  />{$help_cat.cat_name}</td>
+    <!-- {/foreach} -->
+  </tr>
+  <tr>
+    <!-- {foreach from=$helps item=help_cat} -->
+    <td bgcolor="#FFFFFF" valign="top"><ul>
+        <!-- {foreach from=$help_cat.article item=item} -->
+        <li><a href="{$item.url}" title="{$item.title|escape:html}">{$item.short_title}</a></li>
+        <!-- {/foreach} -->
+      </ul></td>
+    <!-- {/foreach} -->
+  </tr>
+</table>
+<!--{/if}-->
+<!-- #EndLibraryItem -->
+
+
+<!-- #BeginLibraryItem "/library/page_footer.lbi" -->
+<table width="801" border="0" align="center" cellpadding="5" cellspacing="0" style="margin:10px 0 20px 0;" id="footer-table">
+  <tr>
+    <td><img src="images/ecshop.gif" alt="ECSHOP" width="133" height="46" hspace="10" /></td>
+    <td width="6" id="foot-logo"><img src="images/footer_bg.gif" width="6" height="80" alt="" /></td>
+    <td> {$copyright}<br />
+      {$shop_address} {$shop_postcode} <br />
+      <!-- 客服电话{if $service_phone} -->
+      Tel: {$service_phone}
+      <!-- 结束客服电话{/if} -->
+      <!-- QQ 号码 {foreach from=$qq item=im} -->
+      <!-- {if $im} -->
+      <a href="http://wpa.qq.com/msgrd?V=1&amp;Uin={$im}&amp;Site={$shop_name}&amp;Menu=yes" target="_blank"><img src="http://wpa.qq.com/pa?p=1:{$im}:4" height="16" border="0" alt="QQ" /> {$im}</a>
+      <!-- {/if} -->
+      <!-- {/foreach} 结束QQ号码 -->
+      <!-- 淘宝旺旺 {foreach from=$ww item=im} -->
+      <!-- {if $im} -->
+      <a href="http://amos1.taobao.com/msg.ww?v=2&amp;uid={$im|escape:url}&amp;s=2" target="_blank"><img src="http://amos1.taobao.com/online.ww?v=2&amp;uid={$im|escape:url}&amp;s=2" width="16" height="16" border="0" alt="淘宝旺旺" /> {$im}</a>
+      <!-- {/if} -->
+      <!--{/foreach} 结束淘宝旺旺 -->
+      <!-- Yahoo Messenger {foreach from=$ym item=im} -->
+      <!-- {if $im} -->
+      <a href="http://edit.yahoo.com/config/send_webmesg?.target={$im}n&amp;.src=pg" target="_blank"><img src="images/yahoo.gif" width="18" height="17" border="0" alt="Yahoo Messenger" /> {$im}</a>
+      <!-- {/if} -->
+      <!-- {/foreach} 结束Yahoo Messenger -->
+      <!-- MSN Messenger {foreach from=$msn item=im} -->
+      <!-- {if $im} -->
+      <img src="images/msn.gif" width="18" height="17" border="0" alt="MSN" /> {$im}
+      <!-- {/if} -->
+      <!-- {/foreach} 结束MSN Messenger -->
+      <!-- Skype {foreach from=$skype item=im} -->
+      <!-- {if $im} -->
+      <img src="http://mystatus.skype.com/smallclassic/{$im|escape:url}" alt="Skype" /><a href="skype:{$im|escape:url}?call">{$im}</a>
+      <!-- {/if} -->
+      <!-- {/foreach} -->
+      <div>
+        <!-- 开始相关声明{foreach from=$declaration item=article} -->
+        <a href="{$article.url}" target="_blank">{$article.title}</a>
+        <!-- 相关声明{/foreach}-->
+      </div>
+      <!-- ICP 证书{if $icp_number} -->
+      <div> {$lang.icp_number}:<a href="http://www.miibeian.gov.cn/" target="_blank">{$icp_number}</a> </div>
+      <!-- 结束ICP 证书{/if} -->
+      {insert name='query_info'}<br />
+      <a href="http://www.ecshop.com" target="_blank" style="font-size:10px">Powered by <strong><span style="color: #3366FF">ECSHOP</span> <span style="color: #FF9966">{$ecs_version}</span></strong></a><br />
+    </td>
+  </tr>
+</table>
+{if $stats_code}
+<div align="center">{$stats_code}</div>
+{/if}
+
+<script type="text/javascript">
+var process_request = "{$lang.process_request}";
+</script>
+<!-- #EndLibraryItem --></div>
+<!-- End #Wrapper -->
+<div style="float:left;"></div></div><!-- End #globalWrapper -->
+</body>
+</html>

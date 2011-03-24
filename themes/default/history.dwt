@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>{$page_title}</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="animated_favicon.gif" type="image/gif" />
+<link href="css.css" rel="stylesheet" type="text/css" />
+<link href="themes/default/css/overlay-apple.css" rel="stylesheet" type="text/css" />
+
+{* 包含脚本文件 *}
+{insert_scripts files='common.js,jquery.tools.min.js,jquery.jparallax.js'}
+<script type="text/javascript">
+
+$(document).ready(function(){
+  	jQuery('#parallax').jparallax().append();
+	$("#parallax a[rel]").overlay({ top: 100});
+	
+});
+</script>
+</head>
+
+
+<body>
+<div id="globalWrapper">
+<div id="wrapper" class="white_wrapper">
+	<!-- #BeginLibraryItem "/library/page_header_five.lbi" -->
+	>
+	<!-- #EndLibraryItem -->
+
+
+	<div id="container">			
+		<div id="page-middle" style="width:1000px;margin:0px;margin-bottom:10px;float:left;">
+			<div id="parallax">
+				<div class="box_bg"></div>
+				<div class="box_area">
+				<!-- {foreach from=$history_array  item=item} -->
+					<div class="area_{$item.id}">
+						<!-- {foreach from=$item.data item=da} -->
+							<a rel="#h{$item.id}_{$da}" class="a{$item.id}_{$da}"></a>							
+						<!--{/foreach}-->
+					</div>
+				<!--{/foreach}-->
+				</div>
+				
+			
+			</div>	
+			<!--end parallax-->
+			
+			<!-- {foreach from=$history_array  item=item} -->
+					<!-- {foreach from=$item.data item=da} -->
+						<div class="history_overlay" id="h{$item.id}_{$da}" style="background:url({$img_path}history/b{$item.id}_{$da}.png) no-repeat;"></div>						
+					<!--{/foreach}-->
+			<!--{/foreach}-->
+			
+		</div>
+
+		
+		<!-- End #page-middle -->
+		<!-- #BeginLibraryItem "/library/page_footer_five.lbi" -->
+		>
+		<!-- #EndLibraryItem -->
+	</div>
+
+</div>
+<!-- End #Wrapper -->
+</div><!-- End #globalWrapper -->
+</body>
+</html>

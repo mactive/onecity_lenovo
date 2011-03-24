@@ -1,0 +1,207 @@
+
+/* root element for tabs  */
+ul.f_tabs { 
+	list-style:none; 
+	margin:0 !important; 
+	padding:0;	
+	height:30px;
+}
+
+/* single tab */
+ul.f_tabs li { 
+	float:left;	 
+	text-indent:0;
+	padding:0;
+	margin:0 !important;
+	list-style-image:none !important; 
+}
+
+/* link inside the tab. uses a background image */
+ul.f_tabs a { 
+	background: url(../images/training/tabs/tab_tri.png) no-repeat -20px center;
+	font-size:11px;
+	display:block;
+	height: 50px;  
+	line-height:30px;
+	width: 80px;
+	text-align:center;	
+	text-decoration:none;
+	color:#333;
+	padding:0px;
+	margin:0px;	
+}
+
+ul.f_tabs a:active {
+	outline:none;		
+}
+ul.f_tabs a img{padding-top:15px;}
+/* when mouse enters the tab move the background image */
+ul.f_tabs a:hover {
+	background-position: top center;	
+	color:#fff;	
+}
+
+/* active tab uses a class name "current". it's highlight is also done by moving the background image. */
+ul.f_tabs a.current, ul.f_tabs a.current:hover, ul.f_tabs li.current a {
+	background-position: top center;	
+	cursor:default !important; 
+	color:#000 !important;
+}
+
+/* Different widths for tabs: use a class name: w1, w2, w3 or w2 */
+
+
+/* width 1 */
+ul.f_tabs a.s 			{ background-position: -553px 0; width:81px; }
+ul.f_tabs a.s:hover 	{ background-position: -553px -31px; }
+ul.f_tabs a.s.current  { background-position: -553px -62px; }
+
+/* width 2 */
+ul.f_tabs a.l 			{ background-position: -248px -0px; width:174px; }
+ul.f_tabs a.l:hover 	{ background-position: -248px -31px; }
+ul.f_tabs a.l.current  { background-position: -248px -62px; }
+
+
+/* width 3 */
+ul.f_tabs a.xl 			{ background-position: 0 -0px; width:248px; }
+ul.f_tabs a.xl:hover 	{ background-position: 0 -31px; }
+ul.f_tabs a.xl.current { background-position: 0 -62px; }
+
+
+/* initially all panes are hidden */ 
+div.panes div.pane {
+	display:none;		
+}
+
+/* root element for tabs  */
+ul.d_tabs { 
+	list-style:none; 
+	padding-top:20px; 
+	height:30px;
+}
+
+/* single tab */
+ul.d_tabs li { 
+	float:left;	 
+	text-indent:0;
+	padding:0;
+	margin:0 !important;
+	list-style-image:none !important; 
+}
+
+/* link inside the tab. uses a background image */
+ul.d_tabs a { 
+	background: url(../images/training/tabs/icon-dot.png) no-repeat top left;
+	width:12px;
+	height:12px;
+	display:block;
+	text-indent:-99999em;
+	margin-right:5px;
+	float:left;
+}
+
+ul.d_tabs a:active {
+	outline:none;			
+}
+ul.d_tabs a img{padding-top:15px;}
+/* when mouse enters the tab move the background image */
+ul.d_tabs a:hover {
+	background-position: top left;	
+	color:#fff;	
+}
+
+/* active tab uses a class name "current". it's highlight is also done by moving the background image. */
+ul.d_tabs a.current, ul.d_tabs a.current:hover, ul.d_tabs li.current a {
+	background-position: bottom left;	
+	cursor:default !important; 
+	color:#000 !important;
+}
+.video_slider{
+	width:799px;
+	height:auto;
+	display:block;
+	margin: 0px;
+	position:relative;
+	color:#1a1f27;
+}
+.heronav {height:47px; padding:0 0 0 200px; font-size:11px; line-height:1.2em; margin:0px;}
+.project{}
+.project h3.project-title{
+	font-size:25px;
+	font-weight:bold;
+	left:32px;
+	bottom:18px;
+	color:#1b1d20;
+	text-shadow: 0px 1px 0px #e0e8f5;
+	padding-left:3px;
+}
+.project-text{
+	color:#1a1f27;
+	font-size:12px;
+	text-shadow: 0 1px 0 #c6cbd5;
+	line-height:19px;
+	margin-top:5px;
+	margin-left:3px;
+	padding-right:12px;
+}
+
+.project-text p{
+	margin-bottom:0.5em;
+}
+
+#project-type-nav{
+	width:188px;
+	margin-top:20px;
+	float:left;
+	font-size:14px;
+	font-weight:bold;
+	color:#dce7fa;
+	margin-left:2px;
+	border-bottom:1px solid #5d6776;
+	border-top:1px solid #313742;
+	position:relative;
+}
+
+#project-type-nav li{
+	width:188px;
+	height:36px;
+	background:url(../images/training/project-nav-bg.png) no-repeat top left;
+}
+
+#project-type-nav li a{
+	width:188px;
+	height:36px;
+	display:block;
+	overflow:hidden;
+	cursor:pointer;
+}
+
+#project-type-nav li a span{
+	width:78px;
+	height:16px;
+	display:block;
+	text-indent:-99999em;
+	margin-left:20px;
+	margin-top:10px;
+	background-repeat:no-repeat;
+	background-position:bottom left;
+	background-position:top left;	
+	position:relative;
+	z-index:50;
+	opacity: 0.65;
+}
+	
+#project-type-nav li.web a span{	background-image:url(../images/training/text-web.png);}	
+#project-type-nav li.iphone a span{	background-image:url(../images/training/text-iphone.png);}	
+#project-type-nav li.desktop a span{	background-image:url(../images/training/text-desktop.png);}	
+
+#project-type-nav li.current{
+	position:absolute;
+	width:	212px;
+	height:	41px;
+	display:block;
+	background:url(../images/training/project-nav-current-bg.png) no-repeat top left;
+	top:-1px;
+	left:-7px;
+} 
+

@@ -1,0 +1,126 @@
+/* 友情链接*/
+<!--{if $img_links  or $txt_links }-->
+<div style="border:1px solid #CCC;margin:5px auto 10px auto;padding:5px;">
+<!-- {if $img_links} -->
+<div style="padding:3px;">
+<!--开始图片类型的友情链接{foreach from=$img_links item=link}-->
+<span style="width: 100px; text-align: center">
+<a href="{$link.url}" target="_blank" title="{$link.name}"><img src="{$link.logo}" width="88" height="31" alt="{$link.name}" border="0" /></a>
+</span>
+<!--结束图片类型的友情链接{/foreach}-->
+</div>
+<!-- {/if} -->
+<!-- {if $txt_links} -->
+<div style="padding:3px;">
+<!--开始文字类型的友情链接{foreach from=$txt_links item=link}-->
+<span style="width: 100px; text-align: center">
+[<a href="{$link.url}" target="_blank" title="{$link.name}">{$link.name}</a>]
+</span>
+<!--结束文字类型的友情链接{/foreach}-->
+</div>
+<!-- {/if} -->
+</div>
+<!--{/if}-->
+
+
+/*登录广告和新闻*/
+<div id="login-news" class="clear">
+<div id="login"><!-- TemplateBeginEditable name="标语区左侧" -->
+<!-- #BeginLibraryItem "/library/member.lbi" -->
+
+
+{insert_scripts files='transport.js,utils.js'}
+<div><img src="../images/memeber_login.jpg" alt="Login" width="170" height="40" /></div>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" style="background:url(../images/login_bg.gif);">
+  <tr>
+    <td id="ECS_MEMBERZONE">{* SINEMALL 提醒您：根据用户id来调用member_info.lbi显示不同的界面  *}{insert name='member_info'} </td>
+    <td width="9" valign="top"><img src="../images/login_right.gif" alt="shadow" width="9" height="131" /></td>
+  </tr>
+</table>
+
+ <!-- #EndLibraryItem -->
+<!-- TemplateEndEditable --></div>
+<div style="float:left;width:630px;background:#0088D1;">
+  <div style="float:left;width:377px;margin-top:5px;">
+  <script type="text/javascript">
+
+  var swf_width=377;
+  var swf_height=165;
+  // 0xffffff:文字颜色|1:文字位置|0x0066ff:文字背景颜色|60:文字背景透明度|0xffffff:按键文字颜色|0x0066ff:按键默认颜色|0x000033:按键当前颜色|8:自动播放时间(秒)|2:图片过渡效果|1:是否显示按钮|_blank:打开窗口
+  var swf_config = "|2|||0xFFFFFF|0xFF6600||4|3|1|_blank"
+
+  document.write('<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="'+ swf_width +'" height="'+ swf_height +'">');
+  document.write('<param name="movie" value="data/images/bcastr.swf?bcastr_xml_url=cycle_image.php"><param name="quality" value="high">');
+  document.write('<param name="menu" value="false"><param name=wmode value="opaque">');
+  document.write('<param name="FlashVars" value="bcastr_config='+swf_config+'">');
+  document.write('<embed src="data/images/bcastr.swf?bcastr_xml_url=cycle_image.php" wmode="opaque" FlashVars="bcastr_config='+swf_config+'" menu="false" quality="high" width="'+ swf_width +'" height="'+ swf_height +'" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />');
+  document.write('</object>');
+
+  </script>
+  </div>
+  <!-- End Flash -->
+
+  <div style="float:left;width:11px;margin-top:5px;"><img src="images/slogan_right.gif" alt="" /></div>
+  <div class="cell-news">
+  <!-- TemplateBeginEditable name="标语区右侧" -->
+<!-- #BeginLibraryItem "/library/new_articles.lbi" -->
+
+<div id="tab-title">
+<span id="ECS_NOTICE" class="tab-front">{$lang.shop_notice}</span>
+<span id="ECS_ARTICLE" class="tab-back">{$lang.new_article}</span>
+</div>
+<!-- 商店公告内容 -->
+<div class="content-div" id="ECS_NOTICE_BODY">
+  {$shop_notice}
+</div>
+<!-- 最新资料 -->
+<div class="content-div" id="ECS_ARTICLE_BODY" style="display:none" >
+  <ul class="article-list">
+    <!--{foreach from=$new_articles item=article}-->
+    <li>[<a href="{$article.cat_url}">{$article.cat_name}</a>] <a href="{$article.url}" title="{$article.title|escape:html}">{$article.short_title}</a></li>
+    <!--{/foreach}-->
+  </ul>
+</div>
+<script type="text/javascript">
+{literal}
+  var cycleList = ['ECS_NOTICE', 'ECS_ARTICLE'];
+  var tabFront = 'tab-front';
+  var tabBack = 'tab-back';
+  function cycleShow(obj)
+  {
+    var curObj;
+    var curBody;
+    for (i=0; i < cycleList.length; i++)
+    {
+      curObj = document.getElementById(cycleList[i]);
+      curBody = document.getElementById(cycleList[i] + '_BODY');
+      if (obj.id == curObj.id)
+      {
+        curObj.className = tabFront;
+        curBody.style.display = "";
+      }
+      else
+      {
+        curObj.className = tabBack;
+        curBody.style.display = "none";
+      }
+    }
+  }
+
+  // 添加事件
+  for (i=0; i< cycleList.length; i++)
+  {
+    document.getElementById(cycleList[i]).onmousemove = function()
+    {
+      cycleShow(this);
+    };
+  }
+{/literal}
+</script>
+
+
+ <!-- #EndLibraryItem -->
+<!-- TemplateEndEditable -->
+  </div>
+</div>
+</div>

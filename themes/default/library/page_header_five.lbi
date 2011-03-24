@@ -1,0 +1,71 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+
+{* 包含脚本文件 *}
+{insert_scripts files='jquery.pngfix.js'}
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		/**/
+		
+		// Fix background images on all TD elements
+		$("div").pngfix();
+		$("img").pngfix();
+
+		// Fix background images on all A elements
+		$("a").pngfix();
+
+		// Fix all inline PNG images and the element #container with the custom sizingMethod of "scale"
+		/*
+		$("img[@src$=png], #container").pngfix({
+			sizingMethod: "scale"
+		});*/
+
+		
+		$("ul.main li").hover(
+			function()
+			{
+				$("dl").hide();
+				$("a").removeClass("selected");
+				$(this).children("dl").show();
+				$(this).children("a").addClass("selected");
+			},
+			function()
+			{
+				$("a").removeClass("selected");
+				$(this).children("dl").hide();
+				$(this).children("a").removeClass("selected");
+			}
+		);
+	});
+</script>
+</head>
+<div class="header_5">
+
+</div>
+
+	<div class="menu_5">
+		<ul class="main">
+			<li><a href="five.php">首页</a></li>
+			<li><a>&nbsp;征集评选&nbsp;</a>
+				<dl>
+				   <dd><a href="idea_cat.php?id=30">{$lang.5_title.1}</a></dd>
+				   <dd><a href="idea_cat.php?id=20">{$lang.5_title.2}</a></dd>
+				   <dd><a href="idea_cat.php?id=6">{$lang.5_title.3}</a></dd>
+				   <dd><a href="idea_cat.php?id=5">{$lang.5_title.4}</a></dd>
+				</dl>
+			</li>
+			<li><a href="miaosha.php">秒杀iPhone4</a>
+				<dl>
+				   <dd><a href="miaosha.php">还不赶快!</a></dd>
+				</dl>
+			</li>
+			<li><a href="vote_page.php">我最喜欢的节目</a></li>
+			<li><a href="history.php">历史回顾</a></li>
+			<li><a href="stars.php">五星上将</a></li>
+		</ul>		
+		<div class="user_info_5">
+			<a href="user.php?act=default">{$sm_session.user_name}[用户中心]</a>
+			<a href="user.php?act=logout&back_act=five"> | [退出]</a>		
+		</div>
+	</div>

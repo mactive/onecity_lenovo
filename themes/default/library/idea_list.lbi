@@ -1,0 +1,62 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="title_idea_float"><img src="{$img_path}5/comment_title.png" style="margin:5px 0px 0px 60px;"/></div>
+
+<div class="ideas_list">
+	<!-- {foreach from=$ideas_list item=idea} -->
+	<div class="idea_cell">
+		<div>
+			<div class="cell_ico">
+				<div class="up">{$idea.id}</div>
+				<div class="down">{$idea.comment_count}条评论</div>
+			</div>
+			<div class="idea_title"><span class="bold">{$idea.title|truncate:20:"..":true}</span> - 
+				<span class="grey999 font14px">作者: {$idea.real_name}</span></div>
+			<div class="clear"></div>
+		</div>
+		<div class="idea_cell_under">
+			<div class="idea_detail">
+				<div class="detail_content">{$idea.brief|truncate:120:"..":true}</div>
+				{if $idea.gallery}
+					<div class="idea_gallery_area">
+						{include file="library/idea_gallery_list.htm"}					
+					</div>
+				{/if}
+				<div class="extend_comment"><div class="f_left grey999" style="margin-right:10px;width:80px;">点击展开评论</div><a class="comment_handler open_ico"></a></div>
+				<div class="comment_zone f_left">
+					{include file="library/idea_comment_list.htm"}					
+				</div>
+				
+				
+			</div>
+		</div>
+	</div>
+	<!-- {/foreach} -->
+	
+	<!-- 页码点击 -->
+	<div style="padding:20px 30px;height:20px;">
+		<form name="selectPageForm" action="{$smarty.server.PHP_SELF}" method="get" class="f_right">
+		  <div id="pager" class="pager"> 
+			<a href="{$pager.page_first}" class="page_btn">{$lang.page_first}</a> <a href="{$pager.page_prev}" class="page_btn">{$lang.page_prev}</a> 
+				<!--{foreach from=$pager.array key=key item=item}-->
+					<a href="javascript:selectPage({$item});" class="{if $pager.page eq $item }page_btn_selected{else}page_btn{/if}">{$item}</a>
+				<!--{/foreach}-->		
+			<a href="{$pager.page_next}" class="page_btn">{$lang.page_next}</a> <a href="{$pager.page_last}" class="page_btn">{$lang.page_last}</a> </span>
+
+
+		    <!--{foreach from=$pager.search key=key item=item}-->
+		    <input type="hidden" name="{$key}" value="{$item}" />
+		    <!--{/foreach}-->
+		    <input type="hidden" id="page" name="page" value="{$pager.page}" />
+		  </div>
+		</form>
+		<script type="Text/Javascript" language="JavaScript">
+		function selectPage(page_id)
+		{
+			document.getElementById("page").value = page_id;
+			document.forms['selectPageForm'].submit();
+		}
+		</script>
+		
+	</div>
+
+</div>

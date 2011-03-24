@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>{$page_title}</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="animated_favicon.gif" type="image/gif" />
+<link href="css.css" rel="stylesheet" type="text/css" />
+<link href="css/scrollable.css" rel="stylesheet" type="text/css" />
+{* 包含脚本文件 *}
+{insert_scripts files='common.js,jquery.tools.min.js'}
+
+</head>
+
+<body>
+<div id="globalWrapper">
+<div id="wrapper" class="white_wrapper">
+	<!-- #BeginLibraryItem "/library/page_header_five.lbi" -->
+	>
+	<!-- #EndLibraryItem -->
+
+
+	<div id="container">
+		<div class="people_float"><img src="{$miaosha_people.logo}" style="margin:5px 0px 0px 60px;"/></div>
+		
+		<div id="page-middle" style="width:700px;margin-left:10px;_margin-left:13px;float:left;">
+			{$miaosha_people.content}		
+		</div>
+		<div id="page-right" style="width:260px;margin-left:15px;_margin-left:13px;float:left;">
+			<!-- #BeginLibraryItem "/library/index_user_money.lbi" -->
+			>
+			<!-- #EndLibraryItem -->
+		</div>
+		<div class="clear"></div>
+		
+		<!-- End #page-middle -->
+		<!-- #BeginLibraryItem "/library/page_footer_five.lbi" -->
+		>
+		<!-- #EndLibraryItem -->
+	</div>
+
+</div>
+<!-- End #Wrapper -->
+</div><!-- End #globalWrapper -->
+</body>
+</html>

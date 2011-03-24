@@ -1,0 +1,31 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- 分类 -->
+<!--{foreach from=$meter_cate_tree name=meter_cate item=item}-->
+<div>
+	<div class="{if $smarty.foreach.meter_cate.first}
+					category_title
+				{else}
+					{if $smarty.foreach.meter_cate.last}
+						category_title_middle
+					{else}
+						category_title_middle
+					{/if}
+				{/if}
+				">
+		<a class="f_left" href="article_cat.php?id={$item.cat_id}">{$item.cat_name}</a>
+		<div class="tree_right_ico"><a id="ico_handler" class="down_ico"></a></div>
+		<div class="clear"></div>
+	</div>
+	<ul class="category_cell">
+	
+	<!--{foreach from=$item.subarticles item=cus}-->
+		<li><a href="article_cat.php?id={$cus.cat_id}">{$cus.cat_name}</a></li>
+	<!--{/foreach}-->
+	</ul>
+</div>
+<!--{/foreach}-->
+<div class="category_title_under"></div>
+
+
+<!-- {if $sm_session.user_rank} -->
+<!-- {/if} -->

@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<link href="css/sms_down.css" rel="stylesheet" type="text/css" />
+{insert_scripts files='common.js,jquery.tools.min.js'}
+<script type="text/javascript" src="http://www.danqoo.com/images/smsdown/jquery.linscroll.js" ></script>
+    <script type="text/javascript">
+    $(document).ready(
+        function(){
+            $('#smsContent').setScroll(
+                {img:'http://www.danqoo.com/images/smsdown/scroll_bk.gif',width:10},//background-image and width
+                {img:'http://www.danqoo.com/images/smsdown/scroll_arrow_up.gif',height:3},//up
+                {img:'http://www.danqoo.com/images/smsdown/scroll_arrow_down.gif',height:3},//down
+                {img:'http://www.danqoo.com/images/smsdown/scroll_bar.gif',height:25}//bar
+            );
+            }
+        );
+    
+    </script>
+
+</head>
+<body>
+	<br>	<br>	<br>	<br>	<br>	<br>
+
+		  	<div class="screen_bg">
+		  	<div id="smsContent" style="width:400px;overflow:hidden;height:170px;"><br><br>
+				一名黑客日前宣称,他已经破解了苹果CE名黑客自称“orin0co”.他表示,他通过钓 鱼的方式获取了乔布斯在亚马逊上的账号密码.历史记录显示,乔布斯过去10年中在亚马逊上购买了2万件商 一名黑客日前宣称,他已经破解了苹果CE名黑客自称“orin0co”.他表示,他通过钓 鱼的方式获取了乔布斯在亚马逊上的账号密码.历史记录显示,乔布斯过去10年中在亚马逊上购买了2万件商 一名黑客日前宣称,他已经破解了苹果CE名黑客自称“orin0co”.他表示,他通过钓 鱼的方式获取了乔布斯在亚马逊上的账号密码.历史记录显示,乔布斯过去10年中在亚马逊上购买了2万件商 一名黑客日前宣称,他已经破解了苹果CE名黑客自称“orin0co”.他表示,他通过钓 鱼的方式获取了乔布斯在亚马逊上的账号密码.历史记录显示,乔布斯过去10年中在亚马逊上购买了2万件商 一名黑客日前宣称,他已经破解了苹果CE名黑客自称“orin0co”.他表示,他通过钓 鱼的方式获取了乔布斯在亚马逊上的账号密码.历史记录显示,乔布斯过去10年中在亚马逊上购买了2万件商 一名黑客日前宣称,他已经破解了苹果CE名黑客自称“orin0co”.他表示,他通过钓 鱼的方式获取了乔布斯在亚马逊上的账号密码.历史记录显示,乔布斯过去10年中在亚马逊上购买了2万件商 一名黑客日前宣称,他已经破解了苹果CE名黑客自称“orin0co”.他表示,他通过钓 鱼的方式获取了乔布斯在亚马逊上的账号密码.历史记录显示,乔布斯过去10年中在亚马逊上购买了2万件商 
+			</div>
+			</div>
+
+</body>
+</html>
