@@ -268,8 +268,9 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 
 		$val['user_time'] = $now;
 		//如果存在那么update
-		//county 和 地址相同 那么
+		//county 和 地址相同 那么 询问郭婷
 		$is_exist = $GLOBALS['db']->getOne("SELECT cat_id FROM " . $GLOBALS['ecs']->table('city') . " WHERE cat_id = $val[cat_id]");
+		if($is_same_location)
 		if($is_exist){
 			$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $val, 'update', "cat_id='$val[cat_id]'");
 		}else{
