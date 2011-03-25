@@ -5,7 +5,7 @@
 <table width="100%" id="lesson-table" class="table_border table_standard" border="1">
     <tr>
       <td width="100">{$lang.county}:</td>
-      <td>{$city_info.cat_name}</td>
+      <td>{$ad_info.city_name}</td>
     </tr>
 	<!--{if $sm_session.user_rank == 1}-->
     <tr>
@@ -21,7 +21,7 @@
 					<img src="{$photo_info.0.thumb_url}">
 				</a>{$reupload_message}<input type="hidden" name="img_id[]" value="{$photo_info.0.img_id}">
 			<!--{/if}-->
-			{if !$city_info.is_aduit_confirm}<input type="file" name="idea_photo[]">{/if}
+			{if !$ad_info.is_aduit_confirm}<input type="file" name="idea_photo[]">{/if}
 		</td>
 	</tr>	
 	<tr>
@@ -32,7 +32,7 @@
 					<img src="{$photo_info.1.thumb_url}">
 				</a>{$reupload_message}<input type="hidden" name="img_id[]" value="{$photo_info.1.img_id}">
 			<!--{/if}-->
-			{if !$city_info.is_aduit_confirm}<input type="file" name="idea_photo[]">{/if}
+			{if !$ad_info.is_aduit_confirm}<input type="file" name="idea_photo[]">{/if}
 		</td>
 	</tr>
 	<tr>
@@ -43,7 +43,7 @@
 					<img src="{$photo_info.2.thumb_url}">
 				</a>{$reupload_message}<input type="hidden" name="img_id[]" value="{$photo_info.2.img_id}">
 			<!--{/if}-->
-			{if !$city_info.is_aduit_confirm}<input type="file" name="idea_photo[]"></td>{/if}
+			{if !$ad_info.is_aduit_confirm}<input type="file" name="idea_photo[]"></td>{/if}
 	</tr>
 	<tr>
 		<td>远景2. </td>
@@ -53,7 +53,7 @@
 					<img src="{$photo_info.3.thumb_url}">
 				</a>{$reupload_message}<input type="hidden" name="img_id[]" value="{$photo_info.3.img_id}">
 			<!--{/if}-->
-			{if !$city_info.is_aduit_confirm}<input type="file" name="idea_photo[]"></td>{/if}
+			{if !$ad_info.is_aduit_confirm}<input type="file" name="idea_photo[]"></td>{/if}
 	</tr>
 	<tr>
 		<td>备注:</td>
@@ -63,7 +63,7 @@
       <td>&nbsp;</td>
       <td>
         <input type="hidden" name="upload_user_id" value="{$sm_session.user_id}" />
-        <input type="hidden" name="idea_id" value="{$cat_id}" />
+        <input type="hidden" name="ad_id" value="{$ad_id}" />
 		<!--{if $photo_info}--><input type="hidden" name="modify" value="1" /><!--{/if}-->
       	<input type="hidden" name="act" value="act_upload_photo" />
     	<input type="submit" class="submitidea_btn" value="{$lang.button_submit}" />

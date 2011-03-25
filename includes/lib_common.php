@@ -4336,7 +4336,7 @@ function get_idea_list($filter)
  * @param   array   $image_descs
  * @return  void
  */
-function handle_idea_gallery_image($idea_id, $image_files, $image_descs,$image_sorts,$img_ids)
+function handle_ad_gallery_image($ad_id, $image_files, $image_descs,$image_sorts,$img_ids)
 {
     foreach ($image_descs AS $key => $img_desc)
     {
@@ -4396,14 +4396,14 @@ function handle_idea_gallery_image($idea_id, $image_files, $image_descs,$image_s
 			if($img_id > 0)
 			{
 				 /* 更新图片 */
-			    $sql = "UPDATE ".$GLOBALS['ecs']->table('ideas_gallery')." SET ".
+			    $sql = "UPDATE ".$GLOBALS['ecs']->table('city_gallery')." SET ".
 			           "img_url = '$img_url' ,".
 			           "thumb_url = '$thumb_url' ,".
 			           "img_original = '$img_original' ".
 			           "WHERE img_id = $img_id";
 			}else{
-				$sql = "INSERT INTO " . $GLOBALS['ecs']->table('ideas_gallery') . " (idea_id, img_url, img_desc, img_sort, thumb_url, img_original) " .
-	                    "VALUES ('$idea_id', '$img_url', '$img_desc', '$img_sort', '$thumb_url', '$img_original')";
+				$sql = "INSERT INTO " . $GLOBALS['ecs']->table('city_gallery') . " (ad_id, img_url, img_desc, img_sort, thumb_url, img_original) " .
+	                    "VALUES ('$ad_id', '$img_url', '$img_desc', '$img_sort', '$thumb_url', '$img_original')";
 			}
 			//echo $sql."<br>";
 			$GLOBALS['db']->query($sql);

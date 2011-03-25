@@ -5,13 +5,13 @@
 		<!--{foreach from=$city_title key=k item=item }-->
 		<div class="city_info radius_5px">
 			<div class="f_left left_title left_radius_5px">{$item}</div>
-			<div class="f_left right_content"><input type="text" name="col[]" value="{$city_info.$k}" size="30" /></div>	
+			<div class="f_left right_content"><input type="text" name="col[]" value="{$ad_detail.$k}" size="30" /></div>	
 			<div class="clear"></div>
 		</div>
 		<!--{/foreach}-->
 		<div style="width:500px;float:left;">
-			<input type="hidden" name="act" value="update_city" />
-			<input type="hidden" name="cat_id" value="{$city_info.cat_id}" />						
+			<input type="hidden" name="act" value="update_ad" />
+			<input type="hidden" name="ad_id" value="{$ad_detail.ad_id}" />						
 			<input type="submit" class="submitidea_btn" value="{$lang.button_submit}" />
 		</div>
 		</form>
@@ -19,7 +19,7 @@
 		<!--{foreach from=$city_title key=k item=item }-->
 		<div class="city_info radius_5px">
 			<div class="f_left left_title left_radius_5px">{$item}</div>
-			<div class="f_left right_content">{$city_info.$k}</div>	
+			<div class="f_left right_content">{$ad_detail.$k}</div>	
 			<div class="clear"></div>
 		</div>
 		<!--{/foreach}-->
@@ -65,11 +65,10 @@
     <tr>
       <td>&nbsp;</td>
       <td>
-        <input type="hidden" name="city_record_id" value="{$city_info.id}" />
-        <input type="hidden" name="cat_id" value="{$cat_id}" />
-      	<input type="hidden" name="act" value="update_aduit" />
+        <input type="hidden" name="ad_id" value="{$ad_detail.ad_id}" />
+      	<input type="hidden" name="act" value="update_audit" />
     	<input type="submit" class="input_s3 f_left" value="不通过" />
-		<a href="city_operate.php?act=update_aduit&confirm=1&cat_confirm_id={$cat_id}" class="cancel_lite_btn f_left" style="margin-left:20px;">通过审核</a>
+		<a href="city_operate.php?act=update_audit&confirm=1&ad_id={$ad_id}" class="cancel_lite_btn f_left" style="margin-left:20px;">通过审核</a>
       </td>
     </tr>
 	{/if}

@@ -19,6 +19,7 @@ define('AUDIT_5',      	5); //中央专员 central_officer
 define('AUDIT_6',       6); //中央Leader central_leader
 
 define('CONTENT_COLS',       41); //中央Leader central_leader
+define('CITY_AD_LIMIT',       5); //中央Leader central_leader
 
 
 

@@ -51,7 +51,7 @@
 				<!--{if $act_step == "upload_panel"}-->
 				<div class="audit_info radius_5px" style="width:600px;padding:20px;margin:30px 0px 0px 20px;">
 					<div class="font14px grey333" style="margin:20px 0px;">请提交 - FY11财年联想“一城一牌”资源位申报表格 <br>
-						可以分几次上传全部的县／市,同一个地方后上传的会覆盖之前上传的数据
+						可以分几次上传全部的县／市,每一个县市限传5条广告位置信息。
 					</div>
 				<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data">
 					<input type="file" name="user_upload_file[]" class="input_s2" size="20">
@@ -75,6 +75,9 @@
 							<th>{$city_title.col_3}</th>
 							<th>{$city_title.col_4}</th>
 							<th>{$city_title.col_5}</th>
+							<th>{$city_title.col_6}</th>
+							<th>{$city_title.col_7}</th>
+							<th>问题状态</th>
 					    </tr>
 					<!--{foreach from=$problem_array item=city}-->
 						<tr>
@@ -83,6 +86,9 @@
 							<td>{$city.col_3}</td>
 							<td>{$city.col_4}</td>
 							<td>{$city.col_5}</td>
+							<td>{$city.col_6}</td>
+							<td>{$city.col_7}</td>
+							<td>{$city.temp_status}</td>
 						</tr>
 					<!--{/foreach}-->
 					</table>

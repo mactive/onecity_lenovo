@@ -39,27 +39,27 @@
 		<div id="page-middle">
 	      
 			
-				<!--{if $act_step == "edit_city"}-->
+				<!--{if $act_step == "edit_ad"}-->
 					<div class="yellow_notice" style="text-align:left;">{$upload_message}</div>
 										
 					<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data">
 					<!--{foreach from=$city_title key=k item=item }-->
 					<div class="city_info radius_5px">
 						<div class="f_left left_title left_radius_5px">{$item}</div>
-						<div class="f_left right_content"><input type="text" name="col[]" value="{$city_info.$k}" size="30" /></div>	
+						<div class="f_left right_content"><input type="text" name="col[]" value="{$ad_detail.$k}" size="30" /></div>	
 						<div class="clear"></div>
 					</div>
 					<!--{/foreach}-->
 					<div style="width:500px;float:left;">
-						<input type="hidden" name="act" value="update_city" />
-						<input type="hidden" name="cat_id" value="{$city_info.cat_id}" />						
+						<input type="hidden" name="act" value="update_ad" />
+						<input type="hidden" name="ad_id" value="{$ad_detail.ad_id}" />						
 						<input type="submit" class="submitidea_btn" value="{$lang.button_submit}" />
 					</div>
 					</form>
 					
 				<!--{/if}-->
 				
-				<!--{if $act_step == "view_city"}-->					
+				<!--{if $act_step == "view_ad"}-->					
 					
 					<!--{foreach from=$photo_info item=item}-->
 						<div style="width:160px;height:160px;text-align:center;float:left;margin:10px;">
@@ -71,7 +71,7 @@
 					<!--{foreach from=$city_title key=k item=item }-->
 					<div class="city_info radius_5px">
 						<div class="f_left left_title left_radius_5px">{$item}</div>
-						<div class="f_left right_content">{$city_info.$k}</div>	
+						<div class="f_left right_content">{$ad_detail.$k}</div>	
 						<div class="clear"></div>
 					</div>
 					<!--{/foreach}-->

@@ -5,31 +5,29 @@
 	/* initially overlay is hidden */
 	display:none;
 	
-	/* growing background image */
-	background-image:url(../images/white.png);
+	/* growing background image 
+	background-image:url(../images/white.png);*/
+	background:url(../images/white.png) #fff;
+	border:2px solid #ccc;
+	
 	
 	/* 
 		width after the growing animation finishes
 		height is automatically calculated
 	*/
-	width:580px;
-	
-	margin-top:-300px;	
-	margin-left:-100px;
+	width:780px;		
 	
 	/* some padding to layout nested elements nicely  */
-	padding:35px;
+	padding:20px;
 
 	/* a little styling */	
-	font-size:11px;
-	overflow-y:auto; 
-	z-index:20;
+	font-size:12px;
 }
 
 /* default close button positioned on upper right corner */
-.apple_overlay div.close {
+.apple_overlay .close {
 	background-image:url(../images/close_apple.png);
-	position:absolute; right:5px; top:5px;
+	position:absolute; right:-15px; top:-15px;
 	cursor:pointer;
 	height:35px;
 	width:35px;
