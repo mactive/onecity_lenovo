@@ -1,10 +1,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<div class="left_menu">
+<div class="left_menu" style="height:{if $act_step == "upload_file"}200{else}500{/if}px;">
 <div class="nav_top_grey">
     <span>操作菜单</span>
     <div class="bgr"> </div>
 </div>
-<div style="height:{if $act_step == "upload_file"}200{else}500{/if}px;">
+<div>
   <ul class="mycity_ul">
 	{if $sm_session.user_rank == 1}
     <li {if $act_step == "upload_panel"}class="selected"{/if}>
@@ -15,8 +15,21 @@
 	<li><a href="download/final_model.rar" style="background:url({$img_path}ico/project.png) no-repeat 10px center;">模版下载</a></li>
 	<li><a href="user.php?act=profile" style="background:url({$img_path}ico/my_task.png) no-repeat 10px center;">个人密码资料</a></li>
     <li><a href="user.php?act=logout" style="background:url({$img_path}ico/delegated.png) no-repeat 10px center;">退出</a></li>
+
   </ul>
 </div>
+
+<div class="nav_top_lite_grey">
+    <span>您的操作权限</span>
+    <div class="bgr"> </div>
+</div>
+<ul class="mycity_ul">
+	<!--{foreach from=$user_permission item=item}-->
+	<li>{$item}</li>
+	<!--{/foreach}-->
+	<li><a href="city_operate.php?act=audit&ad_id=5">审核高唐</a></li>
+</ul>
+
 <div class="nav_bot"></div>
 <div style="height:14px;"></div>
 </div>

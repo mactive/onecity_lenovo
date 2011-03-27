@@ -15,7 +15,8 @@
 <link href="themes/default/css/overlay-apple.css" rel="stylesheet" type="text/css" />
 
 {* 包含脚本文件 *}
-{insert_scripts files='transport.js,utils.js,jquery.tools.min.js'}
+<script src="http://cdn.jquerytools.org/1.2.5/full/jquery.tools.min.js"></script>
+{insert_scripts files='transport.js,utils.js'}
 <script src="admin/js/listtable.js" type="text/javascript"></script>
 <script src="admin/js/common.js" type="text/javascript"></script>
 <script type="text/javascript">   
@@ -27,8 +28,21 @@
             $("table tr").mouseout(function(){  
                 $(this).removeClass("hover_tr");  
             });
+			
+			var triggers = $("#lesson-table a[rel]").overlay({
+				top:200,
+				// some mask tweaks suitable for modal dialogs
+				mask: {
+					color: '#fff',
+					loadSpeed: 200,
+					opacity: 0.9
+				},
 
-			$("#lesson-table a[rel]").overlay({ effect:'apple',color: '#ccc' });
+				closeOnClick: true
+			});
+
+			
+			//$("#lesson-table a[rel]").overlay({ effect:'apple',color: '#ccc' });
         });  
          
 </script>
@@ -83,9 +97,8 @@
 			<!-- start crm list -->
 			<div id="listDiv" class="table_div">
 			{/if}
-			<!--{insert name='query_info'}--><br />
 				<!--{foreach from=$city_list item=item}-->
-					<div id="ad_list_div_{$item.cat_id}" class="apple_overlay">
+					<div id="ad_list_div_{$item.cat_id}" class="facebox">
 						<table width="100%" class="table_border table_standard" border="1">
 						    <tr>
 						      	<th>{$lang.county}</th>
@@ -94,7 +107,7 @@
 						      	<th>照片数量</th>
 							  	<th>审核状态</th>
 								<!--{foreach from=$audit_level_array item=level}-->
-							  	<th>Lv{$level}</th>
+							  	<th><a title="{$lang.audit_level.$level}">Lv{$level}</a></th>
 								<!--{/foreach}-->
 							  	<th>{$lang.handler}</th>
 						    </tr>
@@ -115,7 +128,8 @@
 								<td>{if $item.is_upload}{$lang.upload_confirm}({$item.user_time}){else}{$lang.upload_pending}{/if}</td>
 								<td><a href="city_operate.php?act=upload_photo&ad_id={$item.ad_id}">
 									<span {if $item.photo_num}class="red-color font14px"{/if}>{$item.photo_num}</span></a></td>
-								<td>	{if $item.audit_status}
+								<td>
+									{if $item.audit_status > 1}
 											<a href="city_operate.php?act=audit&ad_id={$item.ad_id}">
 											{$audit_title.$item.audit_status}-
 											{if $item.is_audit_confirm}
@@ -198,7 +212,8 @@
 							({$city.time_summary}){else}{$lang.upload_pending}{/if}</td>
 						<td>
 							<span {if $city.photo_summary}class="red-color font14px"{/if}>{$city.photo_summary}</span></td>
-						<td>{$city.audit_status_summary}条已审 {$city.audit_confirm_summary}条通过 </td>
+						<td><span class="red-color font14px">{$city.audit_status_summary}</span>条已审 
+							<span class="red-color font14px">{$city.audit_confirm_summary}</span>条通过</td>
 						<td></td>
 					</tr>
 			    <!--{/foreach}-->

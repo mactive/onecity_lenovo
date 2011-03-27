@@ -1,35 +1,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-{if $sm_session.user_rank > 1}<!--电通可以编辑-->
-	{if $sm_session.user_rank <= 3}
-		<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data">
-		<!--{foreach from=$city_title key=k item=item }-->
-		<div class="city_info radius_5px">
-			<div class="f_left left_title left_radius_5px">{$item}</div>
-			<div class="f_left right_content"><input type="text" name="col[]" value="{$ad_detail.$k}" size="30" /></div>	
-			<div class="clear"></div>
-		</div>
-		<!--{/foreach}-->
-		<div style="width:500px;float:left;">
-			<input type="hidden" name="act" value="update_ad" />
-			<input type="hidden" name="ad_id" value="{$ad_detail.ad_id}" />						
-			<input type="submit" class="submitidea_btn" value="{$lang.button_submit}" />
-		</div>
-		</form>
-	{else}
-		<!--{foreach from=$city_title key=k item=item }-->
-		<div class="city_info radius_5px">
-			<div class="f_left left_title left_radius_5px">{$item}</div>
-			<div class="f_left right_content">{$ad_detail.$k}</div>	
-			<div class="clear"></div>
-		</div>
-		<!--{/foreach}-->
-	{/if}
 
+{include file="library/audit_path.htm"}					
 
-{/if}
-
-<div class="upload_table">
 <div class="upload_board" style="height:auto;float:left;">
+	
 <form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
   <table width="100%" border="0" cellspacing="0" class="table_standard">
 	<tr>
@@ -43,22 +17,12 @@
 			<!--{/foreach}-->
 		</td>
 	</tr>
-	<tr>
-		<td>审核记录</td>
-		<td>
-			<!--{foreach from=$aduit_list item=item}-->
-			<div class="aduit_info radius_5px">
-				<span class="grey999">{$item.user_name} - {$item.rank_name} - [ {$item.time} ]</span><br>
-				{$item.aduit_note}
-			</div>
-			<!--{/foreach}-->
-	</tr>
 	
-	{if $highest_aduit_level <= $sm_session.user_rank && $sm_session.user_rank > 1}
+	{if $highest_audit_level <= $sm_session.user_rank && $sm_session.user_rank > 1}
 	<tr>
 		<td width="130">如果审核不通过,<br>请写下明确的原因:</td>
 		<td><br>
-			<textarea name="aduit_note" cols="40" rows="4"></textarea></td>
+			<textarea name="audit_note" id="audit_note" cols="40" rows="4"></textarea></td>
 	</tr>
 	
 
@@ -83,9 +47,10 @@
  */
 function validate()
 {
-    validator = new Validator("theForm");
-    validator.required("aduit_note",        "请填写不通过原因");
 	/*
+    validator = new Validator("theForm");
+	validator.required("audit_note",        "请填写不通过原因");
+	
     validator.required("position_name",   posit_name_empty);
     validator.required("ad_width",        ad_width_empty);
     validator.required("ad_height",       ad_height_empty);
@@ -98,14 +63,44 @@ function validate()
         alert(width_value);
         return false;
     }
-    if (document.forms['theForm'].elements['ad_height'].value > 1024 || document.forms['theForm'].elements['ad_height'].value == 0)
+	*/
+	var obj = document.getElementById('audit_note');
+    if (obj.value == "")
     {
-        alert(height_value);
+        alert("请填写不通过原因");
         return false;
     }
-	*/
-    return validator.passed();
+	return true;
+    //return validator.passed();
 }
 </script>
 </div>
-</div>
+
+
+<!--权限大于1才可见，电通级别的可以编辑-->
+{if $sm_session.user_rank > 1}
+	{if $sm_session.user_rank <= 3}
+		<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data">
+		<!--{foreach from=$city_title key=k item=item }-->
+		<div class="city_info radius_5px">
+			<div class="f_left left_title left_radius_5px">{$item}</div>
+			<div class="f_left right_content"><input type="text" name="col[]" value="{$ad_detail.$k}" size="30" /></div>	
+			<div class="clear"></div>
+		</div>
+		<!--{/foreach}-->
+		<div style="width:500px;float:left;">
+			<input type="hidden" name="act" value="update_ad" />
+			<input type="hidden" name="ad_id" value="{$ad_detail.ad_id}" />						
+			<input type="submit" class="submitidea_btn" value="{$lang.button_submit}" />
+		</div>
+		</form>
+	{else}
+		<!--{foreach from=$city_title key=k item=item }-->
+		<div class="city_info radius_5px">
+			<div class="f_left left_title left_radius_5px">{$item}</div>
+			<div class="f_left right_content">{$ad_detail.$k}</div>	
+			<div class="clear"></div>
+		</div>
+		<!--{/foreach}-->
+	{/if}
+{/if}

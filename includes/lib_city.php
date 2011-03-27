@@ -26,11 +26,21 @@ function get_user_region()
 {
 	/* 检查有没有缺货 */
     $sql = "SELECT msn FROM ".$GLOBALS['ecs']->table('users')." WHERE user_id = '$_SESSION[user_id]' AND user_rank > 0 ";
-    $res = $GLOBALS['db']->GetOne($sql);
+    $res = $GLOBALS['db']->getOne($sql);
 	return explode(",",$res);
 }
 
-
+function get_user_permission($user_region)
+{
+	$user_permission = array();
+	foreach($user_region AS $key => $val){
+		if(!empty($val)){
+			$cat_name = $GLOBALS['db']->getOne("SELECT cat_name FROM ".$GLOBALS['ecs']->table('category')." WHERE cat_id = $val ");
+		    array_push($user_permission,$cat_name);	
+		}	
+	}
+	return $user_permission;
+}
 
 
 /**/
@@ -71,22 +81,17 @@ function get_city_list($children){
 	/* 分页大小 */
     $filter['page'] = empty($_REQUEST['page']) || (intval($_REQUEST['page']) <= 0) ? 1 : intval($_REQUEST['page']);
 
-    $filter['page_size'] = 10;
 
-	/*
+	/**/
     if (isset($_REQUEST['page_size']) && intval($_REQUEST['page_size']) > 0)
     {
         $filter['page_size'] = intval($_REQUEST['page_size']);
     }
-    elseif (isset($_COOKIE['ECSCP']['page_size']) && intval($_COOKIE['ECSCP']['page_size']) > 0)
-    {
-        $filter['page_size'] = intval($_COOKIE['ECSCP']['page_size']);
-    }
     else
     {
-        $filter['page_size'] = 100;
+        $filter['page_size'] = 50;
     }
-	*/
+	
 	
 	/* 记录总数 */
     if ($filter['city_name'])
@@ -151,13 +156,12 @@ function get_ad_summary($ad_list)
 	{
 		$res['photo_summary'] += $val['photo_num'];
 		$res['time_summary'] =  $res['time_summary'] < $val['time_original'] ? $val['time_original'] : $res['time_summary'] ;
-		if($val['audit_status']){
+		if($val['audit_status'] > 1){
 			$res['audit_status_summary'] += 1;
 			if($val['is_audit_confirm']){
 				$res['audit_confirm_summary'] += 1;
 			}
 		}
-		
 	}
 	
 	$res['time_summary'] = local_date('m-d', $res['time_summary']);
@@ -248,5 +252,43 @@ function get_ad_photo_info($ad_id = 0){
 		return $photo_info;
 	}
 }
+
+/* 获得审核路径 */
+function get_audit_path($ad_id = 0,$audit_level_array)
+{
+	$audit_path = array(); //"2","3","4","5","6"级别
+	
+	$sql = "SELECT c.*, u.user_name  FROM " . $GLOBALS['ecs']->table('city_audit') . " AS c ". // , r.rank_name
+ 			" LEFT JOIN " .$GLOBALS['ecs']->table('users') . " AS u ON u.user_id = c.user_id ". 
+ 			//" LEFT JOIN " .$GLOBALS['ecs']->table('user_rank') . " AS r ON r.rank_id = c.user_rank ". 
+			" WHERE c.ad_id = $ad_id ORDER BY time DESC ";
+			
+	$res = $GLOBALS['db']->getAll($sql);
+	
+	foreach($audit_level_array AS $v){
+		$unit = array();
+		foreach($res AS $val){
+			if($val['user_rank'] == $v){
+				array_push($unit,$val);
+			}
+		}
+		$audit_path[$v] = $unit;
+	}
+	
+	//print_r($audit_path);
+	return $audit_path;
+}
+
+
+function is_exist_city_ad($city_id,$col_7)
+{
+	$sql = "SELECT a.audit_status ,c.record_id FROM " . $GLOBALS['ecs']->table('city') . " AS c ". // , r.rank_name
+ 			" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS a ON a.ad_id = c.ad_id ". 
+ 			//" LEFT JOIN " .$GLOBALS['ecs']->table('user_rank') . " AS r ON r.rank_id = c.user_rank ". 
+			" WHERE c.city_id = $city_id AND  c.col_7 LIKE '$col_7' ";
+	$res = $GLOBALS['db']->getRow($sql);
+	return $res;
+}
+
 
 ?>

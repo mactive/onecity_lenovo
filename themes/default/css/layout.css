@@ -106,7 +106,7 @@ style.css li {list-style-type:none;}
 		color:#fff;text-align:center;font-size:12px;margin:6px 20px 0px 0px;}
 
 ul.mycity_ul{width:100%;list-style:none;padding:0;margin:0;}
-ul.mycity_ul li{width:100%;height:30px;line-height:30px;color:#333333;background:url(../images/left_menu_li_bg.png) repeat-x;text-align:left;}
+ul.mycity_ul li{text-indent:40px;width:100%;height:30px;line-height:30px;color:#333333;background:url(../images/left_menu_li_bg.png) repeat-x;text-align:left;}
 ul.mycity_ul li a{color:#000;display:block;text-indent:40px;height:30px;}
 
 ul.mycity_ul li.selected{width:100%;height:30px;line-height:30px;color:#ffffff;background:url(../images/left_menu_li_bg.png) bottom repeat-x;text-align:left;}
@@ -121,6 +121,10 @@ ul.mycity_ul li.selected a{color:#fff;display:block;text-indent:40px;height:30px
 
 .audit_info{background:#ffffff;padding:0px 10px;line-height:25px;margin:5px 0px;float:left;width:100%;}
 
+.audit_board{background:#f0f0f0;line-height:25px;margin:5px;float:left;width:170px;}
+.audit_board .audit_level_title{width:100%;text-indent:10px;font-size:14px;}
+.audit_board .audit_level_content{}
+.audit_board .audit_record{width:160px;background:#ffffff;padding:2px 5px;border-bottom:2px solid #ccc;}
 
 .city_list{width:500px;}
 .city_list .city_upload{background:#c0c0c0;}
@@ -137,6 +141,8 @@ ul.mycity_ul li.selected a{color:#fff;display:block;text-indent:40px;height:30px
 	color:#fff;text-align:center;line-height:30px;}
 .user_info_5 a{color:#fff;line-height:38px;}
 .user_info_5 a:hover{color:#fff;}
+.upload_board{background:url(../images/upload_bg.png) no-repeat;
+	width:910px;padding:15px 25px;}
 
 
 .menu_5{height:58px;background:#973d27;width:1000px;margin:8px 0px;position:relative;z-index:1;}
@@ -213,7 +219,6 @@ filter:alpha(opacity=90); /* IE */
 opacity: 0.9;}
 .miaosha_over{color:#000;margin:300px 0px 0px 580px;height:100px;font-size:20px;text-align:center;width:300px;line-height:100px;border:1px solid #CCCCCC;background:#FFFEAD;}
 
-.upload_board{background:url(../images/5/upload_bg.png) no-repeat;_background:#f2f2f2;_border:1px solid #ccc;width:620px;padding:15px 25px;margin:20px 0px 20px 20px;}
 a.submitidea_btn{background:url(../images/5/submit_btn.png) no-repeat; height:50px;width:133px;display:block;}
 input.submitidea_btn{background:url(../images/5/submit_btn.png) no-repeat; height:50px;width:133px;display:block;border:none;}
 input.vote_btn{background:url(../images/vote/vote_btn.png) no-repeat; height:50px;width:133px;display:block;border:none;cursor:pointer;}

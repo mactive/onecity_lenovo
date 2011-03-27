@@ -59,8 +59,8 @@
 .nav_top_lite_grey{
 	height:29px;
 	width:inherit;
-	text-indent:15px;
-	font-size:14px; color:#FFFFFF; line-height:29px; 
+	text-indent:40px;
+	font-size:14px; color:#000000; line-height:29px; 
 	margin:0;
 	background:url(../images/left_menu_top_bg.png) left -96px no-repeat;
 }

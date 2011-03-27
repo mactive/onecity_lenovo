@@ -34,8 +34,13 @@ $real_name = $GLOBALS['db']->getOne("SELECT real_name FROM " . $GLOBALS['ecs']->
 $smarty->assign('real_name', $real_name);
 $your_user_rank = get_rank_info();
 $smarty->assign('your_user_rank', $your_user_rank['rank_name']);
-$smarty->assign('audit_level_array', array("2","3","4","5","6"));  // 当前位置
+$audit_level_array = array("2","3","4","5","6");
+$smarty->assign('audit_level_array', $audit_level_array);  // 当前位置
 
+//用户权限下的已经上传的城市列表
+$user_region = get_user_region();
+$user_permission = get_user_permission($user_region);
+$smarty->assign('user_permission',        $user_permission);  // 当前位置
 
 /*------------------------------------------------------ */
 //-- INPUT
@@ -82,18 +87,10 @@ $cache_id = sprintf('%X', crc32($city_id . '-' . $page . '-' . $_CFG['lang']));
 if (!$smarty->is_cached('city_operate.dwt', $cache_id) && $act == 'show')
 {
     /* 如果页面没有被缓存则重新获得页面的内容 */
-	//用户权限下的已经上传的城市列表
-	$user_region = get_user_region();
     $children = get_city_children($user_region);
-	
-	//$user_permission = get_user_permission($user_region);
-	//print_r($res);
 
 
-	$_LANG['pager_1'] = '总计 ';
-	$_LANG['pager_2'] = ' 篇审批';
-	$smarty->assign('lang', $_LANG);
-    
+	    
 	$smarty->assign('full_page',        '1');  // 当前位置
 
     assign_template('a', array($city_id));
@@ -117,10 +114,7 @@ elseif ($_REQUEST['act'] == 'query_show')
 {
 	$province = isset($_REQUEST['province'])   && intval($_REQUEST['province'])  > 0 ? intval($_REQUEST['province'])  : 0;   
 	$smarty->assign('full_page',        '0');  // 当前位置
-	
-	
-	$user_region = get_user_region();
-	//print_r($user_region);
+
     $children = get_city_children($user_region);
 	
 	//print_r($res);
@@ -264,28 +258,33 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 		$val['user_time'] = $now;
 		
 		//county 和 地址相同 那么 询问郭婷
-		$exist_sql = "SELECT record_id FROM " . $GLOBALS['ecs']->table('city') . " WHERE city_id = $val[city_id] AND col_7 LIKE '$val[col_7]'";
-		$record_id = $GLOBALS['db']->getOne($exist_sql);
-		echo "**".$exist_sql."--$record_id"."<br>";
+		$exist_ad_info = is_exist_city_ad($val['city_id'],$val['col_7']);
+		$record_id = $exist_ad_info['record_id'];
+		//echo "**".$exist_sql."--$record_id"."<br>";
 		if($record_id){
-			$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $val, 'update', "record_id='$record_id'");
+			if($exist_ad_info['audit_status'] <= 1){
+				$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $val, 'update', "record_id='$record_id'");
+			}else{
+				$issue = $val;
+				$issue['temp_status'] = "该广告已经开始审核，请勿再上传";
+				array_push($problem_array,$issue);
+			}
 			//echo "update<br>";
 		}else{
 			$city_ad_num = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('city') . " WHERE city_id = $val[city_id]");
-			echo "**city_ad_num - $city_ad_num - insert<br>";
+			//echo "**city_ad_num - $city_ad_num - insert<br>";
 			
 			if(CITY_AD_LIMIT - $city_ad_num > 0){
-				echo "**insert<br>";
+				//echo "**insert<br>";
 				
 				$tmp = $val;
 				$tmp['city_name'] = $val['col_3'];
 				$tmp['is_upload'] = 1;
-				$tmp['aduit_status'] = 1;
+				$tmp['audit_status'] = 1;
 				$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $tmp, 'INSERT');
 				
 				$tmp['ad_id'] = $GLOBALS['db']->insert_id();
 				$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $tmp, 'INSERT');
-				
 				
 			}
 			else{
@@ -341,7 +340,6 @@ elseif($_REQUEST['act'] == 'cancel_insert')
 	
 }
 
-
 elseif($_REQUEST['act'] == 'edit_ad' || $_REQUEST['act'] == 'view_ad')
 {
 	$ad_id = isset($_REQUEST['ad_id']) && intval($_REQUEST['ad_id']) > 0 ? intval($_REQUEST['ad_id']) : 0;
@@ -349,8 +347,25 @@ elseif($_REQUEST['act'] == 'edit_ad' || $_REQUEST['act'] == 'view_ad')
 	$ad_detail = get_city_info($ad_id);
 	$smarty->assign('ad_detail', $ad_detail);
 	
+	$ad_info = get_ad_info($ad_id);
+	$smarty->assign('ad_info', $ad_info);
+
+	if($ad_info['audit_status'] > 1){
+		if($ad_info['is_audit_confirm'] == 1){
+			$upload_message = "已经开始审核不能修改了.<a href='city_operate.php?act=view_ad&ad_id=$ad_id'>点此查看</a>";
+		}else{
+			$upload_message = "审核不通过,可以修改,但是不能修改 具体位置描述 .";
+		}
+	}
+	
+	$smarty->assign('upload_message', $upload_message);
+	
+
 	$photo_info = get_ad_photo_info($ad_id);
 	$smarty->assign('photo_info', $photo_info);
+	
+	$audit_path = get_audit_path($ad_id,$audit_level_array); //审核路径图
+	$smarty->assign('audit_path', $audit_path);
 	
 	$smarty->display('city_view.dwt');
 	
@@ -403,13 +418,9 @@ elseif($_REQUEST['act'] == 'audit')
 	$smarty->assign('photo_info', $photo_info);
 	$smarty->assign('ad_id', $ad_id);
 	
-	$sql = "SELECT c.*, u.user_name , r.rank_name FROM " . $GLOBALS['ecs']->table('city_audit') . " AS c ".
- 			" LEFT JOIN " .$GLOBALS['ecs']->table('users') . " AS u ON u.user_id = c.user_id ". 
- 			" LEFT JOIN " .$GLOBALS['ecs']->table('user_rank') . " AS r ON r.rank_id = c.user_rank ". 
-			" WHERE c.ad_id = $ad_id ORDER BY time DESC ";
-	$audit_list = $GLOBALS['db']->getAll($sql);
-	
-	$smarty->assign('audit_list', $audit_list);
+
+	$audit_path = get_audit_path($ad_id,$audit_level_array); //审核路径图
+	$smarty->assign('audit_path', $audit_path);
 	
 	$sql_2 = "SELECT MAX(user_rank) FROM " . $GLOBALS['ecs']->table('city_audit') .
 			" WHERE ad_id = $ad_id ";
@@ -445,7 +456,7 @@ elseif($_REQUEST['act'] == 'update_audit')
 		//
 		$cat_info['audit_status'] = $_SESSION['user_rank'];
 		$cat_info['is_audit_confirm'] = 0;
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('category'), $cat_info, 'UPDATE', "cat_id = '$city_id'");
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $cat_info, 'UPDATE', "ad_id = '$ad_id'");
 
 		show_message("审核信息已经提交。", $_LANG['back_home_lnk'], 'city_operate.php', 'info', true);
 		//$smarty->display('city_view.dwt');

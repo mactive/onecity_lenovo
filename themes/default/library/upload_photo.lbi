@@ -1,76 +1,24 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<div class="yellow_notice" style="display:none;">上传成功</div>
-<div class="upload_table">
-<div class="upload_board" style="height:auto;float:left;">
-<form method="post" action="upload_idea.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
-  <table width="95%" border="0" cellspacing="0" class="table_standard">
-    <tr>
-      <td>{$lang.username}</td>
-      <td><!--{if $smarty.session.user_name}-->{$username}<!--{else}-->{$lang.anonymous}<!--{/if}--></td>
-    </tr>
-    <tr>
-      <td>{$lang.title}</td>
-      <td><input name="title" type="text" length="20"/><span class="red-color"> *</span></td>
-    </tr>
-    <tr>
-      <td>上传照片:</td>
-      <td></td>
-    </tr>
-	<tr>
-		<td>1. </td>
-		<td><input type="file" name="idea_photo[]"></td>
-	</tr>
-	<tr>
-		<td>描述</td>
-		<td><input type="text" name="idea_desc[]" size="30"></td>
-	</tr>
-	<tr>
-		<td>2. </td>
-		<td><input type="file" name="idea_photo[]"></td>
-	</tr>
-	<tr>
-		<td>描述</td>
-		<td><input type="text" name="idea_desc[]" size="30"></td>
-	</tr>
-	<tr>
-		<td>3. </td>
-		<td><input type="file" name="idea_photo[]"></td>
-	</tr>
-	<tr>
-		<td>描述</td>
-		<td><input type="text" name="idea_desc[]" size="30"></td>
-	</tr>
-	<tr>
-		<td>4. </td>
-		<td><input type="file" name="idea_photo[]"></td>
-	</tr>
-	<tr>
-		<td>描述</td>
-		<td><input type="text" name="idea_desc[]" size="30"></td>
-	</tr>
-	<tr>
-		<td>5. </td>
-		<td><input type="file" name="idea_photo[]"></td>
-	</tr>
-	<tr>
-		<td>描述</td>
-		<td style="background:url({$img_path}5/right_yin.jpg) no-repeat right bottom;">
-			<input type="text" name="idea_desc[]" size="30">
-			<br><span class="red-color"> 可以上传1－5张 *</span>
-		</td>
-			
-	</tr>
-
-    <tr>
-      <td>&nbsp;</td>
-      <td>
-        <input type="hidden" name="upload_user_id" value="{$sm_session.user_id}" />
-        <input type="hidden" name="cat_id" value="{$cat_id}" />
-      	<input type="hidden" name="act" value="upload_photo" />
-    	<input type="submit" class="submitidea_btn" value="{$lang.button_submit}" />
-      </td>
-    </tr>
-  </table>
-</form>
+<!--权限大于1才可见，电通级别的可以编辑-->
+<div class="f_left">
+<!--{foreach from=$audit_path key=key item=level }-->
+<div class="audit_board radius_5px">
+	<div class="audit_level_title">{$lang.audit_level.$key}<span class="f_right">->> &nbsp;&nbsp;</span></div>
+	<div></div>
+	<div class="audit_level_content">
+		<!--{foreach from=$level item=item }-->
+		<div class="audit_record">
+		<span class="grey999">{$item.time}</span><br />
+		<span class="grey666">{$item.user_name}</span><br />
+		<div style="padding:0px 5px;line-height:20px;" {if $item.audit_note == "审核通过"}class="bg_green radius_5px"{else}class="bg_red radius_5px"{/if}>
+			{$item.audit_note}
+		</div>
+		</div>
+		<!--{/foreach}-->
+		
+	</div>
+		
+	<div class="clear"></div>
 </div>
+<!--{/foreach}-->
 </div>
