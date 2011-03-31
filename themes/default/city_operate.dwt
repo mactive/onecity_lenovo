@@ -63,12 +63,7 @@
 					    	{$lang.region} <input name="region_name" type="text" id="region_name" size="10" value="{$region_name}" />&nbsp;&nbsp;&nbsp;
 					    	{$lang.county} <input name="county_name" type="text" id="county_name" size="10" value="{$county_name}" /> 
 						</td>
-						<td>流程状态
-							<select name="audit_status" id="audit_status">
-								<option value="">{$lang.select_please}</option>
-								{html_options options=$lang.audit_level}
-							</select> 
-					</td>
+
 					<td style="padding-left:30px;"><input type="submit" value="{$lang.button_search}" class="button" /> <input type="reset" value="重置" class="button" /></td>
 					</tr>
 
@@ -86,10 +81,13 @@
 				      	<th>{$lang.province}</th>
 				      	<th>{$lang.county}</th>
 				      	<th>{$lang.market_level}</th>
-					  	<th>流程状态</th>
-					  	<th>上传状态</th>
-				      	<th>照片数量</th>
-					  	<th>审核状态</th>
+						<!--{if $sm_session.user_rank > 1}-->
+						<th>审核请求</th>
+						<!--{/if}-->
+					  	<th>上传时间</th>
+					  	<th>上传数</th>
+					  	<th>审核数</th>
+					  	<th>通过数</th>
 					  	<th>{$lang.handler}</th>
 				    </tr>
 				<!--{foreach from=$city_list item=city name=index_idea}-->
@@ -100,16 +98,23 @@
 						<td>{$city.province}</td>
 						<td>{$city.county}</td>
 						<td>{$city.market_level}</td>
-						<td><a href="city_operate.php?act=city_ad_list&city_id={$city.cat_id}" target="_blank">
-							{$lang.audit_level.$city.audit_status}</a></td>
-						<td>{if $city.is_upload}<a href="city_operate.php?act=city_ad_list&city_id={$city.cat_id}" target="_blank">
-							{$lang.upload_confirm}{$city.ad_count}条</a>
-							({$city.time_summary}){else}{$lang.upload_pending}{/if}</td>
+						<!--{if $sm_session.user_rank > 1}-->
 						<td>
-							<span {if $city.photo_summary}class="red-color font14px"{/if}>{$city.photo_summary}</span></td>
-						<td><span class="red-color font14px">{$city.audit_status_summary}</span>条已审 
-							<span class="red-color font14px">{$city.audit_confirm_summary}</span>条通过</td>
-						<td></td>
+							<!--{foreach from=$city.status_summary key=key item=item}-->
+								{if $key > 1 && $key == $sm_session.user_rank}
+									{if $item > 0}
+									<a href="city_operate.php?act=city_ad_list&city_id={$city.cat_id}" target="_blank">
+										<span class="red-color">{$item}条</span>待审
+									</a>{else}无待审核{/if}
+								{/if}
+							<!--{/foreach}-->
+						</td>
+						<!--{/if}-->
+						<td>{if $city.is_upload}{$city.time_summary}{else}{$lang.upload_pending}{/if}</td>	
+						<td>{$city.ad_count}</td>
+						<td>{$city.audit_status_summary}</td>
+						<td>{$city.audit_confirm_summary}</td>
+						<td><a href="city_operate.php?act=city_ad_list&city_id={$city.cat_id}" target="_blank">查看详情</a></td>
 					</tr>
 			    <!--{/foreach}-->
 				</table>
@@ -153,7 +158,7 @@
 			  {
 			      listTable.filter['region_name'] = document.getElementById("region_name").value;
 			      listTable.filter['county_name'] = document.getElementById("county_name").value;
-			      listTable.filter['audit_status'] = document.getElementById("audit_status").value;
+			      //listTable.filter['audit_status'] = document.getElementById("audit_status").value;
 			      listTable.filter['page'] = 1;
 			      listTable.loadList();
 			  }

@@ -52,7 +52,7 @@ function get_city_list($children){
     $filter['county_name'] = empty($_REQUEST['county_name']) ? '' : trim($_REQUEST['county_name']);
     $filter['city_name'] = empty($_REQUEST['city_name']) ? '' : trim($_REQUEST['city_name']);
     $filter['region_name'] = empty($_REQUEST['region_name']) ? '' : trim($_REQUEST['region_name']);
-    $filter['audit_status'] = $_REQUEST['audit_status'];
+    $filter['audit_status'] = empty($_REQUEST['audit_status']) ? 0 : $_REQUEST['audit_status'];
 	
 	$filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'inv_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
@@ -71,7 +71,7 @@ function get_city_list($children){
     {
         $where .= " AND a3.cat_name LIKE '%" . mysql_like_quote($filter['region_name']) . "%'";
     }
-    if ($filter['audit_status'] !='')
+    if ($filter['audit_status'])
     {
         $where .= " AND a.audit_status = $filter[audit_status] ";
     }
@@ -126,6 +126,8 @@ function get_city_list($children){
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ". 
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ". 
+//			" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad').   " AS ad ON ad.city_id = a.cat_id ".
+			
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('city'). 		' AS c  ON c.city_id = a.cat_id '.
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad'). 	' AS ad ON ad.city_id = a.cat_id '.
 			"$where ORDER BY a.is_upload DESC, a.audit_status DESC ".
@@ -135,11 +137,12 @@ function get_city_list($children){
 	$res = $GLOBALS['db']->getAll($sql);
 	foreach($res AS $key => $val)
 	{
-		$res[$key]['ad_list'] = get_ad_list_by_cityid($val['cat_id']);
-		$ad_summary = get_ad_summary($res[$key]['ad_list']);
+		$ad_list = get_ad_list_by_cityid($val['cat_id']);//用做弹窗 
+		$ad_summary = get_ad_summary($ad_list);
+		$res[$key]['status_summary'] = get_ad_status_summary($ad_list);
 		
-		$res[$key]['photo_summary'] = $ad_summary['photo_summary']; //照片总量
-		$res[$key]['ad_count'] = count($res[$key]['ad_list']) ;		//上传条数
+		//$res[$key]['photo_summary'] = $ad_summary['photo_summary']; //照片总量
+		$res[$key]['ad_count'] = count($ad_list) ;		//上传条数
 		$res[$key]['time_summary'] = $ad_summary['time_summary']; 	//最新上传时间
 		$res[$key]['audit_status_summary'] = $ad_summary['audit_status_summary']; //已经审核数量
 		$res[$key]['audit_confirm_summary'] = $ad_summary['audit_confirm_summary']; //审核通过数量
@@ -148,6 +151,19 @@ function get_city_list($children){
 	}
 	$arr = array('citys' => $res, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count'],'sql' => $sql,'count_sql' => $count_sql);
     return $arr;
+}
+
+function get_ad_status_summary($ad_list){
+	$audit_level_array = array("1"=>"0","2"=>"0","3"=>"0","4"=>"0","5"=>"0");
+	foreach($audit_level_array AS $k => $v){
+		foreach($ad_list AS $key => $val){
+			if($k == $val['audit_status'] && $val['is_upload'] && $val['is_audit_confirm']){
+				$audit_level_array[$k+1] += 1;
+			}
+		}
+	}
+	return $audit_level_array;
+	
 }
 function get_ad_summary($ad_list)
 {
@@ -159,20 +175,20 @@ function get_ad_summary($ad_list)
 		$res['time_summary'] =  $res['time_summary'] < $val['time_original'] ? $val['time_original'] : $res['time_summary'] ;
 		if($val['audit_status'] > 1){
 			$res['audit_status_summary'] += 1;
-			if($val['is_audit_confirm']){
+			if($val['is_audit_confirm'] && $val['audit_status'] == 5){
 				$res['audit_confirm_summary'] += 1;
 			}
 		}
 	}
 	
-	$res['time_summary'] = local_date('m-d', $res['time_summary']);
+	$res['time_summary'] = local_date('Y-m-d', $res['time_summary']);
 	
 	return $res;
 }
 //一个城市的左右广告列表
 function get_ad_list_by_cityid($city_id)
 {
-	$sql = "SELECT a.*,c.user_time ,COUNT(g.img_id) AS photo_num ".
+	$sql = "SELECT a.*,c.user_time,c.col_7,COUNT(g.img_id) AS photo_num ".
 			//", c.city_id, c.user_time FROM " . 
 			" FROM ".$GLOBALS['ecs']->table('city_ad') . " AS a ".
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city'). 		' AS c ON c.ad_id = a.ad_id '.
@@ -184,7 +200,7 @@ function get_ad_list_by_cityid($city_id)
 	foreach($res AS $key => $val)
 	{
 		$res[$key]['time_original'] = $val['user_time'];
-		$res[$key]['user_time'] = local_date('m-d', $val['user_time']);
+		$res[$key]['user_time'] = local_date('Y-m-d', $val['user_time']);
 	}
 	return $res;
 }
@@ -259,7 +275,7 @@ function get_audit_path($ad_id = 0,$audit_level_array)
 {
 	$audit_path = array(); //"2","3","4","5"级别
 	
-	$sql = "SELECT c.*, u.user_name  FROM " . $GLOBALS['ecs']->table('city_audit') . " AS c ". // , r.rank_name
+	$sql = "SELECT c.*, u.user_name ,u.real_name  FROM " . $GLOBALS['ecs']->table('city_audit') . " AS c ". // , r.rank_name
  			" LEFT JOIN " .$GLOBALS['ecs']->table('users') . " AS u ON u.user_id = c.user_id ". 
  			//" LEFT JOIN " .$GLOBALS['ecs']->table('user_rank') . " AS r ON r.rank_id = c.user_rank ". 
 			" WHERE c.ad_id = $ad_id ORDER BY time DESC ";
@@ -290,6 +306,14 @@ function is_exist_city_ad($city_id,$col_7)
 	$res = $GLOBALS['db']->getRow($sql);
 	return $res;
 }
-
+//城市级别不对
+function get_sys_level($city_id)
+{
+	$sql = "SELECT sys_level  FROM " . $GLOBALS['ecs']->table('category') .
+			" WHERE cat_id = $city_id ";
+	$res = $GLOBALS['db']->getOne($sql);
+	//echo $sql."<br>";
+	return $res;
+}
 
 ?>

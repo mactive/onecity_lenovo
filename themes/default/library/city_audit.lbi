@@ -85,7 +85,13 @@ function validate()
 		<!--{foreach from=$city_title key=k item=item }-->
 		<div class="city_info radius_5px">
 			<div class="f_left left_title left_radius_5px">{$item}</div>
-			<div class="f_left right_content"><input type="text" name="col[]" value="{$ad_detail.$k}" size="30" /></div>	
+			<div class="f_left right_content">
+				<!--{if $k == "col_1" || $k == "col_2" || $k == "col_3" || $k == "col_4" || $k == "col_5"}-->
+					<span>{$ad_detail.$k}</span>
+				<!--{else}-->
+					<input type="text" name="col[]" value="{$ad_detail.$k}" size="30" />
+				<!--{/if}-->
+			</div>	
 			<div class="clear"></div>
 		</div>
 		<!--{/foreach}-->

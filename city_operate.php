@@ -261,58 +261,70 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 	
 	foreach($res AS $key => $val)
 	{	
-	  if($val['city_id']!=0){
+	  	if($val['city_id']!=0)
+		{
 
 		$val['user_time'] = $now;
 		
 		//county 和 地址相同 那么 询问郭婷
 		$exist_ad_info = is_exist_city_ad($val['city_id'],$val['col_7']);
+		$sys_level = get_sys_level($val['city_id']);
 		$record_id = $exist_ad_info['record_id'];
-		//echo "**".$exist_sql."--$record_id"."<br>";
-		if($record_id){
-			if($exist_ad_info['audit_status'] <= 1){
-				$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $val, 'update', "record_id='$record_id'");
-			}else{
+		
+		//echo "**".$sys_level."--$record_id"."<br>";
+		
+			if($record_id){
+				if($exist_ad_info['audit_status'] <= 1){
+					$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $val, 'update', "record_id='$record_id'");
+				}else{
+					$issue = $val;
+					$issue['temp_status'] = "该广告已经开始审核，请勿再上传";
+					array_push($problem_array,$issue);
+				}
+			//echo "update<br>";
+			}elseif($sys_level < 5 ){
 				$issue = $val;
-				$issue['temp_status'] = "该广告已经开始审核，请勿再上传";
+				//echo "level-".$sys_level."<br>";
+				$issue['temp_status'] = "该地区级别过高，请选择下级城市或辖区";
 				array_push($problem_array,$issue);
 			}
-			//echo "update<br>";
-		}else{
-			$city_ad_num = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('city') . " WHERE city_id = $val[city_id]");
-			//echo "**city_ad_num - $city_ad_num - insert<br>";
+			else{
+				$city_ad_num = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('city') . " WHERE city_id = $val[city_id]");
+				//echo "**city_ad_num - $city_ad_num - insert<br>";
 			
-			if(CITY_AD_LIMIT - $city_ad_num > 0){
+				if(CITY_AD_LIMIT - $city_ad_num > 0)
+				{
 				//echo "**insert<br>";
 				
-				$tmp = $val;
-				$tmp['city_name'] = $val['col_3'];
-				$tmp['is_upload'] = 1;
-				$tmp['audit_status'] = 1;
-				$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $tmp, 'INSERT');
+					$tmp = $val;
+					$tmp['city_name'] = $val['col_3'];
+					$tmp['is_upload'] = 1;
+					$tmp['audit_status'] = 1;
+					$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $tmp, 'INSERT');
 				
-				$tmp['ad_id'] = $GLOBALS['db']->insert_id();
-				$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $tmp, 'INSERT');
+					$tmp['ad_id'] = $GLOBALS['db']->insert_id();
+					$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $tmp, 'INSERT');
 				
-				//更新分类信息 for 一城一牌
-				$sql = "UPDATE " . $GLOBALS['ecs']->table('category') . " SET is_upload = '1',  audit_status = '1'  WHERE cat_id = '$val[city_id]'";
-		        $GLOBALS['db']->query($sql);
-				
+					//更新分类信息 for 一城一牌
+					$sql = "UPDATE " . $GLOBALS['ecs']->table('category') . " SET is_upload = '1',  audit_status = '1'  WHERE cat_id = '$val[city_id]'";
+		        	$GLOBALS['db']->query($sql);	
+				}else{
+					$issue = $val;
+					$issue['temp_status'] = "5条上限已经满";
+					array_push($problem_array,$issue);				
+				}
 			}
-			else{
-				$issue = $val;
-				$issue['temp_status'] = "5条上限已经满";
-				array_push($problem_array,$issue);				
-			}
-		}
 		
 		//清除 city_temp 库中的数据
 		$GLOBALS['db']->query("DELETE FROM" . $GLOBALS['ecs']->table('city_temp') . " WHERE temp_id = $val[temp_id] LIMIT 1");
         
-	  }else{
-		$GLOBALS['db']->query("DELETE FROM" . $GLOBALS['ecs']->table('city_temp') . " WHERE temp_id = $val[temp_id] LIMIT 1");
-		array_push($problem_array,$val);
-	  }
+	  	}else{
+			$GLOBALS['db']->query("DELETE FROM" . $GLOBALS['ecs']->table('city_temp') . " WHERE temp_id = $val[temp_id] LIMIT 1");
+			
+			$issue = $val;
+			$issue['temp_status'] = "城市名称不正确，请核实！";
+			array_push($problem_array,$issue);
+	  	}
 	}
 	
 	
