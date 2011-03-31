@@ -2,7 +2,7 @@
 <div class="upload_table">
 <div class="upload_board" style="height:auto;float:left;">
 <form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
-<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
+<table width="70%" id="lesson-table" class="table_border table_standard" border="1">
     <tr>
       <td width="100">{$lang.county}:</td>
       <td>{$ad_info.city_name}</td>
@@ -10,7 +10,7 @@
 	<!--{if $sm_session.user_rank == 1}-->
     <tr>
       <td>上传照片:</td>
-      <td><span class="green-color">文件大小控制在 500KB-1MB 之间</span></td>
+      <td><span class="green-color">请将照片大小控制在1M以内。</span></td>
     </tr>
 	
 	<tr>

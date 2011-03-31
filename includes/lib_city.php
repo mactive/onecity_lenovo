@@ -73,7 +73,7 @@ function get_city_list($children){
     }
     if ($filter['audit_status'] !='')
     {
-        $where .= " AND a.audit_status > 0  AND a.is_audit_confirm = $filter[audit_status] ";
+        $where .= " AND a.audit_status = $filter[audit_status] ";
     }
 
 
@@ -96,13 +96,13 @@ function get_city_list($children){
 	/* 记录总数 */
     if ($filter['city_name'])
     {
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') . " AS a ".
+        $count_sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') . " AS a ".
 				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id "
                . $where;
     }
     elseif ($filter['region_name'])
     {
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') . " AS a ".
+        $count_sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') . " AS a ".
 				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
 			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
 			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
@@ -110,17 +110,18 @@ function get_city_list($children){
     }
     else
     {
-        $sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') ." AS a " . 
+        $count_sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') ." AS a " . 
 				$where;
+		
     }
 
-    $filter['record_count']   = $GLOBALS['db']->getOne($sql);
+    $filter['record_count']   = $GLOBALS['db']->getOne($count_sql);
     $filter['page_count']     = $filter['record_count'] > 0 ? ceil($filter['record_count'] / $filter['page_size']) : 1;
 	
 	
 	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, ". //
 			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
-			//", c.city_id, c.user_time  " . 
+			//", a2.cat_id AS pid, a3.cat_id AS rid" . 
 			" FROM ".$GLOBALS['ecs']->table('category') . " AS a ".
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ". 
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
@@ -145,7 +146,7 @@ function get_city_list($children){
 
 
 	}
-	$arr = array('citys' => $res, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count'],'sql' => $sql);
+	$arr = array('citys' => $res, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count'],'sql' => $sql,'count_sql' => $count_sql);
     return $arr;
 }
 function get_ad_summary($ad_list)
@@ -222,7 +223,7 @@ function full_city_content($xls_array,$city_content)
 function get_cat_id_by_name($cat_name)
 {
 	$sql = "SELECT cat_id  FROM " .$GLOBALS['ecs']->table('category') .
-			" WHERE cat_name LIKE '%". $cat_name ."%' ";
+			" WHERE cat_name LIKE '". $cat_name ."' ";
 	//echo $sql;	
 	
 	$res = $GLOBALS['db']->getOne($sql);
@@ -256,7 +257,7 @@ function get_ad_photo_info($ad_id = 0){
 /* 获得审核路径 */
 function get_audit_path($ad_id = 0,$audit_level_array)
 {
-	$audit_path = array(); //"2","3","4","5","6"级别
+	$audit_path = array(); //"2","3","4","5"级别
 	
 	$sql = "SELECT c.*, u.user_name  FROM " . $GLOBALS['ecs']->table('city_audit') . " AS c ". // , r.rank_name
  			" LEFT JOIN " .$GLOBALS['ecs']->table('users') . " AS u ON u.user_id = c.user_id ". 

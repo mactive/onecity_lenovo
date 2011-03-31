@@ -1158,3 +1158,15 @@ a.tooltips:hover span{ /*span 标签仅在 :hover 状态时显示*/
  text-decoration:none;
 }
 div.separate{height:4px;background:url(../images/dot1.gif) repeat-x top;margin:5px 0px;line-height:4px;font-size:1px;}
+.facebox {
+/* overlay is hidden before loading */
+/* standard decorations */
+width:850px;
+border:10px solid #ccc;
+background:#fff;
+padding:10px;
+margin-top:10px;
+/* hot CSS3 features for mozilla and webkit-based browsers (rounded borders) */
+-moz-border-radius:8px;
+-webkit-border-radius:8px;
+}

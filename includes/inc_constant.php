@@ -13,10 +13,10 @@ if (!defined('IN_ECS'))
 /* 图片处理相关常数 */
 define('AUDIT_1',       1); //分区推广 region_promotion
 define('AUDIT_2',       2);	//电通  dentsu
-define('AUDIT_3',      	3); //电通管理员 dentsu_leader
-define('AUDIT_4',    	4); //分区总经理 region_leader
-define('AUDIT_5',      	5); //中央专员 central_officer
-define('AUDIT_6',       6); //中央Leader central_leader
+//define('AUDIT_3',      	3); //电通管理员 dentsu_leader
+define('AUDIT_3',    	3); //分区总经理 region_leader
+define('AUDIT_4',      	4); //中央专员 central_officer
+define('AUDIT_5',       5); //中央Leader central_leader
 
 define('CONTENT_COLS',       41); //中央Leader central_leader
 define('CITY_AD_LIMIT',       5); //中央Leader central_leader

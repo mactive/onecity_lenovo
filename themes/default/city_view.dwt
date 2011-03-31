@@ -37,6 +37,15 @@
 			<!-- #EndLibraryItem -->
 		</div>
 		<div id="page-middle">
+			
+			<!--{if $act_step == "city_ad_list"}-->
+			
+				<!-- #BeginLibraryItem "/library/city_ad_list.lbi" -->
+				>
+				<!-- #EndLibraryItem -->
+				
+			<!--{/if}-->
+			
 	      
 			
 				<!--{if $act_step == "edit_ad"}-->

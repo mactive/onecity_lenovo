@@ -15,8 +15,7 @@
 <link href="themes/default/css/overlay-apple.css" rel="stylesheet" type="text/css" />
 
 {* 包含脚本文件 *}
-<script src="http://cdn.jquerytools.org/1.2.5/full/jquery.tools.min.js"></script>
-{insert_scripts files='transport.js,utils.js'}
+{insert_scripts files='transport.js,utils.js,jquery.tools.min.js'}
 <script src="admin/js/listtable.js" type="text/javascript"></script>
 <script src="admin/js/common.js" type="text/javascript"></script>
 <script type="text/javascript">   
@@ -29,20 +28,6 @@
                 $(this).removeClass("hover_tr");  
             });
 			
-			var triggers = $("#lesson-table a[rel]").overlay({
-				top:200,
-				// some mask tweaks suitable for modal dialogs
-				mask: {
-					color: '#fff',
-					loadSpeed: 200,
-					opacity: 0.9
-				},
-
-				closeOnClick: true
-			});
-
-			
-			//$("#lesson-table a[rel]").overlay({ effect:'apple',color: '#ccc' });
         });  
          
 </script>
@@ -69,22 +54,20 @@
 
 			<div class="form-div">
 			  <form action="javascript:searchCRM()" name="searchForm">
-				<table width="100%" style="margin:10px auto;" class="table_standard table_border" border="1">
+				<table width="80%" style="margin:10px auto;" class="table_standard table_border" border="1">
 					<tr><td>
 						<img src="images/green_arrow.png" alt=""/>
 						</td>
 						<td>
 						 搜索:
 					    	{$lang.region} <input name="region_name" type="text" id="region_name" size="10" value="{$region_name}" />&nbsp;&nbsp;&nbsp;
-					    	{$lang.city} <input name="city_name" type="text" id="city_name" size="10" value="{$city_name}" />&nbsp;&nbsp;&nbsp;
 					    	{$lang.county} <input name="county_name" type="text" id="county_name" size="10" value="{$county_name}" /> 
-							{$lang.audit_status} 
+						</td>
+						<td>流程状态
 							<select name="audit_status" id="audit_status">
 								<option value="">{$lang.select_please}</option>
-								<option value="0">{$lang.audit_cancel}</option>
-								<option value="1">{$lang.audit_confirm}</option>
+								{html_options options=$lang.audit_level}
 							</select> 
-					    	
 					</td>
 					<td style="padding-left:30px;"><input type="submit" value="{$lang.button_search}" class="button" /> <input type="reset" value="重置" class="button" /></td>
 					</tr>
@@ -97,96 +80,13 @@
 			<!-- start crm list -->
 			<div id="listDiv" class="table_div">
 			{/if}
-				<!--{foreach from=$city_list item=item}-->
-					<div id="ad_list_div_{$item.cat_id}" class="facebox">
-						<table width="100%" class="table_border table_standard" border="1">
-						    <tr>
-						      	<th>{$lang.county}</th>
-						      	<th>ID</th>
-							  	<th>上传状态</th>
-						      	<th>照片数量</th>
-							  	<th>审核状态</th>
-								<!--{foreach from=$audit_level_array item=level}-->
-							  	<th><a title="{$lang.audit_level.$level}">Lv{$level}</a></th>
-								<!--{/foreach}-->
-							  	<th>{$lang.handler}</th>
-						    </tr>
-						<!--{foreach from=$item.ad_list item=item}-->
-							<tr {if $item.is_upload}
-									{if $item.audit_status gt 1}
-										{if $item.is_audit_confirm}
-											class="city_audit_confirm"
-										{else}
-											class="city_audit_cancel"
-										{/if}
-									{else}
-										class="city_upload"
-									{/if}
-								{/if}>
-								<td>{$item.city_name}</td>
-								<td>{$item.ad_id}</td>
-								<td>{if $item.is_upload}{$lang.upload_confirm}({$item.user_time}){else}{$lang.upload_pending}{/if}</td>
-								<td><a href="city_operate.php?act=upload_photo&ad_id={$item.ad_id}">
-									<span {if $item.photo_num}class="red-color font14px"{/if}>{$item.photo_num}</span></a></td>
-								<td>
-									{if $item.audit_status > 1}
-											<a href="city_operate.php?act=audit&ad_id={$item.ad_id}">
-											{$audit_title.$item.audit_status}-
-											{if $item.is_audit_confirm}
-												<span class="green-color">{$lang.audit_confirm}</span>
-											{else}
-												<span class="red-color">{$lang.audit_cancel}</span>
-											{/if}
-											</a>
-										{else}
-											{$lang.audit_pending}
-										{/if}
-								</td>
-								
-								<!--{foreach from=$audit_level_array item=level}-->
-								<td>
-									{if $item.audit_status == $level}
-										{if $item.is_audit_confirm}<a class="audit_confirm"></a>
-										{else}<a class="audit_cancel"></a>{/if}
-									{else}
-										{if $item.audit_status > $level}<a class="audit_confirm">
-										{else}{if $level - $item.audit_status == 1}<a class="audit_idle"></a>{/if}{/if}{/if}
-								</td>
-								<!--{/foreach}-->
-								<td>
-									{if $sm_session.user_rank == 1}
-										{if $item.audit_status == 0 && $item.is_upload == 0 }
-											<span class="grey999">查看 &nbsp; | &nbsp; 修改 &nbsp; | &nbsp; 传照片</span>
-										{else}
-											{if $item.is_audit_confirm && $item.audit_status}
-											<a href="city_operate.php?act=view_ad&ad_id={$item.ad_id}">查看</a> &nbsp; | &nbsp;
-											<span class="grey999">修改 &nbsp; | &nbsp; 传照片</span>
-											{else}
-											<a href="city_operate.php?act=view_ad&ad_id={$item.ad_id}">查看</a> &nbsp; | &nbsp;
-											<a href="city_operate.php?act=edit_ad&ad_id={$item.ad_id}">修改</a> &nbsp; | &nbsp;
-											<a href="city_operate.php?act=upload_photo&ad_id={$item.ad_id}">传照片</a>
-											{/if}
-										{/if}
-									{else}
-										{if $item.is_upload && $item.photo_num}
-										<a href="city_operate.php?act=audit&ad_id={$item.ad_id}">审核</a>
-										{else}
-										<span class="grey999">资料不全</a>
-										{/if}
-									{/if}
-								</td>
-							</tr>
-						<!--{/foreach}-->
-						</table>
-					</div>
-				<!--{/foreach}-->
-				
 				<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
 				    <tr>
 					  	<th>{$lang.region}</th>
 				      	<th>{$lang.province}</th>
 				      	<th>{$lang.county}</th>
 				      	<th>{$lang.market_level}</th>
+					  	<th>流程状态</th>
 					  	<th>上传状态</th>
 				      	<th>照片数量</th>
 					  	<th>审核状态</th>
@@ -194,21 +94,16 @@
 				    </tr>
 				<!--{foreach from=$city_list item=city name=index_idea}-->
 					<tr {if $city.is_upload}
-							{if $city.audit_status_summary gt 1}
-								{if $city.audit_confirm_summary}
-									class="city_audit_confirm"
-								{else}
-									class="city_audit_cancel"
-								{/if}
-							{else}
 								class="city_upload"
-							{/if}
 						{/if}>
 						<td>{$city.region}</td>
 						<td>{$city.province}</td>
 						<td>{$city.county}</td>
 						<td>{$city.market_level}</td>
-						<td>{if $city.is_upload}<a rel="#ad_list_div_{$city.cat_id}">{$lang.upload_confirm}{$city.ad_count}条</a>
+						<td><a href="city_operate.php?act=city_ad_list&city_id={$city.cat_id}" target="_blank">
+							{$lang.audit_level.$city.audit_status}</a></td>
+						<td>{if $city.is_upload}<a href="city_operate.php?act=city_ad_list&city_id={$city.cat_id}" target="_blank">
+							{$lang.upload_confirm}{$city.ad_count}条</a>
 							({$city.time_summary}){else}{$lang.upload_pending}{/if}</td>
 						<td>
 							<span {if $city.photo_summary}class="red-color font14px"{/if}>{$city.photo_summary}</span></td>
@@ -218,10 +113,30 @@
 					</tr>
 			    <!--{/foreach}-->
 				</table>
+				
+				<!--page begin-->
+				<div id="turn-page" class="area_brand" style="text-indent:50px; margin:10px 0px;background:#ddd;">
+			  		{$lang.total_records} <span id="totalRecords">{$record_count}</span>
+			  		{$lang.total_pages} <span id="totalPages">{$page_count}</span>
+			  		{$lang.page_current} <span id="pageCurrent">{$filter.page}</span>
+			  		{$lang.page_size} <input type='text' size='1' id='pageSize' value="{$filter.page_size}" onkeypress="return listTable.changePageSize(event)" />条
+			  		<span id="page-link">
+			    		{literal}<a href="javascript:listTable.gotoPageFirst()">{/literal}{$lang.page_first}</a>
+			    		{literal}<a href="javascript:listTable.gotoPagePrev()">{/literal}{$lang.page_prev}</a>
+			    		{literal}<a href="javascript:listTable.gotoPageNext()">{/literal}{$lang.page_next}</a>
+			    		{literal}<a href="javascript:listTable.gotoPageLast()">{/literal}{$lang.page_last}</a>
+			    		<select id="gotoPage" onchange="listTable.gotoPage(this.value)">
+			      			{create_pages count=$page_count page=$filter.page}
+			    		</select>
+			  		</span>
+				</div>
+
+				<!--page end-->
 {if $full_page}
 			</div>
 		 	</form>
 		
+			
 			<script type="text/javascript" language="javascript">
 			  <!--
 			  listTable.recordCount = {$record_count};
@@ -238,7 +153,6 @@
 			  {
 			      listTable.filter['region_name'] = document.getElementById("region_name").value;
 			      listTable.filter['county_name'] = document.getElementById("county_name").value;
-			      listTable.filter['city_name'] = document.getElementById("city_name").value;
 			      listTable.filter['audit_status'] = document.getElementById("audit_status").value;
 			      listTable.filter['page'] = 1;
 			      listTable.loadList();
@@ -247,25 +161,6 @@
 			  //-->
 			</script>
 			
-			
-			<!--page begin-->
-			<div id="turn-page" class="area_brand" style="text-indent:50px; margin:10px 0px 30px;">
-		  		{$lang.total_records} <span id="totalRecords">{$record_count}</span>
-		  		{$lang.total_pages} <span id="totalPages">{$page_count}</span>
-		  		{$lang.page_current} <span id="pageCurrent">{$filter.page}</span>
-		  		{$lang.page_size} <input type='text' size='1' id='pageSize' value="{$filter.page_size}" onkeypress="return listTable.changePageSize(event)" />条
-		  		<span id="page-link">
-		    		{literal}<a href="javascript:listTable.gotoPageFirst()">{/literal}{$lang.page_first}</a>
-		    		{literal}<a href="javascript:listTable.gotoPagePrev()">{/literal}{$lang.page_prev}</a>
-		    		{literal}<a href="javascript:listTable.gotoPageNext()">{/literal}{$lang.page_next}</a>
-		    		{literal}<a href="javascript:listTable.gotoPageLast()">{/literal}{$lang.page_last}</a>
-		    		<select id="gotoPage" onchange="listTable.gotoPage(this.value)">
-		      			{create_pages count=$page_count page=$filter.page}
-		    		</select>
-		  		</span>
-			</div>
-
-			<!--page end-->
 			
 		</div>			
 		<!-- End #page-middle -->

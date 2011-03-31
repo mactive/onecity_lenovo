@@ -65,6 +65,7 @@
 				
 				
 				<!--{if $act_step == "confirm_insert"}-->
+					<a href="city_operate.php" class="confirm_btn">查看城市，查看上传数据</a><br>
 					<div class="yellow_notice">{$insert_message}</div>
 					{if $problem_array}
 					<div class="table_div">

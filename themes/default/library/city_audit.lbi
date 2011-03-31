@@ -18,7 +18,7 @@
 		</td>
 	</tr>
 	
-	{if $highest_audit_level <= $sm_session.user_rank && $sm_session.user_rank > 1}
+	{if ($highest_audit_level <= $sm_session.user_rank && $sm_session.user_rank > 1 && $sm_session.user_rank - $ad_info.audit_status == 1) || ($ad_info.is_audit_confirm == 0 && $ad_info.audit_status > 1)}
 	<tr>
 		<td width="130">如果审核不通过,<br>请写下明确的原因:</td>
 		<td><br>
@@ -29,10 +29,11 @@
     <tr>
       <td>&nbsp;</td>
       <td>
-        <input type="hidden" name="ad_id" value="{$ad_detail.ad_id}" />
+        <input type="hidden" name="ad_id" value="{$ad_info.ad_id}" />
+        <input type="hidden" name="city_id" value="{$ad_info.city_id}" />
       	<input type="hidden" name="act" value="update_audit" />
     	<input type="submit" class="input_s3 f_left" value="不通过" />
-		<a href="city_operate.php?act=update_audit&confirm=1&ad_id={$ad_id}" class="cancel_lite_btn f_left" style="margin-left:20px;">通过审核</a>
+		<a href="city_operate.php?act=update_audit&confirm=1&ad_id={$ad_id}&city_id={$ad_info.city_id}" class="cancel_lite_btn f_left" style="margin-left:20px;">通过审核</a>
       </td>
     </tr>
 	{/if}
@@ -79,7 +80,7 @@ function validate()
 
 <!--权限大于1才可见，电通级别的可以编辑-->
 {if $sm_session.user_rank > 1}
-	{if $sm_session.user_rank <= 3}
+	{if $sm_session.user_rank == 2}
 		<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data">
 		<!--{foreach from=$city_title key=k item=item }-->
 		<div class="city_info radius_5px">
@@ -90,7 +91,9 @@ function validate()
 		<!--{/foreach}-->
 		<div style="width:500px;float:left;">
 			<input type="hidden" name="act" value="update_ad" />
-			<input type="hidden" name="ad_id" value="{$ad_detail.ad_id}" />						
+			<input type="hidden" name="form_audit" value="1" />
+			<input type="hidden" name="ad_id" value="{$ad_detail.ad_id}" />	
+								
 			<input type="submit" class="submitidea_btn" value="{$lang.button_submit}" />
 		</div>
 		</form>
