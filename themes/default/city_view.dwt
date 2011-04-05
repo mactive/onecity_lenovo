@@ -46,6 +46,14 @@
 				
 			<!--{/if}-->
 			
+			<!--{if $act_step == "view_log"}-->
+			
+				<!-- #BeginLibraryItem "/library/view_log.lbi" -->
+				>
+				<!-- #EndLibraryItem -->
+				
+			<!--{/if}-->
+			
 	      
 			
 				<!--{if $act_step == "edit_ad"}-->
@@ -55,6 +63,8 @@
 					<!-- #EndLibraryItem -->
 					
 				<!--{/if}-->
+				
+				
 				
 				<!--{if $act_step == "view_ad"}-->
 									

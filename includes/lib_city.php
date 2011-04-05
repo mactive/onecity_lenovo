@@ -45,7 +45,7 @@ function get_user_permission($user_region)
 
 /**/
 function get_city_list($children){
-	
+
 	$filter['start_price'] = empty($_REQUEST['start_price']) ? 0 : $_REQUEST['start_price'];
     $filter['end_price'] = empty($_REQUEST['end_price']) ? 1000000 : $_REQUEST['end_price'];
 
@@ -118,19 +118,20 @@ function get_city_list($children){
     $filter['record_count']   = $GLOBALS['db']->getOne($count_sql);
     $filter['page_count']     = $filter['record_count'] > 0 ? ceil($filter['record_count'] / $filter['page_size']) : 1;
 	
+	$request_title = "re.lv_".$_SESSION['user_rank'];
 	
 	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, ". //
 			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
-			//", a2.cat_id AS pid, a3.cat_id AS rid" . 
+			",$request_title AS city_request " . 
 			" FROM ".$GLOBALS['ecs']->table('category') . " AS a ".
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ". 
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ". 
-//			" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad').   " AS ad ON ad.city_id = a.cat_id ".
+			" LEFT JOIN " .$GLOBALS['ecs']->table('city_request').   " AS re ON re.city_id = a.cat_id ".
 			
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('city'). 		' AS c  ON c.city_id = a.cat_id '.
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad'). 	' AS ad ON ad.city_id = a.cat_id '.
-			"$where ORDER BY a.is_upload DESC, a.audit_status DESC ".
+			"$where ORDER BY city_request DESC, a.is_upload DESC, a.audit_status DESC ".
 			" LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
 	//echo $sql;	 GROUP BY ad.ad_id
 	
@@ -149,7 +150,7 @@ function get_city_list($children){
 
 
 	}
-	$arr = array('citys' => $res, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count'],'sql' => $sql,'count_sql' => $count_sql);
+	$arr = array('citys' => $res, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count'],'sql' => $sql,'count_sql' => $count_sql, 'page_size' => $filter['page_size']);
     return $arr;
 }
 
@@ -157,8 +158,12 @@ function get_ad_status_summary($ad_list){
 	$audit_level_array = array("1"=>"0","2"=>"0","3"=>"0","4"=>"0","5"=>"0");
 	foreach($audit_level_array AS $k => $v){
 		foreach($ad_list AS $key => $val){
-			if($k == $val['audit_status'] && $val['is_upload'] && $val['is_audit_confirm']){
-				$audit_level_array[$k+1] += 1;
+			if($k == $val['audit_status'] && $val['is_upload']  && $val['photo_num'] && $val['is_audit_confirm']){
+					$audit_level_array[$k+1] += 1;
+			}else{
+				if($val['audit_status'] == 1 && $_SESSION['user_rank'] == 2 && $val['is_audit_confirm'] == 0 && $val['photo_num']){
+					$audit_level_array[$k+1] += 1;
+				}				
 			}
 		}
 	}
@@ -246,6 +251,16 @@ function get_cat_id_by_name($cat_name)
 	return $res;
 }
 
+function get_city_id($ad_id)
+{
+	$sql = "SELECT city_id  FROM " .$GLOBALS['ecs']->table('city_ad') .
+			" WHERE ad_id = $ad_id ";
+	//echo $sql;	
+	
+	$res = $GLOBALS['db']->getOne($sql);
+	return $res;
+}
+
 function get_city_info($ad_id = 0)
 {
 	if($ad_id){
@@ -316,4 +331,29 @@ function get_sys_level($city_id)
 	return $res;
 }
 
+function act_city_request($ad_id,$level,$is_cancel = 0)
+{
+	$city_id = get_city_id($ad_id);
+	$now_level_col = "lv_".$level;
+	$level = $level+1;
+	$next_level_col = "lv_".$level;
+	
+	$sql = "SELECT $now_level_col,$next_level_col FROM ".$GLOBALS['ecs']->table('city_request')." WHERE city_id = '$city_id' ";
+    $res = $GLOBALS['db']->getRow($sql);
+
+	$now_num = $res[$now_level_col] - 1; //当前等级减1
+	$next_num = $res[$next_level_col] + 1; //下一等级加1
+	//更新city_request
+	if($is_cancel){ //不通过操作
+		$sql_2 = "UPDATE " . $GLOBALS['ecs']->table('city_request') . 
+				 " SET $now_level_col = '$now_num'  WHERE city_id = '$city_id' ";
+	}else{
+		$sql_2 = "UPDATE " . $GLOBALS['ecs']->table('city_request') . 
+				 " SET $now_level_col = '$now_num',$next_level_col = '$next_num'  WHERE city_id = '$city_id' ";
+	}
+	$GLOBALS['db']->query($sql_2);
+	
+	echo $now_level_col."-".$now_num."-".$next_level_col."-".$next_num."-"."<br>".$sql."<br>".$sql_2;
+	
+}
 ?>

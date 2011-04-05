@@ -100,12 +100,14 @@
 						<td>{$city.market_level}</td>
 						<!--{if $sm_session.user_rank > 1}-->
 						<td>
+							{if $city.city_request > 0}
+							<a href="city_operate.php?act=city_ad_list&city_id={$city.cat_id}" target="_blank">
+								<span class="red-color">{$city.city_request}条</span>待审
+							</a>{else}无待审核{/if}
+							
 							<!--{foreach from=$city.status_summary key=key item=item}-->
 								{if $key > 1 && $key == $sm_session.user_rank}
-									{if $item > 0}
-									<a href="city_operate.php?act=city_ad_list&city_id={$city.cat_id}" target="_blank">
-										<span class="red-color">{$item}条</span>待审
-									</a>{else}无待审核{/if}
+									
 								{/if}
 							<!--{/foreach}-->
 						</td>
@@ -118,13 +120,12 @@
 					</tr>
 			    <!--{/foreach}-->
 				</table>
-				
 				<!--page begin-->
 				<div id="turn-page" class="area_brand" style="text-indent:50px; margin:10px 0px;background:#ddd;">
 			  		{$lang.total_records} <span id="totalRecords">{$record_count}</span>
 			  		{$lang.total_pages} <span id="totalPages">{$page_count}</span>
 			  		{$lang.page_current} <span id="pageCurrent">{$filter.page}</span>
-			  		{$lang.page_size} <input type='text' size='1' id='pageSize' value="{$filter.page_size}" onkeypress="return listTable.changePageSize(event)" />条
+			  		{$lang.page_size} {$filter.page_size}条
 			  		<span id="page-link">
 			    		{literal}<a href="javascript:listTable.gotoPageFirst()">{/literal}{$lang.page_first}</a>
 			    		{literal}<a href="javascript:listTable.gotoPagePrev()">{/literal}{$lang.page_prev}</a>
@@ -135,8 +136,8 @@
 			    		</select>
 			  		</span>
 				</div>
-
 				<!--page end-->
+				
 {if $full_page}
 			</div>
 		 	</form>
