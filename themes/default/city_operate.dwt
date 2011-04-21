@@ -19,16 +19,38 @@
 <script src="admin/js/listtable.js" type="text/javascript"></script>
 <script src="admin/js/common.js" type="text/javascript"></script>
 <script type="text/javascript">   
-        $(document).ready(function(){
-//鼠标移到tr上变色  
-            $("table tr").mouseover(function(){  
-                $(this).addClass("hover_tr");  
-            });  
-            $("table tr").mouseout(function(){  
-                $(this).removeClass("hover_tr");  
-            });
+	function batch_audit(){
+		var con = confirm("是否确认批量审核通过");
+		
+		if({$sm_session.user_rank}  == 5 && con == true){
 			
-        });  
+			var filters = new Object;
+			filters.confirm = 1;
+			
+				Ajax.call("city_operate.php?act=batch_audit", filters, function(result)
+			  	{
+					if (result.content)
+				      {
+						alert(result.content);
+						var new_location = "city_operate.php";
+						window.location.assign(new_location);
+						  //document.getElementById('city_div_'+cityID).innerHTML = result.content;
+				      }
+			  }, "GET", "JSON");
+		}
+	}
+	
+	$(document).ready(function(){
+	//鼠标移到tr上变色  
+	            $("table tr").mouseover(function(){  
+	                $(this).addClass("hover_tr");  
+	            });  
+	            $("table tr").mouseout(function(){  
+	                $(this).removeClass("hover_tr");  
+	            });
+
+	        });  
+	
          
 </script>
 
@@ -63,14 +85,14 @@
 					    	{$lang.region} <input name="region_name" type="text" id="region_name" size="10" value="{$region_name}" />&nbsp;&nbsp;&nbsp;
 					    	{$lang.county} <input name="county_name" type="text" id="county_name" size="10" value="{$county_name}" /> 
 						</td>
-
 					<td style="padding-left:30px;"><input type="submit" value="{$lang.button_search}" class="button" /> <input type="reset" value="重置" class="button" /></td>
 					</tr>
-
 				</table>
 			  </form>
 			</div>
-			
+			{if $sm_session.user_rank == 5}
+			<div><a onclick="batch_audit()" class="confirm_btn">批量审核</a></div>
+			{/if}
 			<form method="post" name="listForm"  onsubmit="return confirmSubmit(this)">
 			<!-- start crm list -->
 			<div id="listDiv" class="table_div">
@@ -86,6 +108,7 @@
 						<!--{/if}-->
 					  	<th>上传时间</th>
 					  	<th>上传数</th>
+					  	<th>照片数</th>
 					  	<th>审核数</th>
 					  	<th>通过数</th>
 					  	<th>{$lang.handler}</th>
@@ -112,8 +135,9 @@
 							<!--{/foreach}-->
 						</td>
 						<!--{/if}-->
-						<td>{if $city.is_upload}{$city.time_summary}{else}{$lang.upload_pending}{/if}</td>	
+						<td>{if $city.is_upload}{$city.time_summary}{else}{$lang.upload_pending}{/if}</td>
 						<td>{$city.ad_count}</td>
+						<td>{$city.photo_summary}</td>
 						<td>{$city.audit_status_summary}</td>
 						<td>{$city.audit_confirm_summary}</td>
 						<td><a href="city_operate.php?act=city_ad_list&city_id={$city.cat_id}" target="_blank">查看详情</a></td>
