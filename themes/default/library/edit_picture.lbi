@@ -1,0 +1,33 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<form method="post" action="city_project.php" name="theForm" enctype="multipart/form-data">
+<!--{foreach from=$picture_info key=key item=item }-->
+<div class="city_info radius_5px">
+	<div class="f_left left_title left_radius_5px">{$lang.$key}</div>
+	<div class="f_left right_content">
+			{if $key == "pic_thumb"}
+				<input type="file" name="user_upload_file[]"> &nbsp; {$lang.item_desc.$key}
+				{if  $act_step == "edit_picture"}<input type="hidden" name="{$key}" value="{$picture_info.$key}">{/if}
+			{elseif $key == "upload_time"}
+					<input type="hidden" name="{$key}" value="{$picture_info.update_time}">系统时间
+			{elseif $key == "pic_type"}
+				<select name="pic_type">
+				      {html_options options=$lang.pic_type_select selected=$item.pic_type}
+				</select>
+			{elseif $key == "project_id" || $key == "picture_id"}
+				<input type="text" name="{$key}" value="{$picture_info.$key}" size="4" readonly="readonly">
+			{else}
+				<input type="text" name="{$key}" value="{$picture_info.$key}" size="40" /> &nbsp; {$lang.item_desc.$key}
+			{/if}
+	</div>
+	<div class="clear"></div>
+</div>
+<!--{/foreach}-->
+
+<div style="width:500px;float:left;">
+	<input type="hidden" name="act" value="update_picture" />
+	<input type="hidden" name="picture_id" value="{$picture_info.picture_id}" />
+	<input type="hidden" name="project_id" value="{$picture_info.project_id}" />
+	<input type="submit" class="submitidea_btn" value="{$lang.button_submit}" />
+</div>
+
+</form>

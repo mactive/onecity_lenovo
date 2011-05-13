@@ -1,0 +1,26 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<div class="facebox">
+		<table width="100%" class="table_border table_standard" border="1">
+		    <tr>
+		      	<th>{$lang.project_name}</th>
+		      	<th>{$lang.project_status}</th>
+			  	<th>{$lang.ad_list}</th>
+			  	<th>{$lang.project_note}</th>
+		      	<th>{$lang.start_time}</th>
+			  	<th>{$lang.duration_time}</th>
+		    </tr>
+		<!--{foreach from=$project_list item=item}-->
+			<tr>
+				<td>{$item.project_name}</td>
+				<td>{$item.project_status}</td>
+				<td><a href="city_project.php?act=list_picture&project_id={$item.project_id}">广告列表[{$item.pic_count}]</a></td>
+				<td>{$item.project_note}</td>
+				<td>{$item.start_time}</td>
+				<td>
+					{$item.duration_time}天
+				</td>
+			</tr>
+		<!--{/foreach}-->
+		</table>
+	</div>
+

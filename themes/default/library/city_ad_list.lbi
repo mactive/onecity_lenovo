@@ -1,0 +1,111 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<div class="facebox">
+		<table width="100%" class="table_border table_standard" border="1">
+		    <tr>
+		      	<th>{$lang.county}</th>
+		      	<th width="200">具体位置描述</th>
+			  	<th>上传时间</th>
+		      	<th>照片数量</th>
+			  	<th>审核状态</th>
+				<!--{foreach from=$audit_level_array item=level}-->
+			  	<th>{$lang.audit_level.$level}</th>
+				<!--{/foreach}-->
+			  	<th>{$lang.handler}</th>
+		    </tr>
+		<!--{foreach from=$ad_list item=item}-->
+			<tr {if $item.is_upload}
+					{if $item.audit_status gt 1}
+						{if $item.is_audit_confirm}
+							class="city_audit_confirm"
+						{else}
+							class="city_audit_cancel"
+						{/if}
+					{else}
+						class="city_upload"
+					{/if}
+				{/if}>
+				<td>{$item.city_name}</td>
+				<td>{$item.col_7}</td>
+				<td>{if $item.is_upload}{$item.user_time}{else}{$lang.upload_pending}{/if}</td>
+				<td>
+					<span {if $item.photo_num}class="red-color font14px"{/if}>{$item.photo_num}</span></td>
+				<td>
+					{if $item.audit_status > 1}
+							{$audit_title.$item.audit_status}-
+							{if $item.is_audit_confirm}
+								<span class="green-color">{$lang.audit_confirm}</span>
+							{else}
+								<span class="red-color">{$lang.audit_cancel}</span>
+							{/if}
+						{else}
+							{$lang.audit_pending}
+						{/if}
+				</td>
+				
+				<!--{foreach from=$audit_level_array item=level}-->
+				<td>
+
+					{if $item.audit_status == $level}
+						{if $item.is_audit_confirm}<a class="audit_confirm"></a>
+						{else}<a class="audit_cancel"></a>
+						{/if}
+					{else}
+						{if $item.audit_status > $level}<a class="audit_confirm">
+						{else}
+							{if $level - $item.audit_status == 1}
+								{if $item.audit_status == 1 && $item.photo_num}<a class="audit_idle"></a>{/if}
+								{if $item.is_audit_confirm}<a class="audit_idle"></a>{else}{/if}
+							{/if}
+						{/if}
+					{/if}
+				</td>
+				<!--{/foreach}-->
+				<td>
+					{if $sm_session.user_rank == 1}
+						{if $item.is_audit_confirm == 0 }
+							{if $item.audit_status == 1}
+							<a href="city_operate.php?act=view_ad&ad_id={$item.ad_id}">查看</a> &nbsp; | &nbsp;
+							<a href="city_operate.php?act=edit_ad&ad_id={$item.ad_id}">修改</a> &nbsp; | &nbsp;
+							<a href="city_operate.php?act=upload_photo&ad_id={$item.ad_id}">传照片</a>							
+							{else}
+							<a href="city_operate.php?act=view_ad&ad_id={$item.ad_id}">查看</a>
+							{/if}
+						{else}
+							<a href="city_operate.php?act=view_ad&ad_id={$item.ad_id}">查看</a>
+							{if $item.audit_status < 3}
+							 &nbsp; | &nbsp; <a href="city_operate.php?act=edit_ad&ad_id={$item.ad_id}">修改</a>
+							{/if}
+						{/if}
+						
+					{else}
+					
+						{if $item.is_upload && $item.photo_num}
+							{if $item.is_audit_confirm == 0 }
+								{if $item.audit_status == 1}
+									{if $sm_session.user_rank == 2}
+										<a href="city_operate.php?act=audit&ad_id={$item.ad_id}">审核</a>
+									{else}
+										<a href="city_operate.php?act=view_ad&ad_id={$item.ad_id}">查看</a>
+									{/if}
+								{else}
+								<a href="city_operate.php?act=view_ad&ad_id={$item.ad_id}">查看</a>
+								{/if}
+							{else}
+								{if ($sm_session.user_rank - $item.audit_status == 1)}
+								<a href="city_operate.php?act=audit&ad_id={$item.ad_id}">审核</a>
+								{else}
+								<a href="city_operate.php?act=view_ad&ad_id={$item.ad_id}">查看</a>
+								{/if}
+							{/if}
+							{if $sm_session.user_rank >= 4}<a onclick="confrim_delete({$item.ad_id})" class="red_color">删除</a>{/if}
+							
+						{else}
+						<span class="grey999">资料不全</a>
+						{/if}
+					{/if}
+				</td>
+			</tr>
+		<!--{/foreach}-->
+		</table>
+	</div>
+

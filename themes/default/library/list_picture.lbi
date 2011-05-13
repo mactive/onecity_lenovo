@@ -1,0 +1,31 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<div style="height:25px;margin-top:10px;"><a href="city_project.php?act=add_picture&project_id={$project_info.project_id}" class="add_picture"></a></div>
+	<div class="facebox">
+		<table width="100%" class="table_border table_standard" border="1">
+		    <tr>
+		      	<th>{$lang.picture_id}</th>
+		      	<th>{$lang.pic_name}</th>
+		      	<th>{$lang.pic_note}</th>
+				<th>{$lang.pic_thumb}</th>
+			  	<th>{$lang.pic_type}</th>
+			  	<th>{$lang.file_url}</th>
+		      	<th>{$lang.upload_time}</th>
+			  	<th>{$lang.handler}</th>
+		    </tr>
+		<!--{foreach from=$picture_list item=item}-->
+			<tr>
+				<td>{$item.picture_id}</td>
+				<td>{$item.pic_name}</td>
+				<td>{$item.pic_note}</td>
+				<td><img src="{$item.pic_thumb}" height="100" width="100"></td>
+				<td>{$lang.pic_type_select.$item.pic_type}</td>
+				<td><a href="{$item.file_url}">下载地址</a></td>
+				<td>{$item.upload_time}</td>
+				<td>
+					<a href="city_project.php?act=edit_picture&picture_id={$item.picture_id}">修改</a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="">删除</a>
+				</td>
+			</tr>
+		<!--{/foreach}-->
+		</table>
+	</div>
+

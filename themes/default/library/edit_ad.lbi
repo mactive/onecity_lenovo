@@ -1,0 +1,50 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="yellow_notice" style="text-align:center;">{$upload_message}</div>
+<!--{if $ad_info.is_audit_confirm == 0 }-->
+	<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data">
+	<!--{foreach from=$city_title key=k item=item }-->
+	<div class="city_info radius_5px">
+		<div class="f_left left_title left_radius_5px">{$item}</div>
+		<div class="f_left right_content">
+			<!--{if $k == "col_1" || $k == "col_2" || $k == "col_3" || $k == "col_4" || $k == "col_5"}-->
+				<span>{$ad_detail.$k}</span>
+				<input type="hidden" name="col[]" value="{$ad_detail.$k}" />
+			<!--{else}-->
+				<input type="text" name="col[]" value="{$ad_detail.$k}" size="50" />
+			<!--{/if}-->
+		</div>	
+		<div class="clear"></div>
+	</div>
+	<!--{/foreach}-->
+	<div style="width:500px;float:left;">
+		<input type="hidden" name="act" value="update_ad" />
+		<input type="hidden" name="ad_id" value="{$ad_detail.ad_id}" />						
+		<input type="submit" class="submitidea_btn" value="{$lang.button_submit}" />
+	</div>
+	</form>
+<!--{/if}-->
+
+<!--{if $ad_info.is_audit_confirm == 1  && $ad_info.audit_status < 3 && $sm_session.user_rank == 1 }-->
+<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data">
+<!--{foreach from=$city_title key=k item=item }-->
+<div class="city_info radius_5px">
+	<div class="f_left left_title left_radius_5px">{$item}</div>
+	<div class="f_left right_content">
+		<!--{if $k == "col_19" || $k == "col_20" || $k == "col_21" || $k == "col_22" || $k == "col_24" || $k == "col_25" || $k == "col_26" || $k == "col_27" || $k == "col_28" || $k == "col_29" || $k == "col_30" || $k == "col_31" || $k == "col_32" || $k == "col_33" || $k == "col_34" || $k == "col_35" || $k == "col_36" || $k == "col_37" || $k == "col_38" || $k == "col_39" || $k == "col_40" || $k == "col_41" }-->
+			<input type="text" name="col[]" value="{$ad_detail.$k}" size="50" />
+		<!--{else}-->
+			<span>{$ad_detail.$k}</span>
+			<input type="hidden" name="col[]" value="{$ad_detail.$k}" />
+		<!--{/if}-->
+	</div>	
+	<div class="clear"></div>
+</div>
+<!--{/foreach}-->
+<div style="width:500px;float:left;">
+	<input type="hidden" name="act" value="update_ad" />
+	<input type="hidden" name="ad_id" value="{$ad_detail.ad_id}" />						
+	<input type="submit" class="submitidea_btn" value="{$lang.button_submit}" />
+</div>
+</form>
+<!--{/if}-->
+

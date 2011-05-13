@@ -1,0 +1,46 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<div style="height:25px;margin-top:10px;"><a href="city_project.php?act=add_project" class="add_project"></a></div>
+	<div class="facebox">
+		<table width="100%" class="table_border table_standard" border="1">
+		    <tr>
+		      	<th>{$lang.project_name}</th>
+		      	<th>{$lang.project_status}</th>
+			  	<th>{$lang.project_note}</th>
+		      	<th>{$lang.start_time}</th>
+			  	<th>{$lang.duration_time}</th>
+			  	<th>{$lang.city_list}</th>
+			  	<th>{$lang.ad_list}</th>
+			  	<th>{$lang.handler}</th>
+		    </tr>
+		<!--{foreach from=$project_list item=item}-->
+			<tr>
+				<td>{$item.project_name}</td>
+				<td>{$item.project_status}</td>
+				<td>{$item.project_note}</td>
+				<td>{$item.start_time}</td>
+				<td>
+					{$item.duration_time}天
+				</td>
+				<td>{if $sm_session.user_rank == 1}
+						<a href="city_project.php?act=list_city_to_select&project_id={$item.project_id}" class="list_city_to_select"></a>
+					{else}
+						<a href="city_project.php?act=list_city_to_select&project_id={$item.project_id}" class="view_city"></a>
+					{/if}
+				</td>
+				<td><a href="city_project.php?act=list_picture&project_id={$item.project_id}">广告列表</a></td>
+				
+				<td>
+					{if $sm_session.user_rank > 1}
+						<a href="city_project.php?act=edit_project&project_id={$item.project_id}">修改</a> &nbsp; | &nbsp;
+						
+					{else}
+						<a href="city_project.php?act=edit_project&project_id={$item.project_id}">修改</a> &nbsp; | &nbsp;
+						
+					{/if}
+
+				</td>
+			</tr>
+		<!--{/foreach}-->
+		</table>
+	</div>
+

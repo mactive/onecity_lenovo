@@ -1,0 +1,75 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+{if $ad_info.price}
+
+	<form method="post" action="city_project.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+
+		<div class="city_info radius_5px">
+			<div class="f_left left_title left_radius_5px">{$lang.city_title.col_30}</div>
+			<div class="f_left right_content">{$ad_info.price} 元<input type="hidden" name="price" value="{$ad_info.price}" /></div>	
+			<div class="clear"></div>
+		</div>
+		
+		<div class="city_info radius_5px">
+			<div class="f_left left_title left_radius_5px">{$lang.city_title.col_32}</div>
+			<div class="f_left right_content">{$ad_info.price_amount} 元<input type="hidden" name="price_amount" value="{$ad_info.price_amount}" /></div>	
+			<div class="clear"></div>
+		</div>
+		
+		
+		<div class="city_info radius_5px">
+			<div class="f_left left_title left_radius_5px red-color">[申请]{$lang.city_title.col_30}</div>
+			<div class="f_left right_content">
+					<input type="text" name="request_price" value="{$ad_info.request_price}" size="10" /> 元
+			</div>	
+			<div class="clear"></div>
+		</div>
+		
+		<div class="city_info radius_5px">
+			<div class="f_left left_title left_radius_5px red-color">[申请] {$lang.city_title.col_32}</div>
+			<div class="f_left right_content">
+					<input type="text" name="request_price_amount" value="{$ad_info.request_price_amount}" size="10" /> 元
+			</div>	
+			<div class="clear"></div>
+		</div>
+
+		
+		<div class="city_info radius_5px">
+			<div class="f_left left_title left_radius_5px red-color">申请原因</div>
+			<div class="f_left right_content">
+					<input type="text" name="request_note" id="request_note" value="{$ad_info.request_note}" size="30" />
+			</div>	
+			<div class="clear"></div>
+		</div>
+
+
+
+
+	<div style="width:500px;float:left;">
+		<input type="hidden" name="act" value="update_request_ad_price" />
+		<input type="hidden" name="ad_id" value="{$ad_info.ad_id}" />						
+		<input type="hidden" name="req_id" value="{$ad_info.req_id}" />						
+		<input type="submit" class="submitidea_btn" value="{$lang.button_submit}" />
+	</div>
+	</form>
+	
+	<script language="JavaScript">
+
+	/**
+	 * 检查表单输入的数据
+	 */
+	function validate()
+	{
+		var obj = document.getElementById('request_note');
+	    if (obj.value == "")
+	    {
+	        alert("请填写申请原因");
+	        return false;
+	    }
+		return true;
+	    //return validator.passed();
+	}
+	</script>
+	{else}
+	<div class="yellow_notice" style="text-align:center;">{$message}</div>
+	
+{/if}
