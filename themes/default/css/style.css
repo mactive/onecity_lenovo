@@ -446,124 +446,65 @@ div.addto_cart {
   padding: 0px;
 }
 
-a.collect{
-	display:block;
-	float:left;
-	width:85px;
-	height:25px;
-	background:url(../images/collect.png) no-repeat left top ;
-}
-a.collect:hover{
-	display:block;
-	width:85px;
-	height:25px;
-	background:url(../images/collect.png) no-repeat left -25px;
-}
-a.add_cart{
-	display:block;
-	float:left;
-	width:101px;
-	height:25px;
-	background:url(../images/add_cart.png) no-repeat left top ;
-}
-a.add_cart:hover{
-	display:block;
-	width:101px;
-	height:25px;
-	background:url(../images/add_cart.png) no-repeat left -25px;
-}
-
-a.configure{
-	display:block;
-	float:left;
-	margin:0px 5px 5px 0px;
-	width:101px;
-	height:25px;
-	background:url(../images/configure_btn_select.png) no-repeat left top ;
-}
-a.configure:hover{
-	display:block;
-	width:101px;
-	height:25px;
-	background:url(../images/configure_btn_select.png) no-repeat left -25px;
-}
-a.hide_configure{
-	display:block;
-	float:left;
-	margin:0px 5px 5px 0px;
-	width:101px;
-	height:25px;
-	background:url(../images/configure_btn_close.png) no-repeat left top ;
-}
-a.hide_configure:hover{
-	display:block;
-	width:101px;
-	height:25px;
-	background:url(../images/configure_btn_close.png) no-repeat left -25px;
-}
-a.add_to_solution{
-	display:block;
-	float:left;
-	margin:0px 5px 5px 0px;
-	width:39px;
-	height:39px;
-	background:url(../images/add_to_solution_btn.png) no-repeat left top ;
-}
-a.add_to_solution:hover{
-	display:block;
-	float:left;
-	margin:0px 5px 5px 0px;
-	width:39px;
-	height:39px;
-	background:url(../images/add_to_solution_btn.png) no-repeat left -39px ;
-}
-
-a.add_to_order{
-	display:block;
-	float:left;
-	margin:0px 5px 5px 0px;
-	width:104px;
-	height:25px;
-	background:url(../images/add_to_order_btn.png) no-repeat left top ;
-}
-a.add_to_order:hover{
-	display:block;
-	float:left;
-	margin:0px 5px 5px 0px;
-	width:104px;
-	height:25px;
-	background:url(../images/add_to_order_btn.png) no-repeat left -25px ;
-}
-a.remove_from_order{
-	display:block;
-	float:left;
-	margin:0px 5px 5px 0px;
-	width:104px;
-	height:25px;
-	background:url(../images/remove_from_order_btn.png) no-repeat left top ;
-}
-a.remove_from_order:hover{
-	display:block;
-	float:left;
-	margin:0px 5px 5px 0px;
-	width:104px;
-	height:25px;
-	background:url(../images/remove_from_order_btn.png) no-repeat left -25px ;
-}
-
-a.take_register{
+a.add_project{
 	display:block;
 	margin:0px 5px 5px 0px;
 	width:84px;
 	height:25px;
-	background:url(../images/order_ui_bg.png) no-repeat left -125px ;
+	background:url(../images/order_ui_bg.png) no-repeat left -50px ;
 }
-a.new_solution_order{
+a.list_city_to_select{
 	display:block;
 	margin:0px 5px 5px 0px;
 	width:84px;
 	height:25px;
-	background:url(../images/order_ui_bg.png) no-repeat left -25px ;
+	background:url(../images/order_ui_bg.png) no-repeat left -75px ;
+}
+
+a.view_city{
+	display:block;
+	margin:0px 5px 5px 0px;
+	width:84px;
+	height:25px;
+	background:url(../images/order_ui_bg.png) no-repeat left -100px ;
+}
+
+a.audit_btn{
+	display:block;
+	margin:0px 5px 5px 0px;
+	width:84px;
+	height:25px;
+	background:url(../images/order_ui_bg.png) no-repeat left -200px ;
+}
+
+a.select_city{
+	display:block;
+	margin:10px 5px 10px 0px;
+	width:50px;
+	height:25px;
+	background:url(../images/order_ui_bg.png) no-repeat left -125px ;float:left;
+}
+a.unselect_city{
+	display:block;
+	margin:10px 5px 10px 0px;
+	width:50px;
+	height:25px;
+	background:url(../images/order_ui_bg.png) no-repeat left -150px ;float:left;
+}
+
+a.batch_audit{
+	display:block;
+	margin:0px 5px 5px 0px;
+	width:84px;
+	height:25px;
+	background:url(../images/order_ui_bg.png) no-repeat left -175px ;
+}
+a.add_picture{
+	display:block;
+	margin:0px 5px 5px 0px;
+	width:84px;
+	height:25px;
+	background:url(../images/order_ui_bg.png) no-repeat left -225px ;
 }
 a.take_agency_register{
 	display:block;
@@ -909,6 +850,7 @@ p.intro { font-weight: bold; }
 a.confirm_btn{text-align:center;width:200px;border:1px solid #ccc;background:#F5FEEC;border:1px solid #6AB30F;margin-top:10px;padding:10px auto;height:40px;line-height:40px;display:block;}
 a.cancel_btn{text-align:center;width:200px;border:1px solid #ccc;background:#fabdbd;border:1px solid #FF1A00;margin-top:10px;padding:10px auto;height:40px;line-height:40px;display:block;}
 input.input_s3{text-align:center;width:100px;border:1px solid #ccc;background:#fabdbd;border:1px solid #FF1A00;padding:5px auto;height:30px;line-height:30px;display:block;}
+input.cancel_lite_btn{text-align:center;width:100px;border:1px solid #ccc;background:#F5FEEC;border:1px solid #6AB30F;padding:5px auto;height:30px;line-height:30px;display:block;}
 a.cancel_lite_btn{text-align:center;width:98px;border:1px solid #ccc;background:#F5FEEC;border:1px solid #6AB30F;padding:5px auto;height:28px;line-height:28px;display:block;}
 
 /* 文字信息*/
@@ -1158,6 +1100,7 @@ a.tooltips:hover span{ /*span 标签仅在 :hover 状态时显示*/
  text-decoration:none;
 }
 div.separate{height:4px;background:url(../images/dot1.gif) repeat-x top;margin:5px 0px;line-height:4px;font-size:1px;}
+
 .facebox {
 /* overlay is hidden before loading */
 /* standard decorations */

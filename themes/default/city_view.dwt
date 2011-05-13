@@ -18,7 +18,27 @@
 
 <script src="admin/js/listtable.js" type="text/javascript"></script>
 <script src="admin/js/common.js" type="text/javascript"></script>
-
+<script type="text/javascript">   
+	function confrim_delete(ad_ID){
+		var con = confirm("确认是否删除这条记录?");
+		
+		if({$sm_session.user_rank}  >= 4 && con == true){
+			var filters = new Object;
+			filters.ad_id = ad_ID;
+			
+				Ajax.call("city_operate.php?act=delete_ad", filters, function(result)
+			  	{
+					if (result.content)
+				      {
+						alert(result.message);
+						//var new_location = "city_operate.php";
+						window.location.assign(result.content);
+						  //document.getElementById('city_div_'+cityID).innerHTML = result.content;
+				      }
+			  }, "GET", "JSON");
+		}
+	}
+</script>
 </head>
 
 <body>

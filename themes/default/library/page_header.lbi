@@ -7,8 +7,11 @@
 	<div class="login_title">
 	</div>
 	<div class="menu_title">
-		<div class="f_right"><a class="login_top_btn" href="user.php?act=logout">退出</a></div>
-		<div class="f_right"><a class="" href="user.php?act=login">登录</a></div>
+		{if $sm_session.user_rank > 0}
+			<div class="f_right"><a class="login_top_btn" href="user.php?act=logout">退出</a></div>
+		{else}
+			<div class="f_right"><a class="" href="user.php?act=login">登录</a></div>
+		{/if}
 		<div class="f_right" style="line-height:28px;color:#fff;margin-right:20px;margin-top:5px;">你好 {$real_name} , 你的权限是 {$your_user_rank} </div>
 	</div>
 	<div class="clear"></div>

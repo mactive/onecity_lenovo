@@ -299,6 +299,16 @@ function get_ad_info($ad_id = 0)
 }
 
 
+function get_price_info($ad_id = 0)
+{
+	if($ad_id){
+		$price_info = $GLOBALS['db']->getRow("SELECT * FROM " . $GLOBALS['ecs']->table('project_request') . " WHERE ad_id = $ad_id");
+		return $price_info;
+	}
+}
+
+
+
 function get_ad_photo_info($ad_id = 0){
 	if($ad_id){
 		$photo_info = $GLOBALS['db']->getAll("SELECT * FROM " . $GLOBALS['ecs']->table('city_gallery') . " WHERE ad_id = $ad_id");
@@ -307,15 +317,28 @@ function get_ad_photo_info($ad_id = 0){
 }
 
 /* 获得审核路径 */
-function get_audit_path($ad_id = 0,$audit_level_array)
+function get_audit_path($ad_id = 0,$audit_level_array,$type="audit")
 {
+	switch($type)
+    {
+        case 'audit':
+			$type_sql = " AND price_audit = 0 AND feedback_audit = 0 ";
+			break;
+        case 'price':
+			$type_sql = " AND price_audit = 1 AND feedback_audit = 0 ";
+			break;
+        case 'feedback':
+			$type_sql = " AND price_audit = 0 AND feedback_audit = 1 ";
+			break;
+    }
+	
 	$audit_path = array(); //"2","3","4","5"级别
 	
 	$sql = "SELECT c.*, u.user_name ,u.real_name  FROM " . $GLOBALS['ecs']->table('city_ad_audit') . " AS c ". // , r.rank_name
  			" LEFT JOIN " .$GLOBALS['ecs']->table('users') . " AS u ON u.user_id = c.user_id ". 
  			//" LEFT JOIN " .$GLOBALS['ecs']->table('user_rank') . " AS r ON r.rank_id = c.user_rank ". 
-			" WHERE c.ad_id = $ad_id ORDER BY time DESC ";
-			
+			" WHERE c.ad_id = $ad_id ".$type_sql."ORDER BY time DESC ";
+
 	$res = $GLOBALS['db']->getAll($sql);
 	
 	foreach($audit_level_array AS $v){
@@ -356,37 +379,50 @@ function act_city_request($ad_id,$level,$is_cancel = 0)
 {
 	$city_id = get_city_id($ad_id);
 	$now_level_col = "lv_".$level;
-	$level = $level+1;
-	$next_level_col = "lv_".$level;
 	
-	$sql = "SELECT $now_level_col,$next_level_col FROM ".$GLOBALS['ecs']->table('city_request')." WHERE city_id = '$city_id' ";
+	$prev_level = $level - 1;
+	$prev_level_col = "lv_".$prev_level;
+	
+	$next_level = $level + 1;
+	$next_level_col = "lv_".$next_level;
+	
+	if($is_cancel){
+		$sql = "SELECT $now_level_col,$prev_level_col FROM ".$GLOBALS['ecs']->table('city_request')." WHERE city_id = '$city_id' ";
+	}else{
+		$sql = "SELECT $now_level_col,$next_level_col FROM ".$GLOBALS['ecs']->table('city_request')." WHERE city_id = '$city_id' ";
+	}
     $res = $GLOBALS['db']->getRow($sql);
 
-	$now_num = $res[$now_level_col] - 1; //当前等级减1
+	//print_r($res);
+	$now_num  = $res[$now_level_col] - 1; //当前等级减1
 	$next_num = $res[$next_level_col] + 1; //下一等级加1
+	$prev_num = $res[$prev_level_col] + 1; //下一等级加1
+	
+	
 	//更新city_request
-	if($is_cancel){ //不通过操作
+	if($is_cancel){ //不通过操作		
 		$sql_2 = "UPDATE " . $GLOBALS['ecs']->table('city_request') . 
-				 " SET $now_level_col = '$now_num'  WHERE city_id = '$city_id' ";
+				 " SET $now_level_col = '$now_num',$prev_level_col = '$prev_num'  WHERE city_id = '$city_id' ";
 	}else{
 		$sql_2 = "UPDATE " . $GLOBALS['ecs']->table('city_request') . 
 				 " SET $now_level_col = '$now_num',$next_level_col = '$next_num'  WHERE city_id = '$city_id' ";
 	}
+	//echo $sql_2;
 	$GLOBALS['db']->query($sql_2);
 	
 	//echo $now_level_col."-".$now_num."-".$next_level_col."-".$next_num."-"."<br>".$sql."<br>".$sql_2;
 	
 }
 
-
 /**/
-function getFull_ad_list($children,$limit = 0){
+function getFull_ad_list($children,$limit = 0,$r_title){
 	
 	$where = ' WHERE '. $children ;
 		
-	$sql = "SELECT a.*, ad.* ".
+	$sql = "SELECT a.*, ad.*, c.resource ".
 			" FROM ".$GLOBALS['ecs']->table('city') . " AS a ".
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = a.ad_id ". 
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS c ON c.cat_id = a.city_id ". 
 			
 			"$where ORDER BY a.ad_id DESC ";
 	//echo $sql;	 GROUP BY ad.ad_id
@@ -400,6 +436,8 @@ function getFull_ad_list($children,$limit = 0){
 			$res[$key]['lv_3'] = get_audit_note($val['ad_id'],3);
 			$res[$key]['lv_4'] = get_audit_note($val['ad_id'],4);
 			$res[$key]['lv_5'] = get_audit_note($val['ad_id'],5);
+			$res[$key]['resource_type'] = $r_title[$val['resource']];
+			//echo $res[$key]['ad_id']."-".$val['resource']."-".$res[$key]['resource_type']."<br>";
 		}
 	}
     return $res;
@@ -500,8 +538,8 @@ function get_project_list($user_rank){
 			$res[$key]['price_audit_count'] = 0; 	//价格审核通过数
 			$res[$key]['feedback_audit_count'] = 0;	//换画反馈通过数			
 		}
-		$res[$key]['end_time'] = date( 'Y-m-d',(strtotime($val['start_time']) + $val['duration_time'] * 86400 ));
-		
+		$res[$key]['end_time'] 	= date( 'Y-m-d',(strtotime($val['start_time']) + $val['duration_time'] * 86400 ));
+		$res[$key]['pic_count']	= $GLOBALS['db']->getOne("SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('project_picture')." WHERE project_id  =  $val[project_id]");
 	}
 	return $res;
 }
@@ -527,7 +565,8 @@ function get_project_city($children,$limit = 0){
 	$filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'inv_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-	$where = ' WHERE '. $children ." AND a.sys_level = 5 AND ad.audit_status > 2 AND ad.is_audit_confirm = 1 "; 
+	$where = ' WHERE '. $children ." AND a.sys_level = 5 AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 "; 
+	$where.= $_SESSION['user_rank'] > 1 ? " AND pr.req_id > 0 " : "" ;
 	// 最终通过的权限要求 ID
     if ($filter['county_name'])
     {
@@ -582,7 +621,8 @@ function get_project_city($children,$limit = 0){
     {
         $count_sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') ." AS a " . 
 					" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad').   " AS ad ON ad.city_id = a.cat_id ".
-				$where;
+					" LEFT JOIN " .$GLOBALS['ecs']->table('project_request').   " AS pr ON pr.city_id = a.cat_id  AND pr.ad_id  = ad.ad_id ".
+					" $where " ;
 		
     }
 
@@ -591,21 +631,24 @@ function get_project_city($children,$limit = 0){
 	
 	$request_title = "re.lv_".$_SESSION['user_rank'];
 	$limit_sql = $limit > 0 ? " LIMIT 0,$limit ": " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
+	$order_sql = $_SESSION['user_rank'] > 1 ? " ORDER BY t1 ASC " : " ORDER BY a.cat_id DESC";
 	
 	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, ". //
-			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region , ad.ad_id ".
+			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region , ad.ad_id, ad.is_price_change , ad.price_status ,ad.is_price_confirm , ".
+			" pr.req_id, pr.price, pr.price_amount, pr.request_price, pr.request_price_amount,  (ad.price_status - $_SESSION[user_rank]) AS t1 ".
 
 			" FROM ".$GLOBALS['ecs']->table('category') . " AS a ".
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ". 
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ". 
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad').   " AS ad ON ad.city_id = a.cat_id ".
+			" LEFT JOIN " .$GLOBALS['ecs']->table('project_request').   " AS pr ON pr.city_id = a.cat_id  AND pr.ad_id  = ad.ad_id ".
 			
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('city'). 		' AS c  ON c.city_id = a.cat_id '.
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad'). 	' AS ad ON ad.city_id = a.cat_id '.
-			"$where ORDER BY a.is_upload DESC, a.audit_status DESC ".
+			"$where $order_sql ".
 			$limit_sql;
-	//echo $sql;	 //GROUP BY ad.ad_id
+	//echo $sql;	 //GROUP BY ad.ad_id 
 	
 	$res = $GLOBALS['db']->getAll($sql);
 	foreach($res AS $key => $val)
@@ -627,21 +670,85 @@ function get_project_city($children,$limit = 0){
     return $arr;
 }
 
-function act_select_request_city($city_id,$is_add){
-	$final_ad =  get_final_ad($city_id);
+function act_select_request_city($project_id,$ad_id,$is_add){
+	$final_ad =  get_final_ad($ad_id);
 	if(count($final_ad)){
-		//$final_ad['col_'] =  ;//old_price
+		if($is_add){
+			$request_info['project_id'] = $project_id;
+			$request_info['user_id'] = $_SESSION['user_id'];
+			$request_info['price'] = $final_ad['col_30'] ; //['col_30'] = "每平米制作费"
+			$request_info['price_amount'] = $final_ad['col_32'] ; //['col_30'] = "每平米制作费"
+			$request_info['city_id'] = $final_ad['city_id'] ;
+			$request_info['ad_id'] = $final_ad['ad_id'];
+			
+			$request_info['request_price'] = ""; 	//以后需要填写 第一次不用填写
+			$request_info['request_price_amount'] = "";		//以后需要填写 第一次不用填写
+			$request_info['request_note'] = "";			//前两项有变化则填写
+			
+			
+			//$final_ad['col_31'] ; //['col_31'] = "安装费"
+			//$final_ad['col_32'] ; //['col_32'] = "制作费合计"
+		
+			
+			$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('project_request'), $request_info, 'INSERT');
+			
+		}else{
+			$GLOBALS['db']->query("DELETE FROM" . $GLOBALS['ecs']->table('project_request') . " WHERE city_id = $final_ad[city_id] AND ad_id = $final_ad[ad_id]");
+			$sql_2 = "UPDATE " . $GLOBALS['ecs']->table('city_ad') . 
+					 " SET is_price_change = 0,price_status = 0,is_price_confirm = 0 WHERE ad_id = '$final_ad[ad_id]' ";
+			$GLOBALS['db']->query($sql_2);
+			
+			
+		}
+		
 	}
 	
 	
 }
 
-function get_final_ad($city_id){
+function get_final_ad($ad_id){
 	$sql = "SELECT ad.*,c.* FROM ".$GLOBALS['ecs']->table('city_ad') . " AS ad ".
 	 		" LEFT JOIN " .$GLOBALS['ecs']->table('city') . " AS c ON c.ad_id = ad.ad_id ". 
-			" WHERE ad.city_id =  $city_id AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ";
+			" WHERE ad.ad_id =  $ad_id AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ";
 	$res =  $GLOBALS['db']->getRow($sql);
 	return $res;
+}
+
+
+function get_req_info($project_id,$ad_id){
+	$sql = "SELECT * FROM ".$GLOBALS['ecs']->table('project_request') .
+			" WHERE ad_id =  $ad_id AND project_id = $project_id ";
+	$res =  $GLOBALS['db']->getRow($sql);
+	return $res;
+}
+
+
+/**/
+function get_picture_list($project_id){
+	$ext_sql = $project_id ? " pic.project_id = $project_id " : " 1 " ;
+	
+	$sql = "SELECT p.*, pic.* ".
+			" FROM ".$GLOBALS['ecs']->table('project_picture') . " AS pic ".
+			" LEFT JOIN " .$GLOBALS['ecs']->table('project') . " AS p ON p.project_id = pic.project_id ". 
+			"WHERE $ext_sql ORDER BY pic.upload_time DESC ";
+	//echo $sql;//	 GROUP BY ad.ad_id
+	
+	$res = $GLOBALS['db']->getAll($sql);
+	foreach($res AS $key => $val){
+		$res[$key]['upload_time'] = date('Y-m-d',$val['upload_time']);
+		
+	}
+	return $res;
+}
+
+function get_picture_info($picture_id){
+	if($picture_id){
+		$sql = "SELECT * FROM ".$GLOBALS['ecs']->table('project_picture') .	" WHERE picture_id =  $picture_id ";
+		$res =  $GLOBALS['db']->getRow($sql);
+		return $res;
+	}else{
+		return false;
+	}
 }
 
 

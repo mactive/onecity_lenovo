@@ -90,9 +90,10 @@ ul.sp-results li.viewall.hover { background: url(../images/shortcuts_bg_foot_gre
 
 .cur_location {
 	padding:0px 0px 0px 0px;
+	margin:5px 0px;
 	height:22px;
+	width:750px;
 	min-width:200px;
-	_width:750px;
 	background:url(../images/cur_location_bg.png) left top no-repeat;
 }
 .cur_location .urhere{ float:left; line-height:24px;}

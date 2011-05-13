@@ -21,6 +21,10 @@ define('AUDIT_5',       5); //中央Leader central_leader
 define('CONTENT_COLS',       41); //中央Leader central_leader
 define('CITY_AD_LIMIT',       5); //中央Leader central_leader
 
+define('SMBIDEA',       1); //SMB-IDEA-SMB-IDEA
+define('IDEA',       	2); //IDEA-0-IDEA-0
+define('MIDHKAB',       3); //MIDH-KAB-SMB-IDEA
+
 
 
 /* 图片处理相关常数 */

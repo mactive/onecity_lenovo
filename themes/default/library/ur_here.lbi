@@ -1,5 +1,5 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <div class="cur_location">
-	<div class="urhere"><ul><li>{$lang.ur_here} </li>{$ur_here}</ul></div>
+	<div class="urhere"><ul><li class="none_chevron">{$lang.ur_here} </li>{$ur_here}</ul></div>
 	<div class="bgr"></div>
 </div>

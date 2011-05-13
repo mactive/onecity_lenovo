@@ -91,7 +91,7 @@
 			  </form>
 			</div>
 			{if $sm_session.user_rank == 5}
-			<div><a onclick="batch_audit()" class="confirm_btn">批量审核</a></div>
+			<div><a onclick="batch_audit()" class="batch_audit"></a></div>
 			{/if}
 			<form method="post" name="listForm"  onsubmit="return confirmSubmit(this)">
 			<!-- start crm list -->
@@ -124,7 +124,7 @@
 						<!--{if $sm_session.user_rank > 1}-->
 						<td>
 							{if $city.city_request > 0}
-							<a href="city_operate.php?act=city_ad_list&city_id={$city.cat_id}" target="_blank">
+							<a href="city_operate.php?act=city_ad_list&city_id={$city.cat_id}">								
 								<span class="red-color">{$city.city_request}条</span>待审
 							</a>{else}无待审核{/if}
 							
@@ -140,7 +140,7 @@
 						<td>{$city.photo_summary}</td>
 						<td>{$city.audit_status_summary}</td>
 						<td>{$city.audit_confirm_summary}</td>
-						<td><a href="city_operate.php?act=city_ad_list&city_id={$city.cat_id}" target="_blank">查看详情</a></td>
+						<td><a href="city_operate.php?act=city_ad_list&city_id={$city.cat_id}">查看详情</a></td>
 					</tr>
 			    <!--{/foreach}-->
 				</table>

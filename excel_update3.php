@@ -28,7 +28,6 @@ $xls->read($file_path);
 $all_sheets = $xls->sheets;
 $last_update = gmtime();
 
-$action_user = '王丽贤';
 
 $start_time = gmtime();
 $action_note = '批量入库';

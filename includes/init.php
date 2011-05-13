@@ -30,6 +30,8 @@ if (!file_exists(ROOT_PATH . 'data/install.lock') && !file_exists(ROOT_PATH . 'i
 
 /* 初始化设置 */
 @ini_set('memory_limit',          '64M');
+@ini_set('max_execution_time', 	  180);
+@ini_set('max_input_time', 	  	  180);
 @ini_set('session.cache_expire',  180);
 @ini_set('session.use_trans_sid', 0);
 @ini_set('session.use_cookies',   1);

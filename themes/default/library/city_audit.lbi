@@ -4,7 +4,7 @@
 
 <div class="upload_board" style="height:auto;float:left;">
 	
-<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+<form method="post" action="city_operate.php" name="theForm" id="theForm" enctype="multipart/form-data" onsubmit="return validate()">
   <table width="100%" border="0" cellspacing="0" class="table_standard">
 	<tr>
 		<td>已经上传照片</td>
@@ -30,42 +30,47 @@
       <td>&nbsp;</td>
       <td>
         <input type="hidden" name="ad_id" value="{$ad_info.ad_id}" />
+        <input type="hidden" name="confirm" id="confirm" value="0" />
         <input type="hidden" name="city_id" value="{$ad_info.city_id}" />
       	<input type="hidden" name="act" value="update_audit" />
-    	<input type="submit" class="input_s3 f_left" value="不通过" />
-		<a href="city_operate.php?act=update_audit&confirm=1&ad_id={$ad_id}&city_id={$ad_info.city_id}" class="cancel_lite_btn f_left" style="margin-left:20px;">通过审核</a>
+		<input type="submit" class="input_s3 f_left" value="不通过" />
+		<a onclick="update_audit()" class="cancel_lite_btn f_left" style="margin-left:20px;">通过审核</a> 
       </td>
     </tr>
 	{/if}
   </table>
 </form>
+</div>
+
 
 <script src="admin/js/validator.js" type="text/javascript"></script>
-<script language="JavaScript">
-
+<script type="text/javascript">
+function update_audit(){
+	document.getElementById('confirm').value = 1;
+	
+	if({$sm_session.user_rank} == 2){
+		var obj_2 = document.getElementById('col_23');
+		
+		if (obj_2.value == "")
+	    {
+	        alert("请填写媒体评分");
+	    }else{
+			document.getElementById("theForm").submit();
+			
+		}
+	}	
+	else{
+		document.getElementById("theForm").submit();
+	}
+}
 /**
  * 检查表单输入的数据
  */
 function validate()
 {
-	/*
-    validator = new Validator("theForm");
-	validator.required("audit_note",        "请填写不通过原因");
 	
-    validator.required("position_name",   posit_name_empty);
-    validator.required("ad_width",        ad_width_empty);
-    validator.required("ad_height",       ad_height_empty);
-    validator.isNumber("ad_width",        ad_width_number, true);
-    validator.isNumber("ad_height",       ad_height_number, true);
-    validator.required("position_style",  empty_position_style);
-
-    if (document.forms['theForm'].elements['ad_width'].value > 1024 || document.forms['theForm'].elements['ad_width'].value == 0)
-    {
-        alert(width_value);
-        return false;
-    }
-	*/
 	var obj = document.getElementById('audit_note');
+
     if (obj.value == "")
     {
         alert("请填写不通过原因");
@@ -74,23 +79,34 @@ function validate()
 	return true;
     //return validator.passed();
 }
-</script>
-</div>
+function validate2()
+{
+	
+	var obj_2 = document.getElementById('col_23');
 
+    if (obj_2.value == "")
+    {
+        alert("请填写媒体评分");
+        return false;
+    }
+	return true;
+    //return validator.passed();
+}
+</script>
 
 <!--权限大于1才可见，电通级别的可以编辑-->
 {if $sm_session.user_rank > 1}
 	{if $sm_session.user_rank == 2}
-		<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data">
+		<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate2()">
 		<!--{foreach from=$city_title key=k item=item }-->
 		<div class="city_info radius_5px">
 			<div class="f_left left_title left_radius_5px">{$item}</div>
 			<div class="f_left right_content">
 				<!--{if $k == "col_1" || $k == "col_2" || $k == "col_3" || $k == "col_4" || $k == "col_5"}-->
 					<span>{$ad_detail.$k}</span>
-					<input type="hidden" name="col[]" value="{$ad_detail.$k}" size="30" />
+					<input type="hidden" name="col[]" value="{$ad_detail.$k}" size="50" />
 				<!--{else}-->
-					<input type="text" name="col[]" value="{$ad_detail.$k}" size="30" />
+					<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="50" />
 					<span class="f_right"><a target="_blank"  class="grey666" href="city_operate.php?act=view_log&ad_id={$ad_detail.ad_id}&col_name={$k}">
 						修改记录</a></span>
 					
@@ -119,3 +135,6 @@ function validate()
 		<!--{/foreach}-->
 	{/if}
 {/if}
+
+
+

@@ -10,7 +10,7 @@
 	<!--{if $sm_session.user_rank == 1}-->
     <tr>
       <td>上传照片:</td>
-      <td><span class="green-color">请将照片大小控制在1M以内。</span></td>
+      <td><span class="green-color">请将单张照片大小控制在1M以内。</span></td>
     </tr>
 	
 	<tr>
