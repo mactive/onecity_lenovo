@@ -309,9 +309,9 @@ function get_price_info($ad_id = 0)
 
 
 
-function get_ad_photo_info($ad_id = 0){
+function get_ad_photo_info($ad_id = 0,$feedback = 0 ){
 	if($ad_id){
-		$photo_info = $GLOBALS['db']->getAll("SELECT * FROM " . $GLOBALS['ecs']->table('city_gallery') . " WHERE ad_id = $ad_id");
+		$photo_info = $GLOBALS['db']->getAll("SELECT * FROM " . $GLOBALS['ecs']->table('city_gallery') . " WHERE ad_id = $ad_id AND feedback = $feedback ");
 		return $photo_info;
 	}
 }
@@ -561,16 +561,21 @@ function get_project_city($children,$limit = 0){
     $filter['city_name'] = empty($_REQUEST['city_name']) ? '' : trim($_REQUEST['city_name']);
     $filter['region_name'] = empty($_REQUEST['region_name']) ? '' : trim($_REQUEST['region_name']);
     $filter['audit_status'] = empty($_REQUEST['audit_status']) ? 0 : $_REQUEST['audit_status'];
-	
+    $filter['project_id'] = empty($_REQUEST['project_id']) ? 0 : $_REQUEST['project_id'];
+    $filter['resource'] = empty($_REQUEST['resource']) ? 0 : $_REQUEST['resource'];
 	$filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'inv_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
-
-	$where = ' WHERE '. $children ." AND a.sys_level = 5 AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 "; 
-	$where.= $_SESSION['user_rank'] > 1 ? " AND pr.req_id > 0 " : "" ;
+	$quarter = "Q".$filter['project_id'];
+	$where = ' WHERE '. $children ." AND ad.is_audit_confirm = 1 AND ad.audit_status = 5 AND re.sys_level = 5 AND re.$quarter > 0 "; 
+	//$where.= $_SESSION['user_rank'] > 1 ? " AND re.req_id > 0 " : "" ;
 	// 最终通过的权限要求 ID
     if ($filter['county_name'])
     {
         $where .= " AND a.cat_name LIKE '%" . mysql_like_quote($filter['county_name']) . "%'";
+    }
+    if ($filter['resource'])
+    {
+        $where .= " AND re.$quarter = $filter[resource] ";
     }
 	if ($filter['city_name'])
     {
@@ -621,7 +626,7 @@ function get_project_city($children,$limit = 0){
     {
         $count_sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') ." AS a " . 
 					" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad').   " AS ad ON ad.city_id = a.cat_id ".
-					" LEFT JOIN " .$GLOBALS['ecs']->table('project_request').   " AS pr ON pr.city_id = a.cat_id  AND pr.ad_id  = ad.ad_id ".
+					" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource').   " AS re ON re.city_id = a.cat_id ".
 					" $where " ;
 		
     }
@@ -631,19 +636,20 @@ function get_project_city($children,$limit = 0){
 	
 	$request_title = "re.lv_".$_SESSION['user_rank'];
 	$limit_sql = $limit > 0 ? " LIMIT 0,$limit ": " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
-	$order_sql = $_SESSION['user_rank'] > 1 ? " ORDER BY t1 ASC " : " ORDER BY a.cat_id DESC";
+	$order_sql = " ORDER BY city.col_43 DESC ";
 	
 	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, ". //
 			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region , ad.ad_id, ad.is_price_change , ad.price_status ,ad.is_price_confirm , ".
-			" pr.req_id, pr.price, pr.price_amount, pr.request_price, pr.request_price_amount,  (ad.price_status - $_SESSION[user_rank]) AS t1 ".
-
+			//" pr.req_id, pr.price, pr.price_amount, pr.request_price, pr.request_price_amount,  (ad.price_status - $_SESSION[user_rank]) AS t1 ".
+			" city.col_19,city.col_32,city.col_42 AS change_price, city.col_43 AS board_price, re.resource, re.$quarter AS nowQ ".
 			" FROM ".$GLOBALS['ecs']->table('category') . " AS a ".
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ". 
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ". 
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad').   " AS ad ON ad.city_id = a.cat_id ".
-			" LEFT JOIN " .$GLOBALS['ecs']->table('project_request').   " AS pr ON pr.city_id = a.cat_id  AND pr.ad_id  = ad.ad_id ".
-			
+			" LEFT JOIN " .$GLOBALS['ecs']->table('city').   " AS city ON city.ad_id = ad.ad_id ".
+			" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource').  " AS re ON re.city_id = a.cat_id ".
+			//" LEFT JOIN " .$GLOBALS['ecs']->table('project_request').   " AS pr ON pr.city_id = a.cat_id  AND pr.ad_id  = ad.ad_id ".
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('city'). 		' AS c  ON c.city_id = a.cat_id '.
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad'). 	' AS ad ON ad.city_id = a.cat_id '.
 			"$where $order_sql ".

@@ -80,12 +80,7 @@
 						<td>
 						 搜索:
 					    	{$lang.region} <input name="region_name" type="text" id="region_name" size="10" value="{$region_name}" />&nbsp;&nbsp;&nbsp;
-					    	{$lang.county} <input name="county_name" type="text" id="county_name" size="10" value="{$county_name}" />&nbsp;&nbsp;&nbsp;
-							{$lang.resource_title} 
-							<select id="resource">
-						      	<option value='0'>{$lang.select_please}</option>
-								{html_options options=$lang.pic_type_select}
-							</select>
+					    	{$lang.county} <input name="county_name" type="text" id="county_name" size="10" value="{$county_name}" /> 
 						</td>
 
 					<td style="padding-left:30px;"><input type="submit" value="{$lang.button_search}" class="button" /> <input type="reset" value="重置" class="button" /></td>
@@ -99,41 +94,74 @@
 			<!-- start crm list -->
 			<div id="listDiv" class="table_div">
 			{/if}
-				
 				<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
 				    <tr>
-					  	<th>{$lang.resource_title}</th>
+					  	<th>选择和操作</th>
 					  	<th>{$lang.region}</th>
 				      	<th>{$lang.province}</th>
 				      	<th>{$lang.county}</th>
 				      	<th>{$lang.market_level}</th>
 						<th>最终通过</th>
-					  	<th>上报费用</th>
-					  	<th>实际成交费用</th>
-
+					  	<th>合同制作费用</th>
+					  	<th>申报费用</th>
+						<!--{foreach from=$audit_level_array item=level}-->
+					  	<th>{$lang.audit_level.$level}</th>
+						<!--{/foreach}-->
 				    </tr>
 				<!--{foreach from=$city_list item=city name=index_idea}-->
 					<tr>
-						<td class="center">{$lang.pic_type_select.$city.nowQ}</td>
+						<td>
+							{if $sm_session.user_rank == 1}
+							<div id="ad_div{$city.ad_id}">
+								{if $city.req_id}
+									<a onclick="select_request_city({$project_id},{$city.ad_id},0)"  class="unselect_city"></a>
+									<div class="f_left mar_l_5px">
+									<a href="city_project.php?act=request_ad_price&ad_id={$city.ad_id}&project_id={$project_id}" target="_blank">申请费用更改</a><br>
+									<a href="city_project.php?act=view_ad&ad_id={$city.ad_id}" target="_blank">查看审核记录</a>
+									</div>
+								{else}
+									<a onclick="select_request_city({$project_id},{$city.ad_id},1)"  class="select_city"></a>
+								{/if}
+							</div>
+							{else}
+								{if $city.request_price}
+								<a href="city_project.php?act=audit_price&ad_id={$city.ad_id}" target="_blank" class="audit_btn"></a>
+								{else}
+									{if $city.req_id}<span class="grey666">等待填写价格</span>{else}{/if}									
+								{/if}
+							{/if}
+						</td>
 						<td>{$city.region}</td>
 						<td>{$city.province}</td>
 						<td>{$city.county}</td>
 						<td>{$city.market_level}</td>
-						<td><a target="_blank" href="city_operate.php?act=view_ad&ad_id={$city.ad_id}">查看广告牌</a></td>
+						<td><a target="_blank" href="city_operate.php?act=view_price&ad_id={$city.ad_id}">查看广告牌</a></td>
 						<td>
-							{$lang.city_title.col_32}:{$city.col_32}</br>
-							{$lang.city_title.col_19}:{$city.col_19}
+							{if $city.req_id}
+							单:{$city.price}</br>
+							总:{$city.price_amount}{/if}
 						</td>
+						<td>{if $city.req_id}
+							单:{$city.request_price}</br>
+							总:{$city.request_price_amount}{/if}
+						</td>
+						<!--{foreach from=$audit_level_array item=level}-->
 						<td>
-							<!--{if $city.board_price}-->
-							{$lang.city_title.col_42}:{$city.change_price}</br>
-							{$lang.city_title.col_43}:{$city.board_price}
-							<!--{else}-->
-							<a href="填写价格">
-							<!--{/if}-->
-							
+							{if $city.price_status == $level}
+								{if $city.is_price_confirm}<a class="audit_confirm"></a>
+								{else}<a class="audit_cancel"></a>
+								{/if}
+							{else}
+								{if $city.price_status > $level}<a class="audit_confirm">
+								{else}
+									{if $level - $city.price_status == 1}
+										{if $city.price_status == 1 && $city.is_price_change}<a class="audit_idle"></a>{/if}
+										{if $city.is_price_confirm}<a class="audit_idle"></a>{else}{/if}
+									{/if}
+								{/if}
+							{/if}
 						</td>
-
+						<!--{/foreach}-->
 
 					</tr>
 			    <!--{/foreach}-->
@@ -177,7 +205,7 @@
 			  {
 			      listTable.filter['region_name'] = document.getElementById("region_name").value;
 			      listTable.filter['county_name'] = document.getElementById("county_name").value;
-			      listTable.filter['resource'] = document.getElementById("resource").value;
+			      //listTable.filter['audit_status'] = document.getElementById("audit_status").value;
 			      listTable.filter['page'] = 1;
 			      listTable.loadList();
 			  }

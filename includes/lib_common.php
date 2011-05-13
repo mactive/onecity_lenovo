@@ -4336,7 +4336,7 @@ function get_idea_list($filter)
  * @param   array   $image_descs
  * @return  void
  */
-function handle_ad_gallery_image($city_id,$ad_id, $image_files, $image_descs,$image_sorts,$img_ids)
+function handle_ad_gallery_image($city_id,$ad_id, $image_files, $image_descs,$image_sorts,$img_ids,$feedback = 0)
 {
     foreach ($image_descs AS $key => $img_desc)
     {
@@ -4402,8 +4402,8 @@ function handle_ad_gallery_image($city_id,$ad_id, $image_files, $image_descs,$im
 			           "img_original = '$img_original' ".
 			           "WHERE img_id = $img_id";
 			}else{
-				$sql = "INSERT INTO " . $GLOBALS['ecs']->table('city_gallery') . " (city_id, ad_id, img_url, img_desc, img_sort, thumb_url, img_original) " .
-	                    "VALUES ('$city_id','$ad_id', '$img_url', '$img_desc', '$img_sort', '$thumb_url', '$img_original')";
+				$sql = "INSERT INTO " . $GLOBALS['ecs']->table('city_gallery') . " (city_id, ad_id, img_url, img_desc, img_sort, thumb_url, img_original,feedback) " .
+	                    "VALUES ('$city_id','$ad_id', '$img_url', '$img_desc', '$img_sort', '$thumb_url', '$img_original','$feedback')";
 			}
 			//echo $sql."<br>";
 			$GLOBALS['db']->query($sql);

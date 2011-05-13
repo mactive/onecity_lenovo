@@ -59,7 +59,21 @@
 				<!-- #EndLibraryItem -->
 				
 			<!--{/if}-->
+			
+			<!--{if $act_step == "update_ad_info"}-->
+			
+				<!-- #BeginLibraryItem "/library/update_ad_info.lbi" -->
+				>
+				<!-- #EndLibraryItem -->
 				
+			<!--{/if}-->
+			
+			<!--{if $act_step == "upload_photo"}-->
+				
+				<!-- #BeginLibraryItem "/library/upload_project_photo.lbi" -->
+				>
+				<!-- #EndLibraryItem -->
+			<!--{/if}-->
 				
 				
 				
