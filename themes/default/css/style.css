@@ -513,6 +513,13 @@ a.write{
 	height:25px;
 	background:url(../images/order_ui_bg.png) no-repeat left -250px ;float:left;
 }
+a.open_modify{
+	display:block;
+	margin:10px 0px 10px 0px;
+	width:45px;
+	height:25px;
+	background:url(../images/order_ui_bg.png) no-repeat left -275px ;float:left;
+}
 a.take_agency_register{
 	display:block;
 	margin:0px 5px 5px 0px;

@@ -70,7 +70,6 @@
 			<!-- #EndLibraryItem -->
 		</div>
 		<div id="page-middle">
-
 			<div class="form-div">
 			  <form action="javascript:searchCRM()" name="searchForm">
 				<table width="80%" style="margin:10px auto;" class="table_standard table_border" border="1">
@@ -94,31 +93,34 @@
 				</table>
 			  </form>
 			</div>
-			<div class="yellow_notice">下面是所有最终过审的广告牌</div>
+			<div class="yellow_notice">下面是所有通过审核的广告牌</div>
+			
 			<form method="post" name="listForm"  onsubmit="return confirmSubmit(this)">
 			<!-- start crm list -->
 			<div id="listDiv" class="table_div">
 			{/if}
 				<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
 				    <tr>
-					  	<th>{$lang.resource_title}</th>
+					  	<th>{$lang.resource_title}<br>点击查看</th>
 					  	<th>{$lang.region}</th>
-				      	<th>{$lang.province}</th>
+				      	<th width="50">{$lang.province}</th>
 				      	<th>{$lang.county}</th>
 				      	<th>{$lang.market_level}</th>
-						<th>最终通过</th>
 					  	<th>上报费用</th>
 					  	<th>实际成交费用</th>
 					  	<th>上传效果</th>
+					  	<th>{$lang.audit_2}审核</th>
+						<th>操作</th>
 				    </tr>
 				<!--{foreach from=$city_list item=city name=index_idea}-->
 					<tr>
-						<td class="center">{$lang.pic_type_select.$city.nowQ}</td>
+						<td class="center">
+							{if $city.pic_view}<a href="{$city.pic_view}">{$lang.pic_type_select.$city.nowQ}</a>
+							{else}{$lang.pic_type_select.$city.nowQ}{/if}</td>
 						<td>{$city.region}</td>
 						<td>{$city.province}</td>
 						<td>{$city.county}</td>
 						<td>{$city.market_level}</td>
-						<td><a href="city_operate.php?act=view_ad&ad_id={$city.ad_id}">查看广告牌</a></td>
 						<td>
 							{$lang.city_title.col_32}:{$city.col_32}</br>
 							{$lang.city_title.col_19}:{$city.col_19}
@@ -128,16 +130,63 @@
 							{$lang.city_title.col_42}:{$city.change_price}</br>
 							{$lang.city_title.col_43}:{$city.board_price}
 							<!--{else}-->
-							<a class="write" href="city_project.php?act=update_ad_info&ad_id={$city.ad_id}"></a>
+									
+								<!--{if $sm_session.user_rank == 1}-->
+									<a class="write" href="city_project.php?act=update_ad_info&ad_id={$city.ad_id}"></a>
+								<!--{else}-->
+									等待填写
+								<!--{/if}-->						
 							<!--{/if}-->
+							
 							
 						</td>
 						<td>
 							<!--{if $city.board_price}-->
-							<a href="city_project.php?act=upload_photo&ad_id={$city.ad_id}">反馈换画效果</a>
+								<!--{if $sm_session.user_rank == 1}-->
+									<a href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}">反馈换画效果</a>
+								<!--{else}-->
+									<!--{if $city.upload_picture}-->
+									<a href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}">查看换画效果</a>
+									<!--{else}-->
+										<!--{if $city.board_price}-->
+										<a href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}">审核上传数据</a>
+										<!--{/if}-->								
+									<!--{/if}-->
+								<!--{/if}-->
 							<!--{/if}-->
 						</td>
+						<td>
+							<!--{if $city.audit_note}-->
+								<!--{if $city.audit_note == "审核通过"}-->
+								<a class="audit_confirm" href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}"></a>
+								<!--{else}-->
+								<a class="audit_cancel" href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}"></a>
+								<!--{/if}-->
+							<!--{else}-->
+								<!--{if $city.upload_picture}-->
+								<a class="audit_idle" href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}"></a>
+								<!--{else}-->
+									<!--{if $city.board_price}-->等待反馈画面
+									<!--{/if}-->								
+								<!--{/if}-->
+								
+							<!--{/if}-->
 
+						</td>
+						<td>
+							<!--{if $sm_session.user_rank == 4}-->
+								<!--{if $city.can_modify == 0}-->
+								<a href="city_project.php?act=open_modify&ad_id={$city.ad_id}" class="open_modify"></a>
+								<!--{else}-->
+								开启状态
+								<!--{/if}-->
+								
+							<!--{else}-->
+								<!--{if $city.audit_note != "审核通过" && $city.audit_note != "" && $city.upload_picture}-->
+								<br><a href="city_project.php?act=update_ad_info&ad_id={$city.ad_id}">修改</a>
+								<!--{/if}-->
+							<!--{/if}-->
+						</td>
 					</tr>
 			    <!--{/foreach}-->
 				</table>

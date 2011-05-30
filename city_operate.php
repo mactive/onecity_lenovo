@@ -108,7 +108,7 @@ if (!$smarty->is_cached('city_operate.dwt', $cache_id) && $act == 'show')
 	
 	$smarty->display('city_operate.dwt');	
 }
-/* query_show*/
+/* 响应页面内刷新 query_show*/
 elseif ($_REQUEST['act'] == 'query_show')
 {
 	$province = isset($_REQUEST['province'])   && intval($_REQUEST['province'])  > 0 ? intval($_REQUEST['province'])  : 0;   
@@ -136,6 +136,9 @@ elseif ($_REQUEST['act'] == 'query_show')
     make_json_result($smarty->fetch('city_operate.dwt'), '', array('filter' => $city_list['filter'], 'order_id' => $order_id , 'page_count' => $city_list['page_count'],'record_count' => $city_list['record_count'],'page_size' => $city_list['page_size']));
 	
 }
+/**
+ * 显示城市的 全部牌子列表
+ */
 elseif ($_REQUEST['act'] == 'city_ad_list')
 {
 	$city_id = isset($_REQUEST['city_id'])   && intval($_REQUEST['city_id'])  > 0 ? intval($_REQUEST['city_id'])  : 0;   
@@ -144,7 +147,10 @@ elseif ($_REQUEST['act'] == 'city_ad_list')
 
 	$smarty->display('city_view.dwt');	
 }
-//$smarty->display('city_operate.dwt', $cache_id);
+/**
+ * 删除excel导入的临时文件
+ * city_temp 为导入临时数据库
+ */
 elseif($_REQUEST['act'] == 'upload_panel')
 {
 	//删除临时文件
@@ -153,6 +159,9 @@ elseif($_REQUEST['act'] == 'upload_panel')
 	$smarty->display('city_upload.dwt');	
 	
 }
+/**
+ * 上传报表文件
+ */
 elseif($_REQUEST['act'] == 'upload_file')
 {
 	include_once(ROOT_PATH . 'includes/upload_file.php');
@@ -246,6 +255,9 @@ elseif($_REQUEST['act'] == 'upload_file')
 	
 	$smarty->display('city_upload.dwt');
 }
+/**
+ * 确认写入数据库
+ */
 elseif($_REQUEST['act'] == 'confirm_insert')
 {
 	$now = gmtime();
@@ -310,6 +322,7 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 					$tmp['ad_id'] = $GLOBALS['db']->insert_id();
 					$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $tmp, 'INSERT');
 				
+					echo "=============";
 					//更新分类信息 for 一城一牌
 					$sql = "UPDATE " . $GLOBALS['ecs']->table('category') . " SET is_upload = '1',  audit_status = '1'  WHERE cat_id = '$val[city_id]'";
 		        	$GLOBALS['db']->query($sql);
@@ -347,6 +360,9 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 	$smarty->display('city_upload.dwt');
 	
 }
+/**
+ * 取消写入 并清空自己的临时数据
+ */
 elseif($_REQUEST['act'] == 'cancel_insert')
 {
 	$now = gmtime();
@@ -367,7 +383,9 @@ elseif($_REQUEST['act'] == 'cancel_insert')
 	
 	
 }
-
+/**
+ * 添加编辑 广告牌子
+ */
 elseif($_REQUEST['act'] == 'edit_ad' || $_REQUEST['act'] == 'view_ad')
 {
 	$ad_id = isset($_REQUEST['ad_id']) && intval($_REQUEST['ad_id']) > 0 ? intval($_REQUEST['ad_id']) : 0;
@@ -402,6 +420,9 @@ elseif($_REQUEST['act'] == 'edit_ad' || $_REQUEST['act'] == 'view_ad')
 	$smarty->display('city_view.dwt');
 	
 }
+/**
+ * 更新牌子页面
+ */
 elseif($_REQUEST['act'] == 'update_ad')
 {
 	$city_content = make_city_content();
@@ -447,6 +468,9 @@ elseif($_REQUEST['act'] == 'update_ad')
 		show_message("修改成功", $_LANG['profile_lnk'], 'city_operate.php?act=edit_ad&ad_id='.$ad_id, 'info', true);       
 	}
 }
+/**
+ * 删除牌子
+ */
 elseif($_REQUEST['act'] == 'delete_ad')
 {	
 	include_once(ROOT_PATH . 'includes/cls_json.php');
@@ -461,10 +485,12 @@ elseif($_REQUEST['act'] == 'delete_ad')
 	$ad_info = get_ad_info($ad_id);
 	
 	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_delete'), $ad_detail, 'INSERT');
-	act_city_request($ad_id,$ad_info['audit_status'],1);
 	
 	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city') . "WHERE ad_id =  $ad_id ");
 	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city_ad') . "WHERE ad_id =  $ad_id ");
+	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city_gallery') . "WHERE ad_id =  $ad_id ");
+	
+	act_city_request($ad_id,$ad_info['audit_status'],1);
 	
 	
 	$message = "删除成功";
@@ -475,7 +501,9 @@ elseif($_REQUEST['act'] == 'delete_ad')
 	
 	
 }
-
+/**
+ * 查看牌子的 某一项的 修改记录
+ */
 elseif($_REQUEST['act'] == 'view_log')
 {
 	$ad_id = !empty($_REQUEST['ad_id']) ? intval($_REQUEST['ad_id']) : 0;
@@ -493,9 +521,9 @@ elseif($_REQUEST['act'] == 'view_log')
 	$smarty->display('city_view.dwt');
 	
 }
-
-
-/*审核人员*/
+/**
+ * 广告牌 审核界面
+ */
 elseif($_REQUEST['act'] == 'audit')
 {
 	$just_view =  !empty($_POST['just_view']) ? intval($_POST['just_view']) : 0;
@@ -525,7 +553,9 @@ elseif($_REQUEST['act'] == 'audit')
 	$smarty->display('city_view.dwt');
 	
 }
-
+/**
+ * 更新审核记录 写入数据库
+ */
 elseif($_REQUEST['act'] == 'update_audit')
 {
 	$ad_id =  !empty($_REQUEST['ad_id']) ? intval($_REQUEST['ad_id']) : 0;
@@ -569,8 +599,9 @@ elseif($_REQUEST['act'] == 'update_audit')
 }
 
 
-
-/*上传城市照片*/
+/**
+ * 上传城市照片
+ */
 elseif($_REQUEST['act'] == 'upload_photo')
 {
 	$ad_id = isset($_REQUEST['ad_id']) && intval($_REQUEST['ad_id']) > 0 ? intval($_REQUEST['ad_id']) : 0;
@@ -585,7 +616,9 @@ elseif($_REQUEST['act'] == 'upload_photo')
 	
 	$smarty->display('city_view.dwt');
 }
-
+/**
+ * 响应上传照片
+ */
 elseif($_REQUEST['act'] == "act_upload_photo")
 {
 	$ad_id  = empty($_REQUEST['ad_id']) ? 30 : $_REQUEST['ad_id'] ;
@@ -624,34 +657,9 @@ elseif($_REQUEST['act'] == "act_upload_photo")
 	act_city_request($ad_id,AUDIT_1);//更新请求库	
 	show_message("恭喜您,照片上传成功。", $_LANG['back_home_lnk'], "city_operate.php?act=city_ad_list&city_id=$ad_info[city_id]", 'info', true);
 }
-//删除照片
-elseif($_REQUEST['act'] == "delete_photo")
-{
-	
-}
-
-// 修改订单名字
-elseif ($_REQUEST['act'] == 'edit_order_name')
-{   
-	include_once(ROOT_PATH . 'includes/cls_json.php');
-	require_once(ROOT_PATH . 'admin/includes/lib_main.php');
-	
-    $order_id = intval($_POST['id']);
-    $order_name = json_str_iconv(trim($_POST['val']));
-
-	
-    if ($exc_order->edit("order_name = '$order_name'", $order_id))
-    {
-        clear_cache_files();
-		
-        make_json_result(stripslashes($order_name));
-
-    }
-	
-}
 
 /*------------------------------------------------------ */
-//-- 导出状态库存统计表
+//-- 导出报表
 /*------------------------------------------------------ */
 elseif($_REQUEST['act'] == 'export_db')
 {	
@@ -668,6 +676,7 @@ elseif($_REQUEST['act'] == 'export_db')
 			"lv_3"=>$_LANG['AUDIT']['3'],
 			"lv_4"=>$_LANG['AUDIT']['4'],
 			"lv_5"=>$_LANG['AUDIT']['5'],
+			"last_audit_time"=>"最终审核时间",
 			"resource_type"=>$_LANG['resource_title']);
 	$title = array_merge($city_title,$title_expend);
 	//print_r($title);
@@ -689,9 +698,14 @@ elseif($_REQUEST['act'] == 'export_db')
    	}
 
 }
-//中央leader
+/**
+ * 中央leader 批量审核
+ */
 elseif($_REQUEST['act'] == 'batch_audit')
 {
+	if($_SESSION['user_rank'] != 5){
+		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
+	}
 	include_once(ROOT_PATH . 'includes/cls_json.php');
 	
 	$json = new JSON;
@@ -729,67 +743,74 @@ elseif($_REQUEST['act'] == 'batch_audit')
 		make_json_result($str);		
 	}
 }
-
-/*统一整理数据*/
-
-elseif($_REQUEST['act'] == 'batch_recount')
+/**
+ * 动态确认率 显示页面
+ */
+elseif($_REQUEST['act'] == 'querenlv')
 {
-	if($_SESSION['user_id'] != 1){
+	if($_SESSION['user_rank'] < 4){
 		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
 	}
 	
-	$sql = "SELECT COUNT( * ) AS Rows , city_id FROM ".$GLOBALS['ecs']->table('city_ad')." GROUP BY city_id ORDER BY city_id ";
-    $res = $GLOBALS['db']->getAll($sql);
-	echo count($res);
-	foreach($res AS $k => $v){
-		$lv = array();
-		$lv['lv_1'] = 0;
-		$lv['lv_2'] = 0;
-		$lv['lv_3'] = 0;
-		$lv['lv_4'] = 0;
-		$lv['lv_5'] = 0;
-		$lv['lv_6'] = 0;
+	$sql = "SELECT COUNT( * ) AS  amount,col_1 FROM ".$GLOBALS['ecs']->table('city')." GROUP BY col_1 ORDER BY  amount DESC ";
+	$base = $GLOBALS['db']->getAll($sql);
+	//echo $sql."<br>";
+	foreach($base AS $key => $value){
 		
-		$sql_3 = "SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('city_ad'). " AS ad ".
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_gallery') . " AS g ON g.ad_id = ad.ad_id ". 
-			 	
-				" WHERE ad.city_id = $v[city_id] AND ad.audit_status = 1  AND ad.is_upload = 1 AND g.img_id > 0 ";
-		$tmp1 = $GLOBALS['db']->getOne($sql_3);
-		$lv['lv_2'] = $tmp1 / 4 ;
-		echo $sql_3."<br>";
+		$cat_id = get_cat_id_by_name($value['col_1']);
+		$children = get_city_children(array($cat_id));
 		
-		$sql = "SELECT audit_status FROM ".$GLOBALS['ecs']->table('city_ad')." WHERE city_id = $v[city_id] AND is_upload = 1 AND is_audit_confirm = 1 ";
-		$tt = $GLOBALS['db']->getAll($sql);
-		echo $sql."<br>";
-		
-
-
-	    foreach($tt AS $m){
-			switch($m['audit_status'])
-		    {
-		        case 2:
-		            $lv['lv_3'] += 1 ;
-		            break;
-				case 3:
-		            $lv['lv_4'] += 1 ;
-		            break;
-				case 4:
-		            $lv['lv_5'] += 1 ;
-		            break;
-				case 5:
-		            $lv['lv_6'] += 1 ;
-		            break;
-		    }
-		
+		$sql_5 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
+				" WHERE $children  AND a.market_level = 5 ";
+		//echo $sql_5;
+		$sql_5_plus = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city'). " AS c " .
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = c.ad_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS cat ON cat.cat_id = c.city_id ". 
+				" WHERE c.col_1 = '$value[col_1]'  AND cat.market_level = 5 ".
+				" AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ";
+				
+		$base[$key]['lv_5']['amount'] = $GLOBALS['db']->getOne($sql_5);
+		$base[$key]['lv_5']['confirm_amount'] = $GLOBALS['db']->getOne($sql_5_plus);
+		if(!empty($base[$key]['lv_5']['confirm_amount']) || !empty($base[$key]['lv_5']['amount'])){
+			$base[$key]['lv_5']['percent'] = round(($base[$key]['lv_5']['confirm_amount'] / $base[$key]['lv_5']['amount'] * 100),2);
 		}
-		print_r($lv) ;
-		echo "<br>";
 		
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_request'), $lv, 'update', "city_id='$v[city_id]'");
-
+		$sql_6 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
+				" WHERE $children  AND ( a.market_level LIKE'%6%'  OR a.market_level LIKE'%百强镇%' ) "; //
+		
+		$sql_6_plus = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city'). " AS c " .
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = c.ad_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS cat ON cat.cat_id = c.city_id ". 
+				" WHERE c.col_1 LIKE '$value[col_1]'  AND ( cat.market_level LIKE'%6%' OR cat.market_level LIKE'%百强镇%' ) ". // 
+				" AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ";
+		//echo $sql_6."<br>";
+		$base[$key]['lv_6']['amount'] = $GLOBALS['db']->getOne($sql_6);
+		$base[$key]['lv_6']['confirm_amount'] = $GLOBALS['db']->getOne($sql_6_plus);
+		$base[$key]['lv_6']['percent'] =round(($base[$key]['lv_6']['confirm_amount'] / $base[$key]['lv_6']['amount'] * 100),2);
+		
+		
+		
+		$sql_7 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
+				" WHERE $children  AND a.market_level LIKE'百强镇'";
+		
+		$sql_7_plus = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city'). " AS c " .
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = c.ad_id ". 
+				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS cat ON cat.cat_id = c.city_id ". 
+				" WHERE c.col_1 LIKE '$value[col_1]'  AND cat.market_level LIKE '百强镇'".
+				" AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ";
+				//echo $sql_7."<br>";
+		$base[$key]['lv_7']['amount'] = $GLOBALS['db']->getOne($sql_7);
+		$base[$key]['lv_7']['confirm_amount'] = $GLOBALS['db']->getOne($sql_7_plus);
+		if(!empty($base[$key]['lv_7']['confirm_amount']) || !empty($base[$key]['lv_7']['amount'])){
+			$base[$key]['lv_7']['percent'] =round(($base[$key]['lv_7']['confirm_amount'] / $base[$key]['lv_7']['amount'] * 100),2);
+		}
+		
+		
 	}
 	
+	$smarty->assign('data',   $base);
+	$smarty->display('city_view.dwt');
+	
 }
-
 
 ?>

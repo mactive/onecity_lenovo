@@ -10,7 +10,7 @@
 		<div class="audit_record">
 		<span class="grey999">{$item.time}</span><br />
 		<span class="grey666">{$item.real_name}</span><br />
-		<div style="padding:0px 5px;line-height:20px;" {if $item.audit_note == "审核通过"}class="bg_green radius_5px"{else}class="bg_red radius_5px"{/if}>
+		<div style="padding:0px 5px;line-height:20px;" {if $item.audit_note == "审核通过" }class="bg_green radius_5px"{else}class="bg_red radius_5px"{/if}>
 			{$item.audit_note}
 		</div>
 		</div>

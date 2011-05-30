@@ -73,10 +73,10 @@ require(ROOT_PATH . 'includes/lib_time.php');
 require(ROOT_PATH . 'includes/lib_common.php');
 require(ROOT_PATH . 'includes/lib_main.php');
 require(ROOT_PATH . 'includes/lib_insert.php');
-require(ROOT_PATH . 'includes/lib_goods.php');
-require(ROOT_PATH . 'includes/lib_article.php');
-require(ROOT_PATH . 'includes/lib_idea.php');
-require(ROOT_PATH . 'includes/lib_solution_operate.php');
+//require(ROOT_PATH . 'includes/lib_goods.php');
+//require(ROOT_PATH . 'includes/lib_article.php');
+//require(ROOT_PATH . 'includes/lib_idea.php');
+//require(ROOT_PATH . 'includes/lib_solution_operate.php');
 
 /* 对用户传入的变量进行转义操作。*/
 if (!get_magic_quotes_gpc())
@@ -169,13 +169,7 @@ if (!defined('INIT_NO_SMARTY'))
 	/* 全局变量 */
     $smarty->assign('lang', $_LANG);//语言项
 	$smarty->assign('img_path',   'themes/default/images/');     // 图片路径
-	$smarty->assign('rand',   '5');     // 图片路径
-	
-	$news_index = get_articlecat_subcat($_CFG['index_news_article_cat'],5,34,'DESC');
-	$smarty->assign('news_index',       $news_index);//首页滚动
-	
-	$smarty->assign('user_rank', $_LANG['user_rank']);
-    $smarty->assign('user_rank_name', $_LANG['user_rank_name']);
+
 	/* 全局变量 */
 	
 

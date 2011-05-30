@@ -1,12 +1,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <form method="post" action="city_project.php" name="theForm" enctype="multipart/form-data">
 <!--{foreach from=$picture_info key=key item=item }-->
-<div class="city_info radius_5px">
+<div class="city_info radius_5px" {if $key == "pic_thumb"}style="height:120px;"{/if}>
 	<div class="f_left left_title left_radius_5px">{$lang.$key}</div>
 	<div class="f_left right_content">
 			{if $key == "pic_thumb"}
+				{if  $act_step == "edit_picture"}<img src="{$picture_info.$key}" height="100"/>
+				<input type="hidden" name="{$key}" value="{$picture_info.$key}">
+				{/if}
 				<input type="file" name="user_upload_file[]"> &nbsp; {$lang.item_desc.$key}
-				{if  $act_step == "edit_picture"}<input type="hidden" name="{$key}" value="{$picture_info.$key}">{/if}
+				
 			{elseif $key == "upload_time"}
 					<input type="hidden" name="{$key}" value="{$picture_info.update_time}">系统时间
 			{elseif $key == "pic_type"}

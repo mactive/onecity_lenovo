@@ -22,7 +22,9 @@
 				<td><a href="{$item.file_url}">下载地址</a></td>
 				<td>{$item.upload_time}</td>
 				<td>
-					<a href="city_project.php?act=edit_picture&picture_id={$item.picture_id}">修改</a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="">删除</a>
+					<a href="city_project.php?act=view_picture&picture_id={$item.picture_id}">查看</a> &nbsp;&nbsp;|&nbsp;&nbsp;
+					<a href="city_project.php?act=edit_picture&picture_id={$item.picture_id}">修改</a> &nbsp;&nbsp;|&nbsp;&nbsp; 
+					<a href="city_project.php?act=delete_picture&picture_id={$item.picture_id}">删除</a>
 				</td>
 			</tr>
 		<!--{/foreach}-->

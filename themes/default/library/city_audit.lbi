@@ -11,7 +11,7 @@
 		<td>
 			<!--{foreach from=$photo_info item=item name=photo_info}-->
 				<div style="width:160px;height:160px;text-align:center;float:left;margin:10px;">
-				<a href="{$item.img_original}" target="_blank" class="city_photo"><img src="{$item.thumb_url}"></a>
+				<a href="{$item.img_url}" target="_blank" class="city_photo"><img src="{$item.thumb_url}"></a>
 				{$lang.city_photo.$item.img_sort}
 				</div>
 			<!--{/foreach}-->

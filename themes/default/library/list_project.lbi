@@ -1,5 +1,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<!--{if $sm_session.user_rank == 4}-->
 	<div style="height:25px;margin-top:10px;"><a href="city_project.php?act=add_project" class="add_project"></a></div>
+	<!--{/if}-->
 	<div class="facebox">
 		<table width="100%" class="table_border table_standard" border="1">
 		    <tr>
@@ -9,13 +11,17 @@
 		      	<th>{$lang.start_time}</th>
 			  	<th>{$lang.duration_time}</th>
 			  	<th>{$lang.city_list}</th>
-			  	<th>{$lang.ad_list}</th>
 			  	<th>{$lang.handler}</th>
 		    </tr>
 		<!--{foreach from=$project_list item=item}-->
 			<tr>
 				<td>{$item.project_name}</td>
-				<td>{$item.project_status}</td>
+				<td>{$item.project_status}
+					总计<span class="underline"> {$item.summary.city_count} </span>块牌子<br>
+					<!--{if $item.project_id == 1}--><span class="underline"> {$item.summary.write_complete} </span>块牌子已填写合同信息<br><!--{/if}-->
+					<span class="underline"> {$item.summary.upload} </span>块牌子已反馈效果<br>
+					<span class="underline"> {$item.summary.confirm} </span>块牌子换画已经通过审核
+				</td>
 				<td>{$item.project_note}</td>
 				<td>{$item.start_time}</td>
 				<td>
@@ -26,18 +32,15 @@
 					{else}
 						<a href="city_project.php?act=list_city_to_select&project_id={$item.project_id}" class="view_city"></a>
 					{/if}
-				</td>
-				<td><a href="city_project.php?act=list_picture&project_id={$item.project_id}">广告列表</a></td>
-				
+				</td>				
 				<td>
-					{if $sm_session.user_rank > 1}
-						<a href="city_project.php?act=edit_project&project_id={$item.project_id}">修改</a> &nbsp; | &nbsp;
-						
-					{else}
-						<a href="city_project.php?act=edit_project&project_id={$item.project_id}">修改</a> &nbsp; | &nbsp;
-						
+					{if $sm_session.user_rank == 4}
+						<a href="city_project.php?act=edit_project&project_id={$item.project_id}">修改</a> 
 					{/if}
 
+					{if $sm_session.user_rank == 2}
+						<a href="city_project.php?act=list_picture&project_id={$item.project_id}">广告列表</a>
+					{/if}
 				</td>
 			</tr>
 		<!--{/foreach}-->

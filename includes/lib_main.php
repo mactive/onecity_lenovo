@@ -1448,10 +1448,6 @@ function show_message($content, $link = '', $href = '', $type = 'info', $auto_re
 
     $GLOBALS['smarty']->assign('ur_here',    $position['ur_here']); // 当前位置
 
-    if (is_null($GLOBALS['smarty']->get_template_vars('helps')))
-    {
-        $GLOBALS['smarty']->assign('helps', get_shop_help()); // 网店帮助
-    }
 
     $GLOBALS['smarty']->assign('auto_redirect', $auto_redirect);
     $GLOBALS['smarty']->assign('message', $msg);

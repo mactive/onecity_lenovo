@@ -68,6 +68,14 @@
 				<!-- #EndLibraryItem -->
 				
 			<!--{/if}-->
+			
+			<!--{if $act_step == "view_picture" }-->
+			
+				<!-- #BeginLibraryItem "/library/view_picture.lbi" -->
+				>
+				<!-- #EndLibraryItem -->
+				
+			<!--{/if}-->
 				
 				
 				

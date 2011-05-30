@@ -4363,7 +4363,7 @@ function handle_ad_gallery_image($city_id,$ad_id, $image_files, $image_descs,$im
             $thumb_url = $GLOBALS['image']->make_thumb($image_files['tmp_name'][$key], $GLOBALS['_CFG']['thumb_width'],  $GLOBALS['_CFG']['thumb_height']);
             $thumb_url = is_string($thumb_url) ? $thumb_url : '';
 
-			$img_url = $GLOBALS['image']->make_thumb($image_files['tmp_name'][$key], 1280,  1024);
+			$img_url = $GLOBALS['image']->make_thumb($image_files['tmp_name'][$key], 1024,  768);
             $img_url = is_string($img_url) ? $img_url : '';
 
             $upload = array(
@@ -4376,7 +4376,7 @@ function handle_ad_gallery_image($city_id,$ad_id, $image_files, $image_descs,$im
             {
                 $upload['error'] = $image_files['error'][$key];
             }
-            $img_original = $GLOBALS['image']->upload_image($upload);
+            $img_original = "";//$GLOBALS['image']->upload_image($upload);
 
             /* 如果服务器支持GD 则添加水印
             if (gd_version() > 0)

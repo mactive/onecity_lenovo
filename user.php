@@ -78,7 +78,6 @@ if (in_array($action, $ui_arr))
     {
         $smarty->assign('show_transform_points',     1);
     }
-    $smarty->assign('helps',      get_shop_help()); // 网店帮助
     $smarty->assign('action',     $action);
     $smarty->assign('lang',       $_LANG);
 }else{
