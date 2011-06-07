@@ -107,7 +107,7 @@
 				      	<th>{$lang.county}</th>
 				      	<th>{$lang.market_level}</th>
 					  	<th>上报费用</th>
-					  	<th>实际成交费用</th>
+					  	<th>填写</th>
 					  	<th>上传效果</th>
 					  	<th>{$lang.audit_2}审核</th>
 						<th>操作</th>
@@ -122,35 +122,33 @@
 						<td>{$city.county}</td>
 						<td>{$city.market_level}</td>
 						<td>
-							{$lang.city_title.col_32}:{$city.col_32}</br>
-							{$lang.city_title.col_19}:{$city.col_19}
+							{$lang.city_title.col_19}:{$city.col_19}</br>
+							{$lang.city_title.col_20}:{$city.col_20}
+							
 						</td>
 						<td>
-							<!--{if $city.board_price}-->
-							{$lang.city_title.col_42}:{$city.change_price}</br>
-							{$lang.city_title.col_43}:{$city.board_price}
-							<!--{else}-->
-									
-								<!--{if $sm_session.user_rank == 1}-->
-									<a class="write" href="city_project.php?act=update_ad_info&ad_id={$city.ad_id}"></a>
+
+								<!--{if $city.can_modify == 1 }-->
+									<!--{if $sm_session.user_rank == 1}-->
+										<a class="write" href="city_project.php?act=update_ad_info&ad_id={$city.ad_id}"></a>
+									<!--{else}-->
+										等待填写
+									<!--{/if}-->
 								<!--{else}-->
-									等待填写
+										已经填写									
 								<!--{/if}-->						
-							<!--{/if}-->
-							
-							
 						</td>
 						<td>
-							<!--{if $city.board_price}-->
+							<!--{if $city.can_modify == 0}-->
 								<!--{if $sm_session.user_rank == 1}-->
+									<!--{if $city.audit_note != "审核通过"}-->
 									<a href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}">反馈换画效果</a>
+									<!--{else}-->
+									<a href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}">查看换画效果</a>
+									<!--{/if}-->
 								<!--{else}-->
 									<!--{if $city.upload_picture}-->
 									<a href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}">查看换画效果</a>
-									<!--{else}-->
-										<!--{if $city.board_price}-->
-										<a href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}">审核上传数据</a>
-										<!--{/if}-->								
 									<!--{/if}-->
 								<!--{/if}-->
 							<!--{/if}-->
@@ -160,13 +158,18 @@
 								<!--{if $city.audit_note == "审核通过"}-->
 								<a class="audit_confirm" href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}"></a>
 								<!--{else}-->
-								<a class="audit_cancel" href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}"></a>
+									<!--{if $city.can_modify == 0}-->
+									<a class="audit_idle" href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}"></a>
+									<!--{else}-->
+									<a class="audit_cancel" href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}"></a>
+									<!--{/if}-->
+									
 								<!--{/if}-->
 							<!--{else}-->
 								<!--{if $city.upload_picture}-->
 								<a class="audit_idle" href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}"></a>
 								<!--{else}-->
-									<!--{if $city.board_price}-->等待反馈画面
+									<!--{if $city.can_modify == 0}-->等待反馈画面
 									<!--{/if}-->								
 								<!--{/if}-->
 								
@@ -182,8 +185,12 @@
 								<!--{/if}-->
 								
 							<!--{else}-->
-								<!--{if $city.audit_note != "审核通过" && $city.audit_note != "" && $city.upload_picture}-->
-								<br><a href="city_project.php?act=update_ad_info&ad_id={$city.ad_id}">修改</a>
+								<!--{if $city.audit_note != "审核通过" && $city.audit_note != ""  && $city.can_modify == 2 && $sm_session.user_rank == 1 }-->
+								<a href="city_project.php?act=update_ad_info&ad_id={$city.ad_id}">修改</a>
+								<!--{else}-->
+									<!--{if $city.can_modify == 0}-->								
+									<a href="city_project.php?act=update_ad_info&ad_id={$city.ad_id}">查看</a>
+									<!--{/if}-->
 								<!--{/if}-->
 							<!--{/if}-->
 						</td>

@@ -17,7 +17,7 @@
 				<td>{$item.picture_id}</td>
 				<td>{$item.pic_name}</td>
 				<td>{$item.pic_note}</td>
-				<td><img src="{$item.pic_thumb}" height="100" width="100"></td>
+				<td><img src="{$item.pic_thumb}" height="100" ></td>
 				<td>{$lang.pic_type_select.$item.pic_type}</td>
 				<td><a href="{$item.file_url}">下载地址</a></td>
 				<td>{$item.upload_time}</td>

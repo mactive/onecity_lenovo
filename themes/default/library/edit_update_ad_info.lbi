@@ -1,0 +1,57 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="yellow_notice" style="text-align:center;">{$upload_message}</div>
+
+<!--{if $ad_info.is_audit_confirm == 1 && $ad_info.audit_status == 5 }-->
+	<form method="post" action="city_project.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+	<!--{foreach from=$city_title key=k item=item }-->
+	<div class="city_info radius_5px">
+		<div class="f_left left_title left_radius_5px">{$item}</div>
+		<div class="f_left right_content">			
+			<!--{if ($k == "col_28" || $k == "col_29" || $k == "col_42" || $k == "col_43" || $k == "col_44")}-->
+				<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="50" style="background:#fffead;"/>
+			<!--{else}-->
+				<span>{$ad_detail.$k}</span>
+				<input type="hidden" name="col[]" value="{$ad_detail.$k}" />
+			<!--{/if}-->
+		</div>	
+		<div class="clear"></div>
+	</div>
+	<!--{/foreach}-->
+	
+	<div style="width:500px;float:left;">
+		<input type="hidden" name="act" value="act_update_ad_info" />
+		<input type="hidden" name="ad_id" value="{$ad_detail.ad_id}" />	
+		<input type="hidden" name="project_id" value="1" />	
+		<input type="submit" class="submitidea_btn" value="{$lang.button_submit}" />
+	</div>
+	
+	</form>
+<!--{/if}-->
+
+
+<script type="text/javascript">
+/**
+ * 检查表单输入的数据
+ */
+function validate()
+{
+	var col_28 = document.getElementById('col_28');
+	var col_29 = document.getElementById('col_29');
+	var col_42 = document.getElementById('col_42');
+	var col_43 = document.getElementById('col_43');
+	var col_44 = document.getElementById('col_44');
+	
+    if (col_28.value == "" || col_29.value == "" || col_42.value == "" || col_43.value == "" || col_44.value == "")
+    {
+        alert("请确认黄色背景的输入框都已经填写");
+        return false;
+    }
+
+	var con = confirm("只有一次填写机会，请确认填写和修改的数据无错误");
+	if(con == true){
+		return true;
+	}
+	
+    //return validator.passed();
+}
+</script>

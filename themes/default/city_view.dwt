@@ -126,6 +126,12 @@
 				<!--{/if}-->
 				
 				
+				<!--{if $act_step == "export_page"}-->
+				<!-- #BeginLibraryItem "/library/export_page.lbi" -->
+				>
+				<!-- #EndLibraryItem -->
+				<!--{/if}-->
+				
 				
 				
 

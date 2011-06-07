@@ -308,25 +308,29 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 			else{
 				$city_ad_num = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('city') . " WHERE city_id = $val[city_id]");
 				//echo "**city_ad_num - $city_ad_num - insert<br>";
+				$city_confirm_ad_num = get_city_confirm_ad_num($val['city_id']);
 			
 				if(CITY_AD_LIMIT - $city_ad_num > 0)
 				{
-				//echo "**insert<br>";
-								
-					$tmp = $val;
-					$tmp['city_name'] = $val['col_3'];
-					$tmp['is_upload'] = 1; //要等上传完照片
-					$tmp['audit_status'] = 1;
-					$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $tmp, 'INSERT');
-				
-					$tmp['ad_id'] = $GLOBALS['db']->insert_id();
-					$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $tmp, 'INSERT');
-				
-					echo "=============";
-					//更新分类信息 for 一城一牌
-					$sql = "UPDATE " . $GLOBALS['ecs']->table('category') . " SET is_upload = '1',  audit_status = '1'  WHERE cat_id = '$val[city_id]'";
-		        	$GLOBALS['db']->query($sql);
-					
+					if($city_confirm_ad_num == 1){
+						$issue = $val;
+						$issue['temp_status'] = "该城市已经有通过的牌子,不可以再上传新的";
+						array_push($problem_array,$issue);
+					}else{
+						$tmp = $val;
+						$tmp['city_name'] = $val['col_3'];
+						$tmp['is_upload'] = 1; //要等上传完照片
+						$tmp['audit_status'] = 1;
+						$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $tmp, 'INSERT');
+
+						$tmp['ad_id'] = $GLOBALS['db']->insert_id();
+						$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $tmp, 'INSERT');
+
+						echo "=============";
+						//更新分类信息 for 一城一牌
+						$sql = "UPDATE " . $GLOBALS['ecs']->table('category') . " SET is_upload = '1',  audit_status = '1'  WHERE cat_id = '$val[city_id]'";
+			        	$GLOBALS['db']->query($sql);
+					}
 				}else{
 					$issue = $val;
 					$issue['temp_status'] = "5条上限已经满";
@@ -478,11 +482,11 @@ elseif($_REQUEST['act'] == 'delete_ad')
 	$json = new JSON;
     $filters = $json->decode($_GET['JSON']);
 	$ad_id = $filters->ad_id;
-	
-	//$ad_id = isset($_REQUEST['ad_id']) && intval($_REQUEST['ad_id']) > 0 ? intval($_REQUEST['ad_id']) : 0;
-	
+		
 	$ad_detail = get_city_info($ad_id);
 	$ad_info = get_ad_info($ad_id);
+	$city_id = get_city_id($ad_id);
+	//echo "ad_id".$ad_id;
 	
 	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_delete'), $ad_detail, 'INSERT');
 	
@@ -490,7 +494,7 @@ elseif($_REQUEST['act'] == 'delete_ad')
 	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city_ad') . "WHERE ad_id =  $ad_id ");
 	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city_gallery') . "WHERE ad_id =  $ad_id ");
 	
-	act_city_request($ad_id,$ad_info['audit_status'],1);
+	act_city_request_delete($city_id,$ad_info['audit_status'],1);
 	
 	
 	$message = "删除成功";
@@ -582,7 +586,7 @@ elseif($_REQUEST['act'] == 'update_audit')
 		$audit_status = $cat_info['audit_status'] + 1; //上一级别可看
 		$sql = "UPDATE " . $GLOBALS['ecs']->table('category') . " SET audit_status = '$audit_status'  WHERE cat_id = '$city_id'";
         $GLOBALS['db']->query($sql);
-		act_city_request($ad_id,$_SESSION['user_rank']);//更新请求库	
+		act_city_request($city_id,$_SESSION['user_rank']);//更新请求库	
 		
 		show_message("审核通过,其他人会看到。", $_LANG['back_home_lnk'], $return_url, 'info', true);
 		
@@ -591,7 +595,7 @@ elseif($_REQUEST['act'] == 'update_audit')
 		$cat_info['audit_status'] = $_SESSION['user_rank'];
 		$cat_info['is_audit_confirm'] = 0;
 		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $cat_info, 'UPDATE', "ad_id = '$ad_id'");
-		act_city_request($ad_id,$_SESSION['user_rank'],1);//更新请求库	
+		act_city_request($city_id,$_SESSION['user_rank'],1);//更新请求库	
 		
 		show_message("审核信息已经提交。", $_LANG['back_home_lnk'], $return_url, 'info', true);
 		//$smarty->display('city_view.dwt');
@@ -654,19 +658,56 @@ elseif($_REQUEST['act'] == "act_upload_photo")
 	//算是完整上传
 	//$sql = "UPDATE " . $GLOBALS['ecs']->table('city_ad') . " SET is_upload = '1'  WHERE ad_id = '$ad_id'";
     //$GLOBALS['db']->query($sql);
-	act_city_request($ad_id,AUDIT_1);//更新请求库	
+	
+	act_city_request($ad_info['city_id'],AUDIT_1);//更新请求库	
 	show_message("恭喜您,照片上传成功。", $_LANG['back_home_lnk'], "city_operate.php?act=city_ad_list&city_id=$ad_info[city_id]", 'info', true);
 }
 
+elseif($_REQUEST['act'] == 'export_page')
+{
+	//分区
+	$region_array = get_region_array();
+	$smarty->assign('region_array', $region_array);
+	
+	//城市级别
+	$market_level_array = get_market_level_array();
+	$smarty->assign('market_level_array', $market_level_array);
+	
+	//审核状态
+	$audit_status_array = get_audit_status_array();
+	$smarty->assign('audit_status_array', $audit_status_array);
+	
+	
+	//market_level_array
+	//audit_status_array
+	$smarty->display('city_view.dwt');
+}
 /*------------------------------------------------------ */
 //-- 导出报表
 /*------------------------------------------------------ */
 elseif($_REQUEST['act'] == 'export_db')
 {	
-	$children = get_city_children_a($user_region);
-	$limit = 2500;
+	$region 		= empty($_REQUEST['region']) ? "0" : intval($_REQUEST['region']);
+	$market_level 	= empty($_REQUEST['market_level']) ? "" : trim($_REQUEST['market_level']);
+	$audit_status 	= empty($_REQUEST['audit_status']) ? "" : trim($_REQUEST['audit_status']);
+	$resource 		= empty($_REQUEST['resource']) ? "" : intval($_REQUEST['resource']);
+    
+	$start_time = empty($_REQUEST['start_time']) ? '0' : trim($_REQUEST['start_time']);
+    $end_time   = empty($_REQUEST['end_time']) ? '0' : trim($_REQUEST['end_time']);
 
-    $ad_list = getFull_ad_list($children,$limit,$_LANG['resource']);
+
+	if($region){
+		$temp = array($region);
+		$children = get_city_children_a($temp);
+		
+	}else{
+		$children = get_city_children_a($user_region);
+	}	
+	
+	$limit = 2500;
+	$r_title = $_LANG['resource'];
+
+    $ad_list = getFull_ad_list($children,$market_level,$audit_status,$resource,$start_time,$end_time,$r_title,$limit);
 	
 	$file_name = "Report_".$_SESSION['user_name']."_".local_date('Y-m-d-H-i-s', gmtime());
 
@@ -680,7 +721,9 @@ elseif($_REQUEST['act'] == 'export_db')
 			"resource_type"=>$_LANG['resource_title']);
 	$title = array_merge($city_title,$title_expend);
 	//print_r($title);
-		
+	
+	//echo "count_data:".count($ad_list);
+	
 	$tt = excel_write_with_sub_array($file_name,$title,$ad_list,'city');		
 	
 	//print_r($title);	
@@ -691,7 +734,7 @@ elseif($_REQUEST['act'] == 'export_db')
 		$link[0]['text'] = '下载地址';
 	    $link[0]['href'] = 'city_operate.php?act=show';
 
-		$link[1]['text'] = '请下载报表';
+		$link[1]['text'] = '请下载报表.'."共".count($ad_list)."条数据";
 	    $link[1]['href'] = 'xls/city/'.$file_name.'.xls';
 	
 	    show_message($link[1]['text'], $link[0]['text'], $link[1]['href'], 'info',false);
@@ -725,7 +768,7 @@ elseif($_REQUEST['act'] == 'batch_audit')
 		$audit_status = $cat_info['audit_status'] + 1; //上一级别可看
 		$sql = "UPDATE " . $GLOBALS['ecs']->table('category') . " SET audit_status = '$audit_status'  WHERE cat_id = '$val[city_id]'";
         $GLOBALS['db']->query($sql);
-		act_city_request($val['ad_id'],$_SESSION['user_rank']);//更新请求库
+		act_city_request($val['city_id'],$_SESSION['user_rank']);//更新请求库
 		
 		/* 写入审核历史数据库*/
 		$audit_info = array();

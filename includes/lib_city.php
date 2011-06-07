@@ -7,17 +7,9 @@ function get_city_children($arr)
 		//$tt = array_merge(array($val), array_keys(cat_list($val, 0, false)));
 		$tt =  array_keys(cat_list($val, 0, false));
 		$all_array  = array_merge($all_array,$tt);
-		/*
-		echo "<br>".count($tt)."<br>";
-		print_r($tt);
-		echo "<br><br>==============<br><br>";
-		*/
+
 	}
-	/*
-	echo "<br><br>==============<br><br>";
-	echo "<br>".count($all_array)."<br>";
-	print_r($all_array);
-	*/
+
 	return 'a.cat_id ' . db_create_in(array_unique($all_array));		
 	
 }
@@ -328,19 +320,20 @@ function get_ad_info($ad_id = 0)
 }
 
 
-function get_price_info($ad_id = 0)
-{
-	if($ad_id){
-		$price_info = $GLOBALS['db']->getRow("SELECT * FROM " . $GLOBALS['ecs']->table('project_request') . " WHERE ad_id = $ad_id");
-		return $price_info;
-	}
-}
+
 
 
 
 function get_ad_photo_info($ad_id = 0,$project = 0 ){
 	if($ad_id){
 		$photo_info = $GLOBALS['db']->getAll("SELECT * FROM " . $GLOBALS['ecs']->table('city_gallery') . " WHERE ad_id = $ad_id AND feedback = $project ");
+		return $photo_info;
+	}
+}
+//最新的审核记录
+function get_last_audit_note($ad_id,$project){
+	if($ad_id){
+		$photo_info = $GLOBALS['db']->getOne("SELECT audit_note FROM " . $GLOBALS['ecs']->table('city_ad_audit') . " WHERE ad_id = $ad_id AND feedback_audit = $project  ORDER BY record_id DESC limit 1 ");
 		return $photo_info;
 	}
 }
@@ -426,9 +419,25 @@ function get_sys_level($city_id)
 	return $res;
 }
 
-function act_city_request($ad_id,$level,$is_cancel = 0)
+/*删除之后更新数据*/
+function act_city_request_delete($city_id,$level,$is_delete = 0){
+	if($is_delete){
+		$next_level = $level + 1;
+		$next_level_col = "lv_".$next_level;
+		$sql = "SELECT $next_level_col FROM ".$GLOBALS['ecs']->table('city_request')." WHERE city_id = '$city_id' ";
+		$res = $GLOBALS['db']->getOne($sql);
+		//echo $sql."<br>";
+		
+		$next_num  = $res - 1;
+	    	$sql_2 = "UPDATE " . $GLOBALS['ecs']->table('city_request') . 
+					 " SET $next_level_col = '$next_num' WHERE city_id = '$city_id' ";
+		//echo $sql_2."<br>";
+		$GLOBALS['db']->query($sql_2);
+	}
+}
+
+function act_city_request($city_id,$level,$is_cancel = 0)
 {
-	$city_id = get_city_id($ad_id);
 	$now_level_col = "lv_".$level;
 	
 	$prev_level = $level - 1;
@@ -442,6 +451,7 @@ function act_city_request($ad_id,$level,$is_cancel = 0)
 	}else{
 		$sql = "SELECT $now_level_col,$next_level_col FROM ".$GLOBALS['ecs']->table('city_request')." WHERE city_id = '$city_id' ";
 	}
+	//echo $sql;
     $res = $GLOBALS['db']->getRow($sql);
 
 	//print_r($res);
@@ -458,7 +468,7 @@ function act_city_request($ad_id,$level,$is_cancel = 0)
 		$sql_2 = "UPDATE " . $GLOBALS['ecs']->table('city_request') . 
 				 " SET $now_level_col = '$now_num',$next_level_col = '$next_num'  WHERE city_id = '$city_id' ";
 	}
-	//echo $sql_2;
+	//echo $sql_2."<br>";
 	$GLOBALS['db']->query($sql_2);
 	
 	//echo $now_level_col."-".$now_num."-".$next_level_col."-".$next_num."-"."<br>".$sql."<br>".$sql_2;
@@ -466,17 +476,58 @@ function act_city_request($ad_id,$level,$is_cancel = 0)
 }
 
 /**/
-function getFull_ad_list($children,$limit = 0,$r_title){
+function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_time,$end_time,$r_title,$limit = 0){
 	
 	$where = ' WHERE '. $children ;
-		
+	
+    if ($resource)
+    {
+        $where .= " AND c.resource = $resource ";
+    }
+	if ($market_level)
+    {
+        $where .= " AND c.market_level LIKE '%" . mysql_like_quote($market_level) . "%'";
+    }
+
+    if ($audit_status)
+    {
+    
+		switch($audit_status)
+	    {
+	        case 'leader未审核':
+				$where .= " AND ad.audit_status = 4 AND ad.is_audit_confirm = 1 ";
+	        	$where .= " AND au.audit_note LENGTH($audit_status) = 0 ";
+	            break;
+			case '审核通过':
+				$where .= " AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 AND au.user_rank = 5 ";
+        		$where .= " AND au.audit_note LIKE '" . mysql_like_quote($audit_status) . "'";
+	            break;
+			case '审核不通过':
+				$where .= " AND ad.audit_status = 5 AND ad.is_audit_confirm = 0 AND au.user_rank = 5 ";
+        		$where .= " AND au.audit_note NOT LIKE '审核通过'  AND  au.audit_note NOT LIKE '已被其他客户采购' ";
+	            break;
+			case '已被其他客户采购':
+				$where .= " AND ad.audit_status = 5 AND ad.is_audit_confirm = 0 AND au.user_rank = 5 ";
+        		$where .= " AND au.audit_note LIKE '" . mysql_like_quote($audit_status) . "'";
+	            break;
+	    }
+	
+    }
+
+    if ($start_time && $end_time)
+    {
+        $where .= " AND au.time > '$start_time' AND au.time < '$end_time' ";
+    }
+
+	
 	$sql = "SELECT a.*, ad.*, c.resource ".
 			" FROM ".$GLOBALS['ecs']->table('city') . " AS a ".
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = a.ad_id ". 
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS c ON c.cat_id = a.city_id ". 
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') . " AS au ON au.ad_id = a.ad_id ". 
 			
-			"$where ORDER BY a.ad_id DESC ";
-	//echo $sql;	 GROUP BY ad.ad_id
+			"$where GROUP BY a.ad_id ORDER BY a.ad_id DESC ";
+	//echo $sql."<br>";	 //
 	
 	$res = $GLOBALS['db']->getAll($sql);
 	foreach($res AS $key => $val)
@@ -533,6 +584,7 @@ function excel_write_with_sub_array($_name,$title = array(),$data = array(),$sub
 	}
 	
 	/*按照 title 组织内容*/
+	
 	foreach($data AS $key => $val){
 		$excel->writeRow();
 		foreach($title AS $k => $v){
@@ -607,15 +659,15 @@ function get_project_summary($project_id,$children){
 	$res['city_count'] = $GLOBALS['db']->getOne($sql_0);
 	
 	
-	$quarter_1 = " re.Q".$project_id;
-	$sql_1 = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('city') ." AS c ".
-			" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') ." AS re ON re.city_id = c.city_id ". 
-			 " WHERE $quarter_1 > 0  AND c.col_43 > 0";
+	$quarter_1 = " AND re.Q".$project_id;
+	$sql_1 = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('city') ." AS a ".
+			" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') ." AS re ON re.city_id = a.city_id ". 
+			 " WHERE $children $quarter_1 > 0  AND a.col_43 > 0";
 	
 	
-	$sql_2 = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('city_gallery') ." AS g ".
-			 //" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') ." AS re ON re.city_id = g.city_id ". 
-			 " WHERE g.feedback = $project_id  ";
+	$sql_2 = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('city') ." AS a ".
+			 " LEFT JOIN " .$GLOBALS['ecs']->table('city_gallery') ." AS g ON g.city_id = a.city_id ". 
+			 " WHERE $children AND g.feedback = $project_id  ";
 	
 	$sql_3 = "SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('city_ad'). " AS a ".
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') ." AS au ON au.ad_id = a.ad_id ". 
@@ -724,12 +776,12 @@ function get_project_city($children,$limit = 0){
 	
 	$request_title = "re.lv_".$_SESSION['user_rank'];
 	$limit_sql = $limit > 0 ? " LIMIT 0,$limit ": " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
-	$order_sql = $_SESSION['user_rank'] == 1 ? " ORDER BY city.update_time DESC " :  " ORDER BY city.col_43 DESC " ;
+	$order_sql = $_SESSION['user_rank'] == 1 ? " ORDER BY city.update_time DESC " : " ORDER BY city.update_time DESC " ;
 	
 	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, ". //
 			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region , ad.ad_id, ".
 			//" pr.req_id, pr.price, pr.price_amount, pr.request_price, pr.request_price_amount,  (ad.price_status - $_SESSION[user_rank]) AS t1 ".
-			" city.col_19,city.col_32,city.col_42 AS change_price, city.col_43 AS board_price,city.can_modify, re.resource, re.$quarter AS nowQ ".
+			" city.col_19,city.col_20  ,city.can_modify, re.resource, re.$quarter AS nowQ ".
 			" FROM ".$GLOBALS['ecs']->table('category') . " AS a ".
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ". 
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
@@ -825,6 +877,7 @@ function get_final_ad($ad_id){
 	return $res;
 }
 
+/*
 
 function get_req_info($project_id,$ad_id){
 	$sql = "SELECT * FROM ".$GLOBALS['ecs']->table('project_request') .
@@ -832,8 +885,15 @@ function get_req_info($project_id,$ad_id){
 	$res =  $GLOBALS['db']->getRow($sql);
 	return $res;
 }
+function get_price_info($ad_id = 0)
+{
+	if($ad_id){
+		$price_info = $GLOBALS['db']->getRow("SELECT * FROM " . $GLOBALS['ecs']->table('project_request') . " WHERE ad_id = $ad_id");
+		return $price_info;
+	}
+}
 
-
+*/
 /**/
 function get_picture_list($project_id){
 	$ext_sql = $project_id ? " pic.project_id = $project_id " : " 1 " ;
@@ -862,6 +922,43 @@ function get_picture_info($picture_id){
 	}
 }
 
+//获得城市的广告牌通过数量
+function get_city_confirm_ad_num($city_id){
+	$sql = "SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('city_ad') .	" WHERE audit_status =  5 AND is_audit_confirm = 1 AND city_id = $city_id ";
+	$res =  $GLOBALS['db']->getOne($sql);
+	return $res;
+}
+/**
+ * 为了支持报表导出所做的 获取select 数据 
+ */
+function get_region_array(){
+	$sql = "SELECT cat_id,cat_name FROM ".$GLOBALS['ecs']->table('category') .	" WHERE parent_id <= 1 ";
+	$res =  $GLOBALS['db']->getAll($sql);
+	$array = array();
+	foreach($res AS $key => $val){
+		$array[$val['cat_id']] = $val['cat_name'];
+	}
+	return $array;
+}
+
+function get_market_level_array(){
+	$sql = "SELECT market_level FROM ".$GLOBALS['ecs']->table('category') .	" WHERE LENGTH(market_level) > 0 GROUP BY market_level ORDER BY market_level";
+	$res =  $GLOBALS['db']->getCol($sql);
+	$data = array();
+	foreach($res AS $val){
+		$data[$val] = $val;
+	}
+	return $data;
+}
+
+function get_audit_status_array(){
+	$res = array(
+		"未审核"=>"未审核",
+		"审核通过"=>"审核通过",
+		"审核不通过"=>"审核不通过",
+		"已被其他客户采购"=>"已被其他客户采购");
+	return $res;
+}
 
 
 ?>

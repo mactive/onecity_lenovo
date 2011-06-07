@@ -1,0 +1,27 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	<table width="90%" style="margin:10px auto;" class="table_standard table_border" border="1">
+		<tr>
+			<td rowspan="1">分区</td>
+			<td colspan="3">5级</td>
+			<td colspan="3">6级(含百强镇)</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>城市数量</td>
+			<td>确认城市数量</td>
+			<td>城市确认率</td>
+			<td>城市数量</td>
+			<td>确认城市数量</td>
+			<td>城市确认率</td>
+		</tr>
+		<!--{foreach from=$data key=k item=item }-->
+		<tr>
+			<td>{$item.col_1}</td>
+			<td>{$item.lv_5.amount}</td><td>{$item.lv_5.confirm_amount}</td><td>{$item.lv_5.percent}%</td>
+			<td>{$item.lv_6.amount}</td><td>{$item.lv_6.confirm_amount}</td><td>{$item.lv_6.percent}%</td>
+		</tr>
+		<!--{/foreach}-->
+			
+			
+	</table>
