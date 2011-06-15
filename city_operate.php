@@ -307,7 +307,7 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 			}
 			else{
 				$city_ad_num = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('city') . " WHERE city_id = $val[city_id]");
-				//echo "**city_ad_num - $city_ad_num - insert<br>";
+//				echo "**city_ad_num - $city_ad_num - insert<br>";
 				$city_confirm_ad_num = get_city_confirm_ad_num($val['city_id']);
 			
 				if(CITY_AD_LIMIT - $city_ad_num > 0)
@@ -318,7 +318,13 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 						array_push($problem_array,$issue);
 					}else{
 						$tmp = $val;
+						$market_level = get_market_level("",$val['city_id']);						
+						
 						$tmp['city_name'] = $val['col_3'];
+						$base_info = get_base_info($val['city_id']);
+						$tmp['col_1'] = $base_info['region_name'];
+						$tmp['col_2'] = $base_info['province_name'];
+						$tmp['col_4'] = $market_level;
 						$tmp['is_upload'] = 1; //要等上传完照片
 						$tmp['audit_status'] = 1;
 						$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $tmp, 'INSERT');
@@ -326,10 +332,15 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 						$tmp['ad_id'] = $GLOBALS['db']->insert_id();
 						$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $tmp, 'INSERT');
 
-						echo "=============";
+						//echo "=============";
 						//更新分类信息 for 一城一牌
 						$sql = "UPDATE " . $GLOBALS['ecs']->table('category') . " SET is_upload = '1',  audit_status = '1'  WHERE cat_id = '$val[city_id]'";
 			        	$GLOBALS['db']->query($sql);
+						
+						//4级城市直接通过
+						if($market_level == "4"){
+							act_level_4_city_upload($val['city_id'],$tmp['ad_id']);
+						}
 					}
 				}else{
 					$issue = $val;

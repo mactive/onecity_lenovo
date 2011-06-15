@@ -210,7 +210,7 @@ function get_ad_list_by_cityid($city_id)
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city'). 		' AS c ON c.ad_id = a.ad_id '.
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city_gallery'). ' AS g ON g.ad_id = a.ad_id '.
 			" WHERE a.city_id = $city_id GROUP BY c.record_id ORDER BY a.ad_id ASC ";
-	//echo $sql."<br>";	
+		//echo $sql."<br>";	
 	
 	$res = $GLOBALS['db']->getAll($sql);
 	foreach($res AS $key => $val)
@@ -259,11 +259,16 @@ function full_city_content($xls_array,$city_content)
 	return $city_content;
 }
 
-function get_market_level($cat_name)
+function get_market_level($cat_name,$is_city_id = 0)
 {
-	$sql = "SELECT market_level  FROM " .$GLOBALS['ecs']->table('category') .
-			" WHERE cat_name LIKE '". $cat_name ."' ";
-	//echo $sql;	
+	if($is_city_id){
+		$sql = "SELECT market_level  FROM " . $GLOBALS['ecs']->table('category') .
+				" WHERE cat_id = $is_city_id ";
+	}else{
+		$sql = "SELECT market_level  FROM " .$GLOBALS['ecs']->table('category') .
+				" WHERE cat_name LIKE '". $cat_name ."' ";
+		//echo $sql;
+	}	
 	
 	$res = $GLOBALS['db']->getOne($sql);
 	return $res;
@@ -702,6 +707,8 @@ function get_project_city($children,$limit = 0){
     $filter['audit_status'] = empty($_REQUEST['audit_status']) ? 0 : $_REQUEST['audit_status'];
     $filter['project_id'] = empty($_REQUEST['project_id']) ? 0 : $_REQUEST['project_id'];
     $filter['resource'] = empty($_REQUEST['resource']) ? 0 : $_REQUEST['resource'];
+    $filter['market_level'] = empty($_REQUEST['market_level']) ? '' : trim($_REQUEST['market_level']);
+
 	$filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'inv_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 	$quarter = "Q".$filter['project_id'];
@@ -729,6 +736,10 @@ function get_project_city($children,$limit = 0){
     {
         $where .= " AND a.audit_status = $filter[audit_status] ";
     }
+	if ($filter['market_level'])
+    {
+        $where .= " AND a.market_level LIKE '%" . mysql_like_quote($filter['market_level']) . "%'";
+    }
 
 
 
@@ -751,8 +762,10 @@ function get_project_city($children,$limit = 0){
     if ($filter['city_name'])
     {
         $count_sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') . " AS a ".
-				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id "
-               . $where;
+				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad').   " AS ad ON ad.city_id = a.cat_id ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource').  " AS re ON re.city_id = a.cat_id ".
+                $where;
     }
     elseif ($filter['region_name'])
     {
@@ -760,6 +773,8 @@ function get_project_city($children,$limit = 0){
 				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
 			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
 			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad').   " AS ad ON ad.city_id = a.cat_id ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource').  " AS re ON re.city_id = a.cat_id ".
                 $where;
     }
     else
@@ -800,17 +815,7 @@ function get_project_city($children,$limit = 0){
 	$res = $GLOBALS['db']->getAll($sql);
 	foreach($res AS $key => $val)
 	{
-		/*
-		$ad_list = get_ad_list_by_cityid($val['cat_id']);//用做弹窗 
-		$ad_summary = get_ad_summary($ad_list);
-		$res[$key]['status_summary'] = get_ad_status_summary($ad_list);
-		
-		$res[$key]['photo_summary'] = $ad_summary['photo_summary']/4; //照片总量
-		$res[$key]['ad_count'] = count($ad_list) ;		//上传条数
-		$res[$key]['time_summary'] = $ad_summary['time_summary']; 	//最新上传时间
-		$res[$key]['audit_status_summary'] = $ad_summary['audit_status_summary']; //已经审核数量
-		$res[$key]['audit_confirm_summary'] = $ad_summary['audit_confirm_summary']; //审核通过数量
-		*/
+
 		$res[$key]['pic_view'] = get_pic_view($val['nowQ'],$filter['project_id']);		
 		$res[$key]['audit_note'] =  $GLOBALS['db']->getOne("SELECT audit_note FROM ".$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = $val[ad_id] AND feedback_audit = $filter[project_id] ORDER BY record_id DESC LIMIT 1");
 		$res[$key]['upload_picture'] =  $GLOBALS['db']->getOne("SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('city_gallery')." WHERE ad_id = $val[ad_id] AND feedback = $filter[project_id]");
@@ -928,6 +933,17 @@ function get_city_confirm_ad_num($city_id){
 	$res =  $GLOBALS['db']->getOne($sql);
 	return $res;
 }
+//获得城市的大区名字
+function get_base_info($city_id){
+	$sql = "SELECT a2.cat_name AS province_name,a3.cat_name AS region_name FROM " . 
+			$GLOBALS['ecs']->table('category') . " AS a ".
+			" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+            " WHERE a.cat_id = $city_id limit 1 ";
+	$base_info =  $GLOBALS['db']->getRow($sql); 
+	return $base_info;
+}
 /**
  * 为了支持报表导出所做的 获取select 数据 
  */
@@ -960,5 +976,24 @@ function get_audit_status_array(){
 	return $res;
 }
 
+
+function act_level_4_city_upload($city_id,$ad_id){
+	$sql_1 = "UPDATE " . $GLOBALS['ecs']->table('city_ad') . " SET audit_status = '5', is_audit_confirm = '1' WHERE ad_id = '$ad_id' ";
+	//echo $sql_1;
+	$GLOBALS['db']->query($sql_1);
+	
+	$sql_2 = "UPDATE " . $GLOBALS['ecs']->table('city_request') . " SET lv_0 = '0',lv_1 = '0',lv_2 = '0',lv_3 = '0',lv_4 = '0',lv_5 = '0',lv_6 = '1' WHERE city_id = '$city_id'";
+	//echo $sql_2;
+	$GLOBALS['db']->query($sql_2);
+	
+	$audit = array();
+	$audit['ad_id'] = $ad_id;
+	$audit['user_id'] = 63;
+	$audit['user_rank'] = 5;
+	$audit['audit_note'] = "审核通过";			
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad_audit'), $audit, 'INSERT');
+	
+	
+}
 
 ?>

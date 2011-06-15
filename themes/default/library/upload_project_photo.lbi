@@ -176,8 +176,14 @@ function validate()
 	<div class="f_left right_content" 
 	{if $k == "col_28" || $k == "col_29" || $k == "col_42" || $k == "col_43" || $k == "col_44" }
 	style="background:#fffead;"
-	{/if}>		
+	{/if}>
+		{if $k == "col_42" }
+			<select id="{$k}" name="col[]">
+			      {html_options options=$lang.pic_type_select_lite selected=$ad_detail.$k}
+			</select>
+		{else}
 		{$ad_detail.$k}
+		{/if}
 		</div>	
 	<div class="clear"></div>
 </div>

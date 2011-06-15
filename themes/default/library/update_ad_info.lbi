@@ -1,5 +1,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="../js/calendar.php"></script>
+<link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+	
+<!--{if $sm_session.user_rank == 1}-->
 <div class="yellow_notice" style="text-align:center;">{$upload_message}</div>
+<!--{/if}-->
 
 <!--{if $ad_info.is_audit_confirm == 1 && $ad_info.audit_status == 5 }-->
 	<form method="post" action="city_project.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
@@ -9,20 +14,22 @@
 		<div class="f_left right_content">		
 			<span class="f_right"><a target="_blank"  class="grey666" href="city_operate.php?act=view_log&ad_id={$ad_detail.ad_id}&col_name={$k}">
 				修改记录</a></span>	
-			<!--{if ($ad_detail.can_modify != 0 || $sm_session.user_rank == 2 ) AND ($k != "col_1" && $k != "col_2" && $k != "col_3" && $k != "col_4" && $k != "col_5" && $k != "col_6" && $k != "col_7" && $k != "col_8" && $k != "col_9" )}-->
+			<!--{if ($ad_detail.can_modify != 0 || $sm_session.user_rank == 2 ) && ($k != "col_1" && $k != "col_2" && $k != "col_3" && $k != "col_4" && $k != "col_5" && $k != "col_6" && $k != "col_7" && $k != "col_8" && $k != "col_9" )}-->
 				{if $k == "col_46" || $k == "col_43" || $k == "col_44" || $k == "col_45" }
 					{if $sm_session.user_rank == 2}
-					<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#fffead;"/>
-					{/if}
-				{else}
-					{if $sm_session.user_rank == 1}
-						{if $k == "col_42" }
-						<select id="{$k}" name="col[]">
-						      {html_options options=$lang.pic_type_select selected=$item.pic_type}
-						</select>
+						{if $k == "col_43" || $k == "col_46" }
+						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#fffead;" onclick="return showCalendar(this, '%Y-%m-%d', false, false, this);" />
 						{else}
 						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#fffead;"/>
-						{/if}
+						{/if}					
+					{/if}
+				{elseif $k == "col_42"}
+					<select id="{$k}" name="col[]">
+					      {html_options options=$lang.pic_type_select_lite selected=$ad_detail.$k}
+					</select>
+				{else}
+					{if $sm_session.user_rank == 1}
+						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#fffead;"/>
 					{else}
 						<span>{$ad_detail.$k}</span>
 						<input type="hidden" name="col[]" value="{$ad_detail.$k}" />
@@ -33,7 +40,13 @@
 				<span class="f_right red_color"> * 必填 </span>
 				<!--{/if}-->
 			<!--{else}-->
+				{if $k == "col_42" }
+					<select id="{$k}" name="col[]">
+					      {html_options options=$lang.pic_type_select_lite selected=$ad_detail.$k}
+					</select>
+				{else}
 				<span>{$ad_detail.$k}</span>
+				{/if}
 				<input type="hidden" name="col[]" value="{$ad_detail.$k}" />
 			<!--{/if}-->
 
