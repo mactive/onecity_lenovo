@@ -88,6 +88,10 @@
 				
 				<!--{if $act_step == "view_ad"}-->
 									
+					<div class="f_left">
+						<a class="back_url" href="city_operate.php?act=city_ad_list&city_id={$ad_info.city_id}"></a>
+					</div>
+					
 					{include file="library/audit_path.htm"}
 					
 					<!--{foreach from=$photo_info item=item}-->
@@ -125,6 +129,12 @@
 				<!-- #EndLibraryItem -->
 				<!--{/if}-->
 				
+				
+				<!--{if $act_step == "project_querenlv"}-->
+				<!-- #BeginLibraryItem "/library/project_querenlv.lbi" -->
+				>
+				<!-- #EndLibraryItem -->
+				<!--{/if}-->
 				
 				<!--{if $act_step == "export_page"}-->
 				<!-- #BeginLibraryItem "/library/export_page.lbi" -->

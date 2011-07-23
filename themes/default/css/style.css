@@ -513,12 +513,19 @@ a.write{
 	height:25px;
 	background:url(../images/order_ui_bg.png) no-repeat left -250px ;float:left;
 }
+a.back_url{
+	display:block;
+	margin:10px 0px 10px 0px;
+	width:85px;
+	height:25px;
+	background:url(../images/order_ui_bg.png) no-repeat left -275px ;float:left;
+}
 a.open_modify{
 	display:block;
 	margin:10px 0px 10px 0px;
 	width:45px;
 	height:25px;
-	background:url(../images/order_ui_bg.png) no-repeat left -275px ;float:left;
+	background:url(../images/order_ui_bg.png) no-repeat left -300px ;float:left;
 }
 a.take_agency_register{
 	display:block;
@@ -967,6 +974,7 @@ a.audit_idle{width:24px;height:24px;cursor:hand;display:block;background:url("..
 a.audit_confirm{width:24px;height:24px;cursor:hand;display:block;background:url("../images/audit_status_bg.png") no-repeat center left;}
 a.audit_cancel{width:24px;height:24px;cursor:hand;display:block;background:url("../images/audit_status_bg.png") no-repeat bottom left;}
 .table_border{border:1px solid #DADADA;border-collapse:collapse;}
+.table_border_dark{border:1px solid #666666;border-collapse:collapse;}
 .table_align_center td{text-align:center;}
 .table_align_center th{text-align:center;}
 

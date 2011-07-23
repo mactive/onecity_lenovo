@@ -20,7 +20,6 @@ function get_city_children_a($arr)
 	foreach($arr AS $val){
 		$tt =  array_keys(cat_list($val, 0, false));
 		$all_array  = array_merge($all_array,$tt);
-		
 	}
 	return 'a.city_id ' . db_create_in(array_unique($all_array));		
 	
@@ -292,6 +291,16 @@ function get_cat_id_by_name($cat_name)
 {
 	$sql = "SELECT cat_id  FROM " .$GLOBALS['ecs']->table('category') .
 			" WHERE cat_name LIKE '". $cat_name ."' ";
+//	echo $sql;	
+	
+	$res = $GLOBALS['db']->getOne($sql);
+	return $res;
+}
+
+function get_cat_name_by_id($cat_id)
+{
+	$sql = "SELECT cat_name  FROM " .$GLOBALS['ecs']->table('category') .
+			" WHERE cat_id = $cat_id ";
 //	echo $sql;	
 	
 	$res = $GLOBALS['db']->getOne($sql);
@@ -682,7 +691,7 @@ function get_project_summary($project_id,$children){
 	
 	$res['write_complete'] = $project_id == 1 ? $GLOBALS['db']->getOne($sql_1) : 0 ;
 	$res['upload'] = $GLOBALS['db']->getOne($sql_2);
-	$res['upload'] = $res['upload'] / 4;
+	$res['upload'] = floor($res['upload'] / 4);
 	$res['confirm'] = $GLOBALS['db']->getOne($sql_3);
 	
 	return $res;
@@ -992,8 +1001,40 @@ function act_level_4_city_upload($city_id,$ad_id){
 	$audit['user_rank'] = 5;
 	$audit['audit_note'] = "审核通过";			
 	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad_audit'), $audit, 'INSERT');
-	
-	
+}
+
+function is_ie() {
+    $useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
+    if ((strpos($useragent, 'opera') !== false) ||
+        (strpos($useragent, 'konqueror') !== false)) return false;
+    if (strpos($useragent, 'msie ') !== false) return true;
+     return false;
+}
+
+function pic_download($attachment) {
+    //$realpath = ABSPATH . UPLOAD_DIR . '/' . $attachment['path'] . '/' . $attachment['savename'];
+    $realpath =  "http://www.lenovo-one.com/".$attachment['path'];
+    $content_len = sprintf("%u", filesize($realpath));
+    if (is_ie()) {
+        // leave $filename alone so it can be accessed via the hook below as expected.
+        $filename = rawurlencode($attachment['filename']);
+    }
+    else {
+        $filename = &$attachment['filename'];
+    }
+
+    while(ob_get_length() !== false) @ob_end_clean(); 
+    header('Pragma: public');
+    header('Last-Modified: '.gmdate('D, d M Y H:i:s') . ' GMT');
+    header('Cache-Control: no-store, no-cache, must-revalidate');
+    header('Cache-Control: pre-check=0, post-check=0, max-age=0');
+    header('Content-Transfer-Encoding: binary'); 
+    header('Content-Encoding: none');
+    header('Content-type: ' . $attachment['type']);
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    //header("Content-length: $content_len");
+    echo file_get_contents($realpath);
+    exit();
 }
 
 ?>

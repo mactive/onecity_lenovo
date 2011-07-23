@@ -1,4 +1,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="f_left" style="width:100%;">
+	<a class="back_url" href="city_project.php?act=list_city_to_select&project_id={$project_id}&region_name={$city_name}"></a>
+</div>
+
 <!--{foreach from=$old_photo_info item=project key=k}-->
 	<!--{if $project}-->
 	<div class="radius_5px city_info" style="width:95%;height:200px;padding:0px 10px;">
@@ -132,7 +136,7 @@
         <input type="hidden" name="confirm" id="confirm" value="0" />
         <input type="hidden" name="project_id" value="{$project_id}" />
       	<input type="hidden" name="act" value="update_audit" />
-		<input type="submit" class="input_s3 f_left" value="不通过" />
+		<input type="submit" class="input_s3 f_left" value="意见反馈" />
 		<a onclick="update_audit()" class="cancel_lite_btn f_left" style="margin-left:20px;">通过审核</a> 
       </td>
     </tr>

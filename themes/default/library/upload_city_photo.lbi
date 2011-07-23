@@ -1,4 +1,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!--{if $upload_message &&  $is_change == 0}-->
+
+<div class="yellow_notice" style="text-align:center;">{$upload_message}</div>
+
+<!--{else}-->
+
 <div class="upload_table">
 <div class="upload_board" style="height:auto;float:left;">
 <form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
@@ -75,3 +81,4 @@
 </form>
 </div>
 </div>
+<!--{/if}-->

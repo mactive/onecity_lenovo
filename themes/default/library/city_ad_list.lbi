@@ -1,5 +1,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<div class="facebox">
+	<div class="f_left">
+		<a class="back_url" href="city_operate.php?region_name={$city_name}"></a>
+	</div>
+	<div class="facebox f_left">
 		<table width="100%" class="table_border table_standard" border="1">
 		    <tr>
 		      	<th>{$lang.county}</th>
@@ -89,19 +92,23 @@
 									{/if}
 								{else}
 								<a href="city_operate.php?act=view_ad&ad_id={$item.ad_id}">查看</a>
+									{if $sm_session.user_rank >= 2}
+									<a href="city_operate.php?act=audit&ad_id={$item.ad_id}">审核</a>
+									{/if}
 								{/if}
 							{else}
 								{if ($sm_session.user_rank - $item.audit_status == 1)}
-								<a href="city_operate.php?act=audit&ad_id={$item.ad_id}">审核</a>
+								<a href="city_operate.php?act=audit&ad_id={$item.ad_id}">重
+									审</a>
 								{else}
 								<a href="city_operate.php?act=view_ad&ad_id={$item.ad_id}">查看</a>
 								{/if}
-							{/if}
-							{if $sm_session.user_rank >= 4}<a onclick="confrim_delete({$item.ad_id})" class="red_color">删除</a>{/if}
-							
+							{/if}							
 						{else}
 						<span class="grey999">资料不全</a>
 						{/if}
+						{if $sm_session.user_rank >= 4}<a onclick="confrim_delete({$item.ad_id})" class="red_color">删除</a>{/if}
+						
 					{/if}
 				</td>
 			</tr>

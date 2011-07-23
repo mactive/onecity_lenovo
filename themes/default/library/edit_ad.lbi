@@ -1,4 +1,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="f_left">
+	<a class="back_url" href="city_operate.php?act=city_ad_list&city_id={$ad_info.city_id}"></a>
+</div>
 <div class="yellow_notice" style="text-align:center;">{$upload_message}</div>
 <!--{if $ad_info.is_audit_confirm == 0 }-->
 	<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data">

@@ -1,4 +1,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="f_left" style="width:100%;">
+	<a class="back_url" href="city_project.php?act=list_city_to_select&project_id={$project_id}&region_name={$city_name}"></a>
+</div>
 <script type="text/javascript" src="../js/calendar.php"></script>
 <link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
 	
@@ -61,7 +64,7 @@
 	<div style="width:500px;float:left;">
 		<input type="hidden" name="act" value="act_update_ad_info" />
 		<input type="hidden" name="ad_id" value="{$ad_detail.ad_id}" />	
-		<input type="hidden" name="project_id" value="1" />	
+		<input type="hidden" name="project_id" value="{$project_id}" />	
 		<input type="submit" class="submitidea_btn" value="{$lang.button_submit}" />
 	</div>
 	<!--{/if}-->

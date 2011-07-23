@@ -1,5 +1,5 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<!--权限大于1才可见，电通级别的可以编辑-->
+
 <div class="f_left">
 <!--{foreach from=$audit_path key=key item=level }-->
 <div class="audit_board radius_5px">

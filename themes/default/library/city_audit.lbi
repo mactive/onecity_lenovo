@@ -1,5 +1,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
+<div class="f_left">
+	<a class="back_url" href="city_operate.php?act=city_ad_list&city_id={$ad_info.city_id}"></a>
+</div>
+
 {include file="library/audit_path.htm"}					
 
 <div class="upload_board" style="height:auto;float:left;">
@@ -83,7 +87,6 @@ function validate2()
 {
 	
 	var obj_2 = document.getElementById('col_23');
-
     if (obj_2.value == "")
     {
         alert("请填写媒体评分");

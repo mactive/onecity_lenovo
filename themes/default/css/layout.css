@@ -142,7 +142,7 @@ ul.mycity_ul li.selected a{color:#fff;display:block;text-indent:40px;height:30px
 .user_info_5 a{color:#fff;line-height:38px;}
 .user_info_5 a:hover{color:#fff;}
 .upload_board{background:url(../images/upload_bg.png) no-repeat;
-	width:910px;padding:15px 25px;}
+	width:900px;_width:850px;padding:15px 25px;}
 
 
 .menu_5{height:58px;background:#973d27;width:1000px;margin:8px 0px;position:relative;z-index:1;}
@@ -421,7 +421,6 @@ height:160px;
 }
 #page-middle {
   float: left;padding:0px;
-  overflow: hidden;
   width: 900px; margin-left: 15px;
 
 }
