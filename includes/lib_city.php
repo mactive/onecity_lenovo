@@ -944,7 +944,7 @@ function get_city_confirm_ad_num($city_id){
 }
 //获得城市的大区名字
 function get_base_info($city_id){
-	$sql = "SELECT a2.cat_name AS province_name,a3.cat_name AS region_name FROM " . 
+	$sql = "SELECT a.cat_name AS city_name,a1.cat_name AS county_name, a2.cat_name AS province_name,a3.cat_name AS region_name FROM " . 
 			$GLOBALS['ecs']->table('category') . " AS a ".
 			" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
