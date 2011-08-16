@@ -428,6 +428,7 @@ elseif($_REQUEST['act'] == 'CITY'){
 	
 	$type =  !empty($_REQUEST['type']) ? intval($_REQUEST['type']) : 1;
 	$is_upload =  !empty($_REQUEST['is_upload']) ? intval($_REQUEST['is_upload']) : 0;
+	$is_confirm =  !empty($_REQUEST['is_confirm']) ? intval($_REQUEST['is_confirm']) : 0;
 	switch ($type) {
 		case '4':
 			$sql_plus = " AND a.market_level = 4 ";
@@ -457,6 +458,11 @@ elseif($_REQUEST['act'] == 'CITY'){
 	}
 	if($is_upload == 1){
 		$sql_plus .= " AND ad.is_upload = 1 ";
+	}
+	
+	if($is_confirm == 1){
+		$sql_plus .= " AND ad.is_audit_confirm = 1 AND ad.audit_status = 5 ";
+		
 	}
 	
 	

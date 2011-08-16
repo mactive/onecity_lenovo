@@ -802,7 +802,7 @@ function get_project_city($children,$limit = 0){
 	$limit_sql = $limit > 0 ? " LIMIT 0,$limit ": " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
 	$order_sql = $_SESSION['user_rank'] == 1 ? " ORDER BY city.update_time DESC " : " ORDER BY city.update_time DESC " ;
 	
-	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, ". //
+	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, a.is_microsoft, ". //
 			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region , ad.ad_id, ".
 			//" pr.req_id, pr.price, pr.price_amount, pr.request_price, pr.request_price_amount,  (ad.price_status - $_SESSION[user_rank]) AS t1 ".
 			" city.col_19,city.col_20  ,city.can_modify, re.resource, re.$quarter AS nowQ ".

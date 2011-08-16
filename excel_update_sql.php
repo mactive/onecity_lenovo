@@ -1,16 +1,83 @@
 <?php
-/**
- * SINEMALL 品牌列表 * $Author: testyang $
- * $Id: brand.php 14641 2008-06-04 06:15:32Z testyang $
-*/
-
 
 define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
+require(dirname(__FILE__) . '/includes/lib_city.php');
+require(dirname(__FILE__) . '/includes/excel_reader2.php');
+
+$file_name = $_REQUEST['file_name'];
+//$array1 = get_my_goods_list();
+//$array2 = get_my_brand_list();
+//$tb = get_my_tb_ys_list();
+//$items = array_merge($array1, $array2);
 
 ini_set("display_errors",1);
 error_reporting(E_ALL);
+
+$xls = new Spreadsheet_Excel_Reader();
+//$xls->setOutputEncoding('gb2312');
+$xls->setOutputEncoding('utf-8');
+$file_path = "data/excel/".$file_name.".xls";
+
+$xls->read($file_path);
+$all_sheets = $xls->sheets;
+
+
+/* all array */
+$exist_array = array();
+//$sichuan =  array_keys(cat_list(18, 0, false,4)); //四川ID 18
+//print_r($sichuan);
+
+/*
+$children = get_city_children(array('18'));
+
+$sql_5 = "SELECT cat_id FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
+		" WHERE $children  AND a.sys_level = 5 ";
+$sichuan = $GLOBALS['db']->getCol($sql_5);
+//print_r($sichuan);
+echo count($sichuan);
+*/
+
+for ($y=0;$y<count($all_sheets);$y++) 
+{ 
+	echo "sheet: $y  "." row_count:".$all_sheets[$y]['numRows']."    col_count:".$all_sheets[$y]['numCols']."<br>";
+	$count = 0;
+
+	
+	for ($row=2;$row<=$all_sheets[$y]['numRows'];$row++) 
+	{
+		//$city = trim($all_sheets[$y]['cells'][$row][4]);
+		$county = trim($all_sheets[$y]['cells'][$row][3]);
+		//echo "城市名字:".$county."<br>";
+		
+		//$parent_id = get_cat_id_by_name($city);
+		$city_id = get_cat_id_by_name($county);
+
+		if(!empty($city_id)){
+			
+			
+			$sql = "UPDATE " . $GLOBALS['ecs']->table('category') . " SET is_microsoft = '1'  WHERE cat_id = $city_id LIMIT 1 ";
+			
+			echo $sql."<br>";
+	
+			
+			
+			//$GLOBALS['db']->query($sql);
+		    //$GLOBALS['db']->query($sql_2);
+		    //$GLOBALS['db']->query($sql_3);
+			
+		$count = $count + 1; 			
+			
+		}else{
+			echo $county."不存在<br>";
+		}
+	}
+	echo "===========".$count."<br>";
+}
+
+function dd(){
+	
 
 $last_update = gmtime();
 
@@ -32,7 +99,7 @@ $last_update = gmtime();
 		$GLOBALS['db']->query($sql);	    
 	}
 			
-
+}
 
 ?>
 
