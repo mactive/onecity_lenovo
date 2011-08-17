@@ -45,7 +45,7 @@ for ($y=0;$y<count($all_sheets);$y++)
 	$count = 0;
 
 	
-	for ($row=2;$row<=$all_sheets[$y]['numRows'];$row++) 
+	for ($row=1;$row<=$all_sheets[$y]['numRows'];$row++) 
 	{
 		//$city = trim($all_sheets[$y]['cells'][$row][4]);
 		$county = trim($all_sheets[$y]['cells'][$row][3]);
@@ -57,13 +57,13 @@ for ($y=0;$y<count($all_sheets);$y++)
 		if(!empty($city_id)){
 			
 			
-			$sql = "UPDATE " . $GLOBALS['ecs']->table('category') . " SET is_microsoft = '1'  WHERE cat_id = $city_id LIMIT 1 ";
+			$sql = "UPDATE " . $GLOBALS['ecs']->table('city_resource') . " SET Q2 = '6'  WHERE city_id = $city_id AND sys_level = 5 LIMIT 1 ";
 			
 			echo $sql."<br>";
 	
 			
 			
-			//$GLOBALS['db']->query($sql);
+			$GLOBALS['db']->query($sql);
 		    //$GLOBALS['db']->query($sql_2);
 		    //$GLOBALS['db']->query($sql_3);
 			

@@ -62,7 +62,8 @@ elseif($_REQUEST['act'] == 'transform')
 {
 	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 1;
 	$market_level =  !empty($_REQUEST['market_level']) ? intval($_REQUEST['market_level']) : 0;
-	$wanted_level = 4; // 4 5 6
+	$wanted_region = !empty($_REQUEST['wanted_region']) ? intval($_REQUEST['wanted_region']) : 2; //2-23
+	//$wanted_level = 4; // 4 5 6
 	// 	4级城市 / 各大分区 / 城市名称  
 	//	所有都是包含画面的
 	//	8月中旬要数据
@@ -73,7 +74,8 @@ elseif($_REQUEST['act'] == 'transform')
 	
 	$res = $GLOBALS['db']->getCol($sql);
 	$count = 0 ;
-	$root_folder = "export/level_".$wanted_level;
+//	$root_folder = "export/level_".$wanted_level;
+	$root_folder = "export/region_".$wanted_region;
 	if (!file_exists($root_folder))
 	{
 	    @mkdir($root_folder, 0777);
@@ -82,28 +84,37 @@ elseif($_REQUEST['act'] == 'transform')
 
 	foreach($res AS $val){
 		$city_id = get_city_id($val);
-		$market_level = get_market_level_by_ad_id($val);
+		
+		$base_info 	= get_region_info($city_id);
+		$region_name= $base_info['region_name'];
+		$region_id 	= $base_info['region_id'];
+		
+		if($region_id == $wanted_region){
 			
-		if($market_level == $wanted_level){
-
+			$market_level = get_market_level("",$city_id);
+		
 			$base_info = get_base_info($city_id);
 
 			$city_name	= $base_info['city_name'];
-			$region_name = $base_info['region_name'];
-			$region_folder = $root_folder."/".$region_name;
-			$city_folder = $region_folder."/".$city_name;
+			//$region_name = $base_info['region_name'];
+			$level_folder = $root_folder."/level_".$market_level;
+			$city_folder = $level_folder."/".$city_name;
 			//echo $city_name. $region_name ;
-
-			if (!file_exists($region_folder))
+			
+			if (!file_exists($level_folder))
 			{
-			    @mkdir($region_folder, 0777);
-			    @chmod($region_folder, 0777);
+			    @mkdir(rawurldecode($level_folder), 0777);
+			    @chmod(rawurldecode($level_folder), 0777);
 			}
 
 			if (!file_exists($city_folder))
 			{
-			    @mkdir($city_folder, 0777);
-			    @chmod($city_folder, 0777);
+			    @mkdir(rawurldecode($city_folder), 0777);
+			    @chmod(rawurldecode($city_folder), 0777);
+				$pic_list = get_pic_list($val,$city_name,$project_id);
+				foreach($pic_list AS $row){
+					@copy($row['img_url'],   $city_folder."/".$row['img_name']);
+				}
 			}
 			
 			$count += 1;
@@ -124,7 +135,7 @@ elseif($_REQUEST['act'] == 'transform')
 		echo "</div>";
 		*/
 	}
-	echo "all 4 level ".$count;	
+	echo "all $wanted_region region ".$count;	
 }
 
 function get_market_level_by_ad_id($ad_id)
@@ -137,6 +148,28 @@ function get_market_level_by_ad_id($ad_id)
 	return $market_level;
 }
 
+function get_region_info($city_id){
+	$sql = "SELECT a3.cat_name AS region_name, a3.cat_id AS region_id FROM " . 
+			$GLOBALS['ecs']->table('category') . " AS a ".
+			" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+            " WHERE a.cat_id = $city_id limit 1 ";
+	$base_info =  $GLOBALS['db']->getRow($sql); 
+	return $base_info;
+}
+
+function get_pic_list($ad_id,$city_name,$project_id){
+	$sql = "SELECT img_id,img_url  FROM " . $GLOBALS['ecs']->table('city_gallery') .
+            " WHERE ad_id = $ad_id AND feedback  = $project_id limit 4 ";
+	$res =  $GLOBALS['db']->getAll($sql);
+	foreach($res AS $key => $row){
+		$res[$key]['img_url'] = $_SERVER['DOCUMENT_ROOT']."/".$row['img_url'];
+		$res[$key]['img_name'] = $city_name."_$key".".jpg";
+	}
+	//print_r($res);
+	return $res;
+}
 
 
 ?>
