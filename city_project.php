@@ -331,7 +331,8 @@ elseif ($_REQUEST['act'] == 'update_ad_info')
 		if($audit_note != "审核通过" && !empty($audit_note) ){
 			$upload_message = "审核不通过,需要修改.";			
 		}else{
-			if($ad_detail['can_modify'] == 1 ){
+			$can_modify_q = "can_modify_q".$project_id;
+			if($ad_detail[$can_modify_q] == 1 ){
 				$upload_message = "已经填写过,重新开启修改.";
 			}else{
 				$upload_message = "已经最终填写过不可以再修改.若想修改需要中央专员开启.";
@@ -418,9 +419,11 @@ elseif($_REQUEST['act'] == 'act_update_ad_info')
 	{	
 		$i_plus = $i +1;
 		$city_content['col_'.$i_plus] = $col[$i];
-	}	
-	$city_content['update_time'] = gmtime();
-	$city_content['can_modify'] = 0;
+	}
+	$update_time_q = "update_time_q".$project_id;
+	$can_modify_q = "can_modify_q".$project_id;
+	$city_content[$update_time_q] = gmtime();
+	$city_content[$can_modify_q] = 0;
 	
 	if($ad_id){
 		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $city_content, 'update', "ad_id='$ad_id'");
@@ -458,9 +461,11 @@ elseif($_REQUEST['act'] == 'upload_photo')
 	
 	$ad_id = isset($_REQUEST['ad_id']) && intval($_REQUEST['ad_id']) > 0 ? intval($_REQUEST['ad_id']) : 0;
 	$project_id = isset($_REQUEST['project_id']) && intval($_REQUEST['project_id']) > 0 ? intval($_REQUEST['project_id']) : 0;
+	$is_change = isset($_REQUEST['is_change']) && intval($_REQUEST['is_change']) > 0 ? intval($_REQUEST['is_change']) : 0;
 	$ad_info = get_ad_info($ad_id);
 	$smarty->assign('ad_info', $ad_info);
 	
+	$smarty->assign('is_change', $is_change);
 	$smarty->assign('project_id', $project_id);
 	$project_info = get_project_info($project_id);
 	$smarty->assign('project_info', $project_info);
@@ -531,8 +536,11 @@ elseif($_REQUEST['act'] == "act_upload_photo")
 	handle_ad_gallery_image($ad_info['city_id'],$ad_id, $photo, $desc_array, $sort_array,$id_array,$feedback); //feedback
 	
 	//上传图片也不可以修改
-	$city_content['can_modify'] = 0;
-	$city_content['update_time'] = gmtime();
+	$update_time_q = "update_time_q".$project_id;
+	$can_modify_q = "can_modify_q".$project_id;
+	$city_content[$update_time_q] = gmtime();
+	$city_content[$can_modify_q] = 0;
+	
 	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $city_content, 'update', "ad_id='$ad_id'");
 	
 	print_r($city_content);
@@ -565,7 +573,8 @@ elseif($_REQUEST['act'] == 'update_audit')
 		
 	}else{		
 		//打开修改权限
-		$city_content['can_modify'] = 2;	
+		$can_modify_q = "can_modify_q".$project_id;
+		$city_content[$can_modify_q] = 2;	
 		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $city_content, 'update', "ad_id='$ad_id'");
 		
 		show_message("审核信息已经提交。", $_LANG['back_home_lnk'], $return_url, 'info', true);
@@ -726,8 +735,11 @@ elseif($_REQUEST['act'] == 'delete_picture'){
 /* 开启修改权限 */
 elseif($_REQUEST['act'] == 'open_modify'){
 	$ad_id= !empty($_REQUEST['ad_id']) ? intval($_REQUEST['ad_id']) : 0;
+	$project_id = isset($_REQUEST['project_id']) && intval($_REQUEST['project_id']) > 0 ? intval($_REQUEST['project_id']) : 0;
+	
+	$can_modify_q = "can_modify_q".$project_id;
 	if($ad_id){
-		$sql = "UPDATE " . $GLOBALS['ecs']->table('city') . " SET can_modify = '1'  WHERE ad_id = '$ad_id'";
+		$sql = "UPDATE " . $GLOBALS['ecs']->table('city') . " SET $can_modify_q = '1'  WHERE ad_id = '$ad_id'";
 	    $GLOBALS['db']->query($sql);
 		show_message("开启成功");
 	}	

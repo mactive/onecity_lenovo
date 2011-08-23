@@ -194,7 +194,7 @@
 						<td>
 							<!--{if $sm_session.user_rank >= 4}-->
 								<!--{if $city.can_modify == 0}-->
-								<a href="city_project.php?act=open_modify&ad_id={$city.ad_id}" class="open_modify"></a> &nbsp;&nbsp;
+								<a href="city_project.php?act=open_modify&project_id={$project_id}&ad_id={$city.ad_id}" class="open_modify"></a> &nbsp;&nbsp;
 								<a href="city_project.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}">查看</a>
 								<!--{else}-->
 								开启状态

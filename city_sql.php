@@ -773,6 +773,19 @@ elseif($_REQUEST['act'] == 'DIFF'){
 	echo "</table>";
 }
 
+elseif($_REQUEST['act'] == 'city_q2'){
+	$sql = "SELECT ad_id,time FROM ".$GLOBALS['ecs']->table('city_ad_audit')." Where feedback_audit = 2 GROUP BY ad_id ORDER BY ad_id";
+	$res = $GLOBALS['db']->getAll($sql);
+	foreach($res AS $val){
+		$time = strtotime($val['time']);
+		$sql = "UPDATE " . $GLOBALS['ecs']->table('city') . " SET update_time_q2 = $time  WHERE ad_id = $val[ad_id] ";
+		echo $sql."<br>";
+    	$GLOBALS['db']->query($sql);
+
+
+	}
+}
+
 /**
  * 
  */
@@ -805,6 +818,7 @@ function get_city_progress($city_id){
 	return $array;
 	
 }
+
 
 
 

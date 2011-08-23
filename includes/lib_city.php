@@ -681,17 +681,17 @@ function get_project_summary($project_id,$children){
 	
 	$sql_2 = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('city') ." AS a ".
 			 " LEFT JOIN " .$GLOBALS['ecs']->table('city_gallery') ." AS g ON g.city_id = a.city_id ". 
-			 " WHERE $children AND g.feedback = $project_id  ";
+			 " WHERE $children AND g.feedback = $project_id GROUP BY a.city_id ";
 	
 	$sql_3 = "SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('city_ad'). " AS a ".
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') ." AS au ON au.ad_id = a.ad_id ". 
 			 " WHERE $children AND au.feedback_audit = $project_id AND au.audit_note LIKE '审核通过' ";
 	
-	
+	//echo $sql_2;
 	
 	$res['write_complete'] = $project_id == 1 ? $GLOBALS['db']->getOne($sql_1) : 0 ;
-	$res['upload'] = $GLOBALS['db']->getOne($sql_2);
-	$res['upload'] = floor($res['upload'] / 4);
+	$res['upload'] = $GLOBALS['db']->getAll($sql_2);
+	$res['upload'] = count($res['upload']);
 	$res['confirm'] = $GLOBALS['db']->getOne($sql_3);
 	
 	return $res;
@@ -721,6 +721,9 @@ function get_project_city($children,$limit = 0){
 	$filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'inv_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 	$quarter = "Q".$filter['project_id'];
+	$can_modify_quarter = "can_modify_q".$filter['project_id'];
+	$update_time_quarter = "update_time_q".$filter['project_id'];
+	
 	$where = ' WHERE '. $children ." AND ad.is_audit_confirm = 1 AND ad.audit_status = 5 AND re.sys_level = 5 ";
 	$where .= " AND re.$quarter > 0 ";
 	//$where.= $_SESSION['user_rank'] > 1 ? " AND re.req_id > 0 " : "" ;
@@ -800,12 +803,12 @@ function get_project_city($children,$limit = 0){
 	
 	$request_title = "re.lv_".$_SESSION['user_rank'];
 	$limit_sql = $limit > 0 ? " LIMIT 0,$limit ": " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
-	$order_sql = $_SESSION['user_rank'] == 1 ? " ORDER BY city.update_time DESC " : " ORDER BY city.update_time DESC " ;
+	$order_sql = $_SESSION['user_rank'] == 1 ? " ORDER BY city.$update_time_quarter DESC " : " ORDER BY city.$update_time_quarter DESC " ;
 	
 	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, a.is_microsoft, ". //
 			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region , ad.ad_id, ".
 			//" pr.req_id, pr.price, pr.price_amount, pr.request_price, pr.request_price_amount,  (ad.price_status - $_SESSION[user_rank]) AS t1 ".
-			" city.col_19,city.col_20  ,city.can_modify, re.resource, re.$quarter AS nowQ ".
+			" city.col_19,city.col_20  ,city.$can_modify_quarter, re.resource, re.$quarter AS nowQ ".
 			" FROM ".$GLOBALS['ecs']->table('category') . " AS a ".
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ". 
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 

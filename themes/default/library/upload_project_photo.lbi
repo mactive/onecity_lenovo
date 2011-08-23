@@ -45,7 +45,7 @@
 					<img src="{$photo_info.0.thumb_url}">
 				</a>{$reupload_message}<input type="hidden" name="img_id[]" value="{$photo_info.0.img_id}">
 			<!--{/if}-->
-			{if !$ad_info.is_aduit_confirm && !$feedback_confirm && $sm_session.user_rank == 1}<input type="file" name="idea_photo[]">{/if}
+			{if (!$ad_info.is_aduit_confirm && !$feedback_confirm && $sm_session.user_rank == 1 ) || $is_change == 1}<input type="file" name="idea_photo[]">{/if}
 		</td>
 	</tr>	
 	<tr>
@@ -56,7 +56,7 @@
 					<img src="{$photo_info.1.thumb_url}">
 				</a>{$reupload_message}<input type="hidden" name="img_id[]" value="{$photo_info.1.img_id}">
 			<!--{/if}-->
-			{if !$ad_info.is_aduit_confirm && !$feedback_confirm && $sm_session.user_rank == 1}<input type="file" name="idea_photo[]">{/if}
+			{if (!$ad_info.is_aduit_confirm && !$feedback_confirm && $sm_session.user_rank == 1 ) || $is_change == 1}<input type="file" name="idea_photo[]">{/if}
 		</td>
 	</tr>
 	<tr>
@@ -67,7 +67,7 @@
 					<img src="{$photo_info.2.thumb_url}">
 				</a>{$reupload_message}<input type="hidden" name="img_id[]" value="{$photo_info.2.img_id}">
 			<!--{/if}-->
-			{if !$ad_info.is_aduit_confirm && !$feedback_confirm && $sm_session.user_rank == 1}<input type="file" name="idea_photo[]"></td>{/if}
+			{if (!$ad_info.is_aduit_confirm && !$feedback_confirm && $sm_session.user_rank == 1 ) || $is_change == 1}<input type="file" name="idea_photo[]">{/if}
 	</tr>
 	<tr>
 		<td>远景2. </td>
@@ -77,7 +77,7 @@
 					<img src="{$photo_info.3.thumb_url}">
 				</a>{$reupload_message}<input type="hidden" name="img_id[]" value="{$photo_info.3.img_id}">
 			<!--{/if}-->
-			{if !$ad_info.is_aduit_confirm && !$feedback_confirm && $sm_session.user_rank == 1}<input type="file" name="idea_photo[]"></td>{/if}
+			{if (!$ad_info.is_aduit_confirm && !$feedback_confirm && $sm_session.user_rank == 1 ) || $is_change == 1}<input type="file" name="idea_photo[]">{/if}
 	</tr>
 	<tr>
 		<td>备注:</td>

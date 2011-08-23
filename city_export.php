@@ -58,9 +58,23 @@ elseif($_REQUEST['act'] == 'rename')
 	pic_download($info);
 
 }
+elseif($_REQUEST['act'] == 'transform_page')
+{
+	$data = array();
+	for($i=2;$i<24;$i++){
+		$tt = array();
+		$tt['id'] = $i; 
+		$tt['name'] = get_cat_name($i);
+		array_push($data,$tt);
+	}
+	$smarty->assign('data',    $data);	
+	
+	$smarty->display('city_export.dwt');
+	
+}
 elseif($_REQUEST['act'] == 'transform')
 {
-	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 1;
+	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 2;
 	$market_level =  !empty($_REQUEST['market_level']) ? intval($_REQUEST['market_level']) : 0;
 	$wanted_region = !empty($_REQUEST['wanted_region']) ? intval($_REQUEST['wanted_region']) : 2; //2-23
 	//$wanted_level = 4; // 4 5 6
@@ -68,14 +82,17 @@ elseif($_REQUEST['act'] == 'transform')
 	//	所有都是包含画面的
 	//	8月中旬要数据
 	
-	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table('city_gallery')." WHERE feedback  = $project_id GROUP BY ad_id "; //LIMIT 0,50
+	$sql = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
+			" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') . " AS au ON au.ad_id = g.ad_id ". 
+			" WHERE g.feedback  = $project_id AND au.feedback_audit = $project_id  GROUP BY g.ad_id "; //LIMIT 0,50
 	
 	echo $sql."<br>";
 	
 	$res = $GLOBALS['db']->getCol($sql);
 	$count = 0 ;
+	$wanted_region_name = get_cat_name($wanted_region);
 //	$root_folder = "export/level_".$wanted_level;
-	$root_folder = "export/region_".$wanted_region;
+	$root_folder = "export/".$wanted_region_name;
 	if (!file_exists($root_folder))
 	{
 	    @mkdir($root_folder, 0777);
@@ -103,6 +120,8 @@ elseif($_REQUEST['act'] == 'transform')
 			
 			if (!file_exists($level_folder))
 			{
+			    //@mkdir(iconv("UTF-8","GBK",$level_folder), 0777);
+			    //@chmod(iconv("UTF-8","GBK",$level_folder), 0777);
 			    @mkdir(rawurldecode($level_folder), 0777);
 			    @chmod(rawurldecode($level_folder), 0777);
 			}
@@ -111,6 +130,11 @@ elseif($_REQUEST['act'] == 'transform')
 			{
 			    @mkdir(rawurldecode($city_folder), 0777);
 			    @chmod(rawurldecode($city_folder), 0777);
+			
+			//	@mkdir(iconv("UTF-8","GBK",$city_folder), 0777);
+		    //	@chmod(iconv("UTF-8","GBK",$city_folder), 0777);
+		    
+			
 				$pic_list = get_pic_list($val,$city_name,$project_id);
 				foreach($pic_list AS $row){
 					@copy($row['img_url'],   $city_folder."/".$row['img_name']);
@@ -158,6 +182,14 @@ function get_region_info($city_id){
 	$base_info =  $GLOBALS['db']->getRow($sql); 
 	return $base_info;
 }
+
+function get_cat_name($cat_id){
+	$sql = "SELECT cat_name FROM " . $GLOBALS['ecs']->table('category') . 
+            " WHERE cat_id = $cat_id ";
+	$res =  $GLOBALS['db']->getOne($sql); 
+	return $res;
+}
+
 
 function get_pic_list($ad_id,$city_name,$project_id){
 	$sql = "SELECT img_id,img_url  FROM " . $GLOBALS['ecs']->table('city_gallery') .
