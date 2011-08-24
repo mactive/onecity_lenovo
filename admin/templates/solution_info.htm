@@ -1,0 +1,131 @@
+<!-- $Id: brand_info.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+<style type="text/css">
+td.label2{line-height:20px; padding:0;font-weight:bold;
+padding:5px 1em;
+text-align:right;
+vertical-align:top;
+width:10%;
+}	
+</style>
+{include file="pageheader.htm"}
+<div class="main-div">
+<form method="post" action="solution.php" name="theForm" enctype="multipart/form-data">
+<table cellspacing="1" cellpadding="3" width="100%">
+  <tr>
+    <td class="label2">指定{$lang.step_id}</td>
+    <td><select name="step_id" id="step_id" onchange="searchGoods('step_id')"><option value="0">{$lang.please_select}</option>{html_options options=$solution_step_list selected=$solution_id}</select>
+    </td>
+  </tr>
+  
+  <tr>
+    <td class="label2">{$lang.solution_name}</td>
+    <td><input type="text" name="solution_name" id="solution_name" maxlength="60" value="{$solution.solution_name}" />{$lang.require_field}</td>
+  </tr>
+  <tr>
+    <td class="label2"><a href="javascript:showNotice('warn_steplogo');" title="{$lang.form_notice}">
+        <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.solution_logo}</td>
+    <td><input type="file" name="solution_logo" size="45">{if $solution.solution_logo neq ""}<input type="button" value="{$lang.drop_solution_logo}" onclick="if (confirm('{$lang.confirm_drop_logo}'))location.href='solution.php?act=drop_logo&id={$solution.solution_id}'">{/if}
+    <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="warn_steplogo">
+    {if $solution.solution_logo eq ''}
+    {$lang.up_steplogo}
+    {else}
+    {$lang.warn_steplogo}
+    {/if}
+    </span><br /><img id="solution_img" src="../data/steplogo/{$solution.solution_logo}" width="60"/>
+    </td>
+  </tr>
+  <tr>
+    <td class="label2">{$lang.solution_desc}</td>
+    <td><textarea  name="solution_desc" id="solution_desc" cols="60" rows="4"  >{$solution.solution_desc}</textarea></td>
+  </tr>
+  <tr>
+    <td class="label2">{$lang.parent_id}</td>
+    <td><select name="parent_id">{html_options options=$solution_list selected=$parent_id}</select>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="label2">{$lang.sort_step}</td>
+    <td><input type="text" name="sort_step" size="5"/> {$lang.sort_step_notice}
+    </td>
+  </tr>
+  <tr>
+    <td class="label2"></td>
+	<td align="center"><br />
+      <input type="submit" class="button" value="{$lang.button_submit}" onclick="return checkForm()" />
+      <input type="reset" class="button" value="{$lang.button_reset}" />
+      <input type="hidden" name="act" value="{$form_action}" />
+      <input type="hidden" name="solution_id" value="{$solution_id}"/>
+      <input type="hidden" id="step_logo" name="step_logo"/>
+      <input type="hidden" id="step_type" name="step_type" />
+      <input type="hidden" name="act" value="{$form_action}" />
+      <input type="hidden" name="old_stepname" value="{$solution.solution_name}" />
+      <input type="hidden" name="id" value="{$solution_id}" />
+      <input type="hidden" name="clusters_id" value="{$clusters_id}" />
+
+      <input type="hidden" name="other_cat" id="other_cat" value="" />
+      <input type="hidden" name="old_steplogo" value="{$solution.solution_logo}">
+    </td>
+  </tr>
+</table>
+</form>
+</div>
+{insert_scripts files="../js/utils.js,validator.js"}
+
+<script language="JavaScript">
+<!--
+var data = '{$solution.other_cat}';
+var defaultClass = "{$lang.default_class}" 
+{literal}
+var myTopic = Object();
+
+onload = function()
+{
+  
+  // 开始检查订单
+  startCheckOrder();
+  //var classList = document.getElementById("topic_class_list");
+}
+function detail_goods(show)
+{	
+	if(show == 'show'){
+		document.getElementById("detail_goods").style.display = '';		
+	}else{
+		document.getElementById("detail_goods").style.display = 'none';		
+	}
+  
+}
+function checkForm()
+{
+  var validator = new Validator('');
+  validator.required('solution_name', solution_name_empty);
+
+  document.getElementById("other_cat").value = obj2str(myTopic);
+
+  return validator.passed();
+}
+
+
+function searchGoods(stepId)
+{
+  //var elements = document.forms['theForm'].elements;
+  var step_id = document.getElementById(stepId).value;
+  var filters = new Object;
+  filters.step_id = step_id;
+  Ajax.call("solution.php?act=get_solution_step_info", filters, function(result)
+  {
+    //clearOptions("source_select");
+    document.getElementById("solution_name").value = result.content.step_name;
+    document.getElementById("solution_desc").value = result.content.step_desc;
+    document.getElementById("solution_img").src = "../data/steplogo/" + result.content.step_logo;
+    document.getElementById("step_logo").value = result.content.step_logo;
+    document.getElementById("step_type").value = result.content.is_real;
+
+  }, "GET", "JSON");
+}
+
+{/literal}
+//-->
+</script>
+
+{include file="pagefooter.htm"}

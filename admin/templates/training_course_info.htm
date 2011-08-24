@@ -1,0 +1,289 @@
+<!-- $Id: course_info.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,validator.js,selectzone.js,listtable.js"}
+
+<script type="text/javascript" src="../js/calendar.php?lang={$cfg_lang}"></script>
+<link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+
+<div class="tab-div">
+  <div id="tabbar-div">
+    <p>
+      	<span class="tab-front" id="general-tab">{$lang.tab_general}</span>
+	  	<span class="tab-back" id="lesson-tab">{$lang.tab_lessons}</span>
+		<span class="tab-back" id="detail-tab">{$lang.tab_content}</span>
+		<span class="tab-back" id="goods-tab">{$lang.tab_goods}</span>
+    </p>
+  </div>
+
+<div id="tabbody-div">
+
+<form method="post" action="training.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+<table width="90%" id="general-table">
+  <tr>
+    <td class="label">{$lang.course_name}</td>
+    <td><input type="text" name="course_name" maxlength="60" value="{$course.course_name}" />{$lang.require_field}</td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.course_brief}</td>
+    <td><textarea  name="course_brief" cols="60" rows="4"  >{$course.course_brief}</textarea></td>
+  </tr>
+  <tr>
+    <td class="label"><a href="javascript:showNotice('warn_courselogo');" title="{$lang.form_notice}">
+        <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.course_logo}</td>
+    <td><input type="file" name="course_logo" id="logo" size="45">{if $course.course_logo neq ""}<input type="button" value="{$lang.drop_logo}" onclick="if (confirm('{$lang.confirm_drop_logo}'))location.href='training.php?act=drop_course_logo&id={$course.course_id}'">{/if}
+    <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="warn_courselogo">
+    {if $course.course_logo eq ''}
+    {$lang.up_courselogo}
+    {else}
+    {$lang.warn_courselogo}
+    {/if}
+    </span>
+	<br /><img src="../{$course.course_logo}" width="60"/>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="label">{$lang.sort_order}</td>
+    <td><input type="text" name="sort_order" maxlength="40" size="15" value="{$course.sort_order}" /></td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.course_duration}</td>
+    <td><input type="text" name="course_duration" maxlength="40" size="4" value="{$course.course_duration}" /> days</td>
+  </tr>
+	<tr>
+		
+    <td class="label">{$lang.course_cat}</td>
+    <td>
+		<select name="course_cat" id="course_cat">
+  			<option value="0">{$lang.select_please}</option>
+  			{html_options options=$course_cat_list}
+		</select>
+		<script language=javascript>
+		  document.theForm.course_cat.value = {$course.course_cat};
+		  </script>
+
+		</td>
+    </tr>
+
+
+  <tr>
+    <td class="label">{$lang.course_tag}</td>
+    <td><input type="text" name="course_tag" maxlength="40" size="15" value="{$course.course_tag}" /></td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.level}</td>
+    <td><input type="text" name="level" maxlength="40" size="15" value="{$course.level}" /></td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.is_show}</td>
+    <td><input type="radio" name="is_show" value="1" {if $course.is_show eq 1}checked="checked"{/if} /> {$lang.yes}
+        <input type="radio" name="is_show" value="0" {if $course.is_show eq 0}checked="checked"{/if} /> {$lang.no}
+        ({$lang.visibility_notes})
+    </td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.is_commend}</td>
+    <td><input type="radio" name="is_commend" value="1" {if $course.is_commend eq 1}checked="checked"{/if} /> {$lang.yes}
+        <input type="radio" name="is_commend" value="0" {if $course.is_commend eq 0}checked="checked"{/if} /> {$lang.no}
+        ({$lang.commend_notes})
+    </td>
+  </tr>
+
+</table>
+<table width="90%" id="lesson-table" style="display:none;" class="table_border table_standard" border="1">
+
+    <tr>
+	  <th>{$lang.course_id}</th>
+      <th>{$lang.lesson_name}</th>
+      <th>{$lang.lesson_brief}</th>
+      <th>{$lang.lesson_duration}</th>
+      <th>{$lang.course_day}</th>
+      <th>{$lang.sort_order}</th>
+      <th><a href="javascript:listTable.sort('is_show'); ">{$lang.is_show}</a>{$sort_is_show}</th>
+      <th>{$lang.handler}</th>
+    </tr>
+	{foreach from=$lessons_list  item=item}
+	<tr><td colspan="8">Day {$item.course_day} of {$item.course_duration} </td></tr>
+		{foreach from=$item.lessons  item=lesson}
+		
+    <tr>
+	  <td class="center">{$lesson.course_name}</td>
+      <td class="first-cell">
+        <span onclick="javascript:listTable.edit(this, 'edit_lesson_name', {$lesson.lesson_id})">{$lesson.lesson_name|escape:html}</span>
+      </td>
+      <td>{$lesson.lesson_brief|truncate:36}</td>
+      <td class="center">{$lesson.lesson_duration}小时</td>
+	  <td class="center"><span onclick="javascript:listTable.edit(this, 'edit_lesson_course_day', {$lesson.lesson_id})">{$lesson.course_day}</span></td>
+      <td class="center"><span onclick="javascript:listTable.edit(this, 'edit_lesson_sort_order', {$lesson.lesson_id})">{$lesson.sort_order}</span></td>
+      <td class="center"><img src="images/{if $lesson.is_show}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_lesson_show', {$lesson.lesson_id})" /></td>
+      <td class="center">
+        <a href="training.php?act=edit_lesson&id={$lesson.lesson_id}" title="{$lang.edit}">{$lang.edit}</a> |
+        <a href="javascript:;" onclick="listTable.remove({$lesson.lesson_id}, '{$lang.drop_confirm}','remove_lesson')" title="{$lang.edit}">{$lang.remove}</a> 
+      </td>
+    </tr>
+		{/foreach}
+	{/foreach}
+</table>
+
+<table width="90%" id="detail-table" style="display:none">
+  <tr>
+    <td class="label">{$lang.course_desc}</td>
+    <td><div style="width:700px;">{$FCKeditor}</div></td>
+  </tr>
+</table>
+
+<table width="90%" id="goods-table" style="display:none">
+  <!-- 商品搜索 -->
+  <tr>
+  <td colspan="5">
+    <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+    <!-- 分类 -->
+    <select name="cat_id"><option value="0">{$lang.all_category}</caption>{$goods_cat_list}</select>
+    <!-- 品牌 -->
+    <select name="brand_id"><option value="0">{$lang.all_brand}</caption>{html_options options=$brand_list}</select>
+    <!-- 关键字 -->
+    <input type="text" name="keyword" size="30" />
+    <input type="button" value="{$lang.button_search}" onclick="searchGoods()" class="button" />
+  <td>
+  </tr>
+  <!-- 商品列表 -->
+  <tr>
+    <th>{$lang.all_goods}</th>
+    <th>{$lang.handler}</th>
+    <th>{$lang.send_bouns_goods}</th>
+  </tr>
+
+  <tr>
+    <td width="45%" align="center">
+      <select name="source_select" size="20" style="width:90%" ondblclick="sz.addItem(false, 'add_link_goods', courseId)" multiple="true">
+      </select>
+    </td>
+    <td align="center">
+      <p><input type="button" value="&gt;&gt;" onclick="sz.addItem(true, 'add_link_goods', courseId)" class="button" /></p>
+      <p><input type="button" value="&gt;" onclick="sz.addItem(false, 'add_link_goods', courseId)" class="button" /></p>
+      <p><input type="button" value="&lt;" onclick="sz.dropItem(false, 'drop_link_goods', courseId)" class="button" /></p>
+      <p><input type="button" value="&lt;&lt;" onclick="sz.dropItem(true, 'drop_link_goods', courseId)" class="button" /></p>
+    </td>
+    <td width="45%" align="center">
+      <select name="target_select" multiple="true" size="20" style="width:90%" ondblclick="sz.dropItem(false, 'drop_link_goods', courseId)">
+        {foreach from=$goods_list item=goods}
+        <option value="{$goods.goods_id}">{$goods.goods_name}</option>
+        {/foreach}
+      </select>
+    </td>
+  </tr>
+</table>
+
+<div class="button-div">
+	<input type="submit" class="button" value="{$lang.button_submit}" />
+    <input type="reset" class="button" value="{$lang.button_reset}" />
+    <input type="hidden" name="act" value="{$form_action}" />
+    <input type="hidden" name="old_coursename" value="{$course.course_name}" />
+    <input type="hidden" name="id" value="{$course.course_id}" />
+    <input type="hidden" name="old_courselogo" value="{$course.course_logo}">
+    
+</div>
+
+
+</form>
+</div>
+
+</div>
+<!-- end goods form -->
+
+<script language="JavaScript">
+<!--
+//document.forms['theForm'].elements['course_name'].focus();
+
+var courseId = {$course.course_id|default:0};
+var elements  = document.forms['theForm'].elements;
+var sz        = new SelectZone(1, elements['source_select'], elements['target_select'], '');
+
+onload = function()
+{
+    // 开始检查订单
+    startCheckOrder();
+}
+/**
+ * 检查表单输入的数据
+ */
+function validate()
+{
+    validator = new Validator("theForm");
+    validator.required("course_name",  no_coursename);
+    validator.isNumber("sort_order", require_num, true);
+    return validator.passed();
+}
+document.getElementById("tabbar-div").onmouseover = function(e)
+{
+    var obj = Utils.srcElement(e);
+
+    if (obj.className == "tab-back")
+    {
+        obj.className = "tab-hover";
+    }
+}
+
+document.getElementById("tabbar-div").onmouseout = function(e)
+{
+    var obj = Utils.srcElement(e);
+
+    if (obj.className == "tab-hover")
+    {
+        obj.className = "tab-back";
+    }
+}
+
+document.getElementById("tabbar-div").onclick = function(e)
+{
+    var obj = Utils.srcElement(e);
+
+    if (obj.className == "tab-front")
+    {
+        return;
+    }
+    else
+    {
+        objTable = obj.id.substring(0, obj.id.lastIndexOf("-")) + "-table";
+
+        var tables = document.getElementsByTagName("table");
+        var spans  = document.getElementsByTagName("span");
+
+        for (i = 0; i < tables.length; i++)
+        {
+            if (tables[i].id == objTable)
+            {
+                tables[i].style.display = (Browser.isIE) ? "block" : "table";
+            }
+            else
+            {
+                tables[i].style.display = "none";
+            }
+        }
+        for (i = 0; spans.length; i++)
+        {
+            if (spans[i].className == "tab-front")
+            {
+                spans[i].className = "tab-back";
+                obj.className = "tab-front";
+                break;
+            }
+        }
+    }
+}
+
+function searchGoods()
+{
+    var elements  = document.forms['theForm'].elements;
+    var filters   = new Object;
+
+    filters.cat_id = elements['cat_id'].value;
+    filters.brand_id = elements['brand_id'].value;
+    filters.keyword = Utils.trim(elements['keyword'].value);
+
+    sz.loadOptions('get_goods_list', filters);
+}
+
+//-->
+</script>
+{include file="pagefooter.htm"}

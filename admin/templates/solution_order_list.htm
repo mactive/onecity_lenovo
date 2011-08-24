@@ -1,0 +1,178 @@
+{if $full_page}
+<!-- $Id: inventory_list.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,listtable.js"}
+<script type="text/javascript" src="../js/calendar.php"></script>
+<link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+
+<!-- 订单搜索 -->
+<div class="form-div">
+  <form action="javascript:searchOrder()" name="searchForm">
+	<table>
+		<tr><td>
+    		<img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+			</td><td>
+				{$lang.solution_name} <input type="text" name="solution_name" size="10" />  &nbsp; &nbsp;  
+				{$lang.order_amount}大于  <input type="text" name="order_amount" size="10" /> &nbsp; &nbsp;   
+	    	
+    		{$lang.user_name}   
+			<select name="user_id" id="user_id">
+      			<option value="0">{$lang.select_please}</option>
+      			{html_options options=$user_list}
+    		</select>
+    		&nbsp; &nbsp;  {$lang.custom_name}
+			<select name="contact_id" id="contact_id">
+      			<option value="0">{$lang.select_please}</option>
+      			{html_options options=$custom_list}
+    		</select>
+			
+		</td>
+		<td style="padding-left:30px;"><input type="submit" value="{$lang.button_search}" class="button" /> <input type="reset" value="重置" class="button" /></td>
+		</tr>
+	<tr>
+	  <td></td>
+      <td><strong>{$lang.add_time}: </strong> {$lang.before_start_time}
+      <input type="text" name="start_time" maxlength="60" size="17" id="start_time_id" />
+      <input name="start_time_btn" type="button" id="start_time_btn" onclick="return showCalendar('start_time_id', '%Y-%m-%d %H:%M', '24', false, 'start_time_btn');" value="{$lang.btn_select}" class="button"/>
+      ~ {$lang.after_end_time}
+      <input type="text" name="end_time" maxlength="60" size="17" id="end_time_id" />
+      <input name="end_time_btn" type="button" id="end_time_btn" onclick="return showCalendar('end_time_id', '%Y-%m-%d %H:%M', '24', false, 'end_time_btn');" value="{$lang.btn_select}" class="button"/>  
+      </td>
+    </tr>
+	</table>
+  </form>
+</div>
+
+
+<!-- 订单列表 -->
+<form method="post" name="listForm"  onsubmit="return confirmSubmit(this)">
+  <div class="list-div" id="listDiv">
+{/if}
+
+<table cellpadding="3" cellspacing="1">
+  <tr>
+    <th width="50" >
+      <input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox" /><a href="javascript:listTable.sort('order_id', 'DESC'); ">{$lang.order_id}</a>{$sort_order_id}
+    </th>
+    <th><a href="javascript:listTable.sort('add_time', 'DESC'); ">{$lang.add_time}</a>{$sort_add_time}</th>
+    <th><a href="javascript:listTable.sort('solution_id', 'DESC'); ">{$lang.solution_name}</a>{$sort_solution_id}</th>
+    <th><a href="javascript:listTable.sort('user_id', 'DESC'); ">{$lang.user_name}</a>{$sort_user_id}</th>
+    <th><a href="javascript:listTable.sort('contact_id', 'DESC'); ">{$lang.custom_name}</a>{$sort_contact_id}</th>
+    <th><a href="javascript:listTable.sort('order_amount', 'DESC'); ">{$lang.order_amount}</a>{$sort_order_amount}</th>
+    <th>{$lang.order_note}</a></th>
+	<th>{$lang.order_operate}</th>
+  <tr>
+  {foreach from=$solution_list item=inv}
+  <tr>
+    <td valign="top" nowrap="nowrap"><input type="checkbox" name="checkboxes[]" value="{$inv.order_id}" />{$inv.order_id}{if $inv.extension_code eq "group_buy"}<br /><div align="center">{$lang.group_buy}</div>{/if}</td>
+    <td align="center" valign="top">{$inv.add_time}</td>
+    <td align="center" valign="top" nowrap="nowrap">{$inv.solution_name}</td>
+    <td align="center" valign="top" nowrap="nowrap">{$inv.user_name}</td>
+    <td align="center" valign="top" nowrap="nowrap">{$inv.custom_name}</td>
+    <td align="center" valign="top" >
+     <a href="goods.php?act=edit&goods_id={$inv.goods_id}">{$inv.order_amount}</a>
+    </td>
+    <td align="center" valign="top"  nowrap="nowrap">
+		<span onclick="javascript:listTable.edit(this, 'edit_order_note', {$inv.order_id})">{$inv.order_note}</span>
+
+    </td>
+	<td align="center">
+        <a href="solution_order.php?act=list_one_solution&amp;solution_id={$inv.solution_id}&amp;order_id={$inv.order_id}" title="{$lang.detail}">{$lang.detail}</a> |	
+		<a href="solution_order.php?act=edit&amp;order_id={$inv.order_id}" title="{$lang.edit_inventory}"><img src="images/icon_edit.gif" width="16" height="16" border="0" /></a>	<span style="padding-left:10px;"></span> |	
+	  <a href="javascript:;" onclick="listTable.remove({$inv.order_id}, '{$lang.order_delete_yn}','delete')" title="{$lang.delete_inventory}"><img src="images/icon_trash.gif" width="16" height="16" border="0" /></a></td>
+  </tr>
+  {/foreach}
+</table>
+
+<!-- 分页 -->
+<table id="page-table" cellspacing="0">
+  <tr>
+    <td align="right" nowrap="true">
+    {include file="page.htm"}
+    </td>
+  </tr>
+</table>
+
+{if $full_page}
+  </div>
+<div>
+  <input type="hidden" name="act" value="batch" />
+  <select name="type" id="selAction" onchange="changeAction()">
+	<option value="">{$lang.select_please}</option>
+	{html_options options=$batch_list}
+	<option value="drop">{$lang.drop}</option>	
+  </select>
+  <input type="submit" value="{$lang.button_submit}" id="btnSubmit" name="btnSubmit" class="button" disabled="true" />
+</div>
+</form>
+<script language="JavaScript">
+listTable.recordCount = {$record_count};
+listTable.pageCount = {$page_count};
+
+{foreach from=$filter item=item key=key}
+listTable.filter.{$key} = '{$item}';
+{/foreach}
+{literal}
+
+    onload = function()
+    {
+        // 开始检查订单
+        startCheckOrder();
+    }
+
+    /**
+     * 搜索订单
+     */
+    function searchOrder()
+    {
+        listTable.filter['solution_name'] = Utils.trim(document.forms['searchForm'].elements['solution_name'].value);
+        listTable.filter['order_amount'] = Utils.trim(document.forms['searchForm'].elements['order_amount'].value);
+        listTable.filter['user_id'] = document.forms['searchForm'].elements['user_id'].value;
+        listTable.filter['contact_id'] = document.forms['searchForm'].elements['contact_id'].value;
+        
+		listTable.filter['start_time'] = document.forms['searchForm'].elements['start_time'].value;
+        listTable.filter['end_time'] = document.forms['searchForm'].elements['end_time'].value;
+		
+
+        listTable.filter['page'] = 1;
+        listTable.loadList();
+    }
+
+  /**
+   * @param: bool ext 其他条件：用于转移分类
+   */
+  function confirmSubmit(frm, ext)
+  {
+      if (frm.elements['type'].value == 'drop')
+      {
+          return confirm(batch_trash_confirm);
+      }
+      else if (frm.elements['type'].value == 'inbound')
+      {
+          return confirm(batch_inbound);
+      }
+      else if (frm.elements['type'].value == 'outbound')
+      {
+          return confirm(batch_outbound);
+      }
+      else
+      {
+          return confirm(batch_transport);
+      }
+  }
+
+	function changeAction()
+ 	{
+      var frm = document.forms['listForm'];
+
+      if (!document.getElementById('btnSubmit').disabled &&
+          confirmSubmit(frm, false))
+      {
+          frm.submit();
+      }
+    }
+</script>
+{/literal}
+
+{include file="pagefooter.htm"}
+{/if}

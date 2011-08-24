@@ -1,0 +1,110 @@
+<!-- $Id: event_list.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+
+{if $full_page}
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,listtable.js"}
+
+<!-- 订单搜索 -->
+<div class="form-div">
+  <form action="javascript:searchInventory()" name="searchForm">
+	<table>
+		<tr><td>
+    		<img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+			</td><td>
+    		{$lang.event_name} <input name="event_name" type="text" id="event_name" size="15" value="{$event_name}" /> 
+    		{$lang.is_commend}  
+    		<select name="is_commend" id="is_commend">
+      			<option value="" selected="true">{$lang.select_please}</option>
+      			<option value="0">不推荐</option>
+      			<option value="1">推荐</option>
+    		</select>
+		  	
+		</td>
+		<td style="padding-left:30px;"><input type="submit" value="{$lang.button_search}" class="button" /> <input type="reset" value="重置" class="button" /></td>
+		</tr>
+
+	</table>
+  </form>
+</div>
+
+
+
+<form method="post" action="" name="listForm">
+<!-- start event list -->
+<div class="list-div" id="listDiv">
+{/if}
+
+  <table cellpadding="3" cellspacing="1">
+    <tr>
+      <th>{$lang.event_name}</th>
+      <th>{$lang.event_brief}</th>
+      <th><a href="javascript:listTable.sort('event_start_time'); ">{$lang.event_start_time}</a>{$sort_event_start_time}</th>
+      <th>{$lang.sort_order}</th>
+      <th><a href="javascript:listTable.sort('is_show'); ">{$lang.is_show}</a>{$sort_is_show}</th>
+      <th><a href="javascript:listTable.sort('is_commend'); ">{$lang.is_commend}</a>{$sort_is_commend}</th>
+      <th>{$lang.handler}</th>
+    </tr>
+    {foreach from=$event_list item=event}
+    <tr>
+      <td class="first-cell">
+        <span style="float:right">{$event.event_logo}</span>
+        <span onclick="javascript:listTable.edit(this, 'edit_event_name', {$event.event_id})">{$event.event_name|escape:html}</span>
+      </td>
+      <td>{$event.event_brief|truncate:36}</td>
+      <td align="center">开始:{$event.event_start_time} , 时长:{$event.event_duration}天</td>
+      <td align="center"><span onclick="javascript:listTable.edit(this, 'edit_event_sort_order', {$event.event_id})">{$event.sort_order}</span></td>
+      <td align="center"><img src="images/{if $event.is_show}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_event_show', {$event.event_id})" /></td>
+      <td align="center"><img src="images/{if $event.is_commend}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_event_commend', {$event.event_id})" /></td>
+      <td align="center">
+        <a href="training.php?act=edit_event&id={$event.event_id}" title="{$lang.edit}">{$lang.edit}</a> |
+        <a href="javascript:;" onclick="listTable.remove({$event.event_id}, '{$lang.drop_confirm}','remove_event')" title="{$lang.edit}">{$lang.remove}</a> 
+      </td>
+    </tr>
+    {foreachelse}
+    <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
+    {/foreach}
+    <tr>
+      <td align="right" nowrap="true" colspan="6">
+      {include file="page.htm"}
+      </td>
+    </tr>
+  </table>
+
+{if $full_page}
+<!-- end event list -->
+</div>
+</form>
+
+<script type="text/javascript" language="javascript">
+  <!--
+  listTable.recordCount = {$record_count};
+  listTable.pageCount = {$page_count};
+  listTable.query = "query_event";
+  {foreach from=$filter item=item key=key}
+  listTable.filter.{$key} = '{$item}';
+  {/foreach}
+
+  {literal}
+  onload = function()
+  {
+      // 开始检查订单
+      startCheckOrder();
+  }
+
+  /**
+   * 搜索订单
+   */
+  function searchInventory()
+  {
+      listTable.filter['event_name'] = Utils.trim(document.forms['searchForm'].elements['event_name'].value);
+      listTable.filter['is_commend'] = Utils.trim(document.forms['searchForm'].elements['is_commend'].value);
+
+      listTable.filter['page'] = 1;
+      listTable.loadList();
+  }
+
+  {/literal}
+  //-->
+</script>
+{include file="pagefooter.htm"}
+{/if}

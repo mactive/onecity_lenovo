@@ -1,0 +1,185 @@
+<!-- $Id: course_info.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,selectzone.js,listtable.js"}
+
+
+<script type="text/javascript" src="../js/calendar.php?lang={$cfg_lang}"></script>
+<link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+
+<div class="tab-div">
+  <div id="tabbar-div">
+    <p>
+      	<span class="tab-front" id="general-tab">{$lang.tab_general}</span>
+	  	<span class="tab-back" id="lesson-tab">{$lang.tab_courses}</span>
+		<span class="tab-back" id="detail-tab">{$lang.tab_content}</span>
+    </p>
+  </div>
+
+<div id="tabbody-div">
+<form method="post" action="training.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+<table width="90%" id="general-table">
+  <tr>
+    <td class="label">{$lang.event_name}</td>
+    <td><input type="text" name="event_name" maxlength="60" value="{$event.event_name}" />{$lang.require_field}</td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.event_brief}</td>
+    <td><textarea  name="event_brief" cols="60" rows="4"  >{$event.event_brief}</textarea></td>
+  </tr>
+  <tr>
+    <td class="label"><a href="javascript:showNotice('warn_eventlogo');" title="{$lang.form_notice}">
+        <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.event_logo}</td>
+    <td><input type="file" name="event_logo" id="logo" size="45">{if $event.event_logo neq ""}<input type="button" value="{$lang.drop_logo}" onclick="if (confirm('{$lang.confirm_drop_logo}'))location.href='training.php?act=drop_event_logo&id={$event.event_id}'">{/if}
+    <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="warn_eventlogo">
+    {if $event.event_logo eq ''}
+    {$lang.up_eventlogo}
+    {else}
+    {$lang.warn_eventlogo}
+    {/if}
+    </span>
+	<br /><img src="../{$event.event_logo}" width="60"/>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="label">{$lang.sort_order}</td>
+    <td><input type="text" name="sort_order" maxlength="40" size="15" value="{$event.sort_order}" /></td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.event_start_time}</td>
+    <td>  <input type="text" name="event_start_time" maxlength="60" size="20" value="{$event.event_start_time}" id="event_start_time_id" />
+    <input name="event_start_time_btn" type="button" id="event_start_time_btn" onclick="return showCalendar('event_start_time_id', '%Y-%m-%d %H:%M:%S', '24', false, 'event_start_time_btn');" value="{$lang.btn_select}" class="button"/>
+    </td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.event_duration}</td>
+    <td><input type="text" name="event_duration" maxlength="40" size="4" value="{$event.event_duration}" /> 天</td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.event_gallery}</td>
+    <td><input type="text" name="event_gallery" maxlength="40" size="30" value="{$event.event_gallery}" /> flickr_rss</td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.event_teacher}</td>
+    <td><input type="text" name="event_teacher" maxlength="40" size="15" value="{$event.event_teacher}" /></td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.level}</td>
+    <td><input type="text" name="level" maxlength="40" size="15" value="{$event.level}" /></td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.is_show}</td>
+    <td><input type="radio" name="is_show" value="1" {if $event.is_show eq 1}checked="checked"{/if} /> {$lang.yes}
+        <input type="radio" name="is_show" value="0" {if $event.is_show eq 0}checked="checked"{/if} /> {$lang.no}
+        ({$lang.visibility_notes})
+    </td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.is_commend}</td>
+    <td><input type="radio" name="is_commend" value="1" {if $event.is_commend eq 1}checked="checked"{/if} /> {$lang.yes}
+        <input type="radio" name="is_commend" value="0" {if $event.is_commend eq 0}checked="checked"{/if} /> {$lang.no}
+        ({$lang.commend_notes})
+    </td>
+  </tr>
+
+</table>
+
+<table width="90%" id="lesson-table" style="display:none;" class="table_border table_standard" border="1">
+<tr><td>
+	
+	<table width="100%" id="attrTable">
+	{foreach from=$event_courses  item=i name=foo}
+		<tr><td width="30%" class="label">
+				<a href="javascript:;" onclick="removeSpec(this)">[-]</a>
+			</td>
+			<td>
+				课程号 : {$i.sort_order}
+				<input type="hidden" name="id_list[]" value="{$i.id}">
+				<input type="hidden" name="sort_order_list[]" value="{$i.sort_order}">
+				<select name="course_id_list[]" id="ser_{$smarty.foreach.foo.iteration}">
+		  			<option value="0">{$lang.select_please}</option>
+		  			{html_options options=$course_list selected=$i.course_id}
+				</select>
+				</td>
+		</tr>
+	{/foreach}
+	</table>
+	</td></tr>
+</table>
+
+<table width="90%" id="detail-table" style="display:none">
+  <tr>
+    <td class="label">{$lang.event_desc}</td>
+    <td><div style="width:700px;">{$FCKeditor}</div></td>
+  </tr>
+</table>
+
+<div class="button-div">
+    <input type="submit" class="button" value="{$lang.button_submit}" />
+    <input type="reset" class="button" value="{$lang.button_reset}" />
+    <input type="hidden" name="act" value="{$form_action}" />
+    <input type="hidden" name="old_eventname" value="{$event.event_name}" />
+    <input type="hidden" name="id" value="{$event.event_id}" />
+    <input type="hidden" name="old_eventlogo" value="{$event.event_logo}">
+</div>
+
+</form>
+</div>
+</div>
+{insert_scripts files="validator.js,tab.js"}
+
+<script language="JavaScript">
+<!--
+document.forms['theForm'].elements['event_name'].focus();
+
+var eventID	 = {$event.event_id|default:0};
+var elements  = document.forms['theForm'].elements;
+var sz        = new SelectZone(1, elements['source_select'], elements['target_select'], '');
+
+onload = function()
+{
+    // 开始检查订单
+    startCheckOrder();
+}
+
+/**
+ * 检查表单输入的数据
+ */
+function validate()
+{
+    validator = new Validator("theForm");
+    validator.required("event_name",  no_eventname);
+    validator.isNumber("sort_order", require_num, true);
+    return validator.passed();
+}
+function addSpec(obj)
+{
+    var src   = obj.parentNode.parentNode;
+    var idx   = rowindex(src);
+    var tbl   = document.getElementById('attrTable');
+    var row   = tbl.insertRow(idx + 1);
+    var cell1 = row.insertCell(-1);
+    var cell2 = row.insertCell(-1);
+    var regx  = /<a([^>]+)<\/a>/i;
+
+    cell1.className = 'label';
+    cell1.innerHTML = src.childNodes[0].innerHTML.replace(/(.*)(addSpec)(.*)(\[)(\+)/i, "$1removeSpec$3$4-");
+    cell2.innerHTML = src.childNodes[0].innerHTML;
+    //cell2.innerHTML = src.childNodes[1].innerHTML.replace(/readOnly([^\s|>]*)/i, '');
+}
+
+	/**
+ * 删除规格值
+ */
+function removeSpec(obj)
+{
+    var row = rowindex(obj.parentNode.parentNode);
+    var tbl = document.getElementById('attrTable');
+
+    tbl.deleteRow(row);
+}
+
+
+//-->
+</script>
+{include file="pagefooter.htm"}

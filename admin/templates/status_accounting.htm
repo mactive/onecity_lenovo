@@ -1,0 +1,198 @@
+<!-- $Id: goods_list.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+
+{if $full_page}
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,listtable.js"}
+<script type="text/javascript">
+function getValue(goods_id)
+{
+	var part_change = "part_"+goods_id;
+var x=document.getElementById(part_change);
+//alert("inventory.php?act=add&part_number="+x.innerHTML)
+var url = "inventory.php?act=add&part_number="+x.innerHTML;
+window.open(url,"_self");
+}
+</script>
+
+<!-- 商品搜索 -->
+<div class="form-div">
+  <form action="javascript:searchGoods()" name="searchForm">
+	<table>
+		<tr>
+			<td width="30"><img src="images/icon_search.gif" border="0" alt="SEARCH" />
+		    </td>
+			<td>{if $smarty.get.act neq "trash"}
+		    <!-- 分类 -->
+		    <select name="cat_id"><option value="0">{$lang.goods_cat}</option>{$cat_list}</select>
+		    <!-- 品牌 -->
+		    <select name="brand_id"><option value="0">{$lang.goods_brand}</option>{html_options options=$brand_list}</select>
+		    <!-- 推荐 -->
+		    <select name="intro_type"><option value="0">{$lang.intro_type}</option>{html_options options=$intro_list selected=$smarty.get.intro_type}</select>
+		    {/if}
+		    <!-- 关键字 -->
+		    {$lang.keyword} <input type="text" name="keyword" size="15" /></td>
+			<td>
+		    </td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><!-- part_number -->
+		    {$lang.part_number} : <input type="text" name="part_number" size="20" />
+			| {$lang.average_price}区间   <input type="text" name="start_price" size="5" id="start_price" /> ~ <input type="text" name="end_price" size="5" id="end_price" />
+			| {$lang.goods_number}区间   <input type="text" name="start_number" size="5" id="start_number" /> ~ <input type="text" name="end_number" size="5" id="end_number" />
+			
+			<input type="submit" value="{$lang.button_search}" class="button" />
+			</td>
+			<td></td>
+		</tr>
+	</table>
+  </form>
+</div>
+<!-- 商品列表 -->
+<form method="post" action="" name="listForm" onsubmit="return confirmSubmit(this)">
+  <!-- start goods list -->
+  <div class="list-div" id="listDiv">
+{/if}
+<table cellpadding="3" cellspacing="1">
+  <tr>
+    <th width="100">
+      <a href="javascript:listTable.sort('goods_id'); ">产品{$lang.record_id}</a>{$sort_goods_id}
+    </th>
+    <th width="250"><a href="javascript:listTable.sort('goods_name'); ">{$lang.goods_name}</a>{$sort_goods_name}</th>
+    <th><a href="javascript:listTable.sort('goods_name'); ">{$lang.part_number}</a>{$sort_goods_name}</th>
+	<!--{foreach  from=$status_list item=status}-->
+	<th>{$status.status_name}</th>
+	<!--{/foreach}-->
+	
+    {if $use_storage}
+    <th><a href="javascript:listTable.sort('goods_number'); ">{$lang.goods_number}</a>{$sort_goods_number}</th>
+    {/if}
+    <th>{$lang.handler}</th>
+  <tr>
+  {foreach from=$goods_list item=goods}
+  <tr>
+    <td align="center"> &nbsp;&nbsp; &nbsp;&nbsp;{$goods.goods_id} &nbsp;&nbsp;
+	<a href="javascript:getValue({$goods.goods_id})"><img src="images/recentProgress.png" width="16" height="16" border="0" /></a>
+	</td>
+    <td class="first-cell" style="{if $goods.is_promote}color:red;{/if}">
+	<a href="../goods.php?id={$goods.goods_id}" target="_blank" title="{$lang.view}">{$goods.goods_name|escape:html}</a></td>
+    <td align="center"><span id="part_{$goods.goods_id}" onclick="listTable.edit(this, 'edit_part_number', {$goods.goods_id})">  {$goods.part_number}  </span></td>
+
+
+	{foreach from=$goods.status_accounting key=k item=v}
+	   <td align="center">{$v}</td>
+	{/foreach}
+
+
+	
+	
+    {if $use_storage}
+    <td align="center"><span id="goods_number_{$goods.goods_id}" onclick="listTable.edit(this, 'edit_goods_number', {$goods.goods_id})">{$goods.goods_number}</span></td>
+    {/if}
+    <td align="center">
+      <a href="inventory.php?act=list&amp;part_number={$goods.part_number}" target="_blank" title="{$lang.inventory_list}"><img src="images/icon_view.gif" width="16" height="16" border="0" /></a>
+      <a href="goods.php?act=edit&goods_id={$goods.goods_id}{if $code neq 'real_goods'}&extension_code={$code}{/if}" title="{$lang.edit}"><img src="images/icon_edit.gif" width="16" height="16" border="0" /></a>
+      {if $add_handler}
+        |
+        {foreach from=$add_handler item=handler}
+        <a href="{$handler.url}&goods_id={$goods.goods_id}" title="{$handler.title}"><img src="images/{$handler.img}" width="16" height="16" border="0" /></a>
+        {/foreach}
+      {/if}
+    </td>
+  </tr>
+  {foreachelse}
+  <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
+  {/foreach}
+</table>
+<!-- end goods list -->
+
+<!-- 分页 -->
+<table id="page-table" cellspacing="0">
+  <tr>
+    <td align="right" nowrap="true">
+    {include file="page.htm"}
+    </td>
+  </tr>
+</table>
+
+{if $full_page}
+</div>
+
+</form>
+
+
+<script type="text/javascript">
+  listTable.recordCount = {$record_count};
+  listTable.pageCount = {$page_count};
+  	
+  listTable.query = "status_accounting_query";
+
+  {foreach from=$filter item=item key=key}
+  listTable.filter.{$key} = '{$item}';
+  {/foreach}
+
+  {literal}
+
+	    function searchGoods()
+	    {
+
+	        {if $smarty.get.act neq "trash"}
+	        listTable.filter['cat_id'] = document.forms['searchForm'].elements['cat_id'].value;
+	        listTable.filter['brand_id'] = document.forms['searchForm'].elements['brand_id'].value;
+	        listTable.filter['intro_type'] = document.forms['searchForm'].elements['intro_type'].value;
+	        {/if}
+	        listTable.filter['keyword'] = Utils.trim(document.forms['searchForm'].elements['keyword'].value);
+	        listTable.filter['part_number'] = Utils.trim(document.forms['searchForm'].elements['part_number'].value);
+			listTable.filter['start_price'] = document.forms['searchForm'].elements['start_price'].value;
+	        listTable.filter['end_price'] = document.forms['searchForm'].elements['end_price'].value;
+			listTable.filter['start_number'] = document.forms['searchForm'].elements['start_number'].value;
+	        listTable.filter['end_number'] = document.forms['searchForm'].elements['end_number'].value;
+	
+	
+	        listTable.filter['page'] = 1;
+
+	        listTable.loadList();
+	    }
+
+	
+  onload = function()
+  {
+    startCheckOrder(); // 开始检查订单
+    document.forms['listForm'].reset();
+  }
+
+  /**
+   * @param: bool ext 其他条件：用于转移分类
+   */
+  function confirmSubmit(frm, ext)
+  {
+      if (frm.elements['type'].value == 'trash')
+      {
+          return confirm(batch_trash_confirm);
+      }
+      else if (frm.elements['type'].value == 'not_on_sale')
+      {
+          return confirm(batch_no_on_sale);
+      }
+      else if (frm.elements['type'].value == 'move_to')
+      {
+          ext = (ext == undefined) ? true : ext;
+          return ext && frm.elements['target_cat'].value != 0;
+      }
+      else if (frm.elements['type'].value == '')
+      {
+          return false;
+      }
+      else
+      {
+          return true;
+      }
+  }
+
+
+  
+
+{/literal}
+</script>
+{include file="pagefooter.htm"}
+{/if}

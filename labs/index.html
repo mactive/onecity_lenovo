@@ -1,0 +1,100 @@
+<html>
+	<head>
+	
+	<title>Paul James Campbell | PNG Fix</title>
+	
+		<!-- Include required jQuery object and plug-in -->
+		<script src="jquery-1.2.1.pack.js" type="text/javascript" charset="utf-8"></script>
+		<script src="jquery.pngfix.js" type="text/javascript" charset="utf-8"></script>
+
+		<!-- Make call within DOM load handler (or place at the bottom of HTML) -->
+		<script type="text/javascript">
+		$(document).ready(function() {
+			
+			// Fix background images on all TD elements
+			$("table td").pngfix();
+			
+			// Fix background images on all A elements
+			$("a").pngfix();
+			
+			// Fix all inline PNG images and the element #container with the custom sizingMethod of "scale"
+			$("img[@src$=png], #container").pngfix({
+				sizingMethod: "scale"
+			});
+			
+			// $.miseAlphaImageLoader("sdsd");
+		});
+		</script>
+	
+		<style type="text/css">
+		* {
+			border:0;
+			padding:0;
+			margin:0;
+		}
+		body {
+			font-family: Verdana, Arial, Sans-Serif;
+			font-size:11px;
+			background:#AE1723;
+			text-align:center;
+			color:#fff;
+		}
+		table {
+			margin-top:30px;
+		}
+		table td {
+			height:50px;
+			width:50px;
+			text-align:center;
+		}
+		table td.cell-example {
+			background:url('example_mix_bg.png') repeat top left;
+		}
+		a {
+			padding-left:14px;
+			color:#fff;
+			background:url('example_bullet.png') no-repeat top left;
+		}
+		a:hover {
+			background:none;
+		}
+		#container {
+			margin:70px auto;
+			width:500px;
+		
+			/* Basic repeatable PNG background */
+			background:url('example_bg.png') repeat-x;
+		}
+		</style>
+	
+	</head>
+
+	<body>
+
+		<!-- application of fix to a background image on a standard DIV element -->
+		<div id="container">
+			
+			<!-- application of fix to an IMG element -->
+			<img src="example_image.png" width="400" height="300" alt="Example IMG" />
+			
+		</div>
+		
+		<!-- application of fix on an A element -->
+		<p><a href="http://www.campbellsdigitalsoup.co.uk/about/png-fix/">A link element</a></p>
+		
+		<!-- application of fix to a TABLE TD element -->
+		<table>
+			
+			<tbody>
+					<tr>
+						<td>123</td>
+						<td class="cell-example">---</td>
+						<td>ABC</td>
+					</tr>
+			</tbody>
+			
+		</table>
+
+	</body>
+
+</html>

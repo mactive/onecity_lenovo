@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<channel>
+		<item>
+			<link>http://</link>
+			<image>data/afficheimg/20091124hpqfcy.png</image>
+			<title></title>
+		</item>
+		<item>
+			<link>http://</link>
+			<image>data/afficheimg/20091124uoocjn.png</image>
+			<title></title>
+		</item>
+		<item>
+			<link>index.php</link>
+			<image>data/afficheimg/20091124tcqzyq.png</image>
+			<title></title>
+		</item>
+	</channel>
+	<config>	
+		<roundCorner>5</roundCorner>
+		<autoPlayTime>8</autoPlayTime>
+		<isHeightQuality>false</isHeightQuality>
+		<blendMode>normal</blendMode>
+		<transDuration>1</transDuration>
+		<windowOpen>_self</windowOpen>
+		<btnSetMargin>auto 5 5 auto</btnSetMargin>
+		<btnDistance>20</btnDistance>
+		<titleBgColor>0xff6600</titleBgColor>
+		<titleTextColor>0xffffff</titleTextColor>
+		<titleBgAlpha>.75</titleBgAlpha>
+		<titleMoveDuration>1</titleMoveDuration>
+		<btnAlpha>.7</btnAlpha>	
+		<btnTextColor>0xffffff</btnTextColor>	
+		<btnDefaultColor>0x1B3433</btnDefaultColor>
+		<btnHoverColor>0xff9900</btnHoverColor>
+		<btnFocusColor>0xff6600</btnFocusColor>
+		<changImageMode>hover</changImageMode>
+		<isShowBtn>true</isShowBtn>
+		<scaleMode>noBorder</scaleMode>
+		<transform>breathe</transform>
+	</config>
+</data>

@@ -1,0 +1,103 @@
+{if $full_page}
+<!-- $Id: inventory_list.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,listtable.js"}
+
+<!-- 状态列表 -->
+  <div class="list-div" id="listDiv">
+{/if}
+
+<table cellpadding="3" cellspacing="1">
+  <tr>
+    <th width="50" >
+      <input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox" />{$lang.status_id}
+    </th>
+    <th>{$lang.status_name}</th>
+    <th>{$lang.status_desc}</th>
+	<th>{$lang.inv_operate}</th>
+  <tr>
+  {foreach from=$list_status item=inv}
+  <tr>
+    <td valign="top" nowrap="nowrap"><input type="checkbox" name="checkboxes" value="{$inv.inv_id}" />{$inv.status_id}{if $inv.extension_code eq "group_buy"}<br /><div align="center">{$lang.group_buy}</div>{/if}</td>
+    <td  align="center">{$inv.status_name}</td>
+    <td align="center" valign="top">{$inv.status_desc}</td>
+	<td align="center">
+	  <a href="inventory.php?act=edit_status&status_id={$inv.status_id}" title="{$lang.edit_inventory_status}"><img src="images/icon_edit.gif" width="16" height="16" border="0" /></a><span style="padding-left:20px;"></span>
+	  <a href="javascript:;" onclick="listTable.remove({$inv.status_id}, '{$lang.inventory_status_delete_yn}','delete_status')" title="{$lang.delete_inventory_status}"><img src="images/icon_trash.gif" width="16" height="16" border="0" /></a>
+	</td>
+  </tr>
+  {/foreach}
+</table>
+
+<div class="main-div">
+  	{if $step_act == 'edit_status'}
+  <form action="inventory.php?act=update_status" method="post" enctype="multipart/form-data" name="searchForm">
+	{else}
+  <form action="inventory.php?act=insert_status" method="post" enctype="multipart/form-data" name="searchForm">
+	{/if}
+  <table cellspacing="1" cellpadding="3" width="80%">
+	<tr>
+      <td colspan="2"><div align="right" style="font-size:14px;color:#9CACAF;"><strong>
+		{if $step_act == 'edit_status'}
+		{$lang.edit_inventory_status}
+		{else}
+		{$lang.add_inventory_status}
+		{/if}
+		
+	
+	</strong></div></td>
+      <td colspan="2"></td>
+    </tr>
+	
+	{if $step_act == 'edit_status'}
+	<tr>
+      <td><div align="right"><strong>{$lang.status_id}</strong></div></td>
+      <td colspan="3"><span>{$status_info.status_id}</span><input name="status_id" type="hidden" value="{$status_info.status_id}" id="status_id"></td>
+    </tr>
+	{/if}
+    <tr>
+      <td><div align="right"><strong>{$lang.status_name}</strong></div></td>
+      <td colspan="3"><input name="status_name" type="text" value="{$status_info.status_name}" id="status_name" size="40"></td>
+    </tr>
+
+    <tr>
+      <td><div align="right"><strong>{$lang.status_desc}</strong></div></td>
+      <td colspan="3"><textarea rows="3" cols="40" name="status_desc">{$status_info.status_desc}</textarea>
+		</td>
+      </tr>
+    <tr>
+      <td colspan="4"><div align="center">
+		{if $step_act == 'edit_status'}
+		<input name="query" type="submit" class="button" id="query" value="{$lang.edit_inventory_status}" />
+		{else}
+		<input name="query" type="submit" class="button" id="query" value="{$lang.add_inventory_status}" />
+		{/if}
+        
+        <input name="reset" type="reset" class='button' value='{$lang.button_reset}' />
+      </div></td>
+      </tr>
+  </table>
+</form>
+</div>
+
+{if $full_page}
+  </div>
+</form>
+
+<script type="text/javascript" language="JavaScript">
+  listTable.recordCount = {$record_count};
+  listTable.pageCount = {$page_count};
+
+  {foreach from=$filter item=item key=key}
+  listTable.filter.{$key} = '{$item}';
+  {/foreach}
+  {literal}
+  onload = function()
+  {
+    // 开始检查订单
+    startCheckOrder();
+  }
+  {/literal}
+</script>
+{include file="pagefooter.htm"}
+{/if}

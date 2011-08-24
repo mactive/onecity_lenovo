@@ -1,0 +1,179 @@
+{if $full_page}
+<!-- $Id: inventory_list.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,listtable.js"}
+<script type="text/javascript" src="../js/calendar.php"></script>
+<link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+
+<!-- 订单搜索 -->
+<div class="form-div">
+  <form action="javascript:searchInventory()" name="searchForm">
+	<table>
+		<tr><td>
+    		<img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+			</td><td>
+    		{$lang.part_number} <input name="part_number" type="text" id="part_number" size="15" value="{$filter.part_number}" > 
+    		{$lang.serial_number} <input name="serial_number" type="text" id="serial_number" size="15" value="{$filter.serial_number}">  
+    		{$lang.all_status}  
+    		<select name="status" id="status">
+      			<option value="0">{$lang.select_please}</option>
+      			{html_options options=$status_list}
+    		</select>
+			| 价格区间   <input type="text" name="start_price" size="5" id="start_price" /> ~ <input type="text" name="end_price" size="5" id="end_price" />
+		  	
+		</td>
+		<td style="padding-left:30px;"><input type="submit" value="{$lang.button_search}" class="button" /> <input type="reset" value="重置" class="button" /></td>
+		</tr>
+	<tr>
+	  <td></td>
+      <td>	{$lang.goods_name} <input name="goods_name" type="text" id="goods_name" size="10"> 
+	<strong>{$lang.label_time}</strong>{$lang.before_start_time}
+      <input type="text" name="start_time" maxlength="60" size="17" id="start_time_id" />
+      <input name="start_time_btn" type="button" id="start_time_btn" onclick="return showCalendar('start_time_id', '%Y-%m-%d %H:%M', '24', false, 'start_time_btn');" value="{$lang.btn_select}" class="button"/>
+      ~ {$lang.after_end_time}
+      <input type="text" name="end_time" maxlength="60" size="17" id="end_time_id" />
+      <input name="end_time_btn" type="button" id="end_time_btn" onclick="return showCalendar('end_time_id', '%Y-%m-%d %H:%M', '24', false, 'end_time_btn');" value="{$lang.btn_select}" class="button"/>  
+      </td>
+	  
+    </tr>
+	</table>
+  </form>
+</div>
+
+
+<!-- 订单列表 -->
+<form method="post" name="listForm"  onsubmit="return confirmSubmit(this)">
+  <div class="list-div" id="listDiv">
+{/if}
+<table cellpadding="3" cellspacing="1">
+  <tr>
+    <th width="50" >
+      <input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox" /><a href="javascript:listTable.sort('inv_id', 'DESC'); ">{$lang.inv_id}</a>{$sort_inv_id}
+    </th>
+    <th><a href="javascript:listTable.sort('inv_start_time', 'DESC'); ">{$lang.inv_start_time}</a>{$sort_inv_start_time}</th>
+    <th><a href="javascript:listTable.sort('inv_end_time', 'DESC'); ">{$lang.inv_end_time}</a>{$sort_inv_end_time}</th>
+    <th><a href="javascript:listTable.sort('status_id', 'DESC'); ">{$lang.inv_status}</a>{$sort_status_id}</th>
+    <th><a href="javascript:listTable.sort('part_number', 'DESC'); ">{$lang.part_number}</a>{$sort_part_number}</th>
+    <th><a href="javascript:listTable.sort('serial_number', 'DESC'); ">{$lang.serial_number}</a>{$sort_serial_number}</th>
+    <th><a href="javascript:listTable.sort('goods_id', 'DESC'); ">{$lang.goods_id}</a>{$sort_goods_id}</th>
+    <th><a href="javascript:listTable.sort('inv_price', 'DESC'); ">{$lang.inv_price}</a>{$sort_inv_price}</th>
+	<th>{$lang.action_user}</th>
+	<th>{$lang.inv_operate}</th>
+  <tr>
+  {foreach from=$inventory_list item=inv}
+  <tr>
+    <td valign="top" nowrap="nowrap"><input type="checkbox" name="checkboxes[]" value="{$inv.inv_id}" />{$inv.inv_id}{if $inv.extension_code eq "group_buy"}<br /><div align="center">{$lang.group_buy}</div>{/if}</td>
+    <td  align="center">{$inv.inv_start_time}</td>
+    <td align="center" valign="top">{$inv.inv_end_time}</td>
+    <td align="center" valign="top" nowrap="nowrap">{$inv.status_name}</td>
+    <td align="center" valign="top" nowrap="nowrap">
+		<a href="inventory.php?act=list&amp;part_number={$inv.part_number}">{$inv.part_number}</a></td>
+    <td align="center" valign="top" nowrap="nowrap">
+		<a href="inventory.php?act=list&amp;serial_number={$inv.serial_number}">{$inv.serial_number}</a></td>
+	<td align="center" valign="top" width="200">
+     <a href="inventory.php?act=status_accounting&amp;part_number={$inv.part_number}" target="_blank" alt="{$lang.status_accounting_list}">{$inv.goods_name}</a>
+    </td>
+    <td align="center" valign="top"  nowrap="nowrap">
+     {$inv.inv_price}
+    </td>
+	<td align="center" valign="top" nowrap="nowrap">{$inv.action_user} 
+		{if $inv.action_note}<a herf="" title="{$inv.action_note}"> [{$lang.action_note}] </a>{/if}</td>
+	<td align="center">
+	  <a href="inventory.php?act=edit&inv_id={$inv.inv_id}" title="{$lang.edit_inventory}"><img src="images/icon_edit.gif" width="16" height="16" border="0" /></a>	<span style="padding-left:10px;"></span>
+	  <a href="javascript:;" onclick="listTable.remove({$inv.inv_id}, '{$lang.inventory_delete_yn}','delete')" title="{$lang.delete_inventory}"><img src="images/icon_trash.gif" width="16" height="16" border="0" /></a></td>
+  </tr>
+  {/foreach}
+</table>
+
+<!-- 分页 -->
+<table id="page-table" cellspacing="0">
+  <tr>
+    <td align="right" nowrap="true">
+    {include file="page.htm"}
+    </td>
+  </tr>
+</table>
+
+{if $full_page}
+  </div>
+<div>
+  <input type="hidden" name="act" value="batch" />
+  <select name="type" id="selAction" onchange="changeAction()">
+	<option value="">{$lang.select_please}</option>
+	{html_options options=$batch_list}
+	<option value="drop">{$lang.drop}</option>	
+  </select>
+  <input type="submit" value="{$lang.button_submit}" id="btnSubmit" name="btnSubmit" class="button" disabled="true" />
+</div>
+</form>
+<script language="JavaScript">
+listTable.recordCount = {$record_count};
+listTable.pageCount = {$page_count};
+
+{foreach from=$filter item=item key=key}
+listTable.filter.{$key} = '{$item}';
+{/foreach}
+{literal}
+
+    onload = function()
+    {
+        // 开始检查订单
+        startCheckOrder();
+    }
+
+    /**
+     * 搜索订单
+     */
+    function searchInventory()
+    {
+        listTable.filter['part_number'] = Utils.trim(document.forms['searchForm'].elements['part_number'].value);
+        listTable.filter['goods_name'] = Utils.trim(document.forms['searchForm'].elements['goods_name'].value);
+        listTable.filter['serial_number'] = Utils.trim(document.forms['searchForm'].elements['serial_number'].value);
+        listTable.filter['status_id'] = document.forms['searchForm'].elements['status'].value;
+        listTable.filter['start_time'] = document.forms['searchForm'].elements['start_time'].value;
+        listTable.filter['end_time'] = document.forms['searchForm'].elements['end_time'].value;
+        listTable.filter['start_price'] = document.forms['searchForm'].elements['start_price'].value;
+        listTable.filter['end_price'] = document.forms['searchForm'].elements['end_price'].value;
+
+        listTable.filter['page'] = 1;
+        listTable.loadList();
+    }
+
+  /**
+   * @param: bool ext 其他条件：用于转移分类
+   */
+  	function confirmSubmit(frm, ext)
+  	{
+      if (frm.elements['type'].value == 'drop')
+      {
+          return confirm(batch_trash_confirm);
+      }
+      else if (frm.elements['type'].value == 'inbound')
+      {
+          return confirm(batch_inbound);
+      }
+      else if (frm.elements['type'].value == 'outbound')
+      {
+          return confirm(batch_outbound);
+      }
+      else
+      {
+          return confirm(batch_transport);
+      }
+  }
+
+ 	function changeAction()
+ 	{
+      var frm = document.forms['listForm'];
+
+      if (!document.getElementById('btnSubmit').disabled &&
+          confirmSubmit(frm, false))
+      {
+          frm.submit();
+      }
+    }
+</script>
+{/literal}
+
+{include file="pagefooter.htm"}
+{/if}

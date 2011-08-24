@@ -1,0 +1,51 @@
+body,td,th,div,input,select{	font-family: Tahoma, Verdana;	FONT-SIZE: 9pt} 
+.white_bg {COLOR: #FFFFFF;}
+.blue{color:#0000FF}
+.red{color:#FF0000}
+.bblue{font-weight:bold;color:#0000FF}
+a.bblue:link,a.bblue:visited {font-weight:bold;color:#0000FF}
+.bred{font-weight:bold;color:#FF0000}
+a.bred:link,a.bred:visited{font-weight:bold;color:#ff0000}
+INPUT{	
+BACKGROUND: #f8f8f8; 
+}
+textarea, select {border-width: 1; border-color: #666666; background-color: #ffffff; 	font-family: Tahoma, Verdana;
+font-size: 9pt; font-style: bold;
+}
+.checkboxClass{border:1 groove buttonface;background-color:red;}
+
+
+A:link,A:active,A:visited{TEXT-DECORATION:none ;Color:#4455aa}
+A:hover{TEXT-DECORATION: underline;Color:#4455aa}
+
+A.header:link,A.header:active,A.header:visited{TEXT-DECORATION:none ;Color:#FFFFFF}
+A.header:hover{TEXT-DECORATION: underline;Color:#4455aa}
+
+
+td.tablebody1
+{
+background-color: #FFFFFF;
+}
+
+td.TopLighNav
+{
+background-image: url(../images/tabs_m_tile.gif);
+}
+
+.tableborder1
+{
+width:97%;
+border: 1px; 
+background-color: #6595D6;
+}
+
+.thin{background:#6595D6}
+.thin td{background:#FFFFFF}
+.thin th{background:#EBEFF7}
+
+.rightalign{
+	text-align:right;
+}
+.redzi {
+	color: #FF0000;
+}

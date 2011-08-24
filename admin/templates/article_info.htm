@@ -1,0 +1,410 @@
+<!-- $Id: article_info.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,selectzone.js,validator.js"}
+<!-- start goods form -->
+<div class="tab-div">
+  <div id="tabbar-div">
+    <p>
+      <span class="tab-front" id="general-tab">{$lang.tab_general}</span><span
+      class="tab-back" id="detail-tab">{$lang.tab_content}</span>
+	<!--
+	<span class="tab-back" id="gallery-tab">{$lang.tab_gallery}</span>
+	<span class="tab-back" id="article-table">{$lang.tab_article}</span>
+	-->
+    </p>
+  </div>
+
+  <div id="tabbody-div">
+    <form  action="article.php" method="post" enctype="multipart/form-data" name="theForm" onsubmit="return validate();">
+    <table width="90%" id="general-table">
+      <tr>
+        <td class="narrow-label">{$lang.title}</td>
+        <td><input type="text" name="title" size ="40" maxlength="75" value="{$article.title|escape}" />{$lang.require_field} 最多75个汉字</td>
+      </tr>
+      <!-- {if $article.cat_id >= 0} -->
+      <tr>
+        <td class="narrow-label">{$lang.cat} </td>
+        <td>
+          <select name="article_cat" onchange="catChanged()">
+            <option value="0">{$lang.select_plz}</option>
+            {$cat_select}
+          </select>
+         {$lang.require_field}</td>
+      </tr>
+      <tr>
+        <td class="label">{$lang.lab_other_cat}</td>
+        <td>
+          <input type="button" value="{$lang.add}" onclick="addOtherCat(this.parentNode)" class="button" />
+          {foreach from=$article.other_cat item=cat_id}
+          <select name="other_cat[]"><option value="0">{$lang.select_please}</option>{$other_cat_list.$cat_id}</select>
+          {/foreach}
+        </td>
+      </tr>
+      <!-- {else} -->
+      <input type="hidden" name="article_cat" value="-1" />
+      <!-- {/if} -->
+      {if $article.cat_id >= 0}
+      <tr>
+        <td class="narrow-label">{$lang.is_open}</td>
+        <td>
+        <input type="radio" name="is_open" value="1" {if $article.is_open eq 1}checked{/if}> {$lang.isopen}
+      <input type="radio" name="is_open" value="0" {if $article.is_open eq 0}checked{/if}> {$lang.isclose}{$lang.require_field}        </td>
+      </tr>
+      {else}
+      <tr style="display:none">
+      <td colspan="2"><input type="hidden" name="article_type" value="0" /><input type="hidden" name="is_open" value="1" /></td>
+      </tr>
+      {/if}
+      <tr>
+        <td class="narrow-label"><a href="javascript:showNotice('aritcleKeywordsNote');"><img src="images/notice.gif" width="16" height="16" border="0"></a> {$lang.keywords}</td>
+        <td><input type="text" name="keywords" maxlength="60" value="{$article.keywords|escape}" size="30" />
+		<span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="aritcleKeywordsNote">{$lang.article_keywords_note}</span>
+		</td>
+      </tr>
+	  <tr>
+        <td class="narrow-label">{$lang.article_logo}</td>
+        <td><input type="file" name="articlelogo"> 宽:120px  -  高:75px</td>
+      </tr>
+	  	{if $article.logo}
+		<tr>
+			<td class="narrow-label">图片:</td>
+	        <td> <img src="../data/articlelogo/{$article.logo}" style="height:100px;" /></td></tr>
+	 	{/if}
+	    <tr>
+	      <td class="narrow-label">{$lang.upload_file}</td>
+	      <td><input type="file" name="file"><br>
+	        <span class="narrow-label">{$lang.file_url}
+	        <input name="file_url" type="text" value="{$article.file_url|escape}" size="50" maxlength="255" />
+	        </span></td>
+	    </tr>
+	  	<tr>
+	        <td class="narrow-label">{$lang.article_brief}</td>
+		    <td><textarea  name="brief" cols="60" rows="4">{$article.brief|escape}</textarea></td>
+	    </tr>
+		
+		<!--
+			      <tr>
+			        <td class="narrow-label">{$lang.article_type}</td>
+			        <td><input type="radio" name="article_type" value="0" {if $article.article_type eq 0}checked{/if}>{$lang.common}
+			      <input type="radio" name="article_type" value="1" {if $article.article_type eq 1}checked{/if}>{$lang.top}
+			        {$lang.require_field}        </td>
+			      </tr>
+			<tr>
+			        <td class="narrow-label">{$lang.author}</td>
+			        <td><input type="text" name="author" maxlength="60" value="{$article.author|escape}" /></td>
+			      </tr>
+			      <tr>
+			        <td class="narrow-label">{$lang.email}</td>
+			        <td><input type="text" name="author_email" maxlength="60" value="{$article.email|escape}" /></td>
+			      </tr>
+	  <tr>
+        <td class="narrow-label">{$lang.flickr_rss}</td>
+        <td><input type="text" name="flickr_rss" size="30" maxlength="30" value="{$article.flickr_rss}" /></td>
+      </tr>
+      <tr>
+        <td class="narrow-label">{$lang.external_links}</td>
+        <td><input name="link_url" type="text" id="link_url" value="{if $article.link neq ''}{$article.link|escape}{else}http://{/if}" maxlength="60" /></td>
+      </tr>	
+
+	-->
+
+    </table>
+
+    <table width="90%" id="detail-table" style="display:none">
+     <tr><td>{$FCKeditor}</td></tr>
+    </table>
+
+	<!-- 资料相册 -->
+    <table width="90%" id="gallery-table" style="display:none" align="center">
+      <!-- 图片列表 -->
+      <tr>
+        <td>
+          {foreach from=$img_list item=img key=i}
+          <div id="gallery_{$img.img_id}" style="float:left; text-align:center; border: 1px solid #DADADA; margin: 4px; padding:2px;">
+            <a href="javascript:;" onclick="if (confirm('{$lang.drop_img_confirm}')) dropImg('{$img.img_id}')">[-]</a><br />
+            <a href="goods.php?act=show_image&img_url={$img.img_url}" target="_blank">
+            <img src="../{if $img.thumb_url}{$img.thumb_url}{else}{$img.img_url}{/if}" width="160" border="0" />
+            </a><br />
+			<input type="text" value="{$img.img_sort}" size="2" name="old_img_sort[{$img.img_id}]" />
+            <input type="text" value="{$img.img_desc|escape}" size="15" name="old_img_desc[{$img.img_id}]" />
+          </div>
+          {/foreach}
+        </td>
+      </tr>
+      <tr><td>&nbsp;</td></tr>
+      <!-- 上传图片 -->
+      <tr>
+        <td>
+          <a href="javascript:;" onclick="addImg(this)">[+]</a>
+		  {$lang.sort_order} <input type="text" name="img_sort[]" size="2" />
+          {$lang.img_desc} <input type="text" name="img_desc[]" size="20" />
+          {$lang.img_url} <input type="file" name="img_url[]" />
+        </td>
+      </tr>
+    </table>
+    
+   	<!-- 关联资料 -->
+    <table width="90%" id="article-table" style="display:none" align="center">
+      <!-- 资料搜索 -->
+      <tr>
+        <td colspan="3">
+          <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+          {$lang.article_title} <input type="text" name="article_title" />
+          <input type="button" value="{$lang.button_search}" onclick="searchArticle()" class="button" />
+        </td>
+      </tr>
+      <!-- 资料列表 -->
+      <tr>
+        <th>{$lang.all_article}</th>
+        <th>{$lang.handler}</th>
+        <th>{$lang.goods_article}</th>
+      </tr>
+      <tr>
+        <td width="45%">
+          <select name="source_select3" size="20" style="width:100%" multiple ondblclick="sz3.addItem(false, 'add_goods_article', articleId)">
+          </select>
+        </td>
+        <td align="center">
+          <p><input type="button" value=">>" onclick="sz3.addItem(true, 'add_goods_article', articleId)" class="button" /></p>
+          <p><input type="button" value=">" onclick="sz3.addItem(false, 'add_goods_article', articleId)" class="button" /></p>
+          <p><input type="button" value="<" onclick="sz3.dropItem(false, 'drop_goods_article', articleId)" class="button" /></p>
+          <p><input type="button" value="<<" onclick="sz3.dropItem(true, 'drop_goods_article', articleId)" class="button" /></p>
+        </td>
+        <td width="45%">
+          <select name="target_select3" size="20" style="width:100%" multiple ondblclick="sz3.dropItem(false, 'drop_goods_article', articleId)">
+            {foreach from=$goods_article_list item=goods_article}
+            <option value="{$goods_article.article_id}">{$goods_article.title}</option>
+            {/foreach}
+          </select>
+        </td>
+      </tr>
+    </table>
+	
+	<div class="button-div">
+      <input type="hidden" name="act" value="{$form_action}" />
+      <input type="hidden" name="old_title" value="{$article.title}"/>
+	  <input type="hidden" name="templete" value="1" />
+      <input type="hidden" name="id" value="{$article.article_id}" />
+      <input type="submit" value="{$lang.button_submit}" class="button"  />
+      <input type="reset" value="{$lang.button_reset}" class="button" />
+    </div>
+    </form>
+  </div>
+
+</div>
+<!-- end goods form -->
+<script language="JavaScript">
+
+var articleId = {$article.article_id|default:0};
+var elements  = document.forms['theForm'].elements;
+var sz3 = new SelectZone(1, elements['source_select3'], elements['target_select3']);
+
+{literal}
+onload = function()
+{
+  // 开始检查订单
+  startCheckOrder();
+}
+
+function validate()
+{
+  var validator = new Validator('theForm');
+  validator.required('title', no_title);
+{/literal}
+{if $article.cat_id >= 0}
+  validator.isNullOption('article_cat',no_cat);
+{/if}
+{literal}
+
+  return validator.passed();
+}
+
+document.getElementById("tabbar-div").onmouseover = function(e)
+{
+    var obj = Utils.srcElement(e);
+
+    if (obj.className == "tab-back")
+    {
+        obj.className = "tab-hover";
+    }
+}
+
+document.getElementById("tabbar-div").onmouseout = function(e)
+{
+    var obj = Utils.srcElement(e);
+
+    if (obj.className == "tab-hover")
+    {
+        obj.className = "tab-back";
+    }
+}
+
+document.getElementById("tabbar-div").onclick = function(e)
+{
+    var obj = Utils.srcElement(e);
+
+    if (obj.className == "tab-front")
+    {
+        return;
+    }
+    else
+    {
+        objTable = obj.id.substring(0, obj.id.lastIndexOf("-")) + "-table";
+
+        var tables = document.getElementsByTagName("table");
+        var spans  = document.getElementsByTagName("span");
+
+        for (i = 0; i < tables.length; i++)
+        {
+            if (tables[i].id == objTable)
+            {
+                tables[i].style.display = (Browser.isIE) ? "block" : "table";
+            }
+            else
+            {
+                tables[i].style.display = "none";
+            }
+        }
+        for (i = 0; spans.length; i++)
+        {
+            if (spans[i].className == "tab-front")
+            {
+                spans[i].className = "tab-back";
+                obj.className = "tab-front";
+                break;
+            }
+        }
+    }
+}
+
+function showNotice(objId)
+{
+    var obj = document.getElementById(objId);
+
+    if (obj)
+    {
+        if (obj.style.display != "block")
+        {
+            obj.style.display = "block";
+        }
+        else
+        {
+            obj.style.display = "none";
+        }
+    }
+}
+
+function searchGoods()
+{
+    var elements  = document.forms['theForm'].elements;
+    var filters   = new Object;
+
+    filters.cat_id = elements['cat_id'].value;
+    filters.brand_id = elements['brand_id'].value;
+    filters.keyword = Utils.trim(elements['keyword'].value);
+
+    sz.loadOptions('get_goods_list', filters);
+}
+{/literal}
+
+/**
+ * 新增一个图片
+ */
+function addImg(obj)
+{
+    var src  = obj.parentNode.parentNode;
+    var idx  = rowindex(src);
+    var tbl  = document.getElementById('gallery-table');
+    var row  = tbl.insertRow(idx + 1);
+    var cell = row.insertCell(-1);
+    cell.innerHTML = src.cells[0].innerHTML.replace(/(.*)(addImg)(.*)(\[)(\+)/i, "$1removeImg$3$4-");
+}
+
+/**
+ * 删除图片上传
+ */
+function removeImg(obj)
+{
+    var row = rowindex(obj.parentNode.parentNode);
+    var tbl = document.getElementById('gallery-table');
+
+    tbl.deleteRow(row);
+}
+
+/**
+ * 删除图片
+ */
+function dropImg(imgId)
+{
+  Ajax.call('article.php?is_ajax=1&act=drop_image', "img_id="+imgId, dropImgResponse, "GET", "JSON");
+}
+
+function dropImgResponse(result)
+{
+    if (result.error == 0)
+    {
+        document.getElementById('gallery_' + result.content).style.display = 'none';
+    }
+}
+
+/**
+ * 选取上级分类时判断选定的分类是不是底层分类
+ */
+function catChanged()
+{
+  var obj = document.forms['theForm'].elements['article_cat'];
+
+  cat_type = obj.options[obj.selectedIndex].getAttribute('cat_type');
+  if (cat_type == undefined)
+  {
+    cat_type = 1;
+  }
+
+  if (false)//(obj.selectedIndex > 0) && (cat_type == 2 || cat_type == 4)
+  {
+    alert(not_allow_add);
+    obj.selectedIndex = 0;
+    return false;
+  }
+
+  return true;
+}
+/**
+ * 关联资料函数
+ */
+function searchArticle()
+{
+  var filters = new Object;
+
+  filters.title = Utils.trim(elements['article_title'].value);
+
+  sz3.loadOptions('get_article_list', filters);
+}
+/**
+   * 添加扩展分类
+   */
+  function addOtherCat(conObj)
+  {
+      var sel = document.createElement("SELECT");
+      var selCat = document.forms['theForm'].elements['article_cat'];
+
+      for (i = 0; i < selCat.length; i++)
+      {
+          var opt = document.createElement("OPTION");
+          opt.text = selCat.options[i].text;
+          opt.value = selCat.options[i].value;
+          if (Browser.isIE)
+          {
+              sel.add(opt);
+          }
+          else
+          {
+              sel.appendChild(opt);
+          }
+      }
+      conObj.appendChild(sel);
+      sel.name = "other_cat[]";
+      sel.onChange = function() {checkIsLeaf(this);};
+  }
+</script>
+{include file="pagefooter.htm"}

@@ -1,0 +1,73 @@
+<!-- $Id: course_cat_info.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+<script type="text/javascript" src="../js/calendar.php?lang={$cfg_lang}"></script>
+<link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+
+<div class="main-div">
+<form method="post" action="training.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+<table cellspacing="1" cellpadding="3" width="100%">
+  <tr>
+    <td class="label">{$lang.course_cat_name}</td>
+    <td><input type="text" name="course_cat_name" maxlength="60" value="{$course_cat.course_cat_name}" />{$lang.require_field}</td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.course_cat_brief}</td>
+    <td><textarea  name="course_cat_brief" cols="60" rows="4"  >{$course_cat.course_cat_brief}</textarea></td>
+  </tr>
+  <tr>
+    <td class="label"><a href="javascript:showNotice('warn_course_catlogo');" title="{$lang.form_notice}">
+        <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.course_cat_logo}</td>
+    <td><input type="file" name="course_cat_logo" id="logo" size="45">{if $course_cat.course_cat_logo neq ""}<input type="button" value="{$lang.drop_logo}" onclick="if (confirm('{$lang.confirm_drop_logo}'))location.href='training.php?act=drop_course_cat_logo&id={$course_cat.course_cat_id}'">{/if}
+    <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="warn_course_catlogo">
+    {if $course_cat.course_cat_logo eq ''}
+    {$lang.up_course_catlogo}
+    {else}
+    {$lang.warn_course_catlogo}
+    {/if}
+    </span>
+	<br /><img src="../{$course_cat.course_cat_logo}" width="60"/>
+    </td>
+  </tr>
+
+
+  <tr>
+    <td class="label">{$lang.course_cat_desc}</td>
+    <td><div style="width:700px;">{$FCKeditor}</div></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><br />
+      <input type="submit" class="button" value="{$lang.button_submit}" />
+      <input type="reset" class="button" value="{$lang.button_reset}" />
+      <input type="hidden" name="act" value="{$form_action}" />
+      <input type="hidden" name="old_course_catname" value="{$course_cat.course_cat_name}" />
+      <input type="hidden" name="id" value="{$course_cat.course_cat_id}" />
+      <input type="hidden" name="old_course_catlogo" value="{$course_cat.course_cat_logo}">
+    </td>
+  </tr>
+</table>
+</form>
+</div>
+{insert_scripts files="../js/utils.js,validator.js"}
+{literal}
+<script language="JavaScript">
+<!--
+document.forms['theForm'].elements['course_cat_name'].focus();
+onload = function()
+{
+    // 开始检查订单
+    startCheckOrder();
+}
+/**
+ * 检查表单输入的数据
+ */
+function validate()
+{
+    validator = new Validator("theForm");
+    validator.required("course_cat_name",  no_course_catname);
+    validator.isNumber("sort_order", require_num, true);
+    return validator.passed();
+}
+//-->
+</script>
+{/literal}
+{include file="pagefooter.htm"}

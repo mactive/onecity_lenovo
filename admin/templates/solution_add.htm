@@ -1,0 +1,267 @@
+<!-- $Id: brand_info.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+<style type="text/css">
+td.label2{line-height:20px; padding:0;font-weight:bold;
+padding:5px 1em;
+text-align:right;
+vertical-align:top;
+width:10%;
+}	
+</style>
+{include file="pageheader.htm"}
+<div class="main-div">
+<form method="post" action="solution.php" name="theForm" enctype="multipart/form-data">
+<table cellspacing="1" cellpadding="3" width="100%">
+  <tr>
+    <td class="label2">{$lang.solution_name}</td>
+    <td><input type="text" name="solution_name" maxlength="60" value="{$solution.solution_name}" />{$lang.require_field}</td>
+  </tr>
+  <tr>
+    <td class="label2"><a href="javascript:showNotice('warn_steplogo');" title="{$lang.form_notice}">
+        <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.solution_logo}</td>
+    <td><input type="file" name="solution_logo" id="solution_logo" size="45">{if $solution.solution_logo neq ""}<input type="button" value="{$lang.drop_logo}" onclick="if (confirm('{$lang.confirm_drop_logo}'))location.href='solution.php?act=drop_logo&id={$solution.solution_id}'">{/if}
+    <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="warn_steplogo">
+    {if $solution.solution_logo eq ''}
+    {$lang.up_solutionlogo}
+    {else}
+    {$lang.warn_solutionllogo}
+    {/if}
+    </span>
+	<br /><img src="../data/steplogo/{$solution.solution_logo}" width="60"/>
+    </td>
+  </tr>
+  <tr>
+    <td class="label2">{$lang.solution_desc}</td>
+    <td><textarea  name="solution_desc" cols="60" rows="4"  >{$solution.solution_desc}</textarea></td>
+  </tr>
+  <tr>
+    <td class="label2">{$lang.parent_id}</td>
+    <td><select name="parent_id"><option value="0">{$lang.parent_cat}</option>{html_options options=$solution_list selected=$parent_id}</select>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="label2">{$lang.sort_step}</td>
+    <td><input type="text" name="sort_step" size="5" value="{$solution.sort_step}"/> {$lang.sort_step_notice}
+    </td>
+  </tr>
+  <tr>
+    <td class="label2"></td>
+	<td align="center"><br />
+      <input type="submit" class="button" value="{$lang.button_submit}" onclick="return checkForm()" />
+      <input type="reset" class="button" value="{$lang.button_reset}" />
+      <input type="hidden" name="act" value="{$form_action}" />
+      <input type="hidden" name="old_solutionname" value="{$solution.solution_name}" />
+      <input type="hidden" name="id" value="{$solution.solution_id}" />
+      <input type="hidden" name="other_cat" id="other_cat" value="" />
+      <input type="hidden" name="old_steplogo" value="{$solution.solution_logo}">
+    </td>
+  </tr>
+</table>
+</form>
+</div>
+{insert_scripts files="../js/utils.js,validator.js"}
+
+<script language="JavaScript">
+<!--
+var data = '{$solution.other_cat}';
+var defaultClass = "{$lang.default_class}" 
+{literal}
+var myTopic = Object();
+
+onload = function()
+{
+  
+  // 开始检查订单
+  startCheckOrder();
+  //var classList = document.getElementById("topic_class_list");
+
+  if (data == "")
+  {
+    
+    //classList.innerHTML = "";
+    myTopic['default'] = new Array();
+    var newOpt    = document.createElement("OPTION");
+    newOpt.value  = -1;
+    newOpt.text   = defaultClass;
+    classList.options.add(newOpt);
+    return;
+  }
+  var temp    = data.parseJSON();
+
+  var counter = 0;
+  for (var k in temp)
+  {
+    if(typeof(myTopic[k]) != "function")
+    {
+      myTopic[k] = temp[k];
+      var newOpt    = document.createElement("OPTION");
+      newOpt.value  = k == "default" ? -1 : counter;
+      newOpt.text   = k == "default" ? defaultClass : k;
+      classList.options.add(newOpt);
+      counter++;
+    }
+  }
+  showTargetList();
+}
+function detail_goods(show)
+{	
+	if(show == 'show'){
+		document.getElementById("detail_goods").style.display = '';		
+	}else{
+		document.getElementById("detail_goods").style.display = 'none';		
+	}
+  
+}
+function checkForm()
+{
+  var validator = new Validator('theForm');
+  validator.required('solution_name', solution_name_empty);
+
+  document.getElementById("other_cat").value = obj2str(myTopic);
+
+  return validator.passed();
+}
+
+function chanageSize(num, id)
+{
+  var obj = document.getElementById(id);
+  if (obj.tagName == "TEXTAREA")
+  {
+    var tmp = parseInt(obj.rows);
+    tmp += num;
+    if (tmp <= 0) return;
+    obj.rows = tmp;
+  }
+}
+
+function searchGoods(catId, brandId, keyword)
+{
+  var elements = document.forms['theForm'].elements;
+  var filters = new Object;
+  filters.cat_id = elements[catId].value;
+  filters.brand_id = elements[brandId].value;
+  filters.keyword = Utils.trim(elements[keyword].value);
+  Ajax.call("solution.php?act=get_goods_list", filters, function(result)
+  {
+    clearOptions("source_select");
+    var obj = document.getElementById("source_select");
+    for (var i=0; i < result.content.length; i++)
+    {
+      var opt   = document.createElement("OPTION");
+      opt.value = result.content[i].value;
+      opt.text  = result.content[i].text;
+      opt.id    = result.content[i].data;
+      obj.options.add(opt);
+    }
+  }, "GET", "JSON");
+}
+
+function clearOptions(id)
+{
+  var obj = document.getElementById(id);
+  while(obj.options.length>0)
+  {
+    obj.remove(0);
+  }
+}
+
+function addAllItem(sender)
+{
+  if(sender.options.length == 0) return false;
+  for (var i = 0; i < sender.options.length; i++)
+  {
+    var opt = sender.options[i];
+    addItem(null, opt.value, opt.text);
+  }
+}
+
+function addItem(sender, value, text)
+{
+  var target_select = document.getElementById("target_select");
+  //var sortList = document.getElementById("topic_class_list");
+  var newOpt   = document.createElement("OPTION");
+  if (sender != null)
+  {
+    if(sender.options.length == 0) return false;
+    var option = sender.options[sender.selectedIndex];
+    newOpt.value = option.value;
+    newOpt.text  = option.text;
+  }
+  else
+  {
+    newOpt.value = value;
+    newOpt.text  = text;
+  }
+  if (targetItemExist(newOpt)) return false;
+  if (target_select.length>=50)
+  {
+    alert(item_upper_limit);
+  }
+  target_select.options.add(newOpt);
+}
+
+// 商品是否存在
+function targetItemExist(opt)
+{
+  var options = document.getElementById("target_select").options;
+  for ( var i = 0; i < options.length; i++)
+  {
+    if(options[i].text == opt.text && options[i].value == opt.value) 
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+function showTargetList()
+{
+  clearOptions("target_select");
+  var obj = document.getElementById("topic_class_list");
+  var index = obj.options[obj.selectedIndex].text;
+  if (index == defaultClass)
+  {
+    index = "default";
+  }
+  var options = myTopic[index];
+  
+  for ( var i = 0; i < options.length; i++)
+  {
+    var newOpt    = document.createElement("OPTION");
+    var arr = options[i].split('|');
+    newOpt.value  = arr[1];
+    newOpt.text   = arr[0];
+    document.getElementById("target_select").options.add(newOpt);
+  }
+}
+
+function removeItem(sender,isAll)
+{
+
+  if (!isAll)
+  {
+    var goodsName = sender.options[sender.selectedIndex].text;
+
+    for (var i = 0; i < sender.options.length;)
+    {
+      if (sender.options[i].selected) {
+        sender.remove(i);
+        //myTopic[key].splice(i, 0);
+      }
+      else
+      {
+        i++;
+      }
+    }
+  }
+  else
+  {
+    //myTopic[key] = new Array();
+    sender.innerHTML = "";
+  }
+}
+{/literal}
+//-->
+</script>
+
+{include file="pagefooter.htm"}

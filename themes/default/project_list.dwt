@@ -192,15 +192,7 @@
 
 						</td>
 						<td>
-							<!--{if $sm_session.user_rank >= 4}-->
-								<!--{if $city.can_modify == 0}-->
-								<a href="city_project.php?act=open_modify&project_id={$project_id}&ad_id={$city.ad_id}" class="open_modify"></a> &nbsp;&nbsp;
-								<a href="city_project.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}">查看</a>
-								<!--{else}-->
-								开启状态
-								<!--{/if}-->
-								
-							<!--{else}-->
+
 								<!--{if $city.audit_note != "审核通过" && $city.audit_note != ""  && $city.can_modify == 1 && $sm_session.user_rank == 1 }-->
 								<a href="city_project.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}">修改</a>
 								<!--{else}-->
@@ -208,11 +200,10 @@
 										<!--{if $sm_session.user_rank == 2}-->
 										<a href="city_project.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}">查看并填写<br>报销审核</a>
 										<!--{else}-->
-										<a href="city_project.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}">查看</a>
+										<a href="city_project.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}">查看基础信息</a>
 										<!--{/if}-->					
 									<!--{/if}-->
 								<!--{/if}-->
-							<!--{/if}-->
 						</td>
 						<!--{if $sm_session.user_rank >= 2}-->
 						<td>{if $city.is_microsoft}<img src="{$img_path}microsoft.png" >{/if}</td>

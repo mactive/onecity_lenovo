@@ -1,0 +1,133 @@
+{if $full_page}
+<!-- $Id: inventory_list.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,listtable.js"}
+<script type="text/javascript" src="../js/calendar.php"></script>
+<link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+
+
+<!-- 订单搜索 -->
+<div class="form-div">
+  <form action="javascript:searchInventorylog()" name="searchlogForm">
+	<table>
+		<tr><td>
+    		<img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+			</td><td>
+	    		{$lang.part_number} <input name="part_number" type="text" id="part_number" size="15" value="{$filter.part_number}"> 
+	    		{$lang.serial_number} <input name="serial_number" type="text" id="serial_number" size="15" value="{$filter.serial_number}"> 
+				{$lang.goods_name} <input name="goods_name" type="text" id="goods_name" size="15"> 
+			  	{$lang.action_note} <input name="action_note" type="text" id="action_note" size="15"> 
+			  
+		</td>
+		<td style="padding-left:30px;"><input type="submit" value="{$lang.button_search}" class="button" /> <input type="reset" value="重置" class="button" /></td>
+		</tr>
+	<tr>
+	  <td></td>
+      <td><strong>{$lang.label_time}</strong>{$lang.before_start_time}
+      <input type="text" name="start_time" maxlength="60" size="17" id="start_time_id" />
+      <input name="start_time_btn" type="button" id="start_time_btn" onclick="return showCalendar('start_time_id', '%Y-%m-%d %H:%M', '24', false, 'start_time_btn');" value="{$lang.btn_select}" class="button"/>
+      ~ {$lang.after_end_time}
+      <input type="text" name="end_time" maxlength="60" size="17" id="end_time_id" />
+      <input name="end_time_btn" type="button" id="end_time_btn" onclick="return showCalendar('end_time_id', '%Y-%m-%d %H:%M', '24', false, 'end_time_btn');" value="{$lang.btn_select}" class="button"/>  
+		{$lang.admin_name} <input name="admin_name" type="text" id="admin_name" size="5"> 
+		{$lang.all_status} <input name="status" type="text" id="status" size="5">		
+      </td>
+    </tr>
+	</table>
+  </form>
+</div>
+
+<!-- 订单列表 -->
+<form method="post" name="listForm"  onsubmit="return confirmSubmit(this)">
+  <div class="list-div" id="listDiv">
+{/if}
+<table cellpadding="3" cellspacing="1">
+  <tr>
+    <th width="50" >
+      <input onclick='listTable.selectAll(this, "checkboxes")' type="checkbox" /><a href="javascript:listTable.sort('action_id', 'DESC'); ">{$lang.action_id}</a>{$sort_action_id}
+    </th>
+    <th width="50" >
+     <a href="javascript:listTable.sort('inv_id', 'DESC'); ">{$lang.inv_id}</a>{$sort_inv_id}
+    </th>
+    <th><a href="javascript:listTable.sort('log_time', 'DESC'); ">{$lang.log_time}</a></th>
+    <th><a href="javascript:listTable.sort('status_id', 'DESC'); ">{$lang.inv_status}</a>{$sort_status_id}</th>
+    <th><a href="javascript:listTable.sort('part_number', 'DESC'); ">{$lang.part_number}</a>{$sort_part_number}</th>
+    <th><a href="javascript:listTable.sort('goods_name', 'DESC'); ">{$lang.goods_name}</a>{$sort_goods_name}</th>
+    <th><a href="javascript:listTable.sort('serial_number', 'DESC'); ">{$lang.serial_number}</a>{$sort_serial_number}</th>
+    <th width="200">{$lang.action_note}</th>
+	<th>{$lang.action_user}</th>
+	<th>{$lang.inv_operate}</th>
+  <tr>
+  {foreach from=$inventory_log item=inv}
+  <tr>
+    <td valign="top" nowrap="nowrap"><input type="checkbox" name="checkboxes[]" value="{$inv.action_id}" />{$inv.action_id}</td>
+    <td align="center" valign="top">{$inv.inv_id}</td>
+    <td align="center" valign="top">{$inv.log_time}</td>
+    <td align="center" valign="top" nowrap="nowrap">{$inv.status_name}</td>
+    <td align="center" valign="top" nowrap="nowrap"><a href="inventory.php?act=list_log&amp;part_number={$inv.part_number}">{$inv.part_number}</a></td>
+    <td align="center" valign="top" width="200">
+		<a href="inventory.php?act=status_accounting&amp;part_number={$inv.part_number}" target="_blank" alt="{$lang.status_accounting_list}">{$inv.goods_name}</a>
+    </td>
+    <td align="center" valign="top" nowrap="nowrap"><a href="inventory.php?act=list_log&amp;serial_number={$inv.serial_number}">{$inv.serial_number}</a></td>
+    <td align="center" valign="top" width="200">{$inv.action_note}</td>
+	<td align="center" valign="top" nowrap="nowrap">{$inv.action_user}</td>
+	<td align="center" valign="top" nowrap="nowrap">  <a href="javascript:;" onclick="listTable.remove({$inv.action_id}, '{$lang.inventory_log_delete_yn}','delete_log')" title="{$lang.delete_inventory_status}"><img src="images/icon_trash.gif" width="16" height="16" border="0" /></a>
+	</td>
+  </tr>
+  {/foreach}
+</table>
+
+<!-- 分页 -->
+<table id="page-table" cellspacing="0">
+  <tr>
+    <td align="right" nowrap="true">
+    {include file="page.htm"}
+    </td>
+  </tr>
+</table>
+
+{if $full_page}
+  </div>
+</form>
+<script language="JavaScript">
+listTable.recordCount = {$record_count};
+listTable.pageCount = {$page_count};
+	
+listTable.query = "query_list_log";
+
+{foreach from=$filter item=item key=key}
+listTable.filter.{$key} = '{$item}';
+{/foreach}
+
+{literal}
+
+    onload = function()
+    {
+        // 开始检查订单
+        startCheckOrder();
+    }
+
+    /**
+     * 搜索订单
+     */
+    function searchInventorylog()
+    {
+        listTable.filter['part_number'] = Utils.trim(document.forms['searchlogForm'].elements['part_number'].value);
+        listTable.filter['serial_number'] = Utils.trim(document.forms['searchlogForm'].elements['serial_number'].value);
+        listTable.filter['goods_name'] = Utils.trim(document.forms['searchlogForm'].elements['goods_name'].value);
+        listTable.filter['action_note'] = Utils.trim(document.forms['searchlogForm'].elements['action_note'].value);
+        listTable.filter['admin_name']  = Utils.trim(document.forms['searchlogForm'].elements['admin_name'].value);
+        listTable.filter['status_name'] = Utils.trim(document.forms['searchlogForm'].elements['status'].value);
+
+        listTable.filter['start_time'] = document.forms['searchlogForm'].elements['start_time'].value;
+        listTable.filter['end_time'] = document.forms['searchlogForm'].elements['end_time'].value;
+
+        listTable.filter['page'] = 1;
+        listTable.loadList();
+    }
+
+</script>
+{/literal}
+
+{include file="pagefooter.htm"}
+{/if}

@@ -1,0 +1,208 @@
+<!-- $Id: inventory_list.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js"}
+<script type="text/javascript" src="../js/calendar.php"></script>
+<link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+<!-- 订单列表 -->
+<div class="main-div">
+	<form action="inventory.php?act=update" method="post" enctype="multipart/form-data" name="theForm" onsubmit="return validate();">
+  <table cellspacing="1" cellpadding="3" width="100%">
+    <tr>
+      <td align="right">修改数量</td>
+      <td>	<input id="batch_count" type="text" size="3" name="batch_count"/>
+		<input type="button" onClick="getBatchList({$part_number})" value="批量增加"><span class="grey"> * 请确认所有输入的 part_number 和 serial_number 属于同一件商品</span>
+	</td>
+    </tr>
+	
+	<tr>
+      <td id="tbody-serialList" colspan="2" style="padding:0"></td>
+    </tr>
+    
+
+    <tr>
+      <td><div align="right"><strong>{$lang.all_status}</strong></div></td>
+      <td colspan="3"><select name="status" id="status" onchange="autoendtime()">
+			<option value="0">{$lang.select_please}</option>
+			{html_options options=$status_list}
+		</select>
+		<script language=javascript>
+		  document.theForm.status.value = {$status};
+		  </script>
+		
+		</td>
+      </tr>
+
+    <tr>
+      <td><div align="right"><strong>{$lang.end_time}</strong></div></td>
+      <td>
+ 	  <input type="text" name="end_time" maxlength="60" size="20" value="{$end_time}" id="end_time_id" />
+      <input name="end_time_btn" type="button" id="end_time_btn" onclick="return showCalendar('end_time_id', '%Y-%m-%d %H:%M:%S', '24', false, 'end_time_btn');" value="{$lang.btn_select}" class="button"/>   
+      </td>
+    </tr>
+    <tr>
+      <td><div align="right"><strong>{$lang.action_note}</strong></div></td>
+      <td><textarea rows="3" cols="40" name="action_note">{$action_note}</textarea></td>
+    </tr>
+	
+    <tr>
+      <td colspan="2"><div align="center">
+		<input name="query" type="submit" class="button" id="query" value="{$lang.edit_inventory}" />
+        
+        <input name="reset" type="reset" class='button' value='{$lang.button_reset}' />
+      </div></td>
+      </tr>
+  </table>
+</form>
+</div>
+{insert_scripts files="validator.js"}
+
+<script language="JavaScript">
+//验证是否有重复的
+function validate_repeat(id,value)
+{
+	
+	var batch_count = document.getElementById('batch_count').value;
+  	for (var i=0; i < batch_count; i++)
+	{
+		var item_id  = "ser_"+i;
+		var item_value = document.getElementById(item_id).value;
+		
+		
+		
+		if(value == item_value && value!=''){
+			if(item_id != id){
+				document.getElementById(item_id).style.background = '#ff0';
+				document.getElementById(id).style.background = '#ff0';
+			}
+		}else{
+			document.getElementById(item_id).style.background = '#fff';
+		}
+		
+	}
+}
+
+
+
+function validate_part_and_serial(id,value)
+{
+	var ser_id  = id;
+	var par_id  = ser_id.replace(/ser/, "par");
+	
+	var filters = new Object;
+	filters.serial_number= document.getElementById(ser_id).value;
+	filters.part_number = document.getElementById(par_id).value;
+	
+	Ajax.call("inventory.php?act=validate_part_and_serial", filters, function(result)
+	{
+		if(result.content.is_inventory){
+			document.getElementById(par_id).style.background = '#8CCA90';
+			document.getElementById(ser_id).style.background = '#8CCA90';
+		}else{
+			document.getElementById(par_id).style.background = '#ff0';
+			document.getElementById(ser_id).style.background = '#ff0';
+		}
+		
+	}, "GET", "JSON");
+	validate_repeat(id,value);
+}
+
+function add_order(orderId)
+{
+	var filters = new Object;
+	filters.order_id = orderId;
+	filters.location_array= location.search.split("&");
+	
+	var old_location = location.hostname;
+	
+	Ajax.call("solution_operate.php?act=new_location", filters, function(result)
+	{
+		if(result.content.added_location){
+			var new_location = result.content.added_location;
+			window.location.assign(new_location);
+		}
+		
+	}, "GET", "JSON");
+	
+	
+}
+
+function validate()
+  {
+      var validator = new Validator('theForm');
+		//不是入库时 需要填写出库时间
+		if(document.getElementById('status').value != 1){
+	      validator.required('end_time', end_time_not_null);
+		}
+	
+
+      return validator.passed();
+  }
+	/**
+   * 新增一个规格
+   */
+  function addSpec(obj)
+  {
+      var src   = obj.parentNode.parentNode;
+      var idx   = rowindex(src);
+      var tbl   = document.getElementById('attrTable');
+      var row   = tbl.insertRow(idx + 1);
+      var cell1 = row.insertCell(-1);
+      var cell2 = row.insertCell(-1);
+      var regx  = /<a([^>]+)<\/a>/i;
+
+      cell1.className = 'label';
+      cell1.innerHTML = src.childNodes[0].innerHTML.replace(/(.*)(addSpec)(.*)(\[)(\+)/i, "$1removeSpec$3$4-");
+      cell2.innerHTML = src.childNodes[1].innerHTML.replace(/readOnly([^\s|>]*)/i, '');
+  }
+
+	/**
+   * 删除规格值
+   */
+  function removeSpec(obj)
+  {
+      var row = rowindex(obj.parentNode.parentNode);
+      var tbl = document.getElementById('attrTable');
+
+      tbl.deleteRow(row);
+  }
+  /**
+   * 切换商品类型
+   */
+  function getBatchList(part_number)
+  {
+      var batch_count = document.getElementById('batch_count').value;//document.forms['theForm'].elements['serial_count'];
+
+      Ajax.call('inventory.php?is_ajax=1&act=add_bacth_list', 'part_number=' + part_number + '&batch_count=' + batch_count, setBatchList, "GET", "JSON");
+  }
+
+  function setBatchList(result, text_result)
+  {
+    document.getElementById('tbody-serialList').innerHTML = result.content;
+  }
+  function autoendtime()
+	{
+		if(document.getElementById('status').value != 1){
+			document.getElementById('end_time_id').value = date2str(new Date());
+		}
+	}
+	
+  function str2date(str){  
+  	var   d=null;  
+  	var   reg=/^(\d{4})-(\d{2})-(\d{2})   (\d{2}):(\d{2}):(\d{2})\.(\d+)$/  
+  	if(arr=str.match(reg))d=new   Date(Number(arr[1]),Number(arr[2])-1,Number(arr[3]),Number(arr[4]),Number(arr[5]),Number(arr[6]),Number(arr[7]))  
+  	return   d;  
+  }  
+  function   date2str(d){  
+  	var   ret=d.getFullYear()+"-"  
+  	ret+=("00"+(d.getMonth()+1)).slice(-2)+"-"  
+  	ret+=("00"+d.getDate()).slice(-2)+" "  
+  	ret+=("00"+d.getHours()).slice(-2)+":"  
+  	ret+=("00"+d.getMinutes()).slice(-2)+":"  
+  	ret+=("00"+d.getSeconds()).slice(-2) 
+  	return   ret
+  }  
+  
+</script>
+
+
+{include file="pagefooter.htm"}

@@ -1039,5 +1039,134 @@ function pic_download($attachment) {
     echo file_get_contents($realpath);
     exit();
 }
+/* for base info*/
+/**/
+function get_base_info_list($children,$limit = 0){
+
+    $filter['county_name'] = empty($_REQUEST['county_name']) ? '' : trim($_REQUEST['county_name']);
+    $filter['city_name'] = empty($_REQUEST['city_name']) ? '' : trim($_REQUEST['city_name']);
+    $filter['region_name'] = empty($_REQUEST['region_name']) ? '' : trim($_REQUEST['region_name']);
+    $filter['audit_status'] = empty($_REQUEST['audit_status']) ? 0 : $_REQUEST['audit_status'];
+    $filter['resource'] = empty($_REQUEST['resource']) ? 0 : $_REQUEST['resource'];
+    $filter['market_level'] = empty($_REQUEST['market_level']) ? '' : trim($_REQUEST['market_level']);
+    $filter['project_id'] = empty($_REQUEST['project_id']) ? 0 : $_REQUEST['project_id'];
+
+	$filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'inv_id' : trim($_REQUEST['sort_by']);
+    $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
+
+	
+	$where = ' WHERE '. $children ." AND ad.is_audit_confirm = 1 AND ad.audit_status = 5 AND re.sys_level = 5 ";
+	//$where.= $_SESSION['user_rank'] > 1 ? " AND re.req_id > 0 " : "" ;
+	// 最终通过的权限要求 ID
+    if ($filter['county_name'])
+    {
+        $where .= " AND a.cat_name LIKE '%" . mysql_like_quote($filter['county_name']) . "%'";
+    }
+    if ($filter['resource'])
+    {
+        $where .= " AND re.$quarter = $filter[resource] ";
+    }
+	if ($filter['city_name'])
+    {
+        $where .= " AND a1.cat_name LIKE '%" . mysql_like_quote($filter['city_name']) . "%'";
+    }
+    if ($filter['region_name'])
+    {
+        $where .= " AND a3.cat_name LIKE '%" . mysql_like_quote($filter['region_name']) . "%'";
+    }
+    if ($filter['audit_status'])
+    {
+        $where .= " AND a.audit_status = $filter[audit_status] ";
+    }
+	if ($filter['market_level'])
+    {
+        $where .= " AND a.market_level LIKE '%" . mysql_like_quote($filter['market_level']) . "%'";
+    }
+
+
+
+	/* 分页大小 */
+    $filter['page'] = empty($_REQUEST['page']) || (intval($_REQUEST['page']) <= 0) ? 1 : intval($_REQUEST['page']);
+
+
+	/**/
+    if (isset($_REQUEST['page_size']) && intval($_REQUEST['page_size']) > 0)
+    {
+        $filter['page_size'] = intval($_REQUEST['page_size']);
+    }
+    else
+    {
+        $filter['page_size'] = 50;
+    }
+	
+	
+	/* 记录总数 */
+    if ($filter['city_name'])
+    {
+        $count_sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') . " AS a ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad').   " AS ad ON ad.city_id = a.cat_id ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource').  " AS re ON re.city_id = a.cat_id ".
+                $where;
+    }
+    elseif ($filter['region_name'])
+    {
+        $count_sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') . " AS a ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad').   " AS ad ON ad.city_id = a.cat_id ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource').  " AS re ON re.city_id = a.cat_id ".
+                $where;
+    }
+    else
+    {
+        $count_sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') ." AS a " . 
+					" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad').   " AS ad ON ad.city_id = a.cat_id ".
+					" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource').   " AS re ON re.city_id = a.cat_id ".					
+					" $where " ;
+		
+    }
+
+    $filter['record_count']   = $GLOBALS['db']->getOne($count_sql);
+    $filter['page_count']     = $filter['record_count'] > 0 ? ceil($filter['record_count'] / $filter['page_size']) : 1;
+	
+	$request_title = "re.lv_".$_SESSION['user_rank'];
+	$limit_sql = $limit > 0 ? " LIMIT 0,$limit ": " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
+	$order_sql = $_SESSION['user_rank'] == 1 ? " ORDER BY city.city_id DESC " : " ORDER BY city.city_id DESC " ;
+	
+	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, a.is_microsoft, ". //
+			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region , ad.ad_id, ".
+			//" pr.req_id, pr.price, pr.price_amount, pr.request_price, pr.request_price_amount,  (ad.price_status - $_SESSION[user_rank]) AS t1 ".
+			" city.col_19,city.col_20 ".
+			" FROM ".$GLOBALS['ecs']->table('category') . " AS a ".
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ". 
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ". 
+			" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad').   " AS ad ON ad.city_id = a.cat_id ".
+			" LEFT JOIN " .$GLOBALS['ecs']->table('city').   " AS city ON city.ad_id = ad.ad_id ".
+			" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource').  " AS re ON re.city_id = a.cat_id ".
+			
+			//" LEFT JOIN " .$GLOBALS['ecs']->table('project_request').   " AS pr ON pr.city_id = a.cat_id  AND pr.ad_id  = ad.ad_id ".
+			//" LEFT JOIN " .$GLOBALS['ecs']->table('city'). 		' AS c  ON c.city_id = a.cat_id '.
+			//" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad'). 	' AS ad ON ad.city_id = a.cat_id '.
+			"$where "." GROUP BY a.cat_id  "." $order_sql ".
+			$limit_sql;
+	//echo $sql;	 //GROUP BY ad.ad_id 
+	
+	$res = $GLOBALS['db']->getAll($sql);
+	foreach($res AS $key => $val)
+	{
+
+		$res[$key]['audit_note'] =  $GLOBALS['db']->getOne("SELECT audit_note FROM ".$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = $val[ad_id] AND feedback_audit = $filter[project_id] ORDER BY record_id DESC LIMIT 1");
+		$res[$key]['upload_picture'] =  $GLOBALS['db']->getOne("SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('city_gallery')." WHERE ad_id = $val[ad_id] AND feedback = $filter[project_id]");
+		
+		
+		
+	}
+	$arr = array('citys' => $res, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count'],'sql' => $sql,'count_sql' => $count_sql, 'page_size' => $filter['page_size']);
+    return $arr;
+}
+
 
 ?>

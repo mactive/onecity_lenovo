@@ -1,0 +1,93 @@
+<!-- $Id: lesson_info.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+<script type="text/javascript" src="../js/calendar.php?lang={$cfg_lang}"></script>
+<link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+
+<div class="main-div">
+<form method="post" action="training.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+<table cellspacing="1" cellpadding="3" width="100%">
+  <tr>
+    <td class="label">{$lang.lesson_name}</td>
+    <td><input type="text" name="lesson_name" maxlength="60" value="{$lesson.lesson_name}" size="30" />{$lang.require_field}</td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.lesson_brief}</td>
+    <td><textarea  name="lesson_brief" cols="60" rows="8"  >{$lesson.lesson_brief}</textarea></td>
+  </tr>
+
+
+  <tr>
+    <td class="label">{$lang.course_day}</td>
+    <td><input type="text" name="course_day" maxlength="40" size="4" value="{$lesson.course_day}" /> </td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.sort_order}</td>
+    <td><input type="text" name="sort_order" maxlength="40" size="4" value="{$lesson.sort_order}" /></td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.lesson_duration}</td>
+    <td><input type="text" name="lesson_duration" maxlength="40" size="4" value="{$lesson.lesson_duration}" /> 小时</td>
+  </tr>
+	<tr>
+		
+    <td class="label">{$lang.course_id}</td>
+    <td>
+		<select name="course_id" id="course_id">
+  			<option value="0">{$lang.select_please}</option>
+  			{html_options options=$course_list}
+		</select>
+		<script language=javascript>
+		  document.theForm.course_id.value = {$lesson.course_id};
+		  </script>
+
+		</td>
+    </tr>
+
+  <tr>
+    <td class="label">{$lang.level}</td>
+    <td><input type="text" name="level" maxlength="40" size="15" value="{$lesson.level}" /></td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.is_show}</td>
+    <td><input type="radio" name="is_show" value="1" {if $lesson.is_show eq 1}checked="checked"{/if} /> {$lang.yes}
+        <input type="radio" name="is_show" value="0" {if $lesson.is_show eq 0}checked="checked"{/if} /> {$lang.no}
+        ({$lang.visibility_notes})
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><br />
+      <input type="submit" class="button" value="{$lang.button_submit}" />
+      <input type="reset" class="button" value="{$lang.button_reset}" />
+      <input type="hidden" name="act" value="{$form_action}" />
+      <input type="hidden" name="old_lessonname" value="{$lesson.lesson_name}" />
+      <input type="hidden" name="id" value="{$lesson.lesson_id}" />
+      <input type="hidden" name="old_lessonlogo" value="{$lesson.lesson_logo}">
+    </td>
+  </tr>
+</table>
+</form>
+</div>
+{insert_scripts files="../js/utils.js,validator.js"}
+{literal}
+<script language="JavaScript">
+<!--
+document.forms['theForm'].elements['lesson_name'].focus();
+onload = function()
+{
+    // 开始检查订单
+    startCheckOrder();
+}
+/**
+ * 检查表单输入的数据
+ */
+function validate()
+{
+    validator = new Validator("theForm");
+    validator.required("lesson_name",  no_lessonname);
+    validator.isNumber("sort_order", require_num, true);
+    return validator.passed();
+}
+//-->
+</script>
+{/literal}
+{include file="pagefooter.htm"}

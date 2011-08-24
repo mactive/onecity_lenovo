@@ -1,0 +1,201 @@
+<!-- $Id: inventory_list.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,validator.js"}
+<script type="text/javascript" src="../js/calendar.php"></script>
+<link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
+<!-- 订单列表 -->
+<div class="main-div">
+	{if $step_act == 'add'}
+	<form action="inventory.php?act=insert" method="post" enctype="multipart/form-data" name="theForm" onsubmit="return validate();"> 
+	{else}
+	<form action="inventory.php?act=update" method="post" enctype="multipart/form-data" name="theForm" onsubmit="return validate();">
+	{/if}
+  <table cellspacing="1" cellpadding="3" width="100%">
+	{if $step_act == 'edit'}
+	<tr>
+      <td><div align="right"><strong>{$lang.inv_id}</strong></div></td>
+      <td><span>{$inv_id}</span><input name="inv_id" type="hidden" value="{$inv_id}" id="inv_id"></td>
+    </tr>
+	{/if}
+      <td><div align="right"><strong>{$lang.part_number}</strong></div></td>
+      <td><input name="part_number" type="text" value="{$part_number}" id="part_number" size="30" tabindex="1"></td>
+    </tr>
+    <tr>
+      <td><div align="right">
+			{if $step_act == 'add'}
+		<input id="serial_count" type="text" size="3" name="serial_count" />
+		<input type="button" onClick="getSerialList()" value="批量增加">{/if}
+		<strong>{$lang.serial_number}</strong></div></td>
+      <td><input name="serial_number" type="text" value="{$serial_number}" id="ser_0" size="30" tabindex="2"></td>
+    </tr>
+	
+	<tr>
+      <td id="tbody-serialList" colspan="2" style="padding:0"></td>
+    </tr>
+    
+
+    <tr>
+      <td><div align="right"><strong>{$lang.inv_price}</strong></div></td>
+      <td colspan="3"><input name="inv_price" type="text" value="{$inv_price}" id="inv_price" size="20" />
+		</td>
+      </tr>
+	<tr>
+		
+      <td><div align="right"><strong>{$lang.all_status}</strong></div></td>
+      <td colspan="3"><select name="status" id="status" onchange="autoendtime()">
+			<option value="0">{$lang.select_please}</option>
+			{html_options options=$status_list}
+		</select>
+		<script language=javascript>
+		  document.theForm.status.value = {$status};
+		  </script>
+
+		</td>
+      </tr>
+
+    <tr>
+      <td><div align="right"><strong>{$lang.start_time}</strong></div></td>
+      <td>
+	  <input type="text" name="start_time" maxlength="60" size="20" value="{$start_time}" id="start_time_id" />
+      <input name="start_time_btn" type="button" id="start_time_btn" onclick="return showCalendar('start_time_id', '%Y-%m-%d %H:%M:%S', '24', false, 'start_time_btn');" value="{$lang.btn_select}" class="button"/>      
+      </td>
+    </tr>
+    <tr>
+      <td><div align="right"><strong>{$lang.end_time}</strong></div></td>
+      <td>
+ 	  <input type="text" name="end_time" maxlength="60" size="20" value="{$end_time}" id="end_time_id" />
+      <input name="end_time_btn" type="button" id="end_time_btn" onclick="return showCalendar('end_time_id', '%Y-%m-%d %H:%M:%S', '24', false, 'end_time_btn');" value="{$lang.btn_select}" class="button"/>   
+      </td>
+    </tr>
+    <tr>
+      <td><div align="right"><strong>{$lang.action_note}</strong></div></td>
+      <td><textarea rows="3" cols="40" name="action_note">{$action_note}</textarea></td>
+    </tr>
+	
+    <tr>
+      <td colspan="2"><div align="center">
+		{if $step_act == 'edit'}
+		<input name="old_status" value="{$status}" type="hidden" />
+		<input name="query" type="submit" class="button" id="query" value="{$lang.edit_inventory}" />
+		{else}
+		<input name="query" type="submit" class="button" id="query" value="{$lang.add_inventory}" />
+		{/if}
+        
+        <input name="reset" type="reset" class='button' value='{$lang.button_reset}' />
+      </div></td>
+      </tr>
+  </table>
+</form>
+</div>
+<script language="JavaScript">
+<!--
+// 这里把JS用到的所有语言都赋值到这里
+{foreach from=$lang.js_languages key=key item=item}
+var {$key} = "{$item}";
+{/foreach}
+//-->
+</script>
+
+
+<script language="JavaScript">
+
+function validate_repeat(id,value)
+{
+	var serial_count = document.getElementById('serial_count').value;
+  	for (var i=0; i <= serial_count; i++)
+	{
+		var item_id  = "ser_"+i;
+		var item_value = document.getElementById(item_id).value;
+		
+		if(value == item_value && value!=''){
+			if(item_id != id){
+				document.getElementById(item_id).style.background = '#ff0';
+				document.getElementById(id).style.background = '#ff0';
+			}
+		}else{
+			document.getElementById(item_id).style.background = '#fff';
+		}
+			
+	}
+}
+
+  //
+  function validate()
+	{
+    validator = new Validator("theForm");
+
+        validator.change("status", "old_status", status_not_change);
+
+    	return validator.passed();
+	}
+	/**
+   * 新增一个规格
+   */
+  function addSpec(obj)
+  {
+      var src   = obj.parentNode.parentNode;
+      var idx   = rowindex(src);
+      var tbl   = document.getElementById('attrTable');
+      var row   = tbl.insertRow(idx + 1);
+      var cell1 = row.insertCell(-1);
+      var cell2 = row.insertCell(-1);
+      var regx  = /<a([^>]+)<\/a>/i;
+
+      cell1.className = 'label';
+      cell1.innerHTML = src.childNodes[0].innerHTML.replace(/(.*)(addSpec)(.*)(\[)(\+)/i, "$1removeSpec$3$4-");
+      cell2.innerHTML = src.childNodes[1].innerHTML.replace(/readOnly([^\s|>]*)/i, '');
+  }
+
+	/**
+   * 删除规格值
+   */
+  function removeSpec(obj)
+  {
+      var row = rowindex(obj.parentNode.parentNode);
+      var tbl = document.getElementById('attrTable');
+
+      tbl.deleteRow(row);
+  }
+  /**
+   * 切换商品类型
+   */
+  function getSerialList()
+  {
+      var serial_count = document.getElementById('serial_count').value;//document.forms['theForm'].elements['serial_count'];
+
+      Ajax.call('inventory.php?is_ajax=1&act=add_serial_list', 'serial_count=' + serial_count, setSerialList, "GET", "JSON");
+  }
+
+  function setSerialList(result, text_result)
+  {
+    document.getElementById('tbody-serialList').innerHTML = result.content;
+  }
+  function autoendtime()
+	{
+		if(document.getElementById('status').value != 1){
+			document.getElementById('end_time_id').value = date2str(new Date());
+		}else{
+			document.getElementById('end_time_id').value = '';
+		}
+	}
+	
+  function str2date(str){  
+  	var   d=null;  
+  	var   reg=/^(\d{4})-(\d{2})-(\d{2})   (\d{2}):(\d{2}):(\d{2})\.(\d+)$/  
+  	if(arr=str.match(reg))d=new   Date(Number(arr[1]),Number(arr[2])-1,Number(arr[3]),Number(arr[4]),Number(arr[5]),Number(arr[6]),Number(arr[7]))  
+  	return   d;  
+  }  
+  function   date2str(d){  
+  	var   ret=d.getFullYear()+"-"  
+  	ret+=("00"+(d.getMonth()+1)).slice(-2)+"-"  
+  	ret+=("00"+d.getDate()).slice(-2)+" "  
+  	ret+=("00"+d.getHours()).slice(-2)+":"  
+  	ret+=("00"+d.getMinutes()).slice(-2)+":"  
+  	ret+=("00"+d.getSeconds()).slice(-2) 
+  	return   ret
+  }  
+  
+</script>
+
+
+{include file="pagefooter.htm"}

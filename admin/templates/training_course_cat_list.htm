@@ -1,0 +1,99 @@
+<!-- $Id: course_cat_list.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+
+{if $full_page}
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,listtable.js"}
+
+<!-- 订单搜索 -->
+<div class="form-div">
+  <form action="javascript:searchInventory()" name="searchForm">
+	<table>
+		<tr><td>
+    		<img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+			</td><td>
+    		{$lang.course_cat_name} <input name="course_cat_name" type="text" id="course_cat_name" size="15" value="{$course_cat_name}" /> 
+    		
+
+		</td>
+		<td style="padding-left:30px;"><input type="submit" value="{$lang.button_search}" class="button" /> <input type="reset" value="重置" class="button" /></td>
+		</tr>
+
+	</table>
+  </form>
+</div>
+
+
+
+<form method="post" action="" name="listForm">
+<!-- start course_cat list -->
+<div class="list-div" id="listDiv">
+{/if}
+
+  <table cellpadding="3" cellspacing="1">
+    <tr>
+      <th>{$lang.course_cat_id}</th>
+      <th>{$lang.course_cat_name}</th>
+      <th>{$lang.course_cat_brief}</th>
+      <th>{$lang.handler}</th>
+    </tr>
+    {foreach from=$course_cat_list item=course_cat}
+    <tr>
+	  <td align="center">{$course_cat.course_cat_id}</td>
+      <td align="center">
+        <span style="float:right">{$course_cat.course_cat_logo}</span>
+       {$course_cat.course_cat_name}
+      </td>
+      <td align="center">{$course_cat.course_cat_brief|truncate:36}</td>
+      <td align="center">
+        <a href="training.php?act=edit_course_cat&id={$course_cat.course_cat_id}" title="{$lang.edit}">{$lang.edit}</a> |
+        <a href="javascript:;" onclick="listTable.remove({$course_cat.course_cat_id}, '{$lang.drop_confirm}','remove_course_cat')" title="{$lang.edit}">{$lang.remove}</a> 
+      </td>
+    </tr>
+    {foreachelse}
+    <tr><td class="no-records" colspan="10">{$lang.no_records}</td></tr>
+    {/foreach}
+    <tr>
+      <td align="right" nowrap="true" colspan="6">
+      {include file="page.htm"}
+      </td>
+    </tr>
+  </table>
+
+{if $full_page}
+<!-- end course_cat list -->
+</div>
+</form>
+
+<script type="text/javascript" language="javascript">
+  <!--
+  listTable.recordCount = {$record_count};
+  listTable.pageCount = {$page_count};
+  listTable.query = "query_course_cat";
+  {foreach from=$filter item=item key=key}
+  listTable.filter.{$key} = '{$item}';
+  {/foreach}
+
+  {literal}
+  onload = function()
+  {
+      // 开始检查订单
+      startCheckOrder();
+  }
+
+  /**
+   * 搜索订单
+   */
+  function searchInventory()
+  {
+      listTable.filter['course_cat_name'] = Utils.trim(document.forms['searchForm'].elements['course_cat_name'].value);
+      listTable.filter['is_commend'] = Utils.trim(document.forms['searchForm'].elements['is_commend'].value);
+
+      listTable.filter['page'] = 1;
+      listTable.loadList();
+  }
+
+  {/literal}
+  //-->
+</script>
+{include file="pagefooter.htm"}
+{/if}

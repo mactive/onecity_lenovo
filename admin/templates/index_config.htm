@@ -1,0 +1,347 @@
+<!-- $Id: topic_edit.htm 14668 2008-06-10 08:17:16Z testyang $ -->
+
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js"}
+{if $warning}
+<ul style="padding:0; margin: 0; list-style-type:none; color: #CC0000;">
+  <li style="border: 1px solid #CC0000; background: #FFFFCC; padding: 10px; margin-bottom: 5px;" >{$warning}</li>
+</ul>
+{/if}
+<!-- start goods form -->
+<div class="tab-div">
+  <!-- tab bar -->
+  <div id="tabbar-div">
+    <p> <span class="tab-front" id="topic_ad-tab">{$lang.topic_ad}</span>
+		<span class="tab-back" id="goods_series-tab">{$lang.goods_series}</span> 
+		<span class="tab-back" id="news-tab">{$lang.news}</span> 
+		<span class="tab-back" id="solutions-tab">{$lang.solutions}</span> 
+		<span class="tab-back" id="cases-tab">{$lang.cases}</span> 
+		<span class="tab-back" id="goods-tab">{$lang.index_12_rand}</span> 
+	</p>
+  </div>
+  <!-- tab body -->
+  <div id="tabbody-div">
+    <form action="index_config.php" method="post" name="theForm">
+		
+      	<table width="90%" border="0"  align="center" cellpadding="0" cellspacing="0" id="topic_ad-table">
+
+			<tr>
+	          <td>{$edit_topic_pic}</td>
+	        </tr>
+	    </table>
+      	<table width="90%" border="0"  align="center" cellpadding="0" cellspacing="0" id="goods_series-table" style="display:none;">
+	        <tr>
+	          <td>{$edit_goods_series}</td>
+	        </tr>
+	    </table>
+      	<table width="90%" border="0"  align="center" cellpadding="0" cellspacing="0" id="news-table" style="display:none;">
+        <tr>
+          <td>{$edit_news}</td>
+        </tr>
+      </table>
+      
+		<table width="90%" border="0"  align="center" cellpadding="0" cellspacing="0" id="solutions-table" style="display:none;">
+	        <tr>
+	          <td>{$edit_solutions}</td>
+	        </tr>
+	    </table>
+		
+		<table width="90%" border="0"  align="center" cellpadding="0" cellspacing="0" id="cases-table" style="display:none;">
+	        <tr>
+	          <td>{$edit_cases}</td>
+	        </tr>
+	    </table>
+		<table width="90%" border="0"  align="center" cellpadding="0" cellspacing="0" id="goods-table" style="display:none;">
+	        <tr>
+	          <td></td>
+	        </tr>
+	    </table>
+		
+      <div class="button-div">
+        <input  name="topic_data" type="hidden" id="topic_data" value='' />
+        <input  name="act" type="hidden" id="act" value='{$act}' />
+        <input  name="topic_id" type="hidden" id="topic_id" value='{$topic.topic_id}' />
+        <input type="submit"  name="Submit"       value="{$lang.button_submit}" class="button" onclick="return checkForm()"/>
+        <input type="reset"   name="Reset"        value="{$lang.button_reset}" class="button"/>
+      </div>
+    </form>
+  </div>
+</div>
+{insert_scripts files="validator.js,tab.js"}
+<script type="Text/Javascript" language="JavaScript">
+<!--
+var data = '{$topic.data}';
+var defaultClass = "{$lang.default_class}" 
+{literal}
+var myTopic = Object();
+
+onloads = function()
+{
+  
+  // 开始检查订单
+  startCheckOrder();
+  var classList = document.getElementById("topic_class_list");
+
+  if (data == "")
+  {
+    
+    classList.innerHTML = "";
+    myTopic['default'] = new Array();
+    var newOpt    = document.createElement("OPTION");
+    newOpt.value  = -1;
+    newOpt.text   = defaultClass;
+    classList.options.add(newOpt);
+    return;
+  }
+  var temp    = data.parseJSON();
+
+  var counter = 0;
+  for (var k in temp)
+  {
+    if(typeof(myTopic[k]) != "function")
+    {
+      myTopic[k] = temp[k];
+      var newOpt    = document.createElement("OPTION");
+      newOpt.value  = k == "default" ? -1 : counter;
+      newOpt.text   = k == "default" ? defaultClass : k;
+      classList.options.add(newOpt);
+      counter++;
+    }
+  }
+  showTargetList();
+}
+
+function checkForm()
+{
+  var validator = new Validator('theForm');
+  validator.required('topic_name', topic_name_empty);
+  validator.required('start_time', start_time_empty);
+  validator.required('end_time', end_time_empty);
+  validator.islt('start_time', 'end_time', start_lt_end);
+
+  document.getElementById("topic_data").value = obj2str(myTopic);
+
+  return validator.passed();
+}
+
+function chanageSize(num, id)
+{
+  var obj = document.getElementById(id);
+  if (obj.tagName == "TEXTAREA")
+  {
+    var tmp = parseInt(obj.rows);
+    tmp += num;
+    if (tmp <= 0) return;
+    obj.rows = tmp;
+  }
+}
+
+function searchGoods(catId, brandId, keyword)
+{
+  var elements = document.forms['theForm'].elements;
+  var filters = new Object;
+  filters.cat_id = elements[catId].value;
+  filters.brand_id = elements[brandId].value;
+  filters.keyword = Utils.trim(elements[keyword].value);
+  Ajax.call("topic.php?act=get_goods_list", filters, function(result)
+  {
+    clearOptions("source_select");
+    var obj = document.getElementById("source_select");
+    for (var i=0; i < result.content.length; i++)
+    {
+      var opt   = document.createElement("OPTION");
+      opt.value = result.content[i].value;
+      opt.text  = result.content[i].text;
+      opt.id    = result.content[i].data;
+      obj.options.add(opt);
+    }
+  }, "GET", "JSON");
+}
+
+function clearOptions(id)
+{
+  var obj = document.getElementById(id);
+  while(obj.options.length>0)
+  {
+    obj.remove(0);
+  }
+}
+
+function addAllItem(sender)
+{
+  if(sender.options.length == 0) return false;
+  for (var i = 0; i < sender.options.length; i++)
+  {
+    var opt = sender.options[i];
+    addItem(null, opt.value, opt.text);
+  }
+}
+
+function addItem(sender, value, text)
+{
+  var target_select = document.getElementById("target_select");
+  var sortList = document.getElementById("topic_class_list");
+  var newOpt   = document.createElement("OPTION");
+  if (sender != null)
+  {
+    if(sender.options.length == 0) return false;
+    var option = sender.options[sender.selectedIndex];
+    newOpt.value = option.value;
+    newOpt.text  = option.text;
+  }
+  else
+  {
+    newOpt.value = value;
+    newOpt.text  = text;
+  }
+  if (targetItemExist(newOpt)) return false;
+  if (target_select.length>=50)
+  {
+    alert(item_upper_limit);
+  }
+  target_select.options.add(newOpt);
+  var key = sortList.options[sortList.selectedIndex].value == "-1" ? "default" : sortList.options[sortList.selectedIndex].text;
+  
+  if(!myTopic[key])
+  {
+    myTopic[key] = new Array();
+  }
+  myTopic[key].push(newOpt.text + "|" + newOpt.value);
+}
+
+// 商品是否存在
+function targetItemExist(opt)
+{
+  var options = document.getElementById("target_select").options;
+  for ( var i = 0; i < options.length; i++)
+  {
+    if(options[i].text == opt.text && options[i].value == opt.value) 
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+function addClass()
+{
+  var obj = document.getElementById("topic_class_list");
+  var newClassName = document.getElementById("new_cat_name");
+  var regExp = /^[a-zA-Z0-9]+$/;
+  if (newClassName.value == ""){
+    alert(sort_name_empty);
+    return;
+  }
+  for(var i=0;i < obj.options.length; i++)
+  {
+    if(obj.options[i].text == newClassName.value)
+    {
+      alert(sort_name_exist);
+      newClassName.focus(); 
+      return;
+    }
+  }
+  var className = document.getElementById("new_cat_name").value;
+  document.getElementById("new_cat_name").value = "";
+  var newOpt    = document.createElement("OPTION");
+  newOpt.value  = obj.options.length;
+  newOpt.text   = className;
+  obj.options.add(newOpt);
+  newOpt.selected = true;
+  if ( obj.options[0].value == "-1")
+  {
+    if (myTopic["default"].length > 0)
+      alert(move_item_confirm.replace("className",className));
+    myTopic[className] = myTopic["default"];
+    delete myTopic["default"];
+    obj.remove(0);
+  }
+  else
+  {
+    myTopic[className] = new Array();
+    clearOptions("target_select");
+  }
+}
+
+function deleteClass()
+{
+  var classList = document.getElementById("topic_class_list");
+  if (classList.value != "-1")
+  {
+    delete myTopic[classList.options[classList.selectedIndex].text];
+    classList.remove(classList.selectedIndex);
+    clearOptions("target_select");
+  }
+  if (classList.options.length < 1)
+  {
+    var newOpt    = document.createElement("OPTION");
+    newOpt.value  = "-1";
+    newOpt.text   = defaultClass;
+    classList.options.add(newOpt);
+    myTopic["default"] = new Array();
+  }
+}
+
+function showTargetList()
+{
+  clearOptions("target_select");
+  var obj = document.getElementById("topic_class_list");
+  var index = obj.options[obj.selectedIndex].text;
+  if (index == defaultClass)
+  {
+    index = "default";
+  }
+  var options = myTopic[index];
+  
+  for ( var i = 0; i < options.length; i++)
+  {
+    var newOpt    = document.createElement("OPTION");
+    var arr = options[i].split('|');
+    newOpt.value  = arr[1];
+    newOpt.text   = arr[0];
+    document.getElementById("target_select").options.add(newOpt);
+  }
+}
+
+function removeItem(sender,isAll)
+{
+  var classList = document.getElementById("topic_class_list");
+  var key = 'default';
+  if (classList.value != "-1")
+  {
+    key = classList.options[classList.selectedIndex].text;
+  }
+  var arr = myTopic[key];
+  if (!isAll)
+  {
+    var goodsName = sender.options[sender.selectedIndex].text;
+    for (var j = 0; j < arr.length; j++)
+    {
+      if (arr[j].indexOf(goodsName) >= 0)
+      {
+          myTopic[key].splice(j,1);
+      }
+    }
+
+    for (var i = 0; i < sender.options.length;)
+    {
+      if (sender.options[i].selected) {
+        sender.remove(i);
+        myTopic[key].splice(i, 0);
+      }
+      else
+      {
+        i++;
+      }
+    }
+  }
+  else
+  {
+    myTopic[key] = new Array();
+    sender.innerHTML = "";
+  }
+}
+{/literal}
+//-->
+</script>
+{include file="pagefooter.htm"}

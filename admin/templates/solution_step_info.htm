@@ -1,0 +1,326 @@
+<!-- $Id: brand_info.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+<style type="text/css">
+td.label2{line-height:20px; padding:0;font-weight:bold;
+padding:5px 1em;
+text-align:right;
+vertical-align:top;
+width:10%;
+}	
+</style>
+{include file="pageheader.htm"}
+<div class="main-div">
+<form method="post" action="solution.php" name="theForm" enctype="multipart/form-data">
+<table cellspacing="1" cellpadding="3" width="100%">
+  <tr>
+    <td class="label2">{$lang.step_name}</td>
+    <td><input type="text" name="step_name" maxlength="60" value="{$step.step_name}" />{$lang.require_field}</td>
+  </tr>
+  <tr>
+    <td class="label2"><a href="javascript:showNotice('warn_steplogo');" title="{$lang.form_notice}">
+        <img src="images/notice.gif" width="16" height="16" border="0" alt="{$lang.form_notice}"></a>{$lang.step_logo}</td>
+    <td><input type="file" name="step_logo" id="step_logo" size="45">{if $step.step_logo neq ""}<input type="button" value="{$lang.drop_step_logo}" onclick="if (confirm('{$lang.confirm_drop_logo}'))location.href='solution.php?act=drop_logo&id={$step.step_id}'">{/if}
+    <br /><span class="notice-span" {if $help_open}style="display:block" {else} style="display:none" {/if} id="warn_steplogo">
+    {if $step.step_logo eq ''}
+    {$lang.up_steplogo}
+    {else}
+    {$lang.warn_steplogo}
+    {/if}
+    </span>
+	<br /><img src="../data/steplogo/{$step.step_logo}" width="60"/>
+    </td>
+  </tr>
+  <tr>
+    <td class="label2">{$lang.step_desc}</td>
+    <td><textarea  name="step_desc" cols="60" rows="4"  >{$step.step_desc}</textarea></td>
+  </tr>
+  <tr>
+    <td class="label2">{$lang.is_real}</td>
+    <td><input type="radio" name="is_real" value="1" {if $step.is_real eq 1}checked="checked"{/if} onclick="detail_goods('show');"/> {$lang.yes}
+        <input type="radio" name="is_real" value="0" {if $step.is_real eq 0}checked="checked"{/if} onclick="detail_goods('hide');" /> {$lang.no}
+        ({$lang.visibility_notes})
+    </td>
+  </tr>
+</table>
+
+<table cellspacing="1" cellpadding="3" width="100%" id="detail_goods">
+ <tr>
+	<td class="label2"><img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" /> {$lang.step_goods}</td>
+    <td>
+		    <!-- 分类 -->
+		    <select name="cat_id"><option value="0">{$lang.all_cat}</option>{$cat_list}</select>
+
+		    <!-- 品牌 -->
+		    <select name="brand_id"><option value="0">{$lang.all_brand}</option>{html_options options=$brand_list selected=$brand_id}</select>
+		    <!-- 推荐 -->
+		    <select name="intro_type"><option value="0">{$lang.intro_type}</option>{html_options options=$intro_list selected=$intro_type}</select>
+	</td>
+  </tr>
+  <tr>
+	<td class="label2">{$lang.other_cat}</td>
+    <td>
+      <table width="90%" border="0"  align="center" cellpadding="0" cellspacing="0" id="goods-table" >
+        <tr>
+          <td colspan="3">
+            <select name="cat_id2">
+              <option value="0">{$lang.all_category}</option>
+              {$cat_list}
+            </select>
+            <select name="brand_id2">
+              <option value="0">{$lang.all_brand}</option>
+              {html_options options=$brand_list}
+            </select>
+            <input type="text" name="keyword2"/>
+            <input name="button" type="button" class="button" onclick="searchGoods('cat_id2', 'brand_id2', 'keyword2')" value="{$lang.button_search}" />          </td>
+        </tr>
+        <!-- 商品列表 -->
+        <tr height="37">
+          <th>{$lang.all_goods}</th>
+          <th>{$lang.handler}</th>
+          <th>{$lang.selected_goods}</th>
+        </tr>
+        <tr>
+          <td width="42%"><select name="source_select" id="source_select" size="20" style="width:100%;height:300px;"  ondblclick="addItem(this)">
+            </select>          </td>
+          <td align="center"><p>
+              <input name="button" type="button" class="button" onclick="addAllItem(document.getElementById('source_select'))" value="&gt;&gt;" />
+            </p>
+            <p>
+              <input name="button" type="button" class="button" onclick="addItem(document.getElementById('source_select'))" value="&gt;" />
+            </p>
+            <p>
+              <input name="button" type="button" class="button" onclick="removeItem(document.getElementById('target_select'))" value="&lt;" />
+            </p>
+            <p>
+              <input name="button" type="button" class="button" value="&lt;&lt;" onclick="removeItem(document.getElementById('target_select'), true)" />
+            </p></td>
+          <td width="42%"><select name="target_select" id="target_select" size="20" style="width:100%;height:300px" multiple="multiple">
+            </select>          </td>
+        </tr>
+      </table>
+
+	</td>
+  </tr>
+</table>
+
+<table cellspacing="1" cellpadding="3" width="100%">
+
+  <tr>
+    <td colspan="2" align="center"><br />
+      <input type="submit" class="button" value="{$lang.button_submit}" onclick="return checkForm()" />
+      <input type="reset" class="button" value="{$lang.button_reset}" />
+      <input type="hidden" name="act" value="{$form_action}" />
+      <input type="hidden" name="old_stepname" value="{$step.step_name}" />
+      <input type="hidden" name="id" value="{$step.step_id}" />
+      <input type="hidden" name="other_cat" id="other_cat" value="" />
+      <input type="hidden" name="old_steplogo" value="{$step.step_logo}">
+    </td>
+  </tr>
+</table>
+</form>
+</div>
+{insert_scripts files="../js/utils.js,validator.js"}
+
+<script language="JavaScript">
+<!--
+var data = '{$step.other_cat}';
+var defaultClass = "{$lang.default_class}" 
+{literal}
+var myTopic = Object();
+
+onload = function()
+{
+  
+  // 开始检查订单
+  startCheckOrder();
+  //var classList = document.getElementById("topic_class_list");
+
+  if (data == "")
+  {
+    
+    //classList.innerHTML = "";
+    myTopic['default'] = new Array();
+    var newOpt    = document.createElement("OPTION");
+    newOpt.value  = -1;
+    newOpt.text   = defaultClass;
+    classList.options.add(newOpt);
+    return;
+  }
+  var temp    = data.parseJSON();
+
+  var counter = 0;
+  for (var k in temp)
+  {
+    if(typeof(myTopic[k]) != "function")
+    {
+      myTopic[k] = temp[k];
+      var newOpt    = document.createElement("OPTION");
+      newOpt.value  = k == "default" ? -1 : counter;
+      newOpt.text   = k == "default" ? defaultClass : k;
+      classList.options.add(newOpt);
+      counter++;
+    }
+  }
+  showTargetList();
+}
+function detail_goods(show)
+{	
+	if(show == 'show'){
+		document.getElementById("detail_goods").style.display = '';		
+	}else{
+		document.getElementById("detail_goods").style.display = 'none';		
+	}
+  
+}
+function checkForm()
+{
+  var validator = new Validator('theForm');
+  validator.required('step_name', step_name_empty);
+
+  document.getElementById("other_cat").value = obj2str(myTopic);
+
+  return validator.passed();
+}
+
+function chanageSize(num, id)
+{
+  var obj = document.getElementById(id);
+  if (obj.tagName == "TEXTAREA")
+  {
+    var tmp = parseInt(obj.rows);
+    tmp += num;
+    if (tmp <= 0) return;
+    obj.rows = tmp;
+  }
+}
+
+function searchGoods(catId, brandId, keyword)
+{
+  var elements = document.forms['theForm'].elements;
+  var filters = new Object;
+  filters.cat_id = elements[catId].value;
+  filters.brand_id = elements[brandId].value;
+  filters.keyword = Utils.trim(elements[keyword].value);
+  Ajax.call("solution.php?act=get_goods_list", filters, function(result)
+  {
+    clearOptions("source_select");
+    var obj = document.getElementById("source_select");
+    for (var i=0; i < result.content.length; i++)
+    {
+      var opt   = document.createElement("OPTION");
+      opt.value = result.content[i].value;
+      opt.text  = result.content[i].text;
+      opt.id    = result.content[i].data;
+      obj.options.add(opt);
+    }
+  }, "GET", "JSON");
+}
+
+function clearOptions(id)
+{
+  var obj = document.getElementById(id);
+  while(obj.options.length>0)
+  {
+    obj.remove(0);
+  }
+}
+
+function addAllItem(sender)
+{
+  if(sender.options.length == 0) return false;
+  for (var i = 0; i < sender.options.length; i++)
+  {
+    var opt = sender.options[i];
+    addItem(null, opt.value, opt.text);
+  }
+}
+
+function addItem(sender, value, text)
+{
+  var target_select = document.getElementById("target_select");
+  //var sortList = document.getElementById("topic_class_list");
+  var newOpt   = document.createElement("OPTION");
+  if (sender != null)
+  {
+    if(sender.options.length == 0) return false;
+    var option = sender.options[sender.selectedIndex];
+    newOpt.value = option.value;
+    newOpt.text  = option.text;
+  }
+  else
+  {
+    newOpt.value = value;
+    newOpt.text  = text;
+  }
+  if (targetItemExist(newOpt)) return false;
+  if (target_select.length>=50)
+  {
+    alert(item_upper_limit);
+  }
+  target_select.options.add(newOpt);
+}
+
+// 商品是否存在
+function targetItemExist(opt)
+{
+  var options = document.getElementById("target_select").options;
+  for ( var i = 0; i < options.length; i++)
+  {
+    if(options[i].text == opt.text && options[i].value == opt.value) 
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+function showTargetList()
+{
+  clearOptions("target_select");
+  var obj = document.getElementById("topic_class_list");
+  var index = obj.options[obj.selectedIndex].text;
+  if (index == defaultClass)
+  {
+    index = "default";
+  }
+  var options = myTopic[index];
+  
+  for ( var i = 0; i < options.length; i++)
+  {
+    var newOpt    = document.createElement("OPTION");
+    var arr = options[i].split('|');
+    newOpt.value  = arr[1];
+    newOpt.text   = arr[0];
+    document.getElementById("target_select").options.add(newOpt);
+  }
+}
+
+function removeItem(sender,isAll)
+{
+
+  if (!isAll)
+  {
+    var goodsName = sender.options[sender.selectedIndex].text;
+
+    for (var i = 0; i < sender.options.length;)
+    {
+      if (sender.options[i].selected) {
+        sender.remove(i);
+        //myTopic[key].splice(i, 0);
+      }
+      else
+      {
+        i++;
+      }
+    }
+  }
+  else
+  {
+    //myTopic[key] = new Array();
+    sender.innerHTML = "";
+  }
+}
+{/literal}
+//-->
+</script>
+
+{include file="pagefooter.htm"}
