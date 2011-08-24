@@ -1,0 +1,48 @@
+
+	<!--{if $city.audit_note != "审核通过" && $city.audit_note != ""  && $city.can_modify == 1 && $sm_session.user_rank == 1 }-->
+	<a href="city_project.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}">修改</a>
+	<!--{else}-->
+		<!--{if $city.can_modify == 0}-->
+			<!--{if $sm_session.user_rank == 2}-->
+			<a href="city_project.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}">查看并填写<br>报销审核</a>
+			<!--{else}-->
+			<a href="city_project.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}">查看基础信息</a>
+			<!--{/if}-->					
+		<!--{/if}-->
+	<!--{/if}-->
+	
+	<!--{if ($ad_detail.can_modify != 0 || $sm_session.user_rank == 2 ) && ($k != "col_1" && $k != "col_2" && $k != "col_3" && $k != "col_4" && $k != "col_5" && $k != "col_6" && $k != "col_7" && $k != "col_8" && $k != "col_9" )}-->
+		{if $k == "col_46" || $k == "col_43" || $k == "col_44" || $k == "col_45" }
+			{if $sm_session.user_rank == 2}
+				{if $k == "col_43" || $k == "col_46" }
+				<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#fffead;" onclick="return showCalendar(this, '%Y-%m-%d', false, false, this);" />
+				{else}
+				<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#fffead;"/>
+				{/if}					
+			{/if}
+		{elseif $k == "col_42"}
+			<select id="{$k}" name="col[]">
+			      {html_options options=$lang.pic_type_select_lite selected=$ad_detail.$k}
+			</select>
+		{else}
+			{if $sm_session.user_rank == 1}
+				<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#fffead;"/>
+			{else}
+				<span>{$ad_detail.$k}</span>
+				<input type="hidden" name="col[]" value="{$ad_detail.$k}" />
+			{/if}
+		
+		{/if}
+		<!--{if $k == "col_28" || $k == "col_29" || $k == "col_19" || $k == "col_20" || $k == "col_42" }-->
+		<span class="f_right red_color"> * 必填 </span>
+		<!--{/if}-->
+	<!--{else}-->
+		{if $k == "col_42" }
+			<select id="{$k}" name="col[]">
+			      {html_options options=$lang.pic_type_select_lite selected=$ad_detail.$k}
+			</select>
+		{else}
+		<span>{$ad_detail.$k}</span>
+		{/if}
+		<input type="hidden" name="col[]" value="{$ad_detail.$k}" />
+	<!--{/if}-->
