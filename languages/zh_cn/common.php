@@ -835,10 +835,10 @@ $_LANG['city_title']['col_40'] = "责任人";
 $_LANG['city_title']['col_41'] = "城市修改备注";
 $_LANG['city_title']['col_42'] = "费用来源";
 
-$_LANG['city_title']['col_43'] = "[报销审核]资料提交时间";
-$_LANG['city_title']['col_44'] = "[报销审核]审核是否通过";
-$_LANG['city_title']['col_45'] = "[报销审核]不通过原因";
-$_LANG['city_title']['col_46'] = "[报销审核]通过时间";
+//$_LANG['city_title']['col_43'] = "[报销审核]资料提交时间";
+//$_LANG['city_title']['col_44'] = "[报销审核]审核是否通过";
+//$_LANG['city_title']['col_45'] = "[报销审核]不通过原因";
+//$_LANG['city_title']['col_46'] = "[报销审核]通过时间";
 
 $_LANG['audit_confirm'] 	= "审核通过";
 $_LANG['audit_cancel'] 		= "审核不过";
@@ -898,10 +898,20 @@ $_LANG['pic_type_select'][4] = "KAB";
 $_LANG['pic_type_select'][5] = "BRAND";
 $_LANG['pic_type_select'][6] = "MICROSOFT";
 
+$_LANG['resource_type']['无照明路牌']= "无照明路牌";
+$_LANG['resource_type']['射灯路牌'] = "射灯路牌";
+$_LANG['resource_type']['三面翻'] 	= "三面翻";
+$_LANG['resource_type']['灯箱'] 	= "灯箱";
+$_LANG['resource_type']['无射灯路牌']= "无射灯路牌";
+$_LANG['resource_type']['车身广告'] = "车身广告";
+$_LANG['resource_type']['LED'] 	= "LED";
+$_LANG['resource_type']['照明路牌'] = "照明路牌";
+
 
 
 $_LANG['pic_type_select_lite'][1] = "SMB";
 $_LANG['pic_type_select_lite'][2] = "IDEA";
+
 
 
 $_LANG['pic_type_array']['SMBIDEA'] = "1";

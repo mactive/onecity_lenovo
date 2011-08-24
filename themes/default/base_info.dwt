@@ -102,7 +102,6 @@
 			{/if}
 				<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
 				    <tr>
-					  	<th>{$lang.resource_title}<br>点击查看</th>
 					  	<th>{$lang.region}</th>
 				      	<th width="50">{$lang.province}</th>
 				      	<th>{$lang.county}</th>
@@ -117,9 +116,6 @@
 				    </tr>
 				<!--{foreach from=$city_list item=city name=index_idea}-->
 					<tr>
-						<td class="center">
-							{if $city.pic_view}<a href="{$city.pic_view}">{$lang.pic_type_select.$city.nowQ}</a>
-							{else}{$lang.pic_type_select.$city.nowQ}{/if}</td>
 						<td>{$city.region}</td>
 						<td>{$city.province}</td>
 						<td>{$city.county}</td>
@@ -128,7 +124,7 @@
 
 								<!--{if $city.can_modify == 1 }-->
 									<!--{if $sm_session.user_rank == 1}-->
-										<a class="write" href="city_project.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}"></a>
+										<a class="write" href="city_base_info.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}"></a>
 									<!--{else}-->
 										等待检查
 									<!--{/if}-->
@@ -160,18 +156,8 @@
 
 						</td>
 						<td>
-
-								<!--{if $city.audit_note != "审核通过" && $city.audit_note != ""  && $city.can_modify == 1 && $sm_session.user_rank == 1 }-->
-								<a href="city_project.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}">修改</a>
-								<!--{else}-->
-									<!--{if $city.can_modify == 0}-->
-										<!--{if $sm_session.user_rank == 2}-->
-										<a href="city_project.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}">查看并填写<br>报销审核</a>
-										<!--{else}-->
-										<a href="city_project.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}">查看基础信息</a>
-										<!--{/if}-->					
-									<!--{/if}-->
-								<!--{/if}-->
+							<a href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}">修改</a>
+							
 						</td>
 						<!--{if $sm_session.user_rank >= 2}-->
 						<td>{if $city.is_microsoft}<img src="{$img_path}microsoft.png" >{/if}</td>
@@ -207,7 +193,7 @@
 			  <!--
 			  listTable.recordCount = {$record_count};
 			  listTable.pageCount = {$page_count};
-			  listTable.query = "query_base_info";
+			  listTable.query = "query_ad_list";
 			  {foreach from=$filter item=item key=key}
 			  listTable.filter.{$key} = '{$item}';
 			  {/foreach}
