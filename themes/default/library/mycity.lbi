@@ -25,8 +25,8 @@
     <div class="bgr"> </div>
 </div>
 <ul class="mycity_ul">
-	<li><a href="city_base_info.php?act=ad_list&project_id=9" style="background:url({$img_path}red_arrow.png) no-repeat 10px center;">基础信息修改</a></li>
-	<li><a href="city_base_info.php?act=expense_material" style="background:url({$img_path}red_arrow.png) no-repeat 10px center;">报销资料状态</a></li>	
+	<li><a href="city_project.php?act=base_info&project_id=9" style="background:url({$img_path}red_arrow.png) no-repeat 10px center;">基础信息修改</a></li>
+	<li><a href="city_project.php?act=expense_material" style="background:url({$img_path}red_arrow.png) no-repeat 10px center;">报销资料状态</a></li>	
 </ul>
 
 <div class="nav_top_lite_grey">

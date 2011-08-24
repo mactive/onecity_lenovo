@@ -744,4 +744,57 @@ elseif($_REQUEST['act'] == 'open_modify'){
 		show_message("开启成功");
 	}	
 }
+
+elseif ($_REQUEST['act'] == 'base_info' )
+{
+	$project_id= !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 0;
+	$smarty->assign('project_id',    $project_id);	
+	
+	$position['ur_here'] .= "<li>选择城市加入本期项目</li>"; 	
+    $smarty->assign('page_title',       $position['title']);    // 页面标题
+    $smarty->assign('ur_here',          $position['ur_here']);  // 当前位置
+	
+	$children = get_city_children($user_region);
+	$smarty->assign('full_page',    1);	
+	
+    $city_list = get_base_info_list($children);
+	$smarty->assign('city_list',    $city_list['citys']);	
+    $smarty->assign('filter',       $city_list['filter']);
+	$smarty->assign('record_count', $city_list['record_count']);
+    $smarty->assign('page_count',   $city_list['page_count']);
+    $smarty->assign('page_size',   $city_list['page_size']);
+    $smarty->assign('sql',   $city_list['sql']);
+    $smarty->assign('count_sql',   $city_list['count_sql']);
+
+	$smarty->display('base_info.dwt');	
+	
+}
+/**
+ * query 页面内刷新 显示某一个项目下的城市列表
+ */
+elseif ($_REQUEST['act'] == 'query_base_info')
+{
+	$smarty->assign('full_page',        '0');  // 当前位置
+    $children = get_city_children($user_region);
+
+	$project_id= !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 0;
+	$smarty->assign('project_id',    $project_id);	
+	
+	
+	$city_list = get_base_info_list($children);
+	$smarty->assign('city_list',    $city_list);
+	
+	$smarty->assign('city_list',    $city_list['citys']);	
+    $smarty->assign('filter',       $city_list['filter']);
+	$smarty->assign('record_count', $city_list['record_count']);
+    $smarty->assign('page_count',   $city_list['page_count']);
+    $smarty->assign('page_size',   $city_list['page_size']);
+
+	$smarty->assign('sql',   	$city_list['sql']);
+	$smarty->assign('count_sql',   $city_list['count_sql']);
+    	
+    make_json_result($smarty->fetch('base_info.dwt'), '', array('filter' => $city_list['filter'], 'page_count' => $city_list['page_count'],'record_count' => $city_list['record_count'],'page_size' => $city_list['page_size']));	
+}
+
+
 ?>
