@@ -173,6 +173,7 @@ elseif ($_REQUEST['act'] == 'update_ad_info')
 	$smarty->assign('photo_info', $photo_info);
 	
 	$ad_detail = get_city_info($ad_id);
+	$ad_detail['base_info_modify'] = $GLOBALS['db']->getOne('SELECT base_info_modify FROM ' .$GLOBALS['ecs']->table('city_ad')." WHERE ad_id = $ad_id limit 1");
 	$smarty->assign('ad_detail', $ad_detail);
 	
 	$ad_info = get_ad_info($ad_id);
