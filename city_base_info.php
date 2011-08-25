@@ -74,8 +74,8 @@ if (empty($_SESSION['user_id']))
 }
 if (!isset($_REQUEST['act']))
 {
-    $act = "list_project";
-	$smarty->assign('act_step',      "list_project");
+    $act = "ad_list";
+	$smarty->assign('act_step',      "ad_list");
 }else{
 	$smarty->assign('act_step',       $_REQUEST['act']);
 }
@@ -94,29 +94,14 @@ if (!isset($_REQUEST['act']))
 /*------------------------------------------------------ */
 
 $position['title'] = "项目管理";
-$position['ur_here'] = '<li><a href="city_project.php">项目管理</a></li>'; 
+$position['ur_here'] = '<li><a href="city_base_info.php">项目管理</a></li>'; 
  
 
 /* 获得页面的缓存ID */
 $cache_id = sprintf('%X', crc32($user_id . '-' . $page . '-' . $_CFG['lang']));
 
 /* 项目列表 所有季度 */
-if (!$smarty->is_cached('project_list.dwt', $cache_id) && $act == 'list_project')
-{
-    /* 如果页面没有被缓存则重新获得页面的内容 */
-	
-	$position['ur_here'] .= "<li>项目列表</li>"; 
-    $smarty->assign('page_title',       $position['title']);    // 页面标题
-    $smarty->assign('ur_here',          $position['ur_here']);  // 当前位置
-
-	$children = get_city_children_a($user_region);
-
-	$project_list = get_project_list($children);
-	$smarty->assign('project_list',    $project_list);
-	
-	$smarty->display('project_view.dwt');	
-}
-elseif ($_REQUEST['act'] == 'ad_list' )
+if ($_REQUEST['act'] == 'ad_list')
 {
 	$project_id= !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 0;
 	$smarty->assign('project_id',    $project_id);	
@@ -178,6 +163,14 @@ elseif ($_REQUEST['act'] == 'update_ad_info')
 	
 	$ad_id = isset($_REQUEST['ad_id']) && intval($_REQUEST['ad_id']) > 0 ? intval($_REQUEST['ad_id']) : 0;
 	$project_id = isset($_REQUEST['project_id']) && intval($_REQUEST['project_id']) > 0 ? intval($_REQUEST['project_id']) : 0;
+	
+	//已经审核完成的照片
+	$old_photo_info = get_project_ad_photo_info($ad_id,$project_id); //no feedback
+	$smarty->assign('old_photo_info', $old_photo_info);
+	
+	//正在审核的照片
+	$photo_info = get_ad_photo_info($ad_id,$project_id); //feedback
+	$smarty->assign('photo_info', $photo_info);
 	
 	$ad_detail = get_city_info($ad_id);
 	$smarty->assign('ad_detail', $ad_detail);
@@ -292,8 +285,14 @@ elseif($_REQUEST['act'] == 'act_update_ad_info')
 	$city_content['col_15'] = intval($city_content['col_13']) *  intval($city_content['col_14']); //总面积
 	$city_content['col_18'] = sep_days( $city_content['col_17'],$city_content['col_16']); //发布天数
 	
+
+	
 	if($ad_id){
 		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $city_content, 'update', "ad_id='$ad_id'");
+		
+		$city_ad_array = array();
+		$city_ad_array['base_info_changed'] = 1;//已经修改过
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $city_ad_array, 'update', "ad_id='$ad_id'");
 		
 		//记录修改记录
 		$old_col = $_REQUEST['old_col'];
@@ -320,6 +319,111 @@ elseif($_REQUEST['act'] == 'act_update_ad_info')
 	
 	show_message("修改成功", "返回基础信息", 'city_base_info.php?act=update_ad_info&ad_id='.$ad_id, 'info', true);       
 }
+
+
+elseif($_REQUEST['act'] == 'send_material')
+{
+	$ad_id = !empty($_REQUEST['ad_id']) ? intval($_REQUEST['ad_id']) : '';
+	
+	$city_ad_array = array();
+	$city_ad_array['is_send'] = 1;//已经修改过
+	$city_ad_array['ad_id'] = $ad_id;//已经修改过
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_material'), $city_ad_array, 'INSERT');
+	
+	show_message("成功寄出 时间:".date("Y-m-d H:i:s"),"关闭该页","javascript:self.close()");       
+	
+}
+elseif($_REQUEST['act'] == 'receive_material')
+{
+	$ad_id = !empty($_REQUEST['ad_id']) ? intval($_REQUEST['ad_id']) : '';
+	
+	$city_ad_array = array();
+	$city_ad_array['is_receive'] = 1;//已经修改过
+	$city_ad_array['ad_id'] = $ad_id;//已经修改过
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_material'), $city_ad_array, 'INSERT');
+	
+	show_message("成功收到 时间:".date("Y-m-d H:i:s"),"关闭该页","javascript:self.close()");       
+	
+}
+
+/* 上传反馈照片 驱动页面 */
+elseif($_REQUEST['act'] == 'base_info_audit')
+{
+	$position['ur_here'] .= "<li>审核基础信息</li>"; 	
+    $smarty->assign('page_title',       $position['title']);    // 页面标题
+    $smarty->assign('ur_here',          $position['ur_here']);  // 当前位置
+	
+	$ad_id = isset($_REQUEST['ad_id']) && intval($_REQUEST['ad_id']) > 0 ? intval($_REQUEST['ad_id']) : 0;
+	$project_id = isset($_REQUEST['project_id']) && intval($_REQUEST['project_id']) > 0 ? intval($_REQUEST['project_id']) : 0;
+	$ad_info = get_ad_info($ad_id);
+	$smarty->assign('ad_info', $ad_info);
+	
+	$smarty->assign('project_id', $project_id);
+	$project_info = get_project_info($project_id);
+	$smarty->assign('project_info', $project_info);
+	
+	$audit_path = get_audit_path($ad_id,$lite_audit_level_array,$project_id); //审核路径图
+	$smarty->assign('audit_path', $audit_path);
+	
+	$ad_detail = get_city_info($ad_id);
+	$smarty->assign('ad_detail', $ad_detail);
+	
+	//已经审核完成的照片
+	$old_photo_info = get_project_ad_photo_info($ad_id,$project_id); //no feedback
+	$smarty->assign('old_photo_info', $old_photo_info);
+	
+	
+	$audit_note = get_last_audit_note($ad_id,$project_id);
+	$feedback_confirm = $audit_note == "审核通过" ? 1 : 0;
+	$smarty->assign('feedback_confirm', $feedback_confirm);
+	
+	$smarty->assign('reupload_message', "重新上传将替换照片");
+	
+	$smarty->assign('ad_id', $ad_id);
+	
+	$base_info = get_base_info($ad_info['city_id']);
+	$city_name = $base_info['region_name'];
+	$smarty->assign('city_name',   $city_name);
+	
+	$smarty->display('base_info_view.dwt');
+}
+
+/* 响应合同项目的审核 */
+elseif($_REQUEST['act'] == 'update_base_info_audit')
+{
+	$ad_id =  !empty($_REQUEST['ad_id']) ? intval($_REQUEST['ad_id']) : 0;
+	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 0;
+	$confirm = !empty($_REQUEST['confirm']) ? intval($_REQUEST['confirm']) : 0;
+	
+	
+	/* 写入审核历史数据库*/
+	$audit_info = array();
+	$audit_info['ad_id'] = $ad_id;
+	$audit_info['user_id'] = $_SESSION['user_id'];
+	$audit_info['user_rank'] = $_SESSION['user_rank'];
+	$audit_info['feedback_audit'] = $project_id;
+	$audit_info['audit_note'] = $confirm > 0 ? "审核通过": trim($_POST['audit_note']);
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad_audit'), $audit_info, 'INSERT');
+	
+	$return_url = "city_base_info.php?act=ad_list&project_id=$project_id";
+	
+	if($confirm == 1){
+		$city_content['base_info_modify'] = 0;	
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $city_content, 'update', "ad_id='$ad_id'");
+		
+		show_message("审核通过,其他人会看到。", $_LANG['back_home_lnk'], $return_url, 'info', true);
+		
+	}else{		
+		//打开修改权限
+		$city_content['base_info_modify'] = 1;	
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $city_content, 'update', "ad_id='$ad_id'");
+		
+		show_message("审核信息已经提交。", $_LANG['back_home_lnk'], $return_url, 'info', true);
+		//$smarty->display('city_view.dwt');
+	}
+}
+
+
 
 function sep_days($end_date,$start_date)
 {

@@ -46,3 +46,11 @@
 		{/if}
 		<input type="hidden" name="col[]" value="{$ad_detail.$k}" />
 	<!--{/if}-->
+	
+	
+	<br>
+	<!--{if $city.audit_note && $city.audit_note != "审核通过" && $sm_session.user_rank == 1}-->
+	<a href="city_base_info.php?act=send_material&ad_id={$city.ad_id}" target="_blank">重新寄出</a>
+	<!--{else}-->
+	
+	<!--{/if}-->

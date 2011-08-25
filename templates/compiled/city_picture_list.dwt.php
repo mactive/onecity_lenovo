@@ -36,20 +36,34 @@
 		<div id="page-middle">
 			
 			<?php echo $this->fetch('library/ur_here.lbi'); ?>
-
 			
-			<?php if ($this->_var['act_step'] == "update_ad_info"): ?>
 			
-				<?php echo $this->fetch('library/update_base_ad_info.lbi'); ?>
+			<?php if ($this->_var['act_step'] == "project_picture"): ?>
+			
+				<?php echo $this->fetch('library/project_picture.lbi'); ?>
 				
 			<?php endif; ?>
 			
-
 			
-			<?php if ($this->_var['act_step'] == "base_info_audit"): ?>
+			<?php if ($this->_var['act_step'] == "list_picture"): ?>
+			
+				<?php echo $this->fetch('library/list_picture.lbi'); ?>
 				
-				<?php echo $this->fetch('library/base_info_audit.lbi'); ?>
 			<?php endif; ?>
+			
+			
+			<?php if ($this->_var['act_step'] == "add_picture" || $this->_var['act_step'] == "edit_picture"): ?>
+			
+				<?php echo $this->fetch('library/edit_picture.lbi'); ?>
+				
+			<?php endif; ?>
+			
+			<?php if ($this->_var['act_step'] == "view_picture"): ?>
+			
+				<?php echo $this->fetch('library/view_picture.lbi'); ?>
+				
+			<?php endif; ?>
+				
 				
 				
 				

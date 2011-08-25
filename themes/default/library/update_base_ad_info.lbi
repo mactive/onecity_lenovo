@@ -1,10 +1,24 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <div class="f_left" style="width:100%;">
-	<a class="back_url" href="city_project.php?act=list_city_to_select&project_id={$project_id}&region_name={$city_name}"></a>
+	<a class="back_url" href="city_base_info.php?act=ad_list&project_id={$project_id}&region_name={$city_name}"></a>
 </div>
 <script type="text/javascript" src="../js/calendar.php"></script>
 <link href="../js/calendar/calendar.css" rel="stylesheet" type="text/css" />
-	
+
+<!--{foreach from=$old_photo_info item=project key=k}-->
+	<!--{if $project}-->
+	<div class="radius_5px city_info" style="width:95%;height:200px;padding:0px 10px;">
+		<span class="green-color font14px">{if $k==0}未换画之前{else}2011Q{$k}{/if}</span><br>
+	<!--{foreach from=$project item=item}-->	
+	<div style="width:160px;height:160px;text-align:center;float:left;margin:10px 20px;">
+	<a href="{$item.img_url}" target="_blank" class="city_photo"><img src="{$item.thumb_url}"></a>
+	{$lang.city_photo.$item.img_sort}
+	</div>
+	<!--{/foreach}-->
+	</div>
+	<!--{/if}-->
+<!--{/foreach}-->
+
 <!--{if $sm_session.user_rank == 1}-->
 <div class="yellow_notice" style="text-align:center;">{$upload_message}</div>
 <!--{/if}-->

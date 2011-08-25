@@ -94,7 +94,7 @@
 				</table>
 			  </form>
 			</div>
-			<div class="yellow_notice">下面是所有通过审核的广告牌</div>
+			<div class="yellow_notice">请按照合同内容需要重新检查的广告牌的基础信息</div>
 			
 			<form method="post" name="listForm"  onsubmit="return confirmSubmit(this)">
 			<!-- start crm list -->
@@ -106,62 +106,95 @@
 				      	<th width="50">{$lang.province}</th>
 				      	<th>{$lang.county}</th>
 				      	<th>{$lang.market_level}</th>
-					  	<th>填写</th>
+					  	<th>是否检查过</th>
+						<th>寄出材料</th>
+						<th>收到材料</th>
 					  	<th>{$lang.audit_2}审核</th>
 						<th>操作</th>
-						<!--{if $sm_session.user_rank >= 2}-->
-						<th>微软</th>
-						<!--{/if}-->
 						
 				    </tr>
 				<!--{foreach from=$city_list item=city name=index_idea}-->
-					<tr>
+					<tr {if $city.base_info_changed == 1 }class="city_upload"{/if}>
 						<td>{$city.region}</td>
 						<td>{$city.province}</td>
 						<td>{$city.county}</td>
 						<td>{$city.market_level}</td>
 						<td>
-
-								<!--{if $city.can_modify == 1 }-->
-									<!--{if $sm_session.user_rank == 1}-->
-										<a class="write" href="city_base_info.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}"></a>
-									<!--{else}-->
-										等待检查
-									<!--{/if}-->
+								<!--{if $city.base_info_changed == 1 }-->
+									已检查
 								<!--{else}-->
-										已检查									
+									未检查									
 								<!--{/if}-->						
 						</td>
 						<td>
+
+							<!--{if $city.send_time}-->
+								{$city.send_time}
+							<!--{else}-->
+								<!--{if $sm_session.user_rank == 1}-->
+								<a href="city_base_info.php?act=send_material&ad_id={$city.ad_id}" target="_blank">寄出</a>
+								<!--{/if}-->
+							
+							<!--{/if}-->
+						</td>
+						<td>
+							<!--{if $city.receive_time}-->
+								{$city.receive_time}
+							<!--{else}-->
+							
+								<!--{if $sm_session.user_rank == 2}-->
+								<a href="city_base_info.php?act=receive_material&ad_id={$city.ad_id}" target="_blank">收到</a>
+								<!--{/if}-->
+							
+							<!--{/if}-->
+						</td>
+						
+						
+						<!--{if $sm_session.user_rank == 1}-->
+						<!--{else}-->
+						<!--{/if}-->
+						
+						
+						<td>
 							<!--{if $city.audit_note}-->
 								<!--{if $city.audit_note == "审核通过"}-->
-								<a class="audit_confirm" href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}"></a>
+								<a class="audit_confirm"></a>
 								<!--{else}-->
-									<!--{if $city.can_modify == 0}-->
-									<a class="audit_idle" href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}"></a>
-									<!--{else}-->
-									<a class="audit_cancel" href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}"></a>
+								
+									<!--{if $city.base_info_modify == 1}-->
+									<a class="audit_cancel"></a>
 									<!--{/if}-->
 									
 								<!--{/if}-->
+								
 							<!--{else}-->
-								<!--{if $city.upload_picture}-->
-								<a class="audit_idle" href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}"></a>
+								<!--{if $city.send_time}-->
+									<!--{if $city.receive_time}-->
+									已收到<a class="audit_idle"></a>
+									<!--{else}-->
+									等待收件
+									<!--{/if}-->
 								<!--{else}-->
-									<!--{if $city.can_modify == 0}-->等待反馈画面
-									<!--{/if}-->								
+									<!--{if $city.receive_time}-->
+									已收到 <a class="audit_idle"></a>
+									<!--{else}-->
+									等待寄出
+									<!--{/if}-->
+									
 								<!--{/if}-->
 								
 							<!--{/if}-->
 
 						</td>
 						<td>
-							<a href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}">修改</a>
+							<!--{if $sm_session.user_rank == 1}-->
+							<a href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}&project_id=9">修改</a>
+							<!--{/if}-->
+							<!--{if $sm_session.user_rank == 2 && $city.base_info_changed == 1}-->
+							<a href="city_base_info.php?act=base_info_audit&ad_id={$city.ad_id}&project_id=9">审核</a>
+							<!--{/if}-->
 							
 						</td>
-						<!--{if $sm_session.user_rank >= 2}-->
-						<td>{if $city.is_microsoft}<img src="{$img_path}microsoft.png" >{/if}</td>
-						<!--{/if}-->
 						
 					</tr>
 			    <!--{/foreach}-->

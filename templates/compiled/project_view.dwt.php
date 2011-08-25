@@ -36,19 +36,36 @@
 		<div id="page-middle">
 			
 			<?php echo $this->fetch('library/ur_here.lbi'); ?>
-
 			
-			<?php if ($this->_var['act_step'] == "update_ad_info"): ?>
 			
-				<?php echo $this->fetch('library/update_base_ad_info.lbi'); ?>
+			<?php if ($this->_var['act_step'] == "list_project"): ?>
+			
+				<?php echo $this->fetch('library/list_project.lbi'); ?>
 				
 			<?php endif; ?>
 			
-
 			
-			<?php if ($this->_var['act_step'] == "base_info_audit"): ?>
+			<?php if ($this->_var['act_step'] == "add_project" || $this->_var['act_step'] == "edit_project"): ?>
+			
+				<?php echo $this->fetch('library/edit_project.lbi'); ?>
 				
-				<?php echo $this->fetch('library/base_info_audit.lbi'); ?>
+			<?php endif; ?>
+			
+			<?php if ($this->_var['act_step'] == "update_ad_info"): ?>
+			
+				<?php echo $this->fetch('library/update_ad_info.lbi'); ?>
+				
+			<?php endif; ?>
+			
+			<?php if ($this->_var['act_step'] == "edit_update_ad_info"): ?>
+			
+				<?php echo $this->fetch('library/edit_update_ad_info.lbi'); ?>
+				
+			<?php endif; ?>
+			
+			<?php if ($this->_var['act_step'] == "upload_photo"): ?>
+				
+				<?php echo $this->fetch('library/upload_project_photo.lbi'); ?>
 			<?php endif; ?>
 				
 				

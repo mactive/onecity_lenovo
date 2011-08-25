@@ -1136,9 +1136,8 @@ function get_base_info_list($children,$limit = 0){
 	$order_sql = $_SESSION['user_rank'] == 1 ? " ORDER BY city.city_id DESC " : " ORDER BY city.city_id DESC " ;
 	
 	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, a.is_microsoft, ". //
-			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region , ad.ad_id, ".
+			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region , ad.ad_id, ad.base_info_changed , ad.base_info_modify ".
 			//" pr.req_id, pr.price, pr.price_amount, pr.request_price, pr.request_price_amount,  (ad.price_status - $_SESSION[user_rank]) AS t1 ".
-			" city.col_19,city.col_20 ".
 			" FROM ".$GLOBALS['ecs']->table('category') . " AS a ".
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ". 
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
@@ -1157,12 +1156,10 @@ function get_base_info_list($children,$limit = 0){
 	$res = $GLOBALS['db']->getAll($sql);
 	foreach($res AS $key => $val)
 	{
-
-		$res[$key]['audit_note'] =  $GLOBALS['db']->getOne("SELECT audit_note FROM ".$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = $val[ad_id] AND feedback_audit = $filter[project_id] ORDER BY record_id DESC LIMIT 1");
-		$res[$key]['upload_picture'] =  $GLOBALS['db']->getOne("SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('city_gallery')." WHERE ad_id = $val[ad_id] AND feedback = $filter[project_id]");
-		
-		
-		
+		$res[$key]['audit_note'] =  $GLOBALS['db']->getOne("SELECT audit_note FROM ".$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = $val[ad_id] AND feedback_audit = $filter[project_id] ORDER BY record_id DESC LIMIT 1");	
+		$res[$key]['send_time'] =  $GLOBALS['db']->getOne("SELECT time FROM ".$GLOBALS['ecs']->table('city_material')." WHERE ad_id = $val[ad_id] AND is_send = 1 ORDER BY time DESC LIMIT 1");	
+		$res[$key]['receive_time'] =  $GLOBALS['db']->getOne("SELECT time FROM ".$GLOBALS['ecs']->table('city_material')." WHERE ad_id = $val[ad_id] AND is_receive = 1 ORDER BY time DESC LIMIT 1");	
+	
 	}
 	$arr = array('citys' => $res, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count'],'sql' => $sql,'count_sql' => $count_sql, 'page_size' => $filter['page_size']);
     return $arr;
