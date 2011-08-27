@@ -189,7 +189,11 @@ if ($this->_foreach['index_idea']['total'] > 0):
 						</td>
 						<td>
 							<?php if ($this->_var['sm_session']['user_rank'] == 1): ?>
-							<a href="city_base_info.php?act=update_ad_info&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=9">修改</a>
+								<?php if ($this->_var['city']['base_info_modify'] == 1): ?>
+									<a href="city_base_info.php?act=update_ad_info&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=9">修改</a>
+								<?php else: ?>
+								<a href="city_base_info.php?act=update_ad_info&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=9">查看</a>
+								<?php endif; ?>
 							<?php endif; ?>
 							<?php if ($this->_var['sm_session']['user_rank'] == 2 && $this->_var['city']['base_info_changed'] == 1): ?>
 							<a href="city_base_info.php?act=base_info_audit&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=9">审核</a>

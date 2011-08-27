@@ -899,6 +899,7 @@ $_LANG['pic_type_select'][5] = "BRAND";
 $_LANG['pic_type_select'][6] = "MICROSOFT";
 
 
+
 $_LANG['resource_type']['无照明路牌']= "无照明路牌";
 $_LANG['resource_type']['射灯路牌'] = "射灯路牌";
 $_LANG['resource_type']['三面翻'] 	= "三面翻";
@@ -907,9 +908,10 @@ $_LANG['resource_type']['无射灯路牌']= "无射灯路牌";
 $_LANG['resource_type']['车身广告'] = "车身广告";
 $_LANG['resource_type']['LED'] 	= "LED";
 $_LANG['resource_type']['照明路牌'] = "照明路牌";
+$_LANG['resource_type']['其他']= "其他";
 
 
-
+$_LANG['pic_type_select_lite'][0] = "请选择。。。";
 $_LANG['pic_type_select_lite'][1] = "SMB";
 $_LANG['pic_type_select_lite'][2] = "IDEA";
 

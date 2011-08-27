@@ -5,7 +5,7 @@
 </div>
 
 <!--{foreach from=$old_photo_info item=project key=k}-->
-	<!--{if $project}-->
+	<!--{if $project && $k == 0}-->
 	<div class="radius_5px city_info" style="width:95%;height:200px;padding:0px 10px;">
 		<span class="green-color font14px">{if $k==0}未换画之前{else}2011Q{$k}{/if}</span><br>
 	<!--{foreach from=$project item=item}-->	

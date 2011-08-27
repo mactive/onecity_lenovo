@@ -188,7 +188,11 @@
 						</td>
 						<td>
 							<!--{if $sm_session.user_rank == 1}-->
-							<a href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}&project_id=9">修改</a>
+								<!--{if $city.base_info_modify == 1}-->
+									<a href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}&project_id=9">修改</a>
+								<!--{else}-->
+								<a href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}&project_id=9">查看</a>
+								<!--{/if}-->
 							<!--{/if}-->
 							<!--{if $sm_session.user_rank == 2 && $city.base_info_changed == 1}-->
 							<a href="city_base_info.php?act=base_info_audit&ad_id={$city.ad_id}&project_id=9">审核</a>
