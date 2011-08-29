@@ -908,10 +908,17 @@ $_LANG['resource_type']['无射灯路牌']= "无射灯路牌";
 $_LANG['resource_type']['车身广告'] = "车身广告";
 $_LANG['resource_type']['LED'] 	= "LED";
 $_LANG['resource_type']['照明路牌'] = "照明路牌";
+<<<<<<< HEAD
 $_LANG['resource_type']['其他']= "其他";
 
 
 $_LANG['pic_type_select_lite'][0] = "请选择。。。";
+=======
+$_LANG['resource_type']['其他']	= "其他";
+
+
+$_LANG['pic_type_select_lite'][0] = "请选择...";
+>>>>>>> merga
 $_LANG['pic_type_select_lite'][1] = "SMB";
 $_LANG['pic_type_select_lite'][2] = "IDEA";
 
