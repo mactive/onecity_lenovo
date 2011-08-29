@@ -83,6 +83,12 @@
 						      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
 								<?php echo $this->html_options(array('options'=>$this->_var['lang']['pic_type_select'])); ?>
 							</select>
+							审核情况
+							<select id="audit_status">
+						      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
+								<?php echo $this->html_options(array('options'=>$this->_var['lang']['audit_status_select'])); ?>
+							</select>
+							
 						</td>
 
 					<td style="padding-left:30px;"><input type="submit" value="<?php echo $this->_var['lang']['button_search']; ?>" class="button" /> <input type="reset" value="重置" class="button" /></td>
@@ -169,7 +175,7 @@ if ($this->_foreach['index_idea']['total'] > 0):
 							<?php endif; ?>
 							
 						</td>
-						<td>
+						<td><?php echo $this->_var['city']['audit_note']; ?>
 							<?php if ($this->_var['city']['audit_note']): ?>
 								<?php if ($this->_var['city']['audit_note'] == "审核通过"): ?>
 								<a class="audit_confirm" href="city_project.php?act=upload_photo&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=<?php echo $this->_var['project_id']; ?>"></a>
@@ -256,6 +262,7 @@ if ($this->_foreach['index_idea']['total'] > 0):
 			      listTable.filter['county_name'] = document.getElementById("county_name").value;
 			      listTable.filter['market_level'] = document.getElementById("market_level").value;
 			      listTable.filter['resource'] = document.getElementById("resource").value;
+			      listTable.filter['audit_status'] = document.getElementById("audit_status").value;
 			      listTable.filter['page'] = 1;
 			      listTable.loadList();
 			  }

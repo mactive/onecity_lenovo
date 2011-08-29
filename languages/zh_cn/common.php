@@ -898,6 +898,9 @@ $_LANG['pic_type_select'][4] = "KAB";
 $_LANG['pic_type_select'][5] = "BRAND";
 $_LANG['pic_type_select'][6] = "MICROSOFT";
 
+$_LANG['audit_status_select']['audit_idle'] = "等待审核";
+$_LANG['audit_status_select']['audit_cancel'] = "审核未通过";
+$_LANG['audit_status_select']['audit_confirm'] = "审核通过";
 
 
 $_LANG['resource_type']['无照明路牌']= "无照明路牌";
