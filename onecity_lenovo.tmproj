@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>themes/default/library/update_base_ad_info.lbi</string>
+	<string>themes/default/project_list.dwt</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -21,177 +21,85 @@
 	<integer>200</integer>
 	<key>metaData</key>
 	<dict>
-		<key>city_base_info.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>146</integer>
-				<key>line</key>
-				<integer>175</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>150</integer>
-		</dict>
 		<key>city_project.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>1</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>582</integer>
+				<integer>0</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>502</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>551</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>1</integer>
-				<key>line</key>
-				<integer>582</integer>
-			</dict>
+			<integer>221</integer>
 		</dict>
-		<key>codesnap.txt</key>
+		<key>includes/lib_city.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>13</integer>
+				<integer>41</integer>
 				<key>line</key>
-				<integer>55</integer>
+				<integer>824</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>766</integer>
 		</dict>
 		<key>languages/zh_cn/common.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>23</integer>
+				<integer>38</integer>
 				<key>line</key>
-				<integer>835</integer>
+				<integer>902</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>789</integer>
+			<integer>890</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>22</integer>
+				<integer>31</integer>
 				<key>line</key>
-				<integer>835</integer>
+				<integer>902</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>28</integer>
+				<integer>44</integer>
 				<key>line</key>
-				<integer>835</integer>
+				<integer>902</integer>
 			</dict>
 		</dict>
-		<key>themes/default/base_info.dwt</key>
+		<key>themes/default/project_list.dwt</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>14</integer>
-				<key>line</key>
-				<integer>194</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>148</integer>
-		</dict>
-		<key>themes/default/library/base_info_audit.lbi</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>23</integer>
-				<key>line</key>
-				<integer>7</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>7</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>8</integer>
-			</dict>
-		</dict>
-		<key>themes/default/library/mycity.lbi</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>96</integer>
-				<key>line</key>
 				<integer>27</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>themes/default/library/update_base_ad_info.lbi</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>1</integer>
 				<key>line</key>
-				<integer>8</integer>
+				<integer>176</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>95</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>city_base_info.php</string>
-		<string>themes/default/library/update_base_ad_info.lbi</string>
-		<string>themes/default/library/base_info_audit.lbi</string>
-		<string>themes/default/base_info.dwt</string>
-		<string>codesnap.txt</string>
-		<string>themes/default/library/mycity.lbi</string>
-		<string>languages/zh_cn/common.php</string>
 		<string>city_project.php</string>
+		<string>includes/lib_city.php</string>
+		<string>themes/default/project_list.dwt</string>
+		<string>languages/zh_cn/common.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
