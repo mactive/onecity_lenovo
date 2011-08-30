@@ -570,7 +570,9 @@ elseif($_REQUEST['act'] == 'update_audit')
 	
 	if($confirm == 1){
 		show_message("审核通过,其他人会看到。", $_LANG['back_home_lnk'], $return_url, 'info', true);
-		
+		$can_modify_q = "can_modify_q".$project_id;
+		$city_content[$can_modify_q] = 0;	
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $city_content, 'update', "ad_id='$ad_id'");
 	}else{		
 		//打开修改权限
 		$can_modify_q = "can_modify_q".$project_id;

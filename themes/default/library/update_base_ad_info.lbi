@@ -29,7 +29,7 @@
 	<div class="city_info radius_5px">
 		<div class="f_left left_title left_radius_5px">{$item}</div>
 		<div class="f_left right_content">		
-			<span class="f_right">{if $k == "col_12"} 连续两块牌子请填写6+8 &nbsp;{/if}
+			<span class="f_right">{if $k == "col_12"}如是两块牌子请写合计尺寸 &nbsp;{/if}
 				<a target="_blank"  class="grey666" href="city_operate.php?act=view_log&ad_id={$ad_detail.ad_id}&col_name={$k}">
 				修改记录</a></span>
 				

@@ -23,6 +23,7 @@
     <span>基础信息</span>
     <div class="bgr"> </div>
 </div>
+
 <ul class="mycity_ul">
 	<li><a href="city_base_info.php?act=ad_list&project_id=9" style="background:url(<?php echo $this->_var['img_path']; ?>ico/my_task.png) no-repeat 10px center;">基础信息修改</a></li>
 </ul>

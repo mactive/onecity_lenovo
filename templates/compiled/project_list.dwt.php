@@ -171,11 +171,12 @@ if ($this->_foreach['index_idea']['total'] > 0):
 									<a href="city_project.php?act=upload_photo&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=<?php echo $this->_var['project_id']; ?>">重新反馈换画效果</a>
 									<?php endif; ?>
 								<?php else: ?>
+									等待重新反馈
 								<?php endif; ?>
 							<?php endif; ?>
 							
 						</td>
-						<td><?php echo $this->_var['city']['audit_note']; ?>
+						<td>
 							<?php if ($this->_var['city']['audit_note']): ?>
 								<?php if ($this->_var['city']['audit_note'] == "审核通过"): ?>
 								<a class="audit_confirm" href="city_project.php?act=upload_photo&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=<?php echo $this->_var['project_id']; ?>"></a>

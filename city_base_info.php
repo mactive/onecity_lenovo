@@ -279,10 +279,8 @@ elseif($_REQUEST['act'] == 'act_update_ad_info')
 
 
 	//$city_content['base_info_modify'] = 0; 电通来点
-	$width_array = array();
-	$width_array = explode("+",$city_content['col_12'],2);
-	$width_add = $width_array[0] + $width_array[1];
-	$city_content['col_13'] = round($width_add * $city_content['col_11']); //面积 = 宽 * 高
+	
+	$city_content['col_13'] = round($city_content['col_12'] * $city_content['col_11']); //面积 = 宽 * 高
 	$city_content['col_15'] = intval($city_content['col_13']) *  intval($city_content['col_14']); //总面积
 	$city_content['col_18'] = sep_days( $city_content['col_17'],$city_content['col_16']); //发布天数
 	

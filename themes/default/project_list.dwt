@@ -170,11 +170,12 @@
 									<a href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}">重新反馈换画效果</a>
 									<!--{/if}-->
 								<!--{else}-->
+									等待重新反馈
 								<!--{/if}-->
 							<!--{/if}-->
 							
 						</td>
-						<td>{$city.audit_note}
+						<td>
 							<!--{if $city.audit_note}-->
 								<!--{if $city.audit_note == "审核通过"}-->
 								<a class="audit_confirm" href="city_project.php?act=upload_photo&ad_id={$city.ad_id}&project_id={$project_id}"></a>
