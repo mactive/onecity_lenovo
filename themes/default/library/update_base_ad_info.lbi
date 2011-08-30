@@ -96,7 +96,7 @@ function validate()
     
     if (col_42.value == 0 )
     {
-        alert("费用来源必须填写");
+        alert("费用来源必须选择!");
         return false;
     }else{
 		return true;

@@ -1,5 +1,5 @@
-<div class="f_left" style="width:100%;">
-	<a class="back_url" href="city_project.php?act=list_city_to_select&project_id=<?php echo $this->_var['project_id']; ?>&region_name=<?php echo $this->_var['city_name']; ?>"></a>
+<div class="f_left" style="width:100%;"><?php echo $this->_var['audit_status']; ?>
+	<a class="back_url" href="city_project.php?act=list_city_to_select&project_id=<?php echo $this->_var['project_id']; ?>&region_name=<?php echo $this->_var['city_name']; ?>&audit_status=<?php echo $this->_var['audit_status']; ?>"></a>
 </div>
 <script type="text/javascript" src="js/calendar.php"></script>
 <link href="js/calendar/calendar.css" rel="stylesheet" type="text/css" />
@@ -10,11 +10,11 @@
 
 <?php if ($this->_var['ad_info']['is_audit_confirm'] == 1 && $this->_var['ad_info']['audit_status'] == 5): ?>
 	<form method="post" action="city_project.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
-	<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_45078100_1314285812');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_45078100_1314285812']):
+	<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_12417700_1314720433');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_12417700_1314720433']):
 ?>
 	<div class="city_info radius_5px">
-		<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_45078100_1314285812']; ?></div>
+		<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_12417700_1314720433']; ?></div>
 		<div class="f_left right_content">		
 			<span class="f_right"><a target="_blank"  class="grey666" href="city_operate.php?act=view_log&ad_id=<?php echo $this->_var['ad_detail']['ad_id']; ?>&col_name=<?php echo $this->_var['k']; ?>">
 				修改记录</a></span>	

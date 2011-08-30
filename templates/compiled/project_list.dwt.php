@@ -86,7 +86,7 @@
 							审核情况
 							<select id="audit_status">
 						      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
-								<?php echo $this->html_options(array('options'=>$this->_var['lang']['audit_status_select'])); ?>
+								<?php echo $this->html_options(array('options'=>$this->_var['lang']['audit_status_select'],'selected'=>$this->_var['filter']['audit_status'])); ?>
 							</select>
 							
 						</td>

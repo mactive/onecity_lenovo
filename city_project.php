@@ -352,6 +352,10 @@ elseif ($_REQUEST['act'] == 'update_ad_info')
 	$base_info = get_base_info($ad_info['city_id']);
 	$city_name = $base_info['region_name'];
 	$smarty->assign('city_name',   $city_name);
+	
+	$audit_status = get_audit_status($ad_id,$project_id);
+	$smarty->assign('audit_status',   $audit_status);
+	
 	$smarty->assign('project_id',   $project_id);
 	
 	$smarty->display('project_view.dwt');	
@@ -497,6 +501,9 @@ elseif($_REQUEST['act'] == 'upload_photo')
 	$base_info = get_base_info($ad_info['city_id']);
 	$city_name = $base_info['region_name'];
 	$smarty->assign('city_name',   $city_name);
+	
+	$audit_status = get_audit_status($ad_id,$project_id);
+	$smarty->assign('audit_status',   $audit_status);
 	
 	$smarty->display('project_view.dwt');
 }

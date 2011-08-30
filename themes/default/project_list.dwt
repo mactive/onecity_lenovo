@@ -89,7 +89,7 @@
 							审核情况
 							<select id="audit_status">
 						      	<option value='0'>{$lang.select_please}</option>
-								{html_options options=$lang.audit_status_select}
+								{html_options options=$lang.audit_status_select selected=$filter.audit_status}
 							</select>
 							
 						</td>

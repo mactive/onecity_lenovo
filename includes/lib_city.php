@@ -713,10 +713,10 @@ function get_project_city($children,$limit = 0){
     $filter['county_name'] = empty($_REQUEST['county_name']) ? '' : trim($_REQUEST['county_name']);
     $filter['city_name'] = empty($_REQUEST['city_name']) ? '' : trim($_REQUEST['city_name']);
     $filter['region_name'] = empty($_REQUEST['region_name']) ? '' : trim($_REQUEST['region_name']);
-    $filter['audit_status'] = empty($_REQUEST['audit_status']) ? 0 : $_REQUEST['audit_status'];
     $filter['project_id'] = empty($_REQUEST['project_id']) ? 0 : $_REQUEST['project_id'];
     $filter['resource'] = empty($_REQUEST['resource']) ? 0 : $_REQUEST['resource'];
     $filter['market_level'] = empty($_REQUEST['market_level']) ? '' : trim($_REQUEST['market_level']);
+    $filter['audit_status'] = empty($_REQUEST['audit_status']) ? '' : trim($_REQUEST['audit_status']);
 
 	$filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'inv_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
@@ -744,9 +744,17 @@ function get_project_city($children,$limit = 0){
     {
         $where .= " AND a3.cat_name LIKE '%" . mysql_like_quote($filter['region_name']) . "%'";
     }
-    if ($filter['audit_status'])
+    if ($filter['audit_status'] == "audit_confirm")
     {
-        $where .= " AND a.audit_status = $filter[audit_status] ";
+        $where .= " AND au.audit_note LIKE '审核通过'  ";
+    }
+    if ($filter['audit_status'] == "audit_cancel")
+    {
+        $where .= " AND au.audit_note is NOT NULL AND au.audit_note NOT LIKE '审核通过'  ";
+    }
+    if ($filter['audit_status'] == "audit_idle")
+    {
+        $where .= " AND au.audit_note is NULL  ";
     }
 	if ($filter['market_level'])
     {
@@ -754,6 +762,15 @@ function get_project_city($children,$limit = 0){
     }
 
 
+
+
+	//  最大值列表 db_create_in
+	$max_record_array = $GLOBALS['db']->getCol("SELECT MAX(record_id) FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " WHERE feedback_audit = $filter[project_id]  GROUP BY ad_id ");
+	$sql_max = "SELECT ad_id,audit_note FROM " . $GLOBALS['ecs']->table('city_ad_audit') .
+            " WHERE record_id " . db_create_in($max_record_array);
+	//echo $sql_max;
+	
+	
 
 	/* 分页大小 */
     $filter['page'] = empty($_REQUEST['page']) || (intval($_REQUEST['page']) <= 0) ? 1 : intval($_REQUEST['page']);
@@ -787,8 +804,21 @@ function get_project_city($children,$limit = 0){
 			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad').   " AS ad ON ad.city_id = a.cat_id ".
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource').  " AS re ON re.city_id = a.cat_id ".
+				" LEFT JOIN (" . $sql_max . ') AS au ON au.ad_id = ad.ad_id '.
                 $where;
     }
+	elseif ($filter['audit_status'])
+    {
+        $count_sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') . " AS a ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad').   " AS ad ON ad.city_id = a.cat_id ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource').  " AS re ON re.city_id = a.cat_id ".
+				" LEFT JOIN (" . $sql_max . ') AS au ON au.ad_id = ad.ad_id '.
+                $where;
+    }
+
     else
     {
         $count_sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('category') ." AS a " . 
@@ -797,10 +827,12 @@ function get_project_city($children,$limit = 0){
 					" $where " ;
 		
     }
-
+	
     $filter['record_count']   = $GLOBALS['db']->getOne($count_sql);
     $filter['page_count']     = $filter['record_count'] > 0 ? ceil($filter['record_count'] / $filter['page_size']) : 1;
 	
+	
+
 	$request_title = "re.lv_".$_SESSION['user_rank'];
 	$limit_sql = $limit > 0 ? " LIMIT 0,$limit ": " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
 	$order_sql = $_SESSION['user_rank'] == 1 ? " ORDER BY city.$update_time_quarter DESC " : " ORDER BY city.$update_time_quarter DESC " ;
@@ -808,7 +840,7 @@ function get_project_city($children,$limit = 0){
 	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, a.is_microsoft, ". //
 			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region , ad.ad_id, ".
 			//" pr.req_id, pr.price, pr.price_amount, pr.request_price, pr.request_price_amount,  (ad.price_status - $_SESSION[user_rank]) AS t1 ".
-			" city.col_19,city.col_20  ,city.$can_modify_quarter AS can_modify, re.resource, re.$quarter AS nowQ ".
+			" city.col_19,city.col_20  ,city.$can_modify_quarter AS can_modify, re.resource, re.$quarter AS nowQ , au.audit_note ".
 			" FROM ".$GLOBALS['ecs']->table('category') . " AS a ".
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ". 
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
@@ -819,7 +851,7 @@ function get_project_city($children,$limit = 0){
 			
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('project_request').   " AS pr ON pr.city_id = a.cat_id  AND pr.ad_id  = ad.ad_id ".
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('city'). 		' AS c  ON c.city_id = a.cat_id '.
-			//" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad'). 	' AS ad ON ad.city_id = a.cat_id '.
+			" LEFT JOIN (" . $sql_max . ') AS au ON au.ad_id = ad.ad_id '.
 			"$where "." GROUP BY a.cat_id  "." $order_sql ".
 			$limit_sql;
 	//echo $sql;	 //GROUP BY ad.ad_id 
@@ -829,7 +861,7 @@ function get_project_city($children,$limit = 0){
 	{
 
 		$res[$key]['pic_view'] = get_pic_view($val['nowQ'],$filter['project_id']);		
-		$res[$key]['audit_note'] =  $GLOBALS['db']->getOne("SELECT audit_note FROM ".$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = $val[ad_id] AND feedback_audit = $filter[project_id] ORDER BY record_id DESC LIMIT 1");
+		//$res[$key]['audit_note'] =  $GLOBALS['db']->getOne("SELECT audit_note FROM ".$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = $val[ad_id] AND feedback_audit = $filter[project_id] ORDER BY record_id DESC LIMIT 1");
 		$res[$key]['upload_picture'] =  $GLOBALS['db']->getOne("SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('city_gallery')." WHERE ad_id = $val[ad_id] AND feedback = $filter[project_id]");
 		
 		
@@ -987,6 +1019,23 @@ function get_audit_status_array(){
 		"已被其他客户采购"=>"已被其他客户采购");
 	return $res;
 }
+
+function get_audit_status($ad_id,$project_id){
+	$sql = "SELECT audit_note FROM ".$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = $ad_id AND feedback_audit = $project_id ORDER BY record_id DESC LIMIT 1";
+	$audit_note = trim($GLOBALS['db']->getOne($sql));
+	//echo $sql.$audit_note;
+	if(empty($audit_note)){
+		$audit_status = "audit_idle";
+	}else{
+		if($audit_note == "审核通过"){
+			$audit_status = "audit_confirm";
+		}else{
+			$audit_status = "audit_cancel";
+		}
+	}
+	return $audit_status;
+}
+
 
 
 function act_level_4_city_upload($city_id,$ad_id){
