@@ -73,6 +73,7 @@
 	
 	<div style="width:500px;float:left;">
 		<input type="hidden" name="act" value="act_update_ad_info" />
+		<input type="hidden" name="project_id" value="{$project_id}" />	
 		<input type="hidden" name="ad_id" value="{$ad_detail.ad_id}" />	
 		<input type="submit" class="submitidea_btn" value="{$lang.button_submit}" />
 	</div>

@@ -268,6 +268,8 @@ elseif($_REQUEST['act'] == 'act_update_ad_info')
 {
 	$city_content = make_city_content();
 	$ad_id = !empty($_REQUEST['ad_id']) ? intval($_REQUEST['ad_id']) : '';
+	$project_id = isset($_REQUEST['project_id']) && intval($_REQUEST['project_id']) > 0 ? intval($_REQUEST['project_id']) : 0;
+	
 	$form_audit = !empty($_REQUEST['form_audit']) ? intval($_REQUEST['form_audit']) : 0;
 	$col = $_REQUEST['col'];
 
@@ -280,8 +282,8 @@ elseif($_REQUEST['act'] == 'act_update_ad_info')
 
 	//$city_content['base_info_modify'] = 0; 电通来点
 	
-	$city_content['col_13'] = round($city_content['col_12'] * $city_content['col_11']); //面积 = 宽 * 高
-	$city_content['col_15'] = intval($city_content['col_13']) *  intval($city_content['col_14']); //总面积
+	$city_content['col_13'] = round($city_content['col_12'] * $city_content['col_11'],1); //面积 = 宽 * 高
+	$city_content['col_15'] = $city_content['col_13'] *  intval($city_content['col_14']); //总面积
 	$city_content['col_18'] = sep_days( $city_content['col_17'],$city_content['col_16']); //发布天数
 	
 
@@ -316,7 +318,7 @@ elseif($_REQUEST['act'] == 'act_update_ad_info')
 	}
 	
 	
-	show_message("修改成功", "返回基础信息", 'city_base_info.php?act=update_ad_info&ad_id='.$ad_id, 'info', true);       
+	show_message("修改成功", "返回基础信息", 'city_base_info.php?act=update_ad_info&project_id='.$project_id.'&ad_id='.$ad_id, 'info', true);       
 }
 
 
