@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>themes/default/project_list.dwt</string>
+	<string>themes/default/library/upload_project_photo.lbi</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -26,35 +26,35 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>1</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>358</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>221</integer>
+			<integer>302</integer>
 		</dict>
 		<key>includes/lib_city.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>41</integer>
+				<integer>3</integer>
 				<key>line</key>
-				<integer>824</integer>
+				<integer>1025</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>766</integer>
+			<integer>993</integer>
 		</dict>
 		<key>languages/zh_cn/common.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>38</integer>
+				<integer>37</integer>
 				<key>line</key>
 				<integer>902</integer>
 			</dict>
@@ -63,7 +63,7 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>890</integer>
+			<integer>886</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
@@ -79,19 +79,63 @@
 				<integer>902</integer>
 			</dict>
 		</dict>
+		<key>themes/default/library/update_ad_info.lbi</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>40</integer>
+				<key>line</key>
+				<integer>1</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>themes/default/library/upload_project_photo.lbi</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>40</integer>
+				<key>line</key>
+				<integer>1</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>themes/default/project_list.dwt</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>27</integer>
+				<integer>48</integer>
 				<key>line</key>
-				<integer>176</integer>
+				<integer>91</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>95</integer>
+			<integer>60</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>36</integer>
+				<key>line</key>
+				<integer>91</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>48</integer>
+				<key>line</key>
+				<integer>91</integer>
+			</dict>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
@@ -99,6 +143,8 @@
 		<string>city_project.php</string>
 		<string>includes/lib_city.php</string>
 		<string>themes/default/project_list.dwt</string>
+		<string>themes/default/library/upload_project_photo.lbi</string>
+		<string>themes/default/library/update_ad_info.lbi</string>
 		<string>languages/zh_cn/common.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
