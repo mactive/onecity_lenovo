@@ -38,7 +38,7 @@
 						{if $k == "col_18" }
 						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#ffffff;" readonly=1/>
 						{elseif $k == "col_16" || $k == "col_17"}
-						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#fffead;" onclick="return showCalendar(this, '%Y-%m-%d', false, false, this);" readonly=1 />
+						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#fffead;" onclick="return showCalendar(this, '%Y-%m-%d', false, false, this);" onblur=sep_days() readonly=1 />
 						{else}
 						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#fffead;" onclick="return showCalendar(this, '%Y-%m', false, false, this);" readonly=1 />
 						
@@ -55,7 +55,7 @@
 						      {html_options options=$lang.pic_type_select_lite selected=$ad_detail.$k}
 						</select>
 				{else}
-					<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#fffead;"/>
+					<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" {if $k == "col_12"}size="20"{else}size="45"{/if}  {if $k == "col_11" || $k == "col_12" || $k == "col_14"}onblur=calc_area(){/if} style="background:#fffead;"/>
 					
 
 				{/if}
@@ -111,5 +111,47 @@ function validate()
 	*/
 	
     //return validator.passed();
+}
+
+function calc_area(){
+	var col_11 = document.getElementById('col_11').value;
+	var col_12 = document.getElementById('col_12').value;
+	var col_14 = document.getElementById('col_14').value;
+	var tt = col_11 * col_12;
+	document.getElementById('col_13').value = tt;
+	document.getElementById('col_15').value = tt * col_14;
+}
+
+function sep_days()
+{
+	var end_date = document.getElementById('col_17').value;
+	var start_date = document.getElementById('col_16').value;
+ 	var temp = strtotime(end_date)-strtotime(start_date);
+ 	var days = temp/(60*60*24);
+ 	//alert(days+1);
+	document.getElementById('col_18').value = days + 1;
+
+}
+
+function strtotime(time_str) 
+{ 
+	var time  = (new Date()).getTime(); 
+
+	if (time_str) 
+    { 
+    	var str = time_str.split('-'); 
+
+        if (3 === str.length) 
+       	{ 
+        	var year  = str[0] - 0; 
+            var month = str[1] - 0 - 1; 
+            var day   = str[2] - 0; 
+            
+  		} 
+ 		time = (new Date(year, month, day)).getTime();
+    }
+	time = time / 1000; 
+ 
+   	return time; 
 }
 </script>

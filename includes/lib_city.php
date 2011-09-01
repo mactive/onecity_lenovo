@@ -542,6 +542,7 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
 			
 			"$where GROUP BY a.ad_id ORDER BY a.ad_id DESC ";
 	//echo $sql."<br>";	 //
+	$col_42_array = array('1'=>"SMB",'2'=>"IDEA");
 	
 	$res = $GLOBALS['db']->getAll($sql);
 	foreach($res AS $key => $val)
@@ -555,6 +556,7 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
 			$res[$key]['lv_3'] = get_audit_note($val['ad_id'],3);
 			$res[$key]['lv_4'] = get_audit_note($val['ad_id'],4);
 			$res[$key]['lv_5'] = get_audit_note($val['ad_id'],5);
+			$res[$key]['col_42'] = col_42_array($val['col_42']);
 			$res[$key]['resource_type'] = $r_title[$val['resource']];
 			$res[$key]['last_audit_time'] = get_audit_time($val['ad_id'],5);
 			//echo $res[$key]['ad_id']."-".$val['resource']."-".$res[$key]['resource_type']."<br>";
