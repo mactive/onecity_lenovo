@@ -42,7 +42,7 @@
 	      
 			
 			<!--{foreach from=$data item=region}-->
-				<a href="http://www.lenovo-one.com/city_export.php?act=transform&wanted_region={$region.id}" target="_blank">{$region.name}</a><br>
+			<a href="http://www.lenovo-one.com/city_export.php?act=transform&wanted_region={$region.id}" target="_blank">{$region.name}-6</a><br>
 			<!--{/foreach}-->
 				
 			

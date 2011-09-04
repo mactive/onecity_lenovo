@@ -6,27 +6,21 @@
 <?php $_from = $this->_var['old_photo_info']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'project');if (count($_from)):
     foreach ($_from AS $this->_var['k'] => $this->_var['project']):
 ?>
-	<?php if ($this->_var['project']): ?>
+	<?php if ($this->_var['project'] && $this->_var['k'] == 0): ?>
 	<div class="radius_5px city_info" style="width:95%;height:200px;padding:0px 10px;">
 		<span class="green-color font14px"><?php if ($this->_var['k'] == 0): ?>未换画之前<?php else: ?>2011Q<?php echo $this->_var['k']; ?><?php endif; ?></span><br>
-	<?php $_from = $this->_var['project']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item_0_18445900_1314290787');if (count($_from)):
-    foreach ($_from AS $this->_var['item_0_18445900_1314290787']):
+	<?php $_from = $this->_var['project']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item_0_35083200_1315122520');if (count($_from)):
+    foreach ($_from AS $this->_var['item_0_35083200_1315122520']):
 ?>	
 	<div style="width:160px;height:160px;text-align:center;float:left;margin:10px 20px;">
-	<a href="<?php echo $this->_var['item_0_18445900_1314290787']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_18445900_1314290787']['thumb_url']; ?>"></a>
-	<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_18445900_1314290787']['img_sort']]; ?>
+	<a href="<?php echo $this->_var['item_0_35083200_1315122520']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_35083200_1315122520']['thumb_url']; ?>"></a>
+	<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_35083200_1315122520']['img_sort']]; ?>
 	</div>
 	<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 	</div>
 	<?php endif; ?>
 <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 <?php echo $this->fetch('library/audit_path.htm'); ?>						
-
-<?php if ($this->_var['sm_session']['user_rank'] == 1): ?>
-
-<?php else: ?>
-
-
 
 <?php if ($this->_var['sm_session']['user_rank'] == 2): ?>
 <div class="clear"></div>
@@ -35,8 +29,11 @@
 	<tr>
 		<td width="130">如果审核不通过,<br>请写下明确的原因:</td>
 		<td><br>
-			<textarea name="audit_note" id="audit_note" cols="40" rows="4"></textarea></td>
+			<textarea name="audit_note" id="audit_note" cols="40" rows="4"></textarea>
+			<br><input name="recycle" id="recycle" type="checkbox" />&nbsp;需要重新邮寄报销材料<br><br>
+			</td>
 	</tr>
+	
     <tr>
       <td>&nbsp;</td>
       <td>
@@ -80,13 +77,12 @@ function validate()
 </script>
 <?php endif; ?>
 
-<?php endif; ?>
 
-<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_18475000_1314290787');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_18475000_1314290787']):
+<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_35106400_1315122520');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_35106400_1315122520']):
 ?>
 <div class="city_info radius_5px">
-	<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_18475000_1314290787']; ?></div>
+	<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_35106400_1315122520']; ?></div>
 	<div class="f_left right_content" 
 	<?php if ($this->_var['k'] == "col_28" || $this->_var['k'] == "col_29" || $this->_var['k'] == "col_42" || $this->_var['k'] == "col_43" || $this->_var['k'] == "col_44"): ?>
 	style="background:#fffead;"

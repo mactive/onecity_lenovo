@@ -369,6 +369,7 @@ function get_project_ad_photo_info($ad_id = 0,$project = 0){
 		}
 		
 	}
+	print_r($photo_info);
 	return $photo_info;
 }
 
@@ -1208,8 +1209,8 @@ function get_base_info_list($children,$limit = 0){
 	foreach($res AS $key => $val)
 	{
 		$res[$key]['audit_note'] =  $GLOBALS['db']->getOne("SELECT audit_note FROM ".$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = $val[ad_id] AND feedback_audit = $filter[project_id] ORDER BY record_id DESC LIMIT 1");	
-		$res[$key]['send_time'] =  $GLOBALS['db']->getOne("SELECT time FROM ".$GLOBALS['ecs']->table('city_material')." WHERE ad_id = $val[ad_id] AND is_send = 1 ORDER BY time DESC LIMIT 1");	
-		$res[$key]['receive_time'] =  $GLOBALS['db']->getOne("SELECT time FROM ".$GLOBALS['ecs']->table('city_material')." WHERE ad_id = $val[ad_id] AND is_receive = 1 ORDER BY time DESC LIMIT 1");	
+		$res[$key]['send_time'] =  $GLOBALS['db']->getAll("SELECT time FROM ".$GLOBALS['ecs']->table('city_material')." WHERE ad_id = $val[ad_id] AND is_send > 0 ORDER BY time ASC");	
+		$res[$key]['receive_time'] =  $GLOBALS['db']->getAll("SELECT time FROM ".$GLOBALS['ecs']->table('city_material')." WHERE ad_id = $val[ad_id] AND is_receive > 0  ORDER BY time ASC");	
 	
 	}
 	$arr = array('citys' => $res, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count'],'sql' => $sql,'count_sql' => $count_sql, 'page_size' => $filter['page_size']);

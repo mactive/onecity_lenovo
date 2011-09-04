@@ -127,26 +127,44 @@
 								<!--{/if}-->						
 						</td>
 						<td>
-
-							<!--{if $city.send_time}-->
-								{$city.send_time}
-							<!--{else}-->
-								<!--{if $sm_session.user_rank == 1}-->
-								<a href="city_base_info.php?act=send_material&ad_id={$city.ad_id}" target="_blank">寄出</a>
-								<!--{/if}-->
+							<!--{foreach from=$city.send_time item=item  name=send }-->
+								{$item.time}[{$smarty.foreach.send.iteration}]<br>
+							<!--{/foreach}-->
 							
+							<!--{if $sm_session.user_rank == 1}-->
+								<!--{if $city.base_info_modify == 2}-->
+									<!--{if $smarty.foreach.receive.total == $smarty.foreach.send.iteration }-->
+									<a href="city_base_info.php?act=re_send_material&ad_id={$city.ad_id}" target="_blank">重新寄出</a>
+									<!--{/if}-->
+								<!--{else}-->
+									<!--{if !$city.send_time}-->
+									<a href="city_base_info.php?act=send_material&ad_id={$city.ad_id}" target="_blank">寄出</a>
+									<!--{/if}-->
+								<!--{/if}-->
 							<!--{/if}-->
+
+							
+							
+							
 						</td>
 						<td>
-							<!--{if $city.receive_time}-->
-								{$city.receive_time}
-							<!--{else}-->
+							<!--{foreach from=$city.receive_time item=item name=receive }-->
+								{$item.time}[{$smarty.foreach.receive.iteration}]<br>
+							<!--{/foreach}-->
 							
-								<!--{if $sm_session.user_rank == 2}-->
-								<a href="city_base_info.php?act=receive_material&ad_id={$city.ad_id}" target="_blank">收到</a>
+							<!--{if $sm_session.user_rank == 2}-->
+								<!--{if $city.base_info_modify == 2}-->
+									<!--{if $smarty.foreach.receive.total < $smarty.foreach.send.iteration }-->
+										<a href="city_base_info.php?act=re_receive_material&ad_id={$city.ad_id}" target="_blank">重新收到</a>
+									<!--{/if}-->
+								<!--{else}-->
+									<!--{if !$city.receive_time}-->
+									<a href="city_base_info.php?act=receive_material&ad_id={$city.ad_id}" target="_blank">收到</a>
+									<!--{/if}-->
 								<!--{/if}-->
-							
 							<!--{/if}-->
+						
+							
 						</td>
 						
 						
@@ -158,11 +176,11 @@
 						<td>
 							<!--{if $city.audit_note}-->
 								<!--{if $city.audit_note == "审核通过"}-->
-								<a class="audit_confirm"></a>
+								<a class="audit_confirm" href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}&project_id=9"></a>
 								<!--{else}-->
 								
-									<!--{if $city.base_info_modify == 1}-->
-									<a class="audit_cancel"></a>
+									<!--{if $city.base_info_modify == 1 || $city.base_info_modify == 2}-->
+									<a class="audit_cancel" href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}&project_id=9"></a>
 									<!--{/if}-->
 									
 								<!--{/if}-->
@@ -170,13 +188,13 @@
 							<!--{else}-->
 								<!--{if $city.send_time}-->
 									<!--{if $city.receive_time}-->
-									已收到<a class="audit_idle"></a>
+									已收到<a class="audit_idle" href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}&project_id=9"></a>
 									<!--{else}-->
 									等待收件
 									<!--{/if}-->
 								<!--{else}-->
 									<!--{if $city.receive_time}-->
-									已收到 <a class="audit_idle"></a>
+									已收到 <a class="audit_idle" href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}&project_id=9"></a>
 									<!--{else}-->
 									等待寄出
 									<!--{/if}-->
@@ -191,7 +209,7 @@
 								<!--{if $city.base_info_modify == 1}-->
 									<a href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}&project_id=9">修改</a>
 								<!--{else}-->
-								<a href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}&project_id=9">查看</a>
+									<a href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}&project_id=9">查看</a>
 								<!--{/if}-->
 							<!--{/if}-->
 							<!--{if $sm_session.user_rank == 2 && $city.base_info_changed == 1}-->

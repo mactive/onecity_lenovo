@@ -128,26 +128,52 @@ if ($this->_foreach['index_idea']['total'] > 0):
 								<?php endif; ?>						
 						</td>
 						<td>
-
-							<?php if ($this->_var['city']['send_time']): ?>
-								<?php echo $this->_var['city']['send_time']; ?>
-							<?php else: ?>
-								<?php if ($this->_var['sm_session']['user_rank'] == 1): ?>
-								<a href="city_base_info.php?act=send_material&ad_id=<?php echo $this->_var['city']['ad_id']; ?>" target="_blank">寄出</a>
-								<?php endif; ?>
+							<?php $_from = $this->_var['city']['send_time']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item');$this->_foreach['send'] = array('total' => count($_from), 'iteration' => 0);
+if ($this->_foreach['send']['total'] > 0):
+    foreach ($_from AS $this->_var['item']):
+        $this->_foreach['send']['iteration']++;
+?>
+								<?php echo $this->_var['item']['time']; ?>[<?php echo $this->_foreach['send']['iteration']; ?>]<br>
+							<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 							
+							<?php if ($this->_var['sm_session']['user_rank'] == 1): ?>
+								<?php if ($this->_var['city']['base_info_modify'] == 2): ?>
+									<?php if ($this->_foreach['receive']['total'] == $this->_foreach['send']['iteration']): ?>
+									<a href="city_base_info.php?act=re_send_material&ad_id=<?php echo $this->_var['city']['ad_id']; ?>" target="_blank">重新寄出</a>
+									<?php endif; ?>
+								<?php else: ?>
+									<?php if (! $this->_var['city']['send_time']): ?>
+									<a href="city_base_info.php?act=send_material&ad_id=<?php echo $this->_var['city']['ad_id']; ?>" target="_blank">寄出</a>
+									<?php endif; ?>
+								<?php endif; ?>
 							<?php endif; ?>
+
+							
+							
+							
 						</td>
 						<td>
-							<?php if ($this->_var['city']['receive_time']): ?>
-								<?php echo $this->_var['city']['receive_time']; ?>
-							<?php else: ?>
+							<?php $_from = $this->_var['city']['receive_time']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item');$this->_foreach['receive'] = array('total' => count($_from), 'iteration' => 0);
+if ($this->_foreach['receive']['total'] > 0):
+    foreach ($_from AS $this->_var['item']):
+        $this->_foreach['receive']['iteration']++;
+?>
+								<?php echo $this->_var['item']['time']; ?>[<?php echo $this->_foreach['receive']['iteration']; ?>]<br>
+							<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 							
-								<?php if ($this->_var['sm_session']['user_rank'] == 2): ?>
-								<a href="city_base_info.php?act=receive_material&ad_id=<?php echo $this->_var['city']['ad_id']; ?>" target="_blank">收到</a>
+							<?php if ($this->_var['sm_session']['user_rank'] == 2): ?>
+								<?php if ($this->_var['city']['base_info_modify'] == 2): ?>
+									<?php if ($this->_foreach['receive']['total'] < $this->_foreach['send']['iteration']): ?>
+										<a href="city_base_info.php?act=re_receive_material&ad_id=<?php echo $this->_var['city']['ad_id']; ?>" target="_blank">重新收到</a>
+									<?php endif; ?>
+								<?php else: ?>
+									<?php if (! $this->_var['city']['receive_time']): ?>
+									<a href="city_base_info.php?act=receive_material&ad_id=<?php echo $this->_var['city']['ad_id']; ?>" target="_blank">收到</a>
+									<?php endif; ?>
 								<?php endif; ?>
-							
 							<?php endif; ?>
+						
+							
 						</td>
 						
 						
@@ -162,7 +188,7 @@ if ($this->_foreach['index_idea']['total'] > 0):
 								<a class="audit_confirm"></a>
 								<?php else: ?>
 								
-									<?php if ($this->_var['city']['base_info_modify'] == 1): ?>
+									<?php if ($this->_var['city']['base_info_modify'] == 1 || $this->_var['city']['base_info_modify'] == 2): ?>
 									<a class="audit_cancel"></a>
 									<?php endif; ?>
 									

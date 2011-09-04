@@ -14,12 +14,19 @@
 <link rel="icon" href="animated_favicon.gif" type="image/gif" />
 <link href="themes/default/css.css" rel="stylesheet" type="text/css" />
 
+<link href="themes/default/css/redmond/jquery-ui-1.8.16.custom.css" rel="stylesheet" type="text/css" />
+
 
 <?php echo $this->smarty_insert_scripts(array('files'=>'utils.js,transport.js')); ?>
+<?php echo $this->smarty_insert_scripts(array('files'=>'jquery-1.6.2.min.js,jquery-ui-1.8.16.custom.min.js')); ?>
 
 <script src="admin/js/listtable.js" type="text/javascript"></script>
 <script src="admin/js/common.js" type="text/javascript"></script>
-
+<script>
+	$(function() {
+		$( 'input[rel="datepicker"]' ).datepicker();
+	});
+	</script>
 </head>
 
 <body>

@@ -75,7 +75,7 @@ elseif($_REQUEST['act'] == 'transform_page')
 elseif($_REQUEST['act'] == 'transform')
 {
 	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 2;
-	$market_level =  !empty($_REQUEST['market_level']) ? intval($_REQUEST['market_level']) : 0;
+	$wanted_market_level =  !empty($_REQUEST['market_level']) ? trim($_REQUEST['market_level']) : 0;
 	$wanted_region = !empty($_REQUEST['wanted_region']) ? intval($_REQUEST['wanted_region']) : 2; //2-23
 	//$wanted_level = 4; // 4 5 6
 	// 	4级城市 / 各大分区 / 城市名称  
@@ -84,7 +84,7 @@ elseif($_REQUEST['act'] == 'transform')
 	
 	$sql = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') . " AS au ON au.ad_id = g.ad_id ". 
-			" WHERE g.feedback  = $project_id AND au.feedback_audit = $project_id  GROUP BY g.ad_id "; //LIMIT 0,50
+			" WHERE g.feedback  = $project_id AND au.audit_note LIKE '审核通过' AND au.feedback_audit = $project_id  GROUP BY g.ad_id "; //LIMIT 0,50
 	
 	echo $sql."<br>";
 	
@@ -105,10 +105,11 @@ elseif($_REQUEST['act'] == 'transform')
 		$base_info 	= get_region_info($city_id);
 		$region_name= $base_info['region_name'];
 		$region_id 	= $base_info['region_id'];
+		$market_level = get_market_level("",$city_id);
 		
-		if($region_id == $wanted_region){
+		if($region_id == $wanted_region && ($market_level == "6A" || $market_level == "6B" || $market_level == "6C" || $market_level == "百强镇" )){
 			
-			$market_level = get_market_level("",$city_id);
+			//$market_level = get_market_level("",$city_id);
 		
 			$base_info = get_base_info($city_id);
 
@@ -202,6 +203,4 @@ function get_pic_list($ad_id,$city_name,$project_id){
 	//print_r($res);
 	return $res;
 }
-
-
 ?>

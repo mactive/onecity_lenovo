@@ -165,7 +165,7 @@ elseif ($_REQUEST['act'] == 'update_ad_info')
 	$project_id = isset($_REQUEST['project_id']) && intval($_REQUEST['project_id']) > 0 ? intval($_REQUEST['project_id']) : 0;
 	
 	//已经审核完成的照片
-	$old_photo_info = get_project_ad_photo_info($ad_id,$project_id); //no feedback
+	$old_photo_info = get_ad_photo_info($ad_id); //no feedback
 	$smarty->assign('old_photo_info', $old_photo_info);
 	
 	//正在审核的照片
@@ -203,7 +203,7 @@ elseif ($_REQUEST['act'] == 'update_ad_info')
 	$photo_info = get_ad_photo_info($ad_id);
 	$smarty->assign('photo_info', $photo_info);
 	
-	$audit_path = get_audit_path($ad_id,$audit_level_array); //审核路径图
+	$audit_path = get_audit_path($ad_id,$lite_audit_level_array,$project_id); //审核路径图
 	$smarty->assign('audit_path', $audit_path);
 	
 	$base_info = get_base_info($ad_info['city_id']);
@@ -213,56 +213,7 @@ elseif ($_REQUEST['act'] == 'update_ad_info')
 	
 	$smarty->display('base_info_view.dwt');	
 }
-/* 更新城市的合同资料 
-elseif ($_REQUEST['act'] == 'edit_update_ad_info')
-{
-	$position['ur_here'] .= "<li>填写签约信息</li>"; 	
-    $smarty->assign('page_title',       $position['title']);    // 页面标题
-    $smarty->assign('ur_here',          $position['ur_here']);  // 当前位置
-	
-	$ad_id = isset($_REQUEST['ad_id']) && intval($_REQUEST['ad_id']) > 0 ? intval($_REQUEST['ad_id']) : 0;
-	$project_id = isset($_REQUEST['project_id']) && intval($_REQUEST['project_id']) > 0 ? intval($_REQUEST['project_id']) : 0;
-	
-	$ad_detail = get_city_info($ad_id);
-	$smarty->assign('ad_detail', $ad_detail);
-	
-	$ad_info = get_ad_info($ad_id);
-	$smarty->assign('ad_info', $ad_info);
-	
-	$audit_note = $GLOBALS['db']->getOne('SELECT audit_note FROM ' .$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = $ad_id AND feedback_audit > 0 ORDER BY record_id DESC limit 1");
-	
-	$smarty->assign('audit_note', $audit_note);
 
-	if($ad_info['audit_status'] > 1){
-		if($ad_info['is_audit_confirm'] == 1){
-			if($ad_info['audit_status'] < AUDIT_5){
-				$upload_message = "因为还没有完全过审核 所以目前不能更新.<a href='city_operate.php?act=view_ad&ad_id=$ad_id'>点此查看</a>";
-			}else{
-				$upload_message = "广告牌已经完全通过审核,可以填写和修改换色底图的项目.";
-			}
-		}
-	}
-	
-	if($ad_detail['col_43']){
-		if($audit_note != "审核通过" && !empty($audit_note) ){
-			$upload_message = "审核不通过,需要修改.";			
-		}else{
-			$upload_message = "已经最终填写过不可以再修改.";
-		}
-	}
-	
-	$smarty->assign('upload_message', $upload_message);
-	
-
-	$photo_info = get_ad_photo_info($ad_id);
-	$smarty->assign('photo_info', $photo_info);
-	
-	$audit_path = get_audit_path($ad_id,$audit_level_array); //审核路径图
-	$smarty->assign('audit_path', $audit_path);
-	
-	$smarty->display('project_view.dwt');	
-}
-*/
 /* 响应更新城市的合同资料 */
 elseif($_REQUEST['act'] == 'act_update_ad_info')
 {
@@ -347,6 +298,36 @@ elseif($_REQUEST['act'] == 'receive_material')
 	
 }
 
+elseif($_REQUEST['act'] == 're_send_material')
+{
+	$ad_id = !empty($_REQUEST['ad_id']) ? intval($_REQUEST['ad_id']) : '';
+
+	$is_send_time = $GLOBALS['db']->getOne("SELECT MAX(`is_send`) FROM " . $GLOBALS['ecs']->table('city_material') . " WHERE ad_id = $ad_id ");
+
+	
+	$city_ad_array = array();
+	$city_ad_array['is_send'] = $is_send_time + 1;//已经修改过
+	$city_ad_array['ad_id'] = $ad_id;//已经修改过
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_material'), $city_ad_array, 'INSERT');
+	
+	show_message("成功第".$city_ad_array['is_send']."次寄出 时间:".date("Y-m-d H:i:s"),"关闭该页","javascript:self.close()");       
+	
+}
+elseif($_REQUEST['act'] == 're_receive_material')
+{
+	$ad_id = !empty($_REQUEST['ad_id']) ? intval($_REQUEST['ad_id']) : '';
+	
+	$is_receive_time = $GLOBALS['db']->getOne("SELECT MAX(`is_receive`) FROM " . $GLOBALS['ecs']->table('city_material') . " WHERE ad_id = $ad_id ");
+	
+	$city_ad_array = array();
+	$city_ad_array['is_receive'] = $is_receive_time + 1;//已经修改过
+	$city_ad_array['ad_id'] = $ad_id;//已经修改过
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_material'), $city_ad_array, 'INSERT');
+	
+	show_message("成功第".$city_ad_array['is_receive']."次收到 时间:".date("Y-m-d H:i:s"),"关闭该页","javascript:self.close()");       
+	
+}
+
 /* 上传反馈照片 驱动页面 */
 elseif($_REQUEST['act'] == 'base_info_audit')
 {
@@ -370,7 +351,7 @@ elseif($_REQUEST['act'] == 'base_info_audit')
 	$smarty->assign('ad_detail', $ad_detail);
 	
 	//已经审核完成的照片
-	$old_photo_info = get_project_ad_photo_info($ad_id,$project_id); //no feedback
+	$old_photo_info = get_ad_photo_info($ad_id); //no feedback
 	$smarty->assign('old_photo_info', $old_photo_info);
 	
 	
@@ -395,6 +376,7 @@ elseif($_REQUEST['act'] == 'update_base_info_audit')
 	$ad_id =  !empty($_REQUEST['ad_id']) ? intval($_REQUEST['ad_id']) : 0;
 	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 0;
 	$confirm = !empty($_REQUEST['confirm']) ? intval($_REQUEST['confirm']) : 0;
+	$recycle = $_POST['recycle'];
 	
 	
 	/* 写入审核历史数据库*/
@@ -414,9 +396,13 @@ elseif($_REQUEST['act'] == 'update_base_info_audit')
 		
 		show_message("审核通过,其他人会看到。", $_LANG['back_home_lnk'], $return_url, 'info', true);
 		
-	}else{		
+	}else{
+		if($recycle){
+			$city_content['base_info_modify'] = 2;	//除了修改还需要重新寄出
+		}else{
+			$city_content['base_info_modify'] = 1;	
+		}
 		//打开修改权限
-		$city_content['base_info_modify'] = 1;	
 		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $city_content, 'update', "ad_id='$ad_id'");
 		
 		show_message("审核信息已经提交。", $_LANG['back_home_lnk'], $return_url, 'info', true);
@@ -424,11 +410,16 @@ elseif($_REQUEST['act'] == 'update_base_info_audit')
 	}
 }
 
-
+// 07/01/2011 -> 2011-07-01
+function transdate($data){
+	$tmp = date( 'Y-m-d ',strtotime($data));//preg_replace( "/\d{2}\/\d{2}\/\d{4}/ ", "2007-09-18 ",$data); 
+	//echo $tmp;
+	return $tmp;
+}
 
 function sep_days($end_date,$start_date)
 {
- 	$temp = strtotime($end_date)-strtotime($start_date);
+ 	$temp = strtotime(transdate($end_date))-strtotime(transdate($start_date));
  	$days = $temp/(60*60*24);
  	return $days+1;
 }
