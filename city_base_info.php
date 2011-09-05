@@ -93,8 +93,8 @@ if (!isset($_REQUEST['act']))
 //  update_request_price 2个price
 /*------------------------------------------------------ */
 
-$position['title'] = "项目管理";
-$position['ur_here'] = '<li><a href="city_base_info.php">项目管理</a></li>'; 
+$position['title'] = "基础信息修改";
+$position['ur_here'] = '<li><a href="city_base_info.php?act=ad_list&project_id=9">基础信息修改</a></li>'; 
  
 
 /* 获得页面的缓存ID */
