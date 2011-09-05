@@ -81,10 +81,10 @@
 					    	{$lang.region} <input name="region_name" type="text" id="region_name" size="10" value="{$filter.region_name}" />&nbsp;&nbsp;&nbsp;
 					    	{$lang.county} <input name="county_name" type="text" id="county_name" size="10" value="{$filter.county_name}" />&nbsp;&nbsp;&nbsp;
 					    	{$lang.market_level} <input name="market_level" type="text" id="market_level" size="4" /> &nbsp;&nbsp;&nbsp;
-							{$lang.resource_title} 
-							<select id="resource">
+							审核情况
+							<select id="audit_status">
 						      	<option value='0'>{$lang.select_please}</option>
-								{html_options options=$lang.pic_type_select}
+								{html_options options=$lang.audit_status_select selected=$filter.audit_status}
 							</select>
 						</td>
 
@@ -181,6 +181,8 @@
 								
 									<!--{if $city.base_info_modify == 1 || $city.base_info_modify == 2}-->
 									<a class="audit_cancel" href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}&project_id=9"></a>
+									<!--{else}-->
+									<a class="audit_idle" href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}&project_id=9"></a>
 									<!--{/if}-->
 									
 								<!--{/if}-->
@@ -261,7 +263,8 @@
 			      listTable.filter['region_name'] = document.getElementById("region_name").value;
 			      listTable.filter['county_name'] = document.getElementById("county_name").value;
 			      listTable.filter['market_level'] = document.getElementById("market_level").value;
-			      listTable.filter['resource'] = document.getElementById("resource").value;
+			      listTable.filter['project_id'] = 9;
+			      listTable.filter['audit_status'] = document.getElementById("audit_status").value;
 			      listTable.filter['page'] = 1;
 			      listTable.loadList();
 			  }

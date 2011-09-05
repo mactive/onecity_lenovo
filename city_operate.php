@@ -28,6 +28,7 @@ $all_city_content = array();
 $smarty->assign('city_title', $_LANG['city_title']);
 $smarty->assign('audit_title', $_LANG['AUDIT']);
 $smarty->assign('CONTENT_COLS', CONTENT_COLS);
+$col_42_array = $_LANG['pic_type_select_lite'];
 
 
 
@@ -412,6 +413,7 @@ elseif($_REQUEST['act'] == 'edit_ad' || $_REQUEST['act'] == 'view_ad')
 	$ad_id = isset($_REQUEST['ad_id']) && intval($_REQUEST['ad_id']) > 0 ? intval($_REQUEST['ad_id']) : 0;
 	
 	$ad_detail = get_city_info($ad_id);
+	$ad_detail['col_42'] = $col_42_array[$ad_detail['col_42']];
 	$smarty->assign('ad_detail', $ad_detail);
 	
 	$ad_info = get_ad_info($ad_id);

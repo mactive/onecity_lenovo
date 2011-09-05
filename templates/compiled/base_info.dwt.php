@@ -78,10 +78,10 @@
 					    	<?php echo $this->_var['lang']['region']; ?> <input name="region_name" type="text" id="region_name" size="10" value="<?php echo $this->_var['filter']['region_name']; ?>" />&nbsp;&nbsp;&nbsp;
 					    	<?php echo $this->_var['lang']['county']; ?> <input name="county_name" type="text" id="county_name" size="10" value="<?php echo $this->_var['filter']['county_name']; ?>" />&nbsp;&nbsp;&nbsp;
 					    	<?php echo $this->_var['lang']['market_level']; ?> <input name="market_level" type="text" id="market_level" size="4" /> &nbsp;&nbsp;&nbsp;
-							<?php echo $this->_var['lang']['resource_title']; ?> 
-							<select id="resource">
+							审核情况
+							<select id="audit_status">
 						      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
-								<?php echo $this->html_options(array('options'=>$this->_var['lang']['pic_type_select'])); ?>
+								<?php echo $this->html_options(array('options'=>$this->_var['lang']['audit_status_select'],'selected'=>$this->_var['filter']['audit_status'])); ?>
 							</select>
 						</td>
 
@@ -185,11 +185,13 @@ if ($this->_foreach['receive']['total'] > 0):
 						<td>
 							<?php if ($this->_var['city']['audit_note']): ?>
 								<?php if ($this->_var['city']['audit_note'] == "审核通过"): ?>
-								<a class="audit_confirm"></a>
+								<a class="audit_confirm" href="city_base_info.php?act=update_ad_info&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=9"></a>
 								<?php else: ?>
 								
 									<?php if ($this->_var['city']['base_info_modify'] == 1 || $this->_var['city']['base_info_modify'] == 2): ?>
-									<a class="audit_cancel"></a>
+									<a class="audit_cancel" href="city_base_info.php?act=update_ad_info&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=9"></a>
+									<?php else: ?>
+									<a class="audit_idle" href="city_base_info.php?act=update_ad_info&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=9"></a>
 									<?php endif; ?>
 									
 								<?php endif; ?>
@@ -197,13 +199,13 @@ if ($this->_foreach['receive']['total'] > 0):
 							<?php else: ?>
 								<?php if ($this->_var['city']['send_time']): ?>
 									<?php if ($this->_var['city']['receive_time']): ?>
-									已收到<a class="audit_idle"></a>
+									已收到<a class="audit_idle" href="city_base_info.php?act=update_ad_info&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=9"></a>
 									<?php else: ?>
 									等待收件
 									<?php endif; ?>
 								<?php else: ?>
 									<?php if ($this->_var['city']['receive_time']): ?>
-									已收到 <a class="audit_idle"></a>
+									已收到 <a class="audit_idle" href="city_base_info.php?act=update_ad_info&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=9"></a>
 									<?php else: ?>
 									等待寄出
 									<?php endif; ?>
@@ -218,7 +220,7 @@ if ($this->_foreach['receive']['total'] > 0):
 								<?php if ($this->_var['city']['base_info_modify'] == 1): ?>
 									<a href="city_base_info.php?act=update_ad_info&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=9">修改</a>
 								<?php else: ?>
-								<a href="city_base_info.php?act=update_ad_info&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=9">查看</a>
+									<a href="city_base_info.php?act=update_ad_info&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=9">查看</a>
 								<?php endif; ?>
 							<?php endif; ?>
 							<?php if ($this->_var['sm_session']['user_rank'] == 2 && $this->_var['city']['base_info_changed'] == 1): ?>
@@ -272,7 +274,8 @@ if ($this->_foreach['receive']['total'] > 0):
 			      listTable.filter['region_name'] = document.getElementById("region_name").value;
 			      listTable.filter['county_name'] = document.getElementById("county_name").value;
 			      listTable.filter['market_level'] = document.getElementById("market_level").value;
-			      listTable.filter['resource'] = document.getElementById("resource").value;
+			      listTable.filter['project_id'] = 9;
+			      listTable.filter['audit_status'] = document.getElementById("audit_status").value;
 			      listTable.filter['page'] = 1;
 			      listTable.loadList();
 			  }

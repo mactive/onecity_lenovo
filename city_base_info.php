@@ -211,6 +211,16 @@ elseif ($_REQUEST['act'] == 'update_ad_info')
 	$smarty->assign('city_name',   $city_name);
 	$smarty->assign('project_id',   $project_id);
 	
+	//分区2次修改 之后
+	$audit_note = $GLOBALS['db']->getOne("SELECT audit_note FROM " . $GLOBALS['ecs']->table('city_ad_audit') . " WHERE ad_id = $ad_id AND feedback_audit = 9 ORDER BY record_id DESC LIMIT 1 ");
+	if(!empty($audit_note) && $audit_note != "审核通过"){
+		$city_ad_array = array();
+		$city_ad_array['base_info_modify'] = 0;//已经修改过
+		echo $audit_note;
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $city_ad_array, 'update', "ad_id='$ad_id'");
+	}
+	
+	
 	$smarty->display('base_info_view.dwt');	
 }
 

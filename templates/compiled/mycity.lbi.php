@@ -1,4 +1,4 @@
-\<div class="left_menu" style="height:<?php if ($this->_var['act_step'] == "upload_file"): ?>200<?php else: ?>500<?php endif; ?>px;">
+<div class="left_menu" style="height:<?php if ($this->_var['act_step'] == "upload_file"): ?>200<?php else: ?>500<?php endif; ?>px;">
 <div class="nav_top_lite_grey">
     <span>广告位管理</span>
     <div class="bgr"> </div>
