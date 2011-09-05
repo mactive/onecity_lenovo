@@ -164,6 +164,7 @@ elseif ($_REQUEST['act'] == 'update_ad_info')
 	$ad_id = isset($_REQUEST['ad_id']) && intval($_REQUEST['ad_id']) > 0 ? intval($_REQUEST['ad_id']) : 0;
 	$project_id = isset($_REQUEST['project_id']) && intval($_REQUEST['project_id']) > 0 ? intval($_REQUEST['project_id']) : 0;
 	
+	
 	//已经审核完成的照片
 	$old_photo_info = get_ad_photo_info($ad_id); //no feedback
 	$smarty->assign('old_photo_info', $old_photo_info);
@@ -178,6 +179,9 @@ elseif ($_REQUEST['act'] == 'update_ad_info')
 	
 	$ad_info = get_ad_info($ad_id);
 	$smarty->assign('ad_info', $ad_info);
+	
+	$audit_status = get_audit_status($ad_id,$project_id);
+	$smarty->assign('audit_status',   $audit_status);
 	
 	$audit_note = $GLOBALS['db']->getOne('SELECT audit_note FROM ' .$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = $ad_id AND feedback_audit = 9 ORDER BY record_id DESC limit 1");
 	
@@ -376,6 +380,9 @@ elseif($_REQUEST['act'] == 'base_info_audit')
 	$base_info = get_base_info($ad_info['city_id']);
 	$city_name = $base_info['region_name'];
 	$smarty->assign('city_name',   $city_name);
+	
+	$audit_status = get_audit_status($ad_id,$project_id);
+	$smarty->assign('audit_status',   $audit_status);
 	
 	$smarty->display('base_info_view.dwt');
 }

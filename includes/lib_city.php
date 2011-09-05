@@ -1185,6 +1185,8 @@ function get_base_info_list($children,$limit = 0){
 			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad').   " AS ad ON ad.city_id = a.cat_id ".
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource').  " AS re ON re.city_id = a.cat_id ".
+				" LEFT JOIN (" . $sql_max . ') AS au ON au.ad_id = ad.ad_id '.
+				
                 $where;
     }
 	elseif ($filter['audit_status'])
