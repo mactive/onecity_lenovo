@@ -131,9 +131,12 @@
 								{$item.time}[{$smarty.foreach.send.iteration}]<br>
 							<!--{/foreach}-->
 							
+							<!--{foreach from=$city.receive_time item=item name=receive }-->
+							<!--{/foreach}-->
+							
 							<!--{if $sm_session.user_rank == 1}-->
-								<!--{if $city.base_info_modify == 2}-->
-									<!--{if $smarty.foreach.receive.total == $smarty.foreach.send.iteration }-->
+								<!--{if $city.base_info_modify == 2 || ($city.base_info_modify == 0 && $city.audit_note != "" )}-->
+									<!--{if $smarty.foreach.receive.total == $smarty.foreach.send.total }-->
 									<a href="city_base_info.php?act=re_send_material&ad_id={$city.ad_id}" target="_blank">重新寄出</a>
 									<!--{/if}-->
 								<!--{else}-->
@@ -153,8 +156,8 @@
 							<!--{/foreach}-->
 							
 							<!--{if $sm_session.user_rank == 2}-->
-								<!--{if $city.base_info_modify == 2}-->
-									<!--{if $smarty.foreach.receive.total < $smarty.foreach.send.iteration }-->
+								<!--{if $city.base_info_modify == 2 || ($city.base_info_modify == 0 && $city.audit_note != "" )}-->
+									<!--{if $smarty.foreach.receive.total < $smarty.foreach.send.total }-->
 										<a href="city_base_info.php?act=re_receive_material&ad_id={$city.ad_id}" target="_blank">重新收到</a>
 									<!--{/if}-->
 								<!--{else}-->
@@ -208,7 +211,7 @@
 						</td>
 						<td>
 							<!--{if $sm_session.user_rank == 1}-->
-								<!--{if $city.base_info_modify == 1}-->
+								<!--{if $city.base_info_modify == 1 || $city.base_info_modify == 2 }-->
 									<a href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}&project_id=9">修改</a>
 								<!--{else}-->
 									<a href="city_base_info.php?act=update_ad_info&ad_id={$city.ad_id}&project_id=9">查看</a>

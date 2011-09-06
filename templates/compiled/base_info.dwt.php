@@ -136,9 +136,16 @@ if ($this->_foreach['send']['total'] > 0):
 								<?php echo $this->_var['item']['time']; ?>[<?php echo $this->_foreach['send']['iteration']; ?>]<br>
 							<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 							
+							<?php $_from = $this->_var['city']['receive_time']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item');$this->_foreach['receive'] = array('total' => count($_from), 'iteration' => 0);
+if ($this->_foreach['receive']['total'] > 0):
+    foreach ($_from AS $this->_var['item']):
+        $this->_foreach['receive']['iteration']++;
+?>
+							<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+							
 							<?php if ($this->_var['sm_session']['user_rank'] == 1): ?>
-								<?php if ($this->_var['city']['base_info_modify'] == 2): ?>
-									<?php if ($this->_foreach['receive']['total'] == $this->_foreach['send']['iteration']): ?>
+								<?php if ($this->_var['city']['base_info_modify'] == 2 || ( $this->_var['city']['base_info_modify'] == 0 && $this->_var['city']['audit_note'] != "" )): ?>
+									<?php if ($this->_foreach['receive']['total'] == $this->_foreach['send']['total']): ?>
 									<a href="city_base_info.php?act=re_send_material&ad_id=<?php echo $this->_var['city']['ad_id']; ?>" target="_blank">重新寄出</a>
 									<?php endif; ?>
 								<?php else: ?>
@@ -162,8 +169,8 @@ if ($this->_foreach['receive']['total'] > 0):
 							<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 							
 							<?php if ($this->_var['sm_session']['user_rank'] == 2): ?>
-								<?php if ($this->_var['city']['base_info_modify'] == 2): ?>
-									<?php if ($this->_foreach['receive']['total'] < $this->_foreach['send']['iteration']): ?>
+								<?php if ($this->_var['city']['base_info_modify'] == 2 || ( $this->_var['city']['base_info_modify'] == 0 && $this->_var['city']['audit_note'] != "" )): ?>
+									<?php if ($this->_foreach['receive']['total'] < $this->_foreach['send']['total']): ?>
 										<a href="city_base_info.php?act=re_receive_material&ad_id=<?php echo $this->_var['city']['ad_id']; ?>" target="_blank">重新收到</a>
 									<?php endif; ?>
 								<?php else: ?>
@@ -217,7 +224,7 @@ if ($this->_foreach['receive']['total'] > 0):
 						</td>
 						<td>
 							<?php if ($this->_var['sm_session']['user_rank'] == 1): ?>
-								<?php if ($this->_var['city']['base_info_modify'] == 1): ?>
+								<?php if ($this->_var['city']['base_info_modify'] == 1 || $this->_var['city']['base_info_modify'] == 2): ?>
 									<a href="city_base_info.php?act=update_ad_info&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=9">修改</a>
 								<?php else: ?>
 									<a href="city_base_info.php?act=update_ad_info&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&project_id=9">查看</a>

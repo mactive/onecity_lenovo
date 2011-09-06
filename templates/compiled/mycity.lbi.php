@@ -18,7 +18,6 @@
 	<?php endif; ?>
   </ul>
 </div>
-<?php if ($this->_var['sm_session']['user_id'] >= 56 && $this->_var['sm_session']['user_id'] <= 60): ?>
 <div class="nav_top_lite_grey">
     <span>基础信息</span>
     <div class="bgr"> </div>
@@ -27,7 +26,6 @@
 <ul class="mycity_ul">
 	<li><a href="city_base_info.php?act=ad_list&project_id=9" style="background:url(<?php echo $this->_var['img_path']; ?>ico/my_task.png) no-repeat 10px center;">基础信息修改</a></li>
 </ul>
-<?php endif; ?>
 <div class="nav_top_lite_grey">
     <span>换画管理</span>
     <div class="bgr"> </div>

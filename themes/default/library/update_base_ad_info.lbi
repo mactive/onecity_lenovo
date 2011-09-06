@@ -21,7 +21,6 @@
 <!--{if $sm_session.user_rank == 1}-->
 <div class="yellow_notice" style="text-align:center;">{$upload_message}</div>
 <!--{/if}-->
-
 <!--{if $ad_info.is_audit_confirm == 1 && $ad_info.audit_status == 5 }-->
 	<form method="post" action="city_base_info.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
 	<!--{foreach from=$city_title key=k item=item }-->
@@ -32,7 +31,7 @@
 				<a target="_blank"  class="grey666" href="city_operate.php?act=view_log&ad_id={$ad_detail.ad_id}&col_name={$k}">
 				修改记录</a></span>
 				
-			<!--{if  ($ad_detail.base_info_modify == 1 && $sm_session.user_rank == 1) && ($k != "col_1" && $k != "col_2" && $k != "col_3" && $k != "col_4" && $k != "col_5" && $k != "col_19" && $k != "col_20" && $k != "col_21" && $k != "col_22" && $k != "col_23" && $k != "col_27" && $k != "col_41" )}-->
+			<!--{if  ($ad_detail.base_info_modify != 0 && $sm_session.user_rank == 1) && ($k != "col_1" && $k != "col_2" && $k != "col_3" && $k != "col_4" && $k != "col_5" && $k != "col_19" && $k != "col_20" && $k != "col_21" && $k != "col_22" && $k != "col_23" && $k != "col_27" && $k != "col_41" )}-->
 				{if $k == "col_16" || $k == "col_17" || $k == "col_18" || $k == "col_35" || $k == "col_37" || $k == "col_39"}
 						{if $k == "col_18" }
 						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#ffffff;" readonly=1/>
@@ -68,7 +67,7 @@
 	<input type="hidden" name="old_col[]" value="{$ad_detail.$k}" />
 	<!--{/foreach}-->
 	
-	<!--{if $ad_detail.base_info_modify == 1 &&  $sm_session.user_rank == 1 }-->
+	<!--{if $ad_detail.base_info_modify != 0 &&  $sm_session.user_rank == 1 }-->
 	
 	<div style="width:500px;float:left;">
 		<input type="hidden" name="act" value="act_update_ad_info" />
