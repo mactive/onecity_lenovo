@@ -31,7 +31,7 @@
 				<a target="_blank"  class="grey666" href="city_operate.php?act=view_log&ad_id={$ad_detail.ad_id}&col_name={$k}">
 				修改记录</a></span>
 				
-			<!--{if  ($ad_detail.base_info_modify != 0 && $sm_session.user_rank == 1) && ($k != "col_1" && $k != "col_2" && $k != "col_3" && $k != "col_4" && $k != "col_5" && $k != "col_19" && $k != "col_20" && $k != "col_21" && $k != "col_22" && $k != "col_23" && $k != "col_27" && $k != "col_41" )}-->
+			<!--{if  ($ad_detail.base_info_modify != 0 && $sm_session.user_rank == 1) && ($k != "col_1" && $k != "col_2" && $k != "col_3" && $k != "col_4" && $k != "col_5" && $k != "col_23" && $k != "col_27" && $k != "col_41" )}-->
 				{if $k == "col_16" || $k == "col_17" || $k == "col_18" || $k == "col_35" || $k == "col_37" || $k == "col_39"}
 						{if $k == "col_18" }
 						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#ffffff;" readonly=1/>
@@ -56,12 +56,8 @@
 					<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" {if $k == "col_12"}size="20"{else}size="45"{/if}  {if $k == "col_11" || $k == "col_12" || $k == "col_14"}onblur=calc_area(){/if} style="background:#fffead;"/>
 				{/if}
 			<!--{else}-->
-				<!--{if ($k == "col_19" || $k == "col_20" || $k == "col_21" || $k == "col_22")  && $sm_session.user_id == 56}-->
-					<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="30" style="background:#fffccc;"/> 只有test_1可以改
-				<!--{else}-->
 					<span>{$ad_detail.$k}</span>
 					<input type="hidden" name="col[]" value="{$ad_detail.$k}" />
-				<!--{/if}-->
 			<!--{/if}-->
 		</div>	
 		<div class="clear"></div>
