@@ -67,7 +67,11 @@
 				<!-- #EndLibraryItem -->
 			<!--{/if}-->
 				
-				
+			<!--{if $act_step == "base_info_querenlv"}-->
+			<!-- #BeginLibraryItem "/library/base_info_querenlv.lbi" -->
+			>
+			<!-- #EndLibraryItem -->
+			<!--{/if}-->
 				
 
 				

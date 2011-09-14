@@ -58,7 +58,9 @@
 				<?php echo $this->fetch('library/base_info_audit.lbi'); ?>
 			<?php endif; ?>
 				
-				
+			<?php if ($this->_var['act_step'] == "base_info_querenlv"): ?>
+			<?php echo $this->fetch('library/base_info_querenlv.lbi'); ?>
+			<?php endif; ?>
 				
 
 				
