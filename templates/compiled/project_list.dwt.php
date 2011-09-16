@@ -102,7 +102,7 @@
 			<form method="post" name="listForm"  onsubmit="return confirmSubmit(this)">
 			
 			<div id="listDiv" class="table_div">
-			<?php endif; ?>
+			<?php endif; ?><?php echo $this->_var['count_sql']; ?>
 				<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
 				    <tr>
 					  	<th><?php echo $this->_var['lang']['resource_title']; ?><br>点击查看</th>

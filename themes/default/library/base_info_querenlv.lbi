@@ -29,14 +29,12 @@
 			<td>审核数量<br>(电通工作量)</td>
 			<td>通过数量</td>
 			<td>通过率</td>
-			<!--{if $sm_session.user_id == 59}-->
 			<td>城市数量</td>
 			<td>已修改数量</td>
 			<td>修改率</td>
 			<td>审核数量<br>(电通工作量)</td>
 			<td>通过数量</td>
 			<td>通过率</td>
-			<!--{/if}-->
 		</tr>
 		<!--{foreach from=$data key=k item=item }-->
 		<tr>

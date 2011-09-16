@@ -548,6 +548,104 @@ elseif($_REQUEST['act'] == 'CITY'){
 	}
 	echo "</table>";
 }
+
+elseif($_REQUEST['act'] == 'CITY_base'){
+	if($_SESSION['user_rank'] < 4){
+		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
+	}
+	
+	$type =  !empty($_REQUEST['type']) ? intval($_REQUEST['type']) : 1;
+	$is_upload =  $_REQUEST['is_upload'];
+	$is_confirm =  !empty($_REQUEST['is_confirm']) ? intval($_REQUEST['is_confirm']) : 0;
+	switch ($type) {
+		case '4':
+			$sql_plus = " AND a.market_level = 4 ";
+			break;
+		//
+		case '5':
+			$sql_plus = " AND a.market_level = 5 ";
+			break;
+		//
+		case '6':
+		
+			$sql_plus = " AND a.market_level LIKE  '%6%' ";
+		//	$sql_plus .= " AND a.resource = 2 ";
+		//	$sql_plus .= " AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ";
+		//	$sql_plus .= " AND ad.is_upload = 1 AND  ad.audit_status < 5";
+			
+			break;
+		//
+		case 'baiqiang':
+			$sql_plus = " AND a.market_level LIKE  '百强镇' ";
+			break;
+		case '6_plus':
+		
+			$sql_plus = " AND ( a.market_level LIKE '%6%' OR a.market_level LIKE '百强镇' ) ";			
+			break;
+		//
+	}
+	if(isset($is_upload)){
+		$sql_plus .= " AND a.is_upload = $is_upload ";
+	}
+	
+	if($is_confirm == 1){
+		$sql_plus .= " AND ad.is_audit_confirm = 1 AND ad.audit_status = 5 ";
+		
+	}
+	
+	
+	
+	$sql_1 = "SELECT a.cat_id,a.cat_name AS county ,a.market_level,a.resource, ".
+				"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
+				//", count(ag.img_id) AS ag_num  ".
+				" FROM ".$GLOBALS['ecs']->table('category') ." AS a ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+			 	//" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.city_id = a.cat_id ".
+			 	//" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') . " AS au ON au.ad_id = ad.ad_id  ".
+			" WHERE a.sys_level = 5 ". $sql_plus .
+			" GROUP BY a.cat_id ORDER BY a.cat_id ASC ";
+	//echo $sql_1;
+	$res_1 = $GLOBALS['db']->getAll($sql_1);
+	
+	foreach($res_1 AS $key => $val){
+		$info = get_city_progress($val['cat_id']);
+		$res_1[$key]['is_audit_confirm'] = $info['is_audit_confirm'];
+		$res_1[$key]['is_shanghua'] = $info['is_shanghua'];
+		$res_1[$key]['col_7'] = $info['col_7'];
+	}
+	
+	
+	echo count($res_1)."<br>";
+	echo "<table>";
+		echo "<tr>";
+		echo "<td>".$_LANG['region']."</td>";
+		echo "<td>".$_LANG['province']."</td>";
+		echo "<td>".$_LANG['city']."</td>";
+		echo "<td>".$_LANG['county']."</td>";
+		echo "<td>".$_LANG['city_title']['col_7']."</td>";
+		echo "<td>".$_LANG['market_level']."</td>";
+		echo "<td>".$_LANG['resource_title']."</td>";
+		echo "<td>".$_LANG['is_audit_confirm']."</td>";
+		echo "<td>".$_LANG['is_shanghua']."</td>";
+		echo "</tr>";
+	foreach($res_1 AS $val){
+		$is_upload = $val['ag_num'] > 0 ? "是" : "否" ;
+		echo "<tr>";
+		echo "<td>".$val['region']."</td>";
+		echo "<td>".$val['province']."</td>";
+		echo "<td>".$val['city']."</td>";
+		echo "<td>".$val['county']."</td>";
+		echo "<td>".$val['col_7']."</td>";
+		echo "<td>".$val['market_level']."</td>";
+		echo "<td>".$_LANG['resource'][$val['resource']]."</td>";
+		echo "<td>".$val['is_audit_confirm']."</td>";
+		echo "<td>".$val['is_shanghua']."</td>";
+		echo "</tr>";
+	}
+	echo "</table>";
+}
 /*更新分区上传错误的数据*/
 elseif($_REQUEST['act'] == 'querenlv_data')
 {

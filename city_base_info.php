@@ -436,7 +436,7 @@ elseif($_REQUEST['act'] == 'update_base_info_audit')
  */
 elseif($_REQUEST['act'] == 'base_info_querenlv')
 {
-	if($_SESSION['user_rank'] < 4){
+	if($_SESSION['user_rank'] < 4 && $_SESSION['user_rank'] != 2  ){
 		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
 	}
 	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 9;

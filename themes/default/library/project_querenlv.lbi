@@ -51,11 +51,9 @@
 			<td>{$item.lv_6.amount}</td>
 			<td>{$item.lv_6.upload_amount}</td><td>{$item.lv_6.upload_percent}%</td>
 			<td>{$item.lv_6.confirm_amount}</td><td>{$item.lv_6.confirm_percent}%</td>
-			<!--{if $sm_session.user_id == 59}-->
 			<td>{$item.lv_7.amount}</td>
 			<td>{$item.lv_7.upload_amount}</td><td>{$item.lv_7.upload_percent}%</td>
 			<td>{$item.lv_7.confirm_amount}</td><td>{$item.lv_7.confirm_percent}%</td>
-			<!--{/if}-->
 		</tr>
 		<!--{/foreach}-->
 			

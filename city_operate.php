@@ -930,22 +930,22 @@ elseif($_REQUEST['act'] == 'project_querenlv')
 	foreach($base AS $key => $value){
 		
 		$cat_id = get_cat_id_by_name($value['col_1']);
-		$children = get_city_children_a(array($cat_id));
+		$children = get_city_children(array($cat_id));
 		
 		/*4级城市*/		
-		$sql_4 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city_resource'). " AS a " .
+		$sql_4 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
 				" WHERE $children  AND a.market_level = 4 ";
 		//echo $sql_4;
 		$sql_4_upload = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
 				" WHERE $children AND g.feedback = '$project_id' AND a.market_level = 4 ".
 				" GROUP BY g.ad_id ";
 		//echo $sql_4_upload."<br>";
 
 		$sql_4_plus = "SELECT au.ad_id FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
 				" WHERE $children AND au.feedback_audit = '$project_id' AND au.audit_note = '审核通过' AND au.user_rank = 2 AND a.market_level = 4  ".
 				" GROUP BY au.ad_id ";
 		//echo $sql_4_plus."<br>";
@@ -964,19 +964,19 @@ elseif($_REQUEST['act'] == 'project_querenlv')
 		}
 		
 		/*5级城市*/		
-		$sql_5 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city_resource'). " AS a " .
+		$sql_5 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
 				" WHERE $children  AND a.market_level = 5 ";
 		//echo $sql_5;
 		$sql_5_upload = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
 				" WHERE $children AND g.feedback = '$project_id' AND a.market_level = 5 ".
 				" GROUP BY g.ad_id ";
 		//echo $sql_5_upload."<br>";
 
 		$sql_5_plus = "SELECT au.ad_id FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
 				" WHERE $children AND au.feedback_audit = '$project_id' AND au.audit_note = '审核通过' AND au.user_rank = 2 AND a.market_level = 5  ".
 				" GROUP BY au.ad_id ";
 		//echo $sql_5_plus."<br>";
@@ -995,19 +995,19 @@ elseif($_REQUEST['act'] == 'project_querenlv')
 		}
 		
 		/*6级城市*/
-		$sql_6 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city_resource'). " AS a " .
+		$sql_6 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
 				" WHERE $children  AND a.market_level LIKE'%6%' "; //
 		
 		$sql_6_upload = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
 				" WHERE $children AND g.feedback = '$project_id' AND a.market_level LIKE'%6%'  ".
 				" GROUP BY g.ad_id ";
 		//echo $sql_5_upload."<br>";
 
 		$sql_6_plus = "SELECT au.ad_id FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
 				" WHERE $children AND au.feedback_audit = '$project_id' AND au.audit_note = '审核通过' AND au.user_rank = 2 AND a.market_level LIKE'%6%' ".
 				" GROUP BY au.ad_id ";
 		//echo $sql_5_plus."<br>";
@@ -1027,19 +1027,19 @@ elseif($_REQUEST['act'] == 'project_querenlv')
 		
 		
 		/*单独百强镇*/
-		$sql_7 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city_resource'). " AS a " .
+		$sql_7 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
 				" WHERE $children  AND  a.market_level LIKE'%百强镇%' "; //
 
 		$sql_7_upload = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
 				" WHERE $children AND g.feedback = '$project_id' AND  a.market_level LIKE'%百强镇%'  ".
 				" GROUP BY g.ad_id ";
 		//echo $sql_5_upload."<br>";
 
 		$sql_7_plus = "SELECT au.ad_id FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
 				" WHERE $children AND au.feedback_audit = '$project_id' AND au.audit_note = '审核通过' AND au.user_rank = 2 AND a.market_level LIKE'%百强镇%'  ".
 				" GROUP BY au.ad_id ";
 		//echo $sql_5_plus."<br>";
