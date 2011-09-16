@@ -28,6 +28,9 @@
 	<?php if ($this->_var['sm_session']['user_rank'] >= 4 || $this->_var['sm_session']['user_rank'] == 2): ?>
 	<li><a href="city_base_info.php?act=base_info_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">基础信息确认率</a></li>
 	<?php endif; ?>
+	<?php if ($this->_var['sm_session']['user_rank'] >= 4 || $this->_var['sm_session']['user_id'] == 54): ?>
+	<li><a href="city_base_info.php?act=city_ad_audit" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">电通工作统计表</a></li>
+	<?php endif; ?>
 </ul>
 <div class="nav_top_lite_grey">
     <span>换画管理</span>

@@ -1,0 +1,51 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="font20px">电通工作统计表 当前时间:{$date}</div>
+<div style="line-height:30px;">
+	<form action="city_base_info.php" method="get" accept-charset="utf-8">
+		开始时间: &nbsp;<input type="text" name="start_time" value="" rel="datepicker" value="{$start_time}">&nbsp;&nbsp;-&nbsp;&nbsp;
+		截止时间: &nbsp;<input type="text" name="end_time" value="" rel="datepicker" value="{$end_time}">
+		
+		<input type="hidden" name="act" value="city_ad_audit" />
+		<input type="submit" value="submit"><br>
+		 统计时间: &nbsp; &nbsp;{$start_time} &nbsp; &nbsp;- &nbsp; &nbsp;{$end_time}
+	</form>
+</div>
+	<table width="800px" style="margin:10px auto;background:url(../images/container_bg.png) #ffffff;" class="table_standard table_border_dark" border="1">
+		<tr>
+			<td rowspan="1">分区</td>
+			<td colspan="2">牌子审核</td>
+			<td colspan="2">基础信息修改审核</td>
+			<td colspan="2">Q1换画审核</td>
+			<td colspan="2">Q2换画审核</td>
+			<td colspan="2">Q3换画审核</td>
+			<td colspan="2">Q4换画审核</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>通过</td>
+			<td>不通过</td>
+			<td>通过</td>
+			<td>不通过</td>
+			<td>通过</td>
+			<td>不通过</td>
+			<td>通过</td>
+			<td>不通过</td>
+			<td>通过</td>
+			<td>不通过</td>
+			<td>通过</td>
+			<td>不通过</td>
+		</tr>
+		<!--{foreach from=$data key=k item=item }-->
+		<tr>
+			<td>{$item.col_1}</td>
+			<td>{$item.q0.passed}</td><td>{$item.q0.refused}</td>
+			<td>{$item.q9.passed}</td><td>{$item.q9.refused}</td>
+			<td>{$item.q1.passed}</td><td>{$item.q1.refused}</td>
+			<td>{$item.q2.passed}</td><td>{$item.q2.refused}</td>
+			<td>{$item.q3.passed}</td><td>{$item.q3.refused}</td>
+			<td>{$item.q4.passed}</td><td>{$item.q4.refused}</td>
+		</tr>
+		<!--{/foreach}-->
+			
+			
+	</table>

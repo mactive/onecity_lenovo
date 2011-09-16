@@ -608,6 +608,95 @@ elseif($_REQUEST['act'] == 'base_info_querenlv')
 	
 }
 
+/**
+ * 动态确认率 显示页面
+ */
+elseif($_REQUEST['act'] == 'city_ad_audit')
+{
+	if($_SESSION['user_rank'] < 4 && $_SESSION['user_id'] != 54  ){
+		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
+	}
+	
+	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 9;
+	$start_time =  !empty($_REQUEST['start_time']) ? date( 'Y-m-d H:i:s',strtotime(trim($_REQUEST['start_time']))) : "";
+	$end_time =  !empty($_REQUEST['end_time']) ? date( 'Y-m-d H:i:s',strtotime(trim($_REQUEST['end_time']))) : "";
+	
+	$smarty->assign('project_id',   $project_id);
+	$date = date('Y-m-d H:i:s',(gmtime()+28800));
+	$smarty->assign('date',   $date);
+	$smarty->assign('start_time',   $start_time);
+	$smarty->assign('end_time',   $end_time);
+	
+	
+	$sql = "SELECT COUNT( * ) AS  amount,col_1 FROM ".$GLOBALS['ecs']->table('city')." GROUP BY col_1  ORDER BY  CONVERT( col_1 USING GBK )   ASC ";
+	$base = $GLOBALS['db']->getAll($sql);
+	//echo $sql."<br>";
+	foreach($base AS $key => $value){
+		
+		$cat_id = get_cat_id_by_name($value['col_1']);
+		$children = get_city_children_a(array($cat_id));
+		
+		
+		$info = get_project_passed(0,$start_time,$end_time,$children);
+		$base[$key]['q0']['passed'] = $info['passed'];
+		$base[$key]['q0']['refused'] = $info['refused'];
+		
+		$info = get_project_passed(9,$start_time,$end_time,$children);
+		$base[$key]['q9']['passed'] = $info['passed'];
+		$base[$key]['q9']['refused'] = $info['refused'];
+		
+		$info = get_project_passed(1,$start_time,$end_time,$children);
+		$base[$key]['q1']['passed'] = $info['passed'];
+		$base[$key]['q1']['refused'] = $info['refused'];
+		
+		$info = get_project_passed(2,$start_time,$end_time,$children);
+		$base[$key]['q2']['passed'] = $info['passed'];
+		$base[$key]['q2']['refused'] = $info['refused'];
+		
+		$info = get_project_passed(3,$start_time,$end_time,$children);
+		$base[$key]['q3']['passed'] = $info['passed'];
+		$base[$key]['q3']['refused'] = $info['refused'];
+		
+		$info = get_project_passed(4,$start_time,$end_time,$children);
+		$base[$key]['q4']['passed'] = $info['passed'];
+		$base[$key]['q4']['refused'] = $info['refused'];
+				
+		
+	}
+	
+	$smarty->assign('data',   $base);
+	$smarty->display('base_info_view.dwt');
+	
+}
+
+function get_project_passed($project_id,$start_time,$end_time,$children){
+	if(!empty($start_time) && !empty($end_time)){
+		$sql_plus = " AND time >= '$start_time' AND time <= '$end_time' ";
+	}else{
+		$sql_plus = "";
+	}
+	$res = array();
+	$sql_passed = "SELECT au.ad_id  FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
+	 		" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
+	 		" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ". 
+			" WHERE $children AND au.feedback_audit = $project_id AND au.user_rank = 2 AND au.audit_note LIKE  '审核通过' ".
+			$sql_plus .
+			" GROUP BY au.ad_id ";
+	//
+	$sql_refused = "SELECT au.ad_id  FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
+		 		" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
+		 		" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ".
+				" WHERE $children AND au.feedback_audit = $project_id AND au.user_rank = 2 AND au.audit_note NOT LIKE  '审核通过' ".
+				$sql_plus .
+			" GROUP BY au.ad_id ";
+	//echo $sql_passed."<br>";
+	//echo $sql_refused."<br>"
+	//
+	$res['passed'] = count($GLOBALS['db']->getAll($sql_passed));
+	$res['refused'] = count($GLOBALS['db']->getAll($sql_refused));
+	
+	return $res;
+}
 
 // 07/01/2011 -> 2011-07-01
 function transdate($data){

@@ -62,6 +62,10 @@
 			<?php echo $this->fetch('library/base_info_querenlv.lbi'); ?>
 			<?php endif; ?>
 				
+			
+			<?php if ($this->_var['act_step'] == "city_ad_audit"): ?>
+			<?php echo $this->fetch('library/city_ad_audit.lbi'); ?>
+			<?php endif; ?>
 
 				
 			
