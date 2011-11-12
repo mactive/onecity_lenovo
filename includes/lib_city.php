@@ -428,11 +428,16 @@ function is_exist_city_ad($city_id,$col_7)
 //城市级别不对
 function get_sys_level($city_id)
 {
-	$sql = "SELECT sys_level  FROM " . $GLOBALS['ecs']->table('category') .
-			" WHERE cat_id = $city_id ";
-	$res = $GLOBALS['db']->getOne($sql);
-	//echo $sql."<br>";
-	return $res;
+	if($city_id){
+		$sql = "SELECT sys_level  FROM " . $GLOBALS['ecs']->table('category') .
+				" WHERE cat_id = $city_id ";
+		$res = $GLOBALS['db']->getOne($sql);
+		//echo $sql."<br>";
+		return $res;
+	}else{
+		return false;
+	}
+	
 }
 
 /*删除之后更新数据*/

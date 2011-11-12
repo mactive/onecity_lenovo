@@ -24,8 +24,8 @@ define('CITY_AD_LIMIT',       5); //中央Leader central_leader
 define('SMBIDEA',       1); //SMB-IDEA-SMB-IDEA
 define('IDEA',       	2); //IDEA-0-IDEA-0
 define('MIDHKAB',       3); //MIDH-KAB-SMB-IDEA
-define('BRAND',       4); //MIDH-KAB-SMB-IDEA
-define('MICROSOFT',       5); //MIDH-KAB-SMB-IDEA
+define('BRAND',       5); //MIDH-KAB-SMB-IDEA
+define('MICROSOFT',       6); //MIDH-KAB-SMB-IDEA
 
 
 

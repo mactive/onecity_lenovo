@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>city_base_info.php</string>
+	<string>city_sql.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -26,14 +26,102 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>47</integer>
+				<integer>23</integer>
 				<key>line</key>
-				<integer>695</integer>
+				<integer>125</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>77</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>19</integer>
+				<key>line</key>
+				<integer>125</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>28</integer>
+				<key>line</key>
+				<integer>125</integer>
+			</dict>
+		</dict>
+		<key>city_operate.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>3</integer>
+				<key>line</key>
+				<integer>739</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>649</integer>
+			<integer>729</integer>
+		</dict>
+		<key>city_sql.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>23</integer>
+				<key>line</key>
+				<integer>972</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>907</integer>
+		</dict>
+		<key>excel_update_delete.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>47</integer>
+				<key>line</key>
+				<integer>61</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>49</integer>
+		</dict>
+		<key>languages/zh_cn/common.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>37</integer>
+				<key>line</key>
+				<integer>800</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>786</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>33</integer>
+				<key>line</key>
+				<integer>800</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>37</integer>
+				<key>line</key>
+				<integer>800</integer>
+			</dict>
 		</dict>
 		<key>themes/default/base_info_view.dwt</key>
 		<dict>
@@ -63,6 +151,66 @@
 				<integer>3</integer>
 				<key>line</key>
 				<integer>40</integer>
+			</dict>
+		</dict>
+		<key>themes/default/css/layout.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>810</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>776</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>10</integer>
+				<key>line</key>
+				<integer>810</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>15</integer>
+				<key>line</key>
+				<integer>810</integer>
+			</dict>
+		</dict>
+		<key>themes/default/css/style.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>59</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>32</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>1</integer>
+				<key>line</key>
+				<integer>61</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>59</integer>
 			</dict>
 		</dict>
 		<key>themes/default/library/base_info_audit.lbi</key>
@@ -95,62 +243,21 @@
 				<integer>6</integer>
 			</dict>
 		</dict>
-		<key>themes/default/library/city_ad_audit.lbi</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>64</integer>
-				<key>line</key>
-				<integer>9</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>themes/default/library/mycity.lbi</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>130</integer>
-				<key>line</key>
-				<integer>32</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>126</integer>
-				<key>line</key>
-				<integer>32</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>133</integer>
-				<key>line</key>
-				<integer>32</integer>
-			</dict>
-		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>city_base_info.php</string>
 		<string>themes/default/base_info_view.dwt</string>
-		<string>themes/default/library/city_ad_audit.lbi</string>
-		<string>themes/default/library/mycity.lbi</string>
+		<string>city_operate.php</string>
+		<string>city_sql.php</string>
+		<string>languages/zh_cn/common.php</string>
+		<string>themes/default/css/style.css</string>
+		<string>themes/default/css/layout.css</string>
 		<string>themes/default/library/base_info_audit.lbi</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{262, 0}, {1651, 1058}}</string>
+	<string>{{-886, 59}, {1298, 999}}</string>
 </dict>
 </plist>

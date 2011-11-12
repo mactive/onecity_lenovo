@@ -53,12 +53,17 @@ for ($y=0;$y<count($all_sheets);$y++)
 	for ($row=2;$row<=$all_sheets[$y]['numRows'];$row++) 
 	{
 		//$city = trim($all_sheets[$y]['cells'][$row][4]);
-		$county = trim($all_sheets[$y]['cells'][$row][3]);
-		echo "城市名字:".$county."<br>";
+		$county = trim($all_sheets[$y]['cells'][$row][4]);
 		
 		//$parent_id = get_cat_id_by_name($city);
 		$city_id = get_cat_id_by_name($county);
-
+		$sys_level = get_sys_level($city_id);
+		
+		echo "城市名字:".$county."系统级别: $sys_level <br>";
+		if($sys_level != 5 ){
+			echo "城市名字:".$county."不能删除<br>";
+		}
+		
 		if(!empty($city_id)){
 			
 			$sql = "DELETE FROM" . $GLOBALS['ecs']->table('category') . " WHERE cat_id = $city_id LIMIT 1";
@@ -71,10 +76,11 @@ for ($y=0;$y<count($all_sheets);$y++)
 			echo $sql_3."<br>";
 			
 			
-			$GLOBALS['db']->query($sql);
-		    $GLOBALS['db']->query($sql_2);
-		    $GLOBALS['db']->query($sql_3);
+			// 	$GLOBALS['db']->query($sql);
+			//	$GLOBALS['db']->query($sql_2);
+			// 	$GLOBALS['db']->query($sql_3);
 			
+
 		$count = $count + 1; 			
 			
 		}else{

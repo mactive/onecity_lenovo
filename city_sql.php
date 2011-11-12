@@ -549,6 +549,7 @@ elseif($_REQUEST['act'] == 'CITY'){
 	echo "</table>";
 }
 
+
 elseif($_REQUEST['act'] == 'CITY_base'){
 	if($_SESSION['user_rank'] < 4){
 		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
@@ -871,6 +872,7 @@ elseif($_REQUEST['act'] == 'DIFF'){
 	echo "</table>";
 }
 
+/*
 elseif($_REQUEST['act'] == 'city_q2'){
 	$sql = "SELECT ad_id,time FROM ".$GLOBALS['ecs']->table('city_ad_audit')." Where feedback_audit = 2 GROUP BY ad_id ORDER BY ad_id";
 	$res = $GLOBALS['db']->getAll($sql);
@@ -883,6 +885,133 @@ elseif($_REQUEST['act'] == 'city_q2'){
 
 	}
 }
+
+*/
+
+
+// 换画管理 城市列表
+elseif($_REQUEST['act'] == 'project'){
+	if($_SESSION['user_rank'] < 4){
+		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
+	}
+	
+	$type =  !empty($_REQUEST['type']) ? intval($_REQUEST['type']) : 1;
+	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 1;
+	$quarter = "Q".$project_id;
+	
+	$is_upload =  !empty($_REQUEST['is_upload']) ? intval($_REQUEST['is_upload']) : 0;
+	$is_confirm =  !empty($_REQUEST['is_confirm']) ? intval($_REQUEST['is_confirm']) : 0;
+	switch ($type) {
+		case '4':
+			$sql_plus = " AND a.market_level = 4 ";
+			break;
+		//
+		case '5':
+			$sql_plus = " AND a.market_level = 5 ";
+			break;
+		//
+		case '6':
+		
+			$sql_plus = " AND a.market_level LIKE  '%6%' ";
+		//	$sql_plus .= " AND a.resource = 2 ";
+		//	$sql_plus .= " AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ";
+		//	$sql_plus .= " AND ad.is_upload = 1 AND  ad.audit_status < 5";
+			
+			break;
+		//
+		case 'baiqiang':
+			$sql_plus = " AND a.market_level LIKE  '百强镇' ";
+			break;
+		case '6_plus':
+		
+			$sql_plus = " AND ( a.market_level LIKE '%6%' OR a.market_level LIKE '百强镇' ) ";			
+			break;
+		//
+	}
+	$sql_plus .=" AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ";
+	if($is_upload == 1){
+		$sql_plus .= " AND ad.is_upload = 1 ";
+	}
+	
+	if($is_confirm == 1){
+		$sql_plus .= " AND ad.is_audit_confirm = 1 AND ad.audit_status = 5 ";	
+	}
+	if($project_id){
+		$sql_plus .= " AND re.$quarter > 0 AND re.$quarter = 6";//microsoft 的城市
+	}
+	
+	
+	
+	$sql_1 = "SELECT a.cat_id,a.cat_name AS county ,a.market_level,re.$quarter AS resource, ".
+				"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
+				" ,city.col_7, city.col_11, city.col_12, city.col_13, city.col_14, city.col_15, city.col_22 ".
+				//", count(ag.img_id) AS ag_num  ".
+				" FROM ".$GLOBALS['ecs']->table('category') ." AS a ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.city_id = a.cat_id ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city').  " AS city ON city.ad_id = ad.ad_id ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource').  " AS re ON re.city_id = a.cat_id ".
+			
+			 	//" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') . " AS au ON au.ad_id = ad.ad_id  ".
+			" WHERE a.sys_level = 5 ". $sql_plus .
+			" GROUP BY a.cat_id ORDER BY a.cat_id ASC ";
+	//echo $sql_1;
+	$res_1 = $GLOBALS['db']->getAll($sql_1);
+	
+
+	foreach($res_1 AS $key => $val){
+		$info = get_city_huanhua_progress($val['cat_id'],$project_id);
+		$res_1[$key]['is_audit_confirm'] = $info['is_audit_confirm'];
+		// $res_1[$key]['is_shanghua'] = $info['is_shanghua'];
+		// $res_1[$key]['col_7'] = $info['col_7'];
+	}
+	
+	
+	echo count($res_1)."<br>";
+	echo "<table width='100%'>";
+		echo "<tr>";
+		echo "<td>".$_LANG['region']."</td>";
+		echo "<td>".$_LANG['province']."</td>";
+		echo "<td>".$_LANG['city']."</td>";
+		echo "<td>".$_LANG['county']."</td>";
+		echo "<td>".$_LANG['city_title']['col_7']."</td>";
+		echo "<td>".$_LANG['city_title']['col_11']."</td>";
+		echo "<td>".$_LANG['city_title']['col_12']."</td>";
+		echo "<td>".$_LANG['city_title']['col_13']."</td>";
+		echo "<td>".$_LANG['city_title']['col_14']."</td>";
+		echo "<td>".$_LANG['city_title']['col_15']."</td>";
+		echo "<td>".$_LANG['city_title']['col_22']."</td>";
+		echo "<td>".$_LANG['market_level']."</td>";
+		echo "<td>".$_LANG['resource_title']."</td>";
+		echo "<td>".$_LANG['is_audit_confirm']."</td>";
+		// echo "<td>".$_LANG['is_shanghua']."</td>";
+		echo "</tr>";
+	foreach($res_1 AS $val){
+		$is_upload = $val['ag_num'] > 0 ? "是" : "否" ;
+		echo "<tr>";
+		echo "<td>".$val['region']."</td>";
+		echo "<td>".$val['province']."</td>";
+		echo "<td>".$val['city']."</td>";
+		echo "<td>".$val['county']."</td>";
+		echo "<td>".$val['col_7']."</td>";
+		echo "<td>".$val['col_11']."</td>";
+		echo "<td>".$val['col_12']."</td>";
+		echo "<td>".$val['col_13']."</td>";
+		echo "<td>".$val['col_14']."</td>";
+		echo "<td>".$val['col_15']."</td>";
+		echo "<td>".$val['col_22']."</td>";
+		echo "<td>".$val['market_level']."</td>";
+		echo "<td>".$_LANG['resource'][$val['resource']]."</td>";
+		echo "<td>".$val['is_audit_confirm']."</td>";
+		// echo "<td>".$val['is_shanghua']."</td>";
+		echo "</tr>";
+	}
+	echo "</table>";
+}
+
+
 
 /**
  * 
@@ -906,6 +1035,34 @@ function get_city_progress($city_id){
 			$array['is_shanghua'] = "是";			
 		}else{
 			$array['is_shanghua'] = "否";
+		}
+		
+	}else{
+		$array['is_audit_confirm'] = "否";
+		$array['is_shanghua'] = "否";
+	}
+	
+	return $array;
+	
+}
+
+/**
+ * 
+ */
+function get_city_huanhua_progress($city_id,$project_id){
+	$array['is_audit_confirm'] = "";
+	$array['is_shanghua'] = "";
+	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table('city_ad')." WHERE city_id = $city_id AND is_upload = 1 AND audit_status = 5 AND is_audit_confirm = 1 limit 1";
+	$ad_id = $GLOBALS['db']->getOne($sql);
+	if($ad_id){
+		
+		$sql = "SELECT audit_note FROM ".$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = $ad_id AND feedback_audit = $project_id ORDER BY record_id DESC limit 1 ";
+		$count = $GLOBALS['db']->getOne($sql); 			
+		
+		if($count == "审核通过"){
+			$array['is_audit_confirm'] = "是";			
+		}else{
+			$array['is_audit_confirm'] = "否";
 		}
 		
 	}else{

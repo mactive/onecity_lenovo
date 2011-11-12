@@ -791,7 +791,6 @@ $_LANG['city_title']['col_44'] = "08PO单号";
 $_LANG['city_title']['col_45'] = "City ID";
 */
 
-
 /* 33个项目 */
 $_LANG['city_title']['col_1'] = "分区";
 $_LANG['city_title']['col_2'] = "省份";
@@ -924,8 +923,8 @@ $_LANG['pic_type_select_lite'][2] = "IDEA";
 $_LANG['pic_type_array']['SMBIDEA'] = "1";
 $_LANG['pic_type_array']['IDEA'] = "2";
 $_LANG['pic_type_array']['MIDHKAB'] = "3";
-$_LANG['pic_type_array']['BRAND'] = "4";
-$_LANG['pic_type_array']['MICROSOFT'] = "5";
+$_LANG['pic_type_array']['BRAND'] = "5";
+$_LANG['pic_type_array']['MICROSOFT'] = "6";
 
 
 
@@ -933,8 +932,8 @@ $_LANG['resource_title'] = "资源类型";
 $_LANG['resource'][1] = "SMBIDEA";
 $_LANG['resource'][2] = "IDEA";
 $_LANG['resource'][3] = "MIDHKAB";
-$_LANG['resource'][4] = "BRAND";
-$_LANG['resource'][5] = "MICROSOFT";
+$_LANG['resource'][5] = "BRAND";
+$_LANG['resource'][6] = "MICROSOFT";
 $_LANG['is_audit_confirm'] = "是否通过";
 $_LANG['is_shanghua'] = "是否上画";
 $_LANG[''] = "";
