@@ -75,6 +75,8 @@ elseif($_REQUEST['act'] == 'transform_page')
 elseif($_REQUEST['act'] == 'transform')
 {
 	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 2;
+	$quarter = "Q".$project_id;
+	
 	$wanted_market_level =  !empty($_REQUEST['market_level']) ? trim($_REQUEST['market_level']) : 0;
 	$wanted_region = !empty($_REQUEST['wanted_region']) ? intval($_REQUEST['wanted_region']) : 2; //2-23
 	//$wanted_level = 4; // 4 5 6
@@ -83,8 +85,11 @@ elseif($_REQUEST['act'] == 'transform')
 	//	8月中旬要数据
 	
 	$sql = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
-			" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') . " AS au ON au.ad_id = g.ad_id ". 
-			" WHERE g.feedback  = $project_id AND au.audit_note LIKE '审核通过' AND au.feedback_audit = $project_id  GROUP BY g.ad_id "; //LIMIT 0,50
+		" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') . " AS au ON au.ad_id = g.ad_id ". 
+		" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
+		" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS re ON re.city_id = ad.city_id ". 
+			" WHERE g.feedback  = $project_id "." AND re.$quarter = 6 ".
+			" AND au.audit_note LIKE '审核通过' AND au.feedback_audit = $project_id  GROUP BY g.ad_id "; //LIMIT 0,50
 	
 	echo $sql."<br>";
 	
@@ -93,11 +98,14 @@ elseif($_REQUEST['act'] == 'transform')
 	$wanted_region_name = get_cat_name($wanted_region);
 //	$root_folder = "export/level_".$wanted_level;
 	$root_folder = "export/".$wanted_region_name;
+	
+	
 	if (!file_exists($root_folder))
 	{
 	    @mkdir($root_folder, 0777);
 	    @chmod($root_folder, 0777);
 	}
+
 
 	foreach($res AS $val){
 		$city_id = get_city_id($val);
@@ -145,21 +153,10 @@ elseif($_REQUEST['act'] == 'transform')
 			$count += 1;
 			
 		}
-		/*
-		$sql = "SELECT * FROM ".$GLOBALS['ecs']->table('city_gallery')." WHERE feedback  = $project_id AND ad_id = $val ORDER BY img_id DESC";
-		echo $sql."<br>";
-		$row = $GLOBALS['db']->getAll($sql);
-		
-		echo "<div>";
-		echo $val;
-		foreach($row AS $v){
-//			echo '<img src="'.$v['thumb_url'].'" width="100" height="75" /> ';
-			echo '<a href="city_export.php?act=rename&ad_id='.$val.'&img_sort='.$v['img_sort'].'&path='.$v['img_url'].'">'.
-			$v['img_id']."_".$v['img_sort'].'<a/> &nbsp;';
-		}
-		echo "</div>";
-		*/
+
 	}
+	
+	
 	echo "all $wanted_region region ".$count;	
 }
 

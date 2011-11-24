@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>city_sql.php</string>
+	<string>includes/lib_city.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -56,28 +56,74 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>3</integer>
+				<integer>35</integer>
 				<key>line</key>
-				<integer>739</integer>
+				<integer>752</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>729</integer>
+			<integer>719</integer>
+		</dict>
+		<key>city_project.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>27</integer>
+				<key>line</key>
+				<integer>113</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>79</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>17</integer>
+				<key>line</key>
+				<integer>113</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>33</integer>
+				<key>line</key>
+				<integer>113</integer>
+			</dict>
 		</dict>
 		<key>city_sql.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>23</integer>
+				<integer>9</integer>
 				<key>line</key>
-				<integer>972</integer>
+				<integer>899</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>907</integer>
+			<integer>894</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>899</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>900</integer>
+			</dict>
 		</dict>
 		<key>excel_update_delete.php</key>
 		<dict>
@@ -92,6 +138,20 @@
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>49</integer>
+		</dict>
+		<key>includes/lib_city.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>1</integer>
+				<key>line</key>
+				<integer>687</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>659</integer>
 		</dict>
 		<key>languages/zh_cn/common.php</key>
 		<dict>
@@ -188,30 +248,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>27</integer>
 				<key>line</key>
-				<integer>59</integer>
+				<integer>1051</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>32</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>1</integer>
-				<key>line</key>
-				<integer>61</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>59</integer>
-			</dict>
+			<integer>1035</integer>
 		</dict>
 		<key>themes/default/library/base_info_audit.lbi</key>
 		<dict>
@@ -249,6 +293,8 @@
 		<string>city_base_info.php</string>
 		<string>themes/default/base_info_view.dwt</string>
 		<string>city_operate.php</string>
+		<string>includes/lib_city.php</string>
+		<string>city_project.php</string>
 		<string>city_sql.php</string>
 		<string>languages/zh_cn/common.php</string>
 		<string>themes/default/css/style.css</string>
@@ -256,8 +302,8 @@
 		<string>themes/default/library/base_info_audit.lbi</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
-	<true/>
+	<false/>
 	<key>windowFrame</key>
-	<string>{{-886, 59}, {1298, 999}}</string>
+	<string>{{-1076, 76}, {1076, 1117}}</string>
 </dict>
 </plist>

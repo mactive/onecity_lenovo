@@ -540,6 +540,9 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
         $where .= " AND au.time > '$start_time' AND au.time < '$end_time' ";
     }
 
+	$project_id = 2;
+
+	$where .= " AND au.feedback_audit = $project_id ";
 	
 	$sql = "SELECT a.*, ad.*, c.resource ".
 			" FROM ".$GLOBALS['ecs']->table('city') . " AS a ".
@@ -558,6 +561,7 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
 		if($val['is_upload'] && $val['audit_status'])
 		{
 			$res[$key]['col_4'] = get_market_level($val['col_3']); //防治分区的人填写错误  从category库中取得
+			$res[$key]['quarter'] = get_quarter_audit_note($val['ad_id'],$project_id);
 			$res[$key]['lv_2'] = get_audit_note($val['ad_id'],2);
 			$res[$key]['lv_2'] = get_audit_note($val['ad_id'],2);
 			$res[$key]['lv_3'] = get_audit_note($val['ad_id'],3);
@@ -570,6 +574,12 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
 		}
 	}
     return $res;
+}
+
+function get_quarter_audit_note($ad_id,$project_id){
+	$sql = "SELECT audit_note FROM ".$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = '$ad_id' AND feedback_audit = $project_id ORDER BY record_id DESC limit 1";
+	$res = $GLOBALS['db']->getOne($sql);
+	return $res;
 }
 
 function get_audit_note($ad_id,$user_rank){
@@ -692,17 +702,17 @@ function get_project_summary($project_id,$children){
 			 " LEFT JOIN " .$GLOBALS['ecs']->table('city_gallery') ." AS g ON g.city_id = a.city_id ". 
 			 " WHERE $children AND g.feedback = $project_id GROUP BY a.city_id ";
 	
-	$sql_3 = "SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('city_ad'). " AS a ".
+	$sql_3 = "SELECT au.ad_id FROM ".$GLOBALS['ecs']->table('city_ad'). " AS a ".
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') ." AS au ON au.ad_id = a.ad_id ". 
-			 " WHERE $children AND au.feedback_audit = $project_id AND au.audit_note LIKE '审核通过' ";
+			 " WHERE $children AND au.feedback_audit = $project_id AND au.audit_note LIKE '审核通过' GROUP BY au.ad_id";
 	
 	//echo $sql_2;
 	
 	$res['write_complete'] = $project_id == 1 ? $GLOBALS['db']->getOne($sql_1) : 0 ;
 	$res['upload'] = $GLOBALS['db']->getAll($sql_2);
 	$res['upload'] = count($res['upload']);
-	$res['confirm'] = $GLOBALS['db']->getOne($sql_3);
-	
+	$tmp = $GLOBALS['db']->getAll($sql_3);
+	$res['confirm'] = count($tmp);
 	return $res;
 }
 
