@@ -748,11 +748,11 @@ elseif($_REQUEST['act'] == 'export_db')
 
 	$city_title = $_LANG['city_title'];
 	$title_expend = array(
-			// "lv_2"=>$_LANG['AUDIT']['2'],
-			// "lv_3"=>$_LANG['AUDIT']['3'],
-			// "lv_4"=>$_LANG['AUDIT']['4'],
-			// "lv_5"=>$_LANG['AUDIT']['5'],
-			"quarter"=>"Q1审核记录",
+			"lv_2"=>$_LANG['AUDIT']['2'],
+			"lv_3"=>$_LANG['AUDIT']['3'],
+			"lv_4"=>$_LANG['AUDIT']['4'],
+			"lv_5"=>$_LANG['AUDIT']['5'],
+			// "quarter"=>"Q1审核记录",
 			"last_audit_time"=>"最终审核时间",
 			"resource_type"=>$_LANG['resource_title']);
 	$title = array_merge($city_title,$title_expend);

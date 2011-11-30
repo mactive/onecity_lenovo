@@ -540,9 +540,8 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
         $where .= " AND au.time > '$start_time' AND au.time < '$end_time' ";
     }
 
-	$project_id = 2;
-
-	$where .= " AND au.feedback_audit = $project_id ";
+	// $project_id = 2;
+	// $where .= " AND au.feedback_audit = $project_id ";
 	
 	$sql = "SELECT a.*, ad.*, c.resource ".
 			" FROM ".$GLOBALS['ecs']->table('city') . " AS a ".
@@ -561,7 +560,7 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
 		if($val['is_upload'] && $val['audit_status'])
 		{
 			$res[$key]['col_4'] = get_market_level($val['col_3']); //防治分区的人填写错误  从category库中取得
-			$res[$key]['quarter'] = get_quarter_audit_note($val['ad_id'],$project_id);
+			// $res[$key]['quarter'] = get_quarter_audit_note($val['ad_id'],$project_id);
 			$res[$key]['lv_2'] = get_audit_note($val['ad_id'],2);
 			$res[$key]['lv_2'] = get_audit_note($val['ad_id'],2);
 			$res[$key]['lv_3'] = get_audit_note($val['ad_id'],3);
