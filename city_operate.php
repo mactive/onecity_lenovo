@@ -880,7 +880,8 @@ elseif($_REQUEST['act'] == 'querenlv')
 			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS cat ON cat.cat_id = c.city_id ". 
 				" WHERE c.col_1 LIKE '$value[col_1]'  AND cat.market_level LIKE'%6%'  ". // 
 				" AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ";
-		//echo $sql_6."<br>";
+			 // echo $sql_6."<br>";
+			 // echo $sql_6_plus."<br>";
 		$base[$key]['lv_6']['amount'] = $GLOBALS['db']->getOne($sql_6);
 		$base[$key]['lv_6']['confirm_amount'] = $GLOBALS['db']->getOne($sql_6_plus);
 		$base[$key]['lv_6']['percent'] =round(($base[$key]['lv_6']['confirm_amount'] / $base[$key]['lv_6']['amount'] * 100),2);

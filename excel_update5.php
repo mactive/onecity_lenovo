@@ -52,27 +52,37 @@ for ($y=0;$y<count($all_sheets);$y++)
 	
 	for ($row=2;$row<=$all_sheets[$y]['numRows'];$row++) 
 	{
-		$city = trim($all_sheets[$y]['cells'][$row][4]);
-		$county = trim($all_sheets[$y]['cells'][$row][5]);
-		$level = trim($all_sheets[$y]['cells'][$row][6]);
-		$mature_emerging = trim($all_sheets[$y]['cells'][$row][8]);
-		$mulching = trim($all_sheets[$y]['cells'][$row][9]);
+		// $city = trim($all_sheets[$y]['cells'][$row][4]);
+		// $county = trim($all_sheets[$y]['cells'][$row][5]);
+		// $level = trim($all_sheets[$y]['cells'][$row][6]);
+		// $mature_emerging = trim($all_sheets[$y]['cells'][$row][8]);
+		// $mulching = trim($all_sheets[$y]['cells'][$row][9]);
 		
-		$parent_id = get_cat_id_by_name($city);
-		//$city_id = get_cat_id_by_name($county);
-
-		if(!empty($parent_id)){
+		$region = trim($all_sheets[$y]['cells'][$row][1]);
+		$province = trim($all_sheets[$y]['cells'][$row][2]);
+		$county = trim($all_sheets[$y]['cells'][$row][3]);
+		$level = trim($all_sheets[$y]['cells'][$row][4]);
+		
+		$city_id = get_cat_id_by_name($county);
+		
+		//echo "ddd".$region."-".$province."-".$county."-".$city_id."-".$level;
+		echo "<br>";
+		
+		
+		if(!empty($city_id)){
 			
-			$sql = "INSERT INTO " . $GLOBALS['ecs']->table('category') .
-					" (`cat_id`,`cat_name`,`parent_id`,`level`,`sys_level`,`market_level`,`mature_emerging`,`mulching` ) ".
-					"VALUES (NULL, '$county', '$parent_id','$level','5','4','$mature_emerging','$mulching')";
-			echo $sql."<br>";
+			$sql = "UPDATE " . $GLOBALS['ecs']->table('city_resource') .
+	                " SET `Q2` = '6' ".
+	                "WHERE city_id = $city_id" ;			
+			
+			echo $sql.";<br>";
 		    //$GLOBALS['db']->query($sql);
 		$count = $count + 1; 			
 			
 		}else{
 			echo $city."不存在<br>";
 		}
+		
 	}
 	echo "===========".$count."<br>";
 }

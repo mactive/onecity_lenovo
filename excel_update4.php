@@ -61,13 +61,13 @@ for ($y=0;$y<count($all_sheets);$y++)
 					" (`cat_id`,`cat_name`,`parent_id`,`level`,`market_level`,`mature_emerging`,`mulching` ) ".
 					"VALUES (NULL, '$county', '$city_id','$level','$market_level','$mature_emerging','$mulching')";
 			echo $sql."<br>";
-		    	$GLOBALS['db']->query($sql);
+		    	//$GLOBALS['db']->query($sql);
 		
 			$sql_2 = "INSERT INTO " . $GLOBALS['ecs']->table('city_request') .
 					" (`city_id`,`city_name`,`parent_id` ) ".
 					"VALUES (NULL, '$county', '$city_id')";
 			echo $sql_2."<br>";
-		    	$GLOBALS['db']->query($sql_2);
+		    	//$GLOBALS['db']->query($sql_2);
 		
 		
 		}
