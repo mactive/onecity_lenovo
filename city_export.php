@@ -170,16 +170,6 @@ function get_market_level_by_ad_id($ad_id)
 	return $market_level;
 }
 
-function get_region_info($city_id){
-	$sql = "SELECT a3.cat_name AS region_name, a3.cat_id AS region_id FROM " . 
-			$GLOBALS['ecs']->table('category') . " AS a ".
-			" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
-		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
-		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
-            " WHERE a.cat_id = $city_id limit 1 ";
-	$base_info =  $GLOBALS['db']->getRow($sql); 
-	return $base_info;
-}
 
 function get_cat_name($cat_id){
 	$sql = "SELECT cat_name FROM " . $GLOBALS['ecs']->table('category') . 

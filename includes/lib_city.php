@@ -203,7 +203,7 @@ function get_ad_summary($ad_list)
 //一个城市的左右广告列表
 function get_ad_list_by_cityid($city_id)
 {
-	$sql = "SELECT a.*,c.user_time,c.col_7,COUNT(g.img_id) AS photo_num ".
+	$sql = "SELECT a.*,c.user_time,c.col_7,c.ad_sn,COUNT(g.img_id) AS photo_num ".
 			//", c.city_id, c.user_time FROM " . 
 			" FROM ".$GLOBALS['ecs']->table('city_ad') . " AS a ".
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city'). 		' AS c ON c.ad_id = a.ad_id '.
@@ -216,6 +216,7 @@ function get_ad_list_by_cityid($city_id)
 	{
 		$res[$key]['time_original'] = $val['user_time'];
 		$res[$key]['user_time'] = local_date('Y-m-d', $val['user_time']);
+		$res[$key]['is_xz'] = stripos($val['ad_sn'],'XZ') ? 1 : 0; 
 	}
 	return $res;
 }
@@ -1257,6 +1258,92 @@ function get_base_info_list($children,$limit = 0){
 	}
 	$arr = array('citys' => $res, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count'],'sql' => $sql,'count_sql' => $count_sql, 'page_size' => $filter['page_size']);
     return $arr;
+}
+
+/* 生成城市编号*/
+function make_ad_sn($ad_id, $city_id){
+	
+	if($ad_id > 0  && $city_id > 0){
+		
+		$region_array = array();
+		$level_array = array();
+		$region_array[2] = "SD";
+		$region_array[3] = "JS";
+		$region_array[4] = "ZJ";
+		$region_array[5] = "JJ";
+		$region_array[6] = "HJ";
+		$region_array[7] = "LN";
+		$region_array[8] = "JM";
+		$region_array[9] = "FJ";
+		$region_array[10] = "JX";
+		$region_array[11] = "AH";
+		$region_array[12] = "HN";
+		$region_array[13] = "HB";
+		$region_array[14] = "HU";
+		$region_array[15] = "GD";
+		$region_array[16] = "SZ";
+		$region_array[17] = "GX";
+		$region_array[18] = "SC";
+		$region_array[19] = "YG";
+		$region_array[20] = "CY";
+		$region_array[21] = "SX";
+		$region_array[22] = "GQ";
+		$region_array[23] = "XJ";
+
+
+		$level_array['百强镇'] = "0";
+		$level_array['4'] 	= "4";
+		$level_array['5'] 	= "5";
+		$level_array['6A'] 	= "7";
+		$level_array['6B'] 	= "8";
+		$level_array['6C'] 	= "9";
+
+		$year_short = substr(date("Y") ,2,2) ;
+
+		$region_info = get_region_info($city_id);
+		$region_id = $region_info['region_id'];
+		$region_sname = $region_array[$region_id];
+
+		$market_level_tmp = get_market_level("",$city_id);
+		$market_level = $level_array[$market_level_tmp];
+
+		$ad_number = substr(strval($ad_id+10000),1,4); 
+		if(isset($region_sname) && isset($market_level) && isset($ad_number) ){
+			$ad_sn = "FY".$year_short."_XZ_".$region_sname."_".$market_level."_".$ad_number;
+			$sql = "UPDATE " . $GLOBALS['ecs']->table('city') . " SET ad_sn = '$ad_sn'  WHERE ad_id = $ad_id ";
+			echo $ad_sn."<br>";
+	    	return $ad_sn;
+		}else{
+			$ad_sn = "FY".$year_short."_XZ_".$region_sname."_".$market_level."_".$ad_number;
+			echo $city_id.",".$ad_sn."<br>";
+			return 0;
+		}
+		
+	}else{
+		return 0;
+	}
+	
+}
+
+function get_region_info($city_id){
+	$sql = "SELECT a3.cat_name AS region_name, a3.cat_id AS region_id FROM " . 
+			$GLOBALS['ecs']->table('category') . " AS a ".
+			" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+            " WHERE a.cat_id = $city_id limit 1 ";
+	$base_info =  $GLOBALS['db']->getRow($sql); 
+	return $base_info;
+}
+
+//获得通过的牌子Id
+function get_passed_ad_id($city_id){
+	$sql = "SELECT ad_id  FROM " . $GLOBALS['ecs']->table('city_ad') . 
+	    " WHERE city_id = $city_id AND audit_status = 5 AND is_upload = 1 AND is_audit_confirm = 1 ORDER BY ad_id ASC limit 1 ";
+    $res =  $GLOBALS['db']->getOne($sql); 
+	// echo $sql;
+	return $res;
+	
 }
 
 

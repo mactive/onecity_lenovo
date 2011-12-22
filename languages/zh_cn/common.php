@@ -881,6 +881,7 @@ $_LANG['price_title']['price_amount'] = "制作费合计";
 $_LANG['price_title']['request_price'] = "[申请]每平米制作费";
 $_LANG['price_title']['request_price_amount'] = "[申请]制作费合计";
 $_LANG['price_title']['request_note'] = "[申请]理由";
+$_LANG['is_xz'] = "新增";
 
 
 /**/

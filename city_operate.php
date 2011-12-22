@@ -319,7 +319,7 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 			
 				if(CITY_AD_LIMIT - $city_ad_num > 0)
 				{
-					if($city_confirm_ad_num == 1){
+					if($city_confirm_ad_num >= 2){
 						$issue = $val;
 						$issue['temp_status'] = "该城市已经有通过的牌子,不可以再上传新的";
 						array_push($problem_array,$issue);
@@ -337,6 +337,7 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 						$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $tmp, 'INSERT');
 
 						$tmp['ad_id'] = $GLOBALS['db']->insert_id();
+						$tmp['ad_sn'] = make_ad_sn($tmp['ad_id'], $val['city_id']);
 						$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $tmp, 'INSERT');
 
 						//echo "=============";
@@ -556,13 +557,33 @@ elseif($_REQUEST['act'] == 'audit')
 	
 	$ad_detail = get_city_info($ad_id);
 	$smarty->assign('ad_detail', $ad_detail);
-	
+
 	$ad_info = get_ad_info($ad_id);
 	$smarty->assign('ad_info', $ad_info);
 	
 	$photo_info = get_ad_photo_info($ad_id);
 	$smarty->assign('photo_info', $photo_info);
 	$smarty->assign('ad_id', $ad_id);
+	
+	// 获得消失的id
+	
+
+	
+	$passed_ad_id = get_passed_ad_id($ad_detail['city_id']);
+	if($passed_ad_id){
+		
+		$passed_ad_detail = get_city_info($passed_ad_id);
+		$smarty->assign('passed_ad_detail', $passed_ad_detail);
+		
+		$passed_photo_info = get_ad_photo_info($passed_ad_id);
+		$smarty->assign('passed_photo_info', $passed_photo_info);
+			
+		$passed_audit_path = get_audit_path($passed_ad_id,$audit_level_array); //审核路径图
+		$smarty->assign('passed_audit_path', $passed_audit_path);
+		
+		$is_xz = stripos($ad_detail['ad_sn'],'XZ') ? 1 : 0; 
+		$smarty->assign('is_xz', $is_xz);
+	}
 	
 
 	$audit_path = get_audit_path($ad_id,$audit_level_array); //审核路径图

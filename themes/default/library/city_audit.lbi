@@ -4,6 +4,10 @@
 	<a class="back_url" href="city_operate.php?act=city_ad_list&city_id={$ad_info.city_id}"></a>
 </div>
 
+{if $is_xz}
+{include file="library/passed_audit_path.htm"}	
+{/if}
+
 {include file="library/audit_path.htm"}					
 
 <div class="upload_board" style="height:auto;float:left;">

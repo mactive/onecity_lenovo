@@ -851,6 +851,7 @@ p.intro { font-weight: bold; }
 .blue-color{color: #80016C;}
 .green-color{color: #6AB30F;}
 .red-color{color: #FF1A00;}
+.red-block{background:#FF1A00;color:#fff;display:block;padding:2px 4px;height:16px;line-height:16px;}
 .grey333{color:#333333;}
 .grey666{ color:#666666;}
 .grey999{ color:#999999;}
