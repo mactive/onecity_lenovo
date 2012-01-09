@@ -1309,12 +1309,12 @@ function make_ad_sn($ad_id, $city_id){
 
 		$ad_number = substr(strval($ad_id+10000),1,4); 
 		if(isset($region_sname) && isset($market_level) && isset($ad_number) ){
-			$ad_sn = "FY".$year_short."_XZ_".$region_sname."_".$market_level."_".$ad_number;
+			$ad_sn = "FY".$year_short."_ZC_".$region_sname."_".$market_level."_".$ad_number;
 			$sql = "UPDATE " . $GLOBALS['ecs']->table('city') . " SET ad_sn = '$ad_sn'  WHERE ad_id = $ad_id ";
 			echo $ad_sn."<br>";
 	    	return $ad_sn;
 		}else{
-			$ad_sn = "FY".$year_short."_XZ_".$region_sname."_".$market_level."_".$ad_number;
+			$ad_sn = "FY".$year_short."_ZC_".$region_sname."_".$market_level."_".$ad_number;
 			echo $city_id.",".$ad_sn."<br>";
 			return 0;
 		}

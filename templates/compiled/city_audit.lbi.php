@@ -16,14 +16,14 @@
 	<tr>
 		<td>已经上传照片</td>
 		<td>
-			<?php $_from = $this->_var['photo_info']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item_0_45146700_1324552205');$this->_foreach['photo_info'] = array('total' => count($_from), 'iteration' => 0);
+			<?php $_from = $this->_var['photo_info']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item_0_32442400_1324879058');$this->_foreach['photo_info'] = array('total' => count($_from), 'iteration' => 0);
 if ($this->_foreach['photo_info']['total'] > 0):
-    foreach ($_from AS $this->_var['item_0_45146700_1324552205']):
+    foreach ($_from AS $this->_var['item_0_32442400_1324879058']):
         $this->_foreach['photo_info']['iteration']++;
 ?>
 				<div style="width:160px;height:160px;text-align:center;float:left;margin:10px;">
-				<a href="<?php echo $this->_var['item_0_45146700_1324552205']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_45146700_1324552205']['thumb_url']; ?>"></a>
-				<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_45146700_1324552205']['img_sort']]; ?>
+				<a href="<?php echo $this->_var['item_0_32442400_1324879058']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_32442400_1324879058']['thumb_url']; ?>"></a>
+				<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_32442400_1324879058']['img_sort']]; ?>
 				</div>
 			<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 		</td>
@@ -107,23 +107,33 @@ function validate2()
 
 <?php if ($this->_var['sm_session']['user_rank'] > 1): ?>
 	<?php if ($this->_var['sm_session']['user_rank'] == 2): ?>
+	
+		
+		<div class="city_info radius_5px">
+			<div class="f_left left_title left_radius_5px">牌子编号</div>
+			<div class="f_left right_content"><span class="red-block" style="width:40px;display:inline;" >新增</span> &nbsp;&nbsp;<?php echo $this->_var['ad_detail']['ad_sn']; ?>
+			</div>
+			<div class="past_content"><span class="grey999">已有</span>&nbsp;&nbsp;<?php echo $this->_var['passed_ad_detail']['ad_sn']; ?></div>
+			<div class="clear"></div>
+		</div>
 		<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate2()">
-		<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_45217300_1324552205');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_45217300_1324552205']):
+		<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_32517200_1324879058');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_32517200_1324879058']):
 ?>
 		<div class="city_info radius_5px">
-			<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_45217300_1324552205']; ?></div>
+			<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_32517200_1324879058']; ?></div>
 			<div class="f_left right_content">
 				<?php if ($this->_var['k'] == "col_1" || $this->_var['k'] == "col_2" || $this->_var['k'] == "col_3" || $this->_var['k'] == "col_4" || $this->_var['k'] == "col_5"): ?>
 					<span><?php echo $this->_var['ad_detail'][$this->_var['k']]; ?></span>
-					<input type="hidden" name="col[]" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" size="50" />
+					<input type="hidden" name="col[]" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" />
 				<?php else: ?>
-					<input type="text" name="col[]" id="<?php echo $this->_var['k']; ?>" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" size="50" />
-					<span class="f_right"><a target="_blank"  class="grey666" href="city_operate.php?act=view_log&ad_id=<?php echo $this->_var['ad_detail']['ad_id']; ?>&col_name=<?php echo $this->_var['k']; ?>">
+					<input type="text" name="col[]" id="<?php echo $this->_var['k']; ?>" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" style="width:250px;" />
+					<span class="f_right" style="margin-left:30px;"><a target="_blank"  class="grey666" href="city_operate.php?act=view_log&ad_id=<?php echo $this->_var['ad_detail']['ad_id']; ?>&col_name=<?php echo $this->_var['k']; ?>">
 						修改记录</a></span>
 					
 				<?php endif; ?>
 			</div>
+			<div class="past_content"><span><?php echo $this->_var['passed_ad_detail'][$this->_var['k']]; ?></span></div>
 			<div class="clear"></div>
 		</div>
 		<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
@@ -131,8 +141,8 @@ function validate2()
 			<input type="hidden" name="act" value="update_ad" />
 			<input type="hidden" name="form_audit" value="1" />
 			<input type="hidden" name="ad_id" value="<?php echo $this->_var['ad_detail']['ad_id']; ?>" />
-			<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_45268400_1324552205');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_45268400_1324552205']):
+			<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_32575800_1324879058');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_32575800_1324879058']):
 ?>
 			<input type="hidden" name="old_col[]" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" />
 			<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
@@ -140,11 +150,11 @@ function validate2()
 		</div>
 		</form>
 	<?php else: ?>
-		<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_45286400_1324552205');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_45286400_1324552205']):
+		<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_32597100_1324879058');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_32597100_1324879058']):
 ?>
 		<div class="city_info radius_5px">
-			<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_45286400_1324552205']; ?></div>
+			<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_32597100_1324879058']; ?></div>
 			<div class="f_left right_content"><?php echo $this->_var['ad_detail'][$this->_var['k']]; ?></div>	
 			<div class="clear"></div>
 		</div>

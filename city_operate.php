@@ -767,7 +767,9 @@ elseif($_REQUEST['act'] == 'export_db')
 	
 	$file_name = "Report_".$_SESSION['user_name']."_".local_date('Y-m-d-H-i-s', gmtime());
 
-	$city_title = $_LANG['city_title'];
+	$ad_sn = array("ad_sn" => "广告编号");
+	$tmp = $_LANG['city_title'];
+	$city_title = array_merge($ad_sn,$tmp);
 	$title_expend = array(
 			"lv_2"=>$_LANG['AUDIT']['2'],
 			"lv_3"=>$_LANG['AUDIT']['3'],

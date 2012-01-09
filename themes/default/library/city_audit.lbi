@@ -104,6 +104,15 @@ function validate2()
 <!--权限大于1才可见，电通级别的可以编辑-->
 {if $sm_session.user_rank > 1}
 	{if $sm_session.user_rank == 2}
+	
+		
+		<div class="city_info radius_5px">
+			<div class="f_left left_title left_radius_5px">牌子编号</div>
+			<div class="f_left right_content"><span class="red-block" style="width:40px;display:inline;" >新增</span> &nbsp;&nbsp;{$ad_detail.ad_sn}
+			</div>
+			<div class="past_content"><span class="grey999">已有</span>&nbsp;&nbsp;{$passed_ad_detail.ad_sn}</div>
+			<div class="clear"></div>
+		</div>
 		<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate2()">
 		<!--{foreach from=$city_title key=k item=item }-->
 		<div class="city_info radius_5px">
@@ -111,14 +120,15 @@ function validate2()
 			<div class="f_left right_content">
 				<!--{if $k == "col_1" || $k == "col_2" || $k == "col_3" || $k == "col_4" || $k == "col_5"}-->
 					<span>{$ad_detail.$k}</span>
-					<input type="hidden" name="col[]" value="{$ad_detail.$k}" size="50" />
+					<input type="hidden" name="col[]" value="{$ad_detail.$k}" />
 				<!--{else}-->
-					<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="50" />
-					<span class="f_right"><a target="_blank"  class="grey666" href="city_operate.php?act=view_log&ad_id={$ad_detail.ad_id}&col_name={$k}">
+					<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" style="width:250px;" />
+					<span class="f_right" style="margin-left:30px;"><a target="_blank"  class="grey666" href="city_operate.php?act=view_log&ad_id={$ad_detail.ad_id}&col_name={$k}">
 						修改记录</a></span>
 					
 				<!--{/if}-->
 			</div>
+			<div class="past_content"><span>{$passed_ad_detail.$k}</span></div>
 			<div class="clear"></div>
 		</div>
 		<!--{/foreach}-->

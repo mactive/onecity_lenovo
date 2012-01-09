@@ -69,14 +69,34 @@ for ($y=0;$y<count($all_sheets);$y++)
 		echo "<br>";
 		
 		
+		// SMB
 		if(!empty($city_id)){
-			
-			$sql = "UPDATE " . $GLOBALS['ecs']->table('city_resource') .
-	                " SET `Q2` = '6' ".
+			/*
+			$sql = "UPDATE " . $GLOBALS['ecs']->table('city') .
+	                " SET `col_42` = '1' ".
 	                "WHERE city_id = $city_id" ;			
 			
 			echo $sql.";<br>";
-		    //$GLOBALS['db']->query($sql);
+		    
+			
+			*/
+			
+			$sql_1 = "SELECT is_microsoft FROM " . $GLOBALS['ecs']->table('category') .
+	                "WHERE cat_id = $city_id" ;			
+			
+			$res = $GLOBALS['db']->getOne($sql_1);
+			
+			echo $res.":".$sql_1.";<br>";
+			
+			$sql = "UPDATE " . $GLOBALS['ecs']->table('category') .
+	                " SET `is_microsoft` = '1' ".
+	                "WHERE cat_id = $city_id" ;			
+			
+			//echo $sql.";<br>";
+			
+			
+			//$GLOBALS['db']->query($sql);
+			
 		$count = $count + 1; 			
 			
 		}else{

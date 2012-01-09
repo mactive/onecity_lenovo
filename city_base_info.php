@@ -176,7 +176,7 @@ elseif ($_REQUEST['act'] == 'update_ad_info')
 	
 	$ad_detail = get_city_info($ad_id);
 	$ad_detail['base_info_modify'] = $GLOBALS['db']->getOne('SELECT base_info_modify FROM ' .$GLOBALS['ecs']->table('city_ad')." WHERE ad_id = $ad_id limit 1");
-	$ad_detail['col_42'] = $col_42_array[$ad_detail['col_42']];
+	$ad_detail['col_42'] = $ad_detail['col_42'];
 	$smarty->assign('ad_detail', $ad_detail);
 	
 	$ad_info = get_ad_info($ad_id);
@@ -242,7 +242,8 @@ elseif($_REQUEST['act'] == 'act_update_ad_info')
 	$city_content['col_13'] = round($city_content['col_12'] * $city_content['col_11'],1); //面积 = 宽 * 高
 	$city_content['col_15'] = $city_content['col_13'] *  intval($city_content['col_14']); //总面积
 	$city_content['col_18'] = sep_days( $city_content['col_17'],$city_content['col_16']); //发布天数
-	
+	$city_content['col_22'] = intval($city_content['col_19']) + intval($city_content['col_20']) + intval($city_content['col_21']); //媒体总价
+
 
 	
 	if($ad_id){

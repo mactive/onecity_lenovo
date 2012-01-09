@@ -1,7 +1,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <!--权限大于1才可见，电通级别的可以编辑-->
 
-<div class="f_left" style="width:95%;background:#fafafa;border:2px solid #666;padding:20px;">
+<div class="f_left" style="width:95%;background:#fafafa;border:2px solid #666;padding:20px;margin:10px 0px;">
 	<div>之前的牌子审核纪录 牌子编号:{$passed_ad_detail.ad_sn}</div>
 	<div style="width:85%;" class="f_left">
 	<!--{foreach from=$passed_photo_info item=item}-->
@@ -15,6 +15,7 @@
 	
 	<div style="width:85%;" class="f_left">
 	
+	<!--{if $hace_a_day}-->
 <!--{foreach from=$passed_audit_path key=key item=level }-->
 <div class="audit_board radius_5px">
 	<div class="audit_level_title">{$lang.audit_level.$key}<span class="f_right">->> &nbsp;&nbsp;</span></div>
@@ -34,5 +35,8 @@
 	<div class="clear"></div>
 </div>
 <!--{/foreach}-->
+<!--{/if}-->
+
+
 </div>
 </div>
