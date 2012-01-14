@@ -58,12 +58,13 @@ for ($y=0;$y<count($all_sheets);$y++)
 		// $mature_emerging = trim($all_sheets[$y]['cells'][$row][8]);
 		// $mulching = trim($all_sheets[$y]['cells'][$row][9]);
 		
-		$region = trim($all_sheets[$y]['cells'][$row][1]);
-		$province = trim($all_sheets[$y]['cells'][$row][2]);
-		$county = trim($all_sheets[$y]['cells'][$row][3]);
-		$level = trim($all_sheets[$y]['cells'][$row][4]);
+		// $region = trim($all_sheets[$y]['cells'][$row][1]);
+		// $province = trim($all_sheets[$y]['cells'][$row][2]);
+		$county = trim($all_sheets[$y]['cells'][$row][1]);
+		$tmp = trim($all_sheets[$y]['cells'][$row][2]);
+		$type = ($tmp == "SMB") ? 1 : 2 ; 
 		
-		$city_id = get_cat_id_by_name($county);
+		$city_id = get_cat_id($county);
 		
 		//echo "ddd".$region."-".$province."-".$county."-".$city_id."-".$level;
 		echo "<br>";
@@ -80,17 +81,11 @@ for ($y=0;$y<count($all_sheets);$y++)
 		    
 			
 			*/
+			echo $county."-".$city_id."-".$type."<br>";
 			
-			$sql_1 = "SELECT is_microsoft FROM " . $GLOBALS['ecs']->table('category') .
-	                "WHERE cat_id = $city_id" ;			
-			
-			$res = $GLOBALS['db']->getOne($sql_1);
-			
-			echo $res.":".$sql_1.";<br>";
-			
-			$sql = "UPDATE " . $GLOBALS['ecs']->table('category') .
-	                " SET `is_microsoft` = '1' ".
-	                "WHERE cat_id = $city_id" ;			
+			$sql = "UPDATE " . $GLOBALS['ecs']->table('city') .
+	                " SET `col_42` = $type ".
+	                "WHERE city_id = $city_id" ;			
 			
 			//echo $sql.";<br>";
 			
@@ -100,7 +95,7 @@ for ($y=0;$y<count($all_sheets);$y++)
 		$count = $count + 1; 			
 			
 		}else{
-			echo $city."不存在<br>";
+			echo $county."不存在<br>";
 		}
 		
 	}
@@ -163,7 +158,7 @@ function act_province_array($province_array)
 
 function get_cat_id($cat_name){
 	$sql = 'SELECT cat_id FROM ' .$GLOBALS['ecs']->table('category').
-           " WHERE cat_name = '$cat_name' ";
+           " WHERE cat_name LIKE '%$cat_name%' ";
 	
     return $GLOBALS['db']->getOne($sql);
 	

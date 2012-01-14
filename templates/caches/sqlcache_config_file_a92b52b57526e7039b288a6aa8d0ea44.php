@@ -1,5 +1,5 @@
 <?php
-$this->mysql_config_cache_file_time = 1324901381;
+$this->mysql_config_cache_file_time = 1326511226;
 $this->timeline = 0;
 $this->timezone = 0;
 $this->platform = 'OTHER';

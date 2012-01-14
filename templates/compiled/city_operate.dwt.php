@@ -13,7 +13,6 @@
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="icon" href="animated_favicon.gif" type="image/gif" />
 <link href="themes/default/css.css" rel="stylesheet" type="text/css" />
-<link href="themes/default/css/overlay-apple.css" rel="stylesheet" type="text/css" />
 
 
 <?php echo $this->smarty_insert_scripts(array('files'=>'transport.js,utils.js,jquery.tools.min.js')); ?>
