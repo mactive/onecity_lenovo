@@ -18,7 +18,7 @@ define('AUDIT_3',    	3); //分区总经理 region_leader
 define('AUDIT_4',      	4); //中央专员 central_officer
 define('AUDIT_5',       5); //中央Leader central_leader
 
-define('CONTENT_COLS',       41); //中央Leader central_leader
+define('CONTENT_COLS',       32); //中央Leader central_leader
 define('CITY_AD_LIMIT',       5); //中央Leader central_leader
 
 define('SMBIDEA',       1); //SMB-IDEA-SMB-IDEA

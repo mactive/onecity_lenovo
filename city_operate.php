@@ -26,6 +26,7 @@ if ((DEBUG_MODE & 2) != 2)
 }
 $all_city_content = array();
 $smarty->assign('city_title', $_LANG['city_title']);
+$smarty->assign('city_dis_title', $_LANG['city_dis_title']);
 $smarty->assign('audit_title', $_LANG['AUDIT']);
 $smarty->assign('CONTENT_COLS', CONTENT_COLS);
 $col_42_array = $_LANG['pic_type_select_lite'];

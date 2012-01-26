@@ -742,56 +742,7 @@ $_LANG['audit_3'] = "分区总经理";
 $_LANG['audit_4'] = "中央专员";
 $_LANG['audit_5'] = "中央Leader";
 
-/* 44 个项目
-
-$_LANG['city_title']['col_1'] = "系统流水号";
-$_LANG['city_title']['col_2'] = "预算";
-$_LANG['city_title']['col_3'] = "大区";
-$_LANG['city_title']['col_4'] = "分区";
-$_LANG['city_title']['col_5'] = "省份";
-$_LANG['city_title']['col_6'] = "城市";
-$_LANG['city_title']['col_7'] = "城市级别";
-$_LANG['city_title']['col_8'] = "资源类型";
-$_LANG['city_title']['col_9'] = "卖场名称";
-$_LANG['city_title']['col_10'] = "卖场地址";
-$_LANG['city_title']['col_11'] = "是否为TOP卖场";
-$_LANG['city_title']['col_12'] = "场内场外";
-$_LANG['city_title']['col_13'] = "具体位置";
-$_LANG['city_title']['col_14'] = "媒体形式";
-$_LANG['city_title']['col_15'] = "见光尺寸(高m)";
-$_LANG['city_title']['col_16'] = "见光尺寸(宽m)";
-$_LANG['city_title']['col_17'] = "面积(m2)";
-$_LANG['city_title']['col_18'] = "数量";
-$_LANG['city_title']['col_19'] = "总面积";
-$_LANG['city_title']['col_20'] = "签约开始日期";
-$_LANG['city_title']['col_21'] = "签约结束日期";
-$_LANG['city_title']['col_22'] = "发布天数";
-$_LANG['city_title']['col_23'] = "媒体净价";
-$_LANG['city_title']['col_24'] = "单天成本";
-$_LANG['city_title']['col_25'] = "单天单平米成本";
-$_LANG['city_title']['col_26'] = "媒体总价";
-$_LANG['city_title']['col_27'] = "给渠道垫款税点比例(例:50%请填写50)";
-$_LANG['city_title']['col_28'] = "给渠道垫款税点金额";
-$_LANG['city_title']['col_29'] = "返款金额";
-$_LANG['city_title']['col_30'] = "垫款渠道编号";
-$_LANG['city_title']['col_31'] = "垫款渠道名称";
-$_LANG['city_title']['col_32'] = "渠道返款包类型";
-$_LANG['city_title']['col_33'] = "媒体联系人";
-$_LANG['city_title']['col_34'] = "联系方式";
-$_LANG['city_title']['col_35'] = "备注";
-$_LANG['city_title']['col_36'] = "每平米制作费";
-$_LANG['city_title']['col_37'] = "安装费";
-$_LANG['city_title']['col_38'] = "制作费合计";
-$_LANG['city_title']['col_39'] = "制作费备注";
-$_LANG['city_title']['col_40'] = "系统预留";
-$_LANG['city_title']['col_41'] = "代理公司审核状态";
-$_LANG['city_title']['col_42'] = "调研公司审核状态";
-$_LANG['city_title']['col_43'] = "媒体评分";
-$_LANG['city_title']['col_44'] = "08PO单号";
-$_LANG['city_title']['col_45'] = "City ID";
-*/
-
-/* 33个项目 */
+/* 42个项目 */
 $_LANG['city_title']['col_1'] = "分区";
 $_LANG['city_title']['col_2'] = "省份";
 $_LANG['city_title']['col_3'] = "市/县/镇";
@@ -834,6 +785,61 @@ $_LANG['city_title']['col_39'] = "合同尾款时间YYYY-MM";
 $_LANG['city_title']['col_40'] = "责任人";
 $_LANG['city_title']['col_41'] = "城市修改备注";
 $_LANG['city_title']['col_42'] = "费用来源";
+
+
+/* city_dis_title 个项目 */
+$_LANG['city_dis_title']['dis_1'] = "分区";
+$_LANG['city_dis_title']['dis_2'] = "省份";
+$_LANG['city_dis_title']['dis_3'] = "市/县/镇";
+$_LANG['city_dis_title']['dis_4'] = "城市级别";
+$_LANG['city_dis_title']['dis_5'] = "资源类型";
+$_LANG['city_dis_title']['dis_6'] = "所在区域";
+$_LANG['city_dis_title']['dis_7'] = "具体位置描述";
+$_LANG['city_dis_title']['dis_8'] = "城市人口数量(万人)";
+$_LANG['city_dis_title']['dis_9'] = "街道人流量(万人次/日)";
+$_LANG['city_dis_title']['dis_10'] = "媒体形式";
+$_LANG['city_dis_title']['dis_11'] = "见光尺寸(高m)";
+$_LANG['city_dis_title']['dis_12'] = "见光尺寸(宽m)";
+$_LANG['city_dis_title']['dis_13'] = "面积";
+$_LANG['city_dis_title']['dis_14'] = "数量";
+$_LANG['city_dis_title']['dis_15'] = "总面积";
+$_LANG['city_dis_title']['dis_16'] = "签约起始日期";
+$_LANG['city_dis_title']['dis_17'] = "签约结束日期";
+$_LANG['city_dis_title']['dis_18'] = "发布天数";
+$_LANG['city_dis_title']['dis_19'] = "媒体净价";
+$_LANG['city_dis_title']['dis_20'] = "税金";
+$_LANG['city_dis_title']['dis_21'] = "佣金";
+$_LANG['city_dis_title']['dis_22'] = "媒体总价";
+$_LANG['city_dis_title']['dis_23'] = "媒体评分";
+$_LANG['city_dis_title']['dis_24'] = "媒体联系人";
+$_LANG['city_dis_title']['dis_25'] = "联系方式";
+$_LANG['city_dis_title']['dis_26'] = "媒体公司名称、地址";
+
+$_LANG['city_dis_title']['dis_27'] = "甲方渠道编号";
+$_LANG['city_dis_title']['dis_28'] = "甲方渠道名称";
+$_LANG['city_dis_title']['dis_29'] = "上级分销商编号";
+$_LANG['city_dis_title']['dis_30'] = "上级分销商编号";
+
+$_LANG['city_dis_title']['dis_31'] = "责任人";
+$_LANG['city_dis_title']['dis_32'] = "备注";
+
+/*
+$_LANG['city_title']['col_28'] = "渠道编号";
+$_LANG['city_title']['col_29'] = "渠道名称";
+$_LANG['city_title']['col_30'] = "每平米制作费";
+$_LANG['city_title']['col_31'] = "安装费";
+$_LANG['city_title']['col_32'] = "制作费合计";
+$_LANG['city_title']['col_33'] = "制作费备注";
+$_LANG['city_title']['col_34'] = "合同首付额度(元)";
+$_LANG['city_title']['col_35'] = "合同首付时间YYYY-MM";
+$_LANG['city_title']['col_36'] = "合同中期付款额度(元)";
+$_LANG['city_title']['col_37'] = "合同中期付款时间YYYY-MM";
+$_LANG['city_title']['col_38'] = "合同尾款额度(元)";
+$_LANG['city_title']['col_39'] = "合同尾款时间YYYY-MM";
+$_LANG['city_title']['col_40'] = "责任人";
+$_LANG['city_title']['col_41'] = "城市修改备注";
+$_LANG['city_title']['col_42'] = "费用来源";
+*/
 
 //$_LANG['city_title']['col_43'] = "[报销审核]资料提交时间";
 //$_LANG['city_title']['col_44'] = "[报销审核]审核是否通过";

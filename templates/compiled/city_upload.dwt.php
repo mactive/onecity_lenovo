@@ -108,7 +108,7 @@
 		<div class="table_div" <?php if ($this->_var['act_step'] == "upload_file"): ?>style="width:4000px;"<?php endif; ?>>
 		<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
 			<tr>
-				<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item');if (count($_from)):
+				<?php $_from = $this->_var['city_dis_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item');if (count($_from)):
     foreach ($_from AS $this->_var['item']):
 ?>
 			  	<th><?php echo $this->_var['item']; ?></th>
