@@ -72,7 +72,7 @@
 
 			<div class="form-div">
 			  <form action="javascript:searchCRM()" name="searchForm">
-				<table width="80%" style="margin:10px auto;" class="table_standard table_border" border="1">
+				<table width="90%" style="margin:10px auto;" class="table_standard table_border" border="1">
 					<tr><td>
 						<img src="themes/default/images/green_arrow.png" alt=""/>
 						</td>
@@ -80,7 +80,12 @@
 						 搜索:
 					    	<?php echo $this->_var['lang']['region']; ?> <input name="region_name" type="text" id="region_name" size="10" value="<?php echo $this->_var['filter']['region_name']; ?>" />&nbsp;&nbsp;&nbsp;
 					    	<?php echo $this->_var['lang']['county']; ?> <input name="county_name" type="text" id="county_name" size="10" value="<?php echo $this->_var['filter']['county_name']; ?>" />&nbsp;&nbsp;&nbsp;
-					    	<?php echo $this->_var['lang']['market_level']; ?> <input name="market_level" type="text" id="market_level" size="10" value="<?php echo $this->_var['filter']['market_level']; ?>" /> 
+					    	<?php echo $this->_var['lang']['market_level']; ?> <input name="market_level" type="text" id="market_level" size="5" value="<?php echo $this->_var['filter']['market_level']; ?>" /> &nbsp;&nbsp;&nbsp;
+					    	是否包含<?php echo $this->_var['lang']['is_xz']; ?> 
+							<select name="has_new" id="has_new">
+						      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
+						      	<option value='1'><?php echo $this->_var['lang']['is_xz']; ?></option>
+							</select>
 						</td>
 					<td style="padding-left:30px;"><input type="submit" value="<?php echo $this->_var['lang']['button_search']; ?>" class="button" /> <input type="reset" value="重置" class="button" /></td>
 					</tr>
@@ -96,6 +101,7 @@
 			<?php endif; ?>
 				<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
 				    <tr>
+					  	<th width="35"><?php echo $this->_var['lang']['is_xz']; ?></th>
 					  	<th><?php echo $this->_var['lang']['region']; ?></th>
 				      	<th><?php echo $this->_var['lang']['province']; ?></th>
 				      	<th><?php echo $this->_var['lang']['county']; ?></th>
@@ -118,6 +124,7 @@ if ($this->_foreach['index_idea']['total'] > 0):
 					<tr <?php if ($this->_var['city']['is_upload']): ?>
 								class="city_upload"
 						<?php endif; ?>>
+						<td><?php if ($this->_var['city']['has_new']): ?><span class="red-block">新增</span><?php endif; ?></td>
 						<td><?php echo $this->_var['city']['region']; ?></td>
 						<td><?php echo $this->_var['city']['province']; ?></td>
 						<td><?php echo $this->_var['city']['county']; ?></td>
@@ -189,6 +196,7 @@ if ($this->_foreach['index_idea']['total'] > 0):
 			      listTable.filter['region_name'] = document.getElementById("region_name").value;
 			      listTable.filter['county_name'] = document.getElementById("county_name").value;
 			      listTable.filter['market_level'] = document.getElementById("market_level").value;
+			      listTable.filter['has_new'] = document.getElementById("has_new").value;
 			      listTable.filter['page'] = 1;
 			      listTable.loadList();
 			  }

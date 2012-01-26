@@ -699,18 +699,5 @@ function get_project_passed($project_id,$start_time,$end_time,$children){
 	return $res;
 }
 
-// 07/01/2011 -> 2011-07-01
-function transdate($data){
-	$tmp = date( 'Y-m-d ',strtotime($data));//preg_replace( "/\d{2}\/\d{2}\/\d{4}/ ", "2007-09-18 ",$data); 
-	//echo $tmp;
-	return $tmp;
-}
-
-function sep_days($end_date,$start_date)
-{
- 	$temp = strtotime(transdate($end_date))-strtotime(transdate($start_date));
- 	$days = $temp/(60*60*24);
- 	return $days+1;
-}
 
 ?>

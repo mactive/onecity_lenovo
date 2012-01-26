@@ -86,6 +86,14 @@
 						      	<option value='0'>{$lang.select_please}</option>
 								{html_options options=$lang.audit_status_select selected=$filter.audit_status}
 							</select>
+							&nbsp;&nbsp;&nbsp;
+							
+							是否包含{$lang.is_xz} 
+							<select name="has_new" id="has_new">
+						      	<option value='0'>{$lang.select_please}</option>
+						      	<option value='1'>{$lang.is_xz}</option>
+							</select>
+							&nbsp;&nbsp;&nbsp;
 						</td>
 
 					<td style="padding-left:30px;"><input type="submit" value="{$lang.button_search}" class="button" /> <input type="reset" value="重置" class="button" /></td>
@@ -100,8 +108,10 @@
 			<!-- start crm list -->
 			<div id="listDiv" class="table_div">
 			{/if}
+			
 				<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
 				    <tr>
+					  	<th width="35">{$lang.is_xz}</th>
 					  	<th>{$lang.region}</th>
 				      	<th width="50">{$lang.province}</th>
 				      	<th>{$lang.county}</th>
@@ -115,6 +125,7 @@
 				    </tr>
 				<!--{foreach from=$city_list item=city name=index_idea}-->
 					<tr {if $city.base_info_changed == 1 }class="city_upload"{/if}>
+						<td>{if $city.has_new}<span class="red-block">新增</span>{/if}</td>
 						<td>{$city.region}</td>
 						<td>{$city.province}</td>
 						<td>{$city.county}</td>
@@ -268,6 +279,7 @@
 			      listTable.filter['market_level'] = document.getElementById("market_level").value;
 			      listTable.filter['project_id'] = 9;
 			      listTable.filter['audit_status'] = document.getElementById("audit_status").value;
+			      listTable.filter['has_new'] = document.getElementById("has_new").value;
 			      listTable.filter['page'] = 1;
 			      listTable.loadList();
 			  }

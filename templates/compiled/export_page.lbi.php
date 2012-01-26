@@ -22,12 +22,21 @@
 					      <?php echo $this->html_options(array('options'=>$this->_var['market_level_array'],'selected'=>$this->_var['item']['market_level'])); ?>
 					</select>
 				&nbsp;&nbsp;&nbsp;
+				
+
 				<?php echo $this->_var['lang']['audit_status']; ?>
 		 			<select name="audit_status">
 						<option value="0"><?php echo $this->_var['lang']['select_please']; ?></option>
 					      <?php echo $this->html_options(array('options'=>$this->_var['audit_status_array'],'selected'=>$this->_var['item']['audit_status'])); ?>
 					</select>
 				&nbsp;&nbsp;&nbsp;
+				是否包含<?php echo $this->_var['lang']['is_xz']; ?> 
+				<select name="has_new">
+			      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
+			      	<option value='1'><?php echo $this->_var['lang']['is_xz']; ?></option>
+				</select>
+				&nbsp;&nbsp;&nbsp;
+				
 				<br><br>
 				<?php echo $this->_var['lang']['start_time']; ?>				
 				<input name="start_time" value="<?php echo $this->_var['start_date']; ?>" style="width:80px;" onclick="return showCalendar(this, '%Y-%m-%d', false, false, this);" />

@@ -106,7 +106,7 @@
 		<div class="clear"></div>
 		
 		<!--{if $act_step == "upload_file"}-->
-		<div class="table_div" {if $act_step == "upload_file"}style="width:4000px;"{/if}>
+		<div class="table_div" {if $act_step == "upload_file"}style="width:2500px;"{/if}>
 		<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
 			<tr>
 				<!--{foreach from=$city_dis_title item=item }-->

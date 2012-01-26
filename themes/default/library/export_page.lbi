@@ -23,12 +23,21 @@
 					      {html_options options=$market_level_array selected=$item.market_level}
 					</select>
 				&nbsp;&nbsp;&nbsp;
+				
+
 				{$lang.audit_status}
 		 			<select name="audit_status">
 						<option value="0">{$lang.select_please}</option>
 					      {html_options options=$audit_status_array selected=$item.audit_status}
 					</select>
 				&nbsp;&nbsp;&nbsp;
+				是否包含{$lang.is_xz} 
+				<select name="has_new">
+			      	<option value='0'>{$lang.select_please}</option>
+			      	<option value='1'>{$lang.is_xz}</option>
+				</select>
+				&nbsp;&nbsp;&nbsp;
+				
 				<br><br>
 				{$lang.start_time}				
 				<input name="start_time" value="{$start_date}" style="width:80px;" onclick="return showCalendar(this, '%Y-%m-%d', false, false, this);" />

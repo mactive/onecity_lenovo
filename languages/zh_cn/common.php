@@ -785,6 +785,11 @@ $_LANG['city_title']['col_39'] = "合同尾款时间YYYY-MM";
 $_LANG['city_title']['col_40'] = "责任人";
 $_LANG['city_title']['col_41'] = "城市修改备注";
 $_LANG['city_title']['col_42'] = "费用来源";
+// new added
+$_LANG['city_title']['col_43'] = "甲方渠道编号";
+$_LANG['city_title']['col_44'] = "甲方渠道名称";
+$_LANG['city_title']['col_45'] = "上级分销商编号";
+$_LANG['city_title']['col_46'] = "上级分销商编号";
 
 
 /* city_dis_title 个项目 */

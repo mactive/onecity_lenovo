@@ -58,6 +58,7 @@ function get_city_list($children,$limit = 0){
     $filter['region_name'] = empty($_REQUEST['region_name']) ? '' : trim($_REQUEST['region_name']);
     $filter['market_level'] = empty($_REQUEST['market_level']) ? '' : trim($_REQUEST['market_level']);
     $filter['audit_status'] = empty($_REQUEST['audit_status']) ? 0 : $_REQUEST['audit_status'];
+    $filter['has_new'] = empty($_REQUEST['has_new']) ? 0 : $_REQUEST['has_new'];
 	
 	$filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'inv_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
@@ -83,6 +84,10 @@ function get_city_list($children,$limit = 0){
     if ($filter['audit_status'])
     {
         $where .= " AND a.audit_status = $filter[audit_status] ";
+    }
+    if ($filter['has_new'])
+    {
+        $where .= " AND a.has_new = $filter[has_new] ";
     }
 
 
@@ -130,7 +135,7 @@ function get_city_list($children,$limit = 0){
 	$request_title = "re.lv_".$_SESSION['user_rank'];
 	$limit_sql = $limit > 0 ? " LIMIT 0,$limit ": " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
 	
-	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, ". //
+	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, a.has_new, ". //
 			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
 			",$request_title AS city_request " . 
 			" FROM ".$GLOBALS['ecs']->table('category') . " AS a ".
@@ -320,7 +325,6 @@ function get_city_id($ad_id)
 
 function get_city_info($ad_id = 0)
 {
-	
 	if($ad_id){
 		$city_info = $GLOBALS['db']->getRow("SELECT * FROM " . $GLOBALS['ecs']->table('city') . " WHERE ad_id = $ad_id");
 		return $city_info;
@@ -498,13 +502,17 @@ function act_city_request($city_id,$level,$is_cancel = 0)
 }
 
 /**/
-function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_time,$end_time,$r_title,$limit = 0){
+function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_time,$end_time,$r_title,$has_new,$limit = 0){
 	
 	$where = ' WHERE '. $children ;
 	
     if ($resource)
     {
         $where .= " AND c.resource = $resource ";
+    }
+    if ($has_new)
+    {
+        $where .= " AND ad.is_new = 1 ";
     }
 	if ($market_level)
     {
@@ -567,6 +575,10 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
 			$res[$key]['lv_3'] = get_audit_note($val['ad_id'],3);
 			$res[$key]['lv_4'] = get_audit_note($val['ad_id'],4);
 			$res[$key]['lv_5'] = get_audit_note($val['ad_id'],5);
+			
+			$res[$key]['start_date'] = intval(sep_days($val['col_16'],"01/01/1970"));
+			$res[$key]['end_date'] = intval(sep_days($val['col_17'],"01/01/1970"));
+			
 			$res[$key]['col_42'] = $col_42_array[$val['col_42']];
 			$res[$key]['resource_type'] = $r_title[$val['resource']];
 			$res[$key]['last_audit_time'] = get_audit_time($val['ad_id'],5);
@@ -1118,12 +1130,13 @@ function get_base_info_list($children,$limit = 0){
     $filter['market_level'] = empty($_REQUEST['market_level']) ? '' : trim($_REQUEST['market_level']);
     $filter['project_id'] = empty($_REQUEST['project_id']) ? 0 : $_REQUEST['project_id'];
     $filter['audit_status'] = empty($_REQUEST['audit_status']) ? '' : trim($_REQUEST['audit_status']);
+    $filter['has_new'] = empty($_REQUEST['has_new']) ? '' : trim($_REQUEST['has_new']);
 
 	$filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'inv_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
 	
-	$where = ' WHERE '. $children ." AND ad.is_audit_confirm = 1 AND ad.audit_status = 5 AND re.sys_level = 5 ";
+	$where = ' WHERE '. $children . " AND ad.is_audit_confirm = 1 AND ad.audit_status = 5 AND re.sys_level = 5 ";
 	//$where.= $_SESSION['user_rank'] > 1 ? " AND re.req_id > 0 " : "" ;
 	// 最终通过的权限要求 ID
     if ($filter['county_name'])
@@ -1157,6 +1170,10 @@ function get_base_info_list($children,$limit = 0){
 	if ($filter['market_level'])
     {
         $where .= " AND a.market_level LIKE '%" . mysql_like_quote($filter['market_level']) . "%'";
+    }
+    if ($filter['has_new'])
+    {
+        $where .= " AND a.has_new = 1 AND ad.is_new = 1    "; //AND ad.is_new = 1 
     }
 
 
@@ -1229,9 +1246,9 @@ function get_base_info_list($children,$limit = 0){
 	
 	$request_title = "re.lv_".$_SESSION['user_rank'];
 	$limit_sql = $limit > 0 ? " LIMIT 0,$limit ": " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
-	$order_sql = $_SESSION['user_rank'] == 1 ? " ORDER BY city.city_id DESC " : " ORDER BY city.city_id DESC " ;
+	$order_sql = $_SESSION['user_rank'] == 1 ? " ORDER BY ad.city_id DESC " : " ORDER BY ad.city_id DESC " ;
 	
-	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, a.is_microsoft, ". //
+	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, a.is_microsoft,a.has_new, ". //
 			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region , ad.ad_id, ad.base_info_changed , ad.base_info_modify,au.audit_note ".
 			//" pr.req_id, pr.price, pr.price_amount, pr.request_price, pr.request_price_amount,  (ad.price_status - $_SESSION[user_rank]) AS t1 ".
 			" FROM ".$GLOBALS['ecs']->table('category') . " AS a ".
@@ -1239,7 +1256,6 @@ function get_base_info_list($children,$limit = 0){
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ". 
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad').   " AS ad ON ad.city_id = a.cat_id ".
-			" LEFT JOIN " .$GLOBALS['ecs']->table('city').   " AS city ON city.ad_id = ad.ad_id ".
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource').  " AS re ON re.city_id = a.cat_id ".
 			
 			" LEFT JOIN (" . $sql_max . ') AS au ON au.ad_id = ad.ad_id '.
@@ -1264,6 +1280,28 @@ function get_base_info_list($children,$limit = 0){
 function make_ad_sn($ad_id, $city_id){
 	
 	if($ad_id > 0  && $city_id > 0){
+		
+		$has_new  = 0;
+		$sql = "SELECT count(*)  FROM " . $GLOBALS['ecs']->table('city_ad') . 
+		    " WHERE city_id = $city_id AND audit_status = 5 AND is_upload = 1 AND is_audit_confirm = 1 ";
+	    $passed_count =  $GLOBALS['db']->getOne($sql);
+
+		// 已经有一块牌子通过 或者 新增的城市[ID>2779] 那么都算新城市
+		if($passed_count >= 1 || $city_id > 2779){
+			$has_new = 1;
+
+			//更新分类信息 for 如果是新城市那么就更新 caegory
+			$sql = "UPDATE " . $GLOBALS['ecs']->table('category') . " SET has_new = '1'  WHERE cat_id = '$city_id'";
+	       	$GLOBALS['db']->query($sql);
+
+			$sql = "UPDATE " . $GLOBALS['ecs']->table('city_ad') . " SET is_new = '1'  WHERE ad_id = '$ad_id'";
+	       	$GLOBALS['db']->query($sql);
+
+		}
+
+
+		$add_word = $has_new == 1 ? "_XZ_" : "_ZC_" ;
+		
 		
 		$region_array = array();
 		$level_array = array();
@@ -1308,13 +1346,13 @@ function make_ad_sn($ad_id, $city_id){
 		$market_level = $level_array[$market_level_tmp];
 
 		$ad_number = substr(strval($ad_id+10000),1,4); 
+		
 		if(isset($region_sname) && isset($market_level) && isset($ad_number) ){
-			$ad_sn = "FY".$year_short."_ZC_".$region_sname."_".$market_level."_".$ad_number;
+			$ad_sn = "FY".$year_short.$add_word.$region_sname."_".$market_level."_".$ad_number;
 			$sql = "UPDATE " . $GLOBALS['ecs']->table('city') . " SET ad_sn = '$ad_sn'  WHERE ad_id = $ad_id ";
-			echo $ad_sn."<br>";
 	    	return $ad_sn;
 		}else{
-			$ad_sn = "FY".$year_short."_ZC_".$region_sname."_".$market_level."_".$ad_number;
+			$ad_sn = "FY".$year_short.$add_word.$region_sname."_".$market_level."_".$ad_number;
 			echo $city_id.",".$ad_sn."<br>";
 			return 0;
 		}
@@ -1343,7 +1381,15 @@ function get_passed_ad_id($city_id){
     $res =  $GLOBALS['db']->getOne($sql); 
 	// echo $sql;
 	return $res;
-	
+}
+
+
+// 07/01/2011 -> 2011-07-01
+function sep_days($end_date,$start_date)
+{
+ 	$temp = strtotime(date( 'Y-m-d ',strtotime($end_date)))-strtotime(date( 'Y-m-d ',strtotime($start_date)));
+ 	$days = $temp/(60*60*24);
+ 	return $days+1;
 }
 
 

@@ -292,9 +292,9 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 		$record_id = $exist_ad_info['record_id'];
 		
 			//echo "**".$sys_level."--$record_id"."<br>";
-			if($val['col_1'] == NULL || $val['col_2'] == NULL || $val['col_3'] == NULL || $val['col_4'] == NULL || $val['col_5'] == NULL || $val['col_6'] == NULL || $val['col_7'] == NULL || $val['col_8'] == NULL || $val['col_9'] == NULL || $val['col_10'] == NULL || $val['col_11'] == NULL || $val['col_12'] == NULL || $val['col_13'] == NULL || $val['col_14'] == NULL || $val['col_15'] == NULL || $val['col_16'] == NULL || $val['col_17'] == NULL || $val['col_18'] == NULL || $val['col_19'] == NULL || $val['col_20'] == NULL || $val['col_22'] == NULL || $val['col_24'] == NULL || $val['col_25'] == NULL || $val['col_26'] == NULL || $val['col_27'] == NULL || $val['col_28'] == NULL || $val['col_29'] == NULL || $val['col_30'] == NULL || $val['col_31'] == NULL || $val['col_32'] == NULL || $val['col_34'] == NULL || $val['col_35'] == NULL || $val['col_36'] == NULL || $val['col_37'] == NULL || $val['col_38'] == NULL || $val['col_39'] == NULL || $val['col_40'] == NULL){
+			if($val['col_1'] == NULL || $val['col_2'] == NULL || $val['col_3'] == NULL || $val['col_4'] == NULL || $val['col_5'] == NULL || $val['col_6'] == NULL || $val['col_7'] == NULL || $val['col_8'] == NULL || $val['col_9'] == NULL || $val['col_10'] == NULL || $val['col_11'] == NULL || $val['col_12'] == NULL || $val['col_14'] == NULL || $val['col_16'] == NULL || $val['col_17'] == NULL || $val['col_19'] == NULL || $val['col_20'] == NULL || $val['col_24'] == NULL || $val['col_25'] == NULL || $val['col_26'] == NULL || $val['col_27'] == NULL || $val['col_28'] == NULL || $val['col_29'] == NULL || $val['col_30'] == NULL || $val['col_31'] == NULL ){
 				$issue = $val;
-				$issue['temp_status'] = "除 佣金(U列)、媒体评分(W列)、制作费备注(AG列)、更改城市备注(AO列) 其他均为必填项,如果没有佣金也清填写0";
+				$issue['temp_status'] = "除 佣金(U列) 媒体评分(W列)、备注(AF列) 其他均为必填项,如果没有佣金也清填写0";
 				array_push($problem_array,$issue);
 			}
 			elseif($record_id){
@@ -325,27 +325,43 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 						$issue['temp_status'] = "该城市已经有通过的牌子,不可以再上传新的";
 						array_push($problem_array,$issue);
 					}else{
+						// 自动处理灰色的列表
 						$tmp = $val;
-						$market_level = get_market_level("",$val['city_id']);						
-						
-						$tmp['city_name'] = $val['col_3'];
+						$market_level = get_market_level("",$val['city_id']);
 						$base_info = get_base_info($val['city_id']);
+						$tmp['city_name'] = $val['col_3'];
 						$tmp['col_1'] = $base_info['region_name'];
 						$tmp['col_2'] = $base_info['province_name'];
 						$tmp['col_4'] = $market_level;
+						
+						// 2012 REPAIRMENT
+						
+						$tmp['col_13'] = round($tmp['col_12'] * $tmp['col_11'],1); //面积 = 宽 * 高
+						$tmp['col_15'] = $tmp['col_13'] *  intval($tmp['col_14']); //总面积
+						$tmp['col_18'] = sep_days( $val['col_17'],$val['col_16']); //发布天数
+						$tmp['col_22'] = intval($val['col_19']) + intval($val['col_20']) + intval($val['col_21']); //媒体总价
+						
+						$tmp['col_40'] = $val['col_31']; //责任人
+						$tmp['col_41'] = $val['col_32']; //备注
+						
+						$tmp['col_27'] = $tmp['col_28'] = $tmp['col_29'] = $tmp['col_30'] = $tmp['col_31'] = $tmp['col_32']  = "";
+						$tmp['col_43'] = $val['col_27']; //甲方编号
+						$tmp['col_44'] = $val['col_28']; //甲方名称
+						$tmp['col_45'] = $val['col_29']; //上级编号
+						$tmp['col_46'] = $val['col_30']; //上级名称
+						
+						// echo "=================<br>";
+						// print_r($tmp);
+						
 						$tmp['is_upload'] = 1; //要等上传完照片
 						$tmp['audit_status'] = 1;
+						
+						/**/
 						$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $tmp, 'INSERT');
-
 						$tmp['ad_id'] = $GLOBALS['db']->insert_id();
 						$tmp['ad_sn'] = make_ad_sn($tmp['ad_id'], $val['city_id']);
 						$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $tmp, 'INSERT');
 
-						//echo "=============";
-						//更新分类信息 for 一城一牌
-						$sql = "UPDATE " . $GLOBALS['ecs']->table('category') . " SET is_upload = '1',  audit_status = '1'  WHERE cat_id = '$val[city_id]'";
-			        	$GLOBALS['db']->query($sql);
-						
 						//4级城市直接通过
 						if($market_level == "4"){
 							act_level_4_city_upload($val['city_id'],$tmp['ad_id']);
@@ -417,6 +433,7 @@ elseif($_REQUEST['act'] == 'edit_ad' || $_REQUEST['act'] == 'view_ad')
 	$ad_detail = get_city_info($ad_id);
 	$ad_detail['col_42'] = $col_42_array[$ad_detail['col_42']];
 	$smarty->assign('ad_detail', $ad_detail);
+	print_r($ad_detail);
 	
 	$ad_info = get_ad_info($ad_id);
 	$smarty->assign('ad_info', $ad_info);
@@ -748,6 +765,7 @@ elseif($_REQUEST['act'] == 'export_db')
 	$market_level 	= empty($_REQUEST['market_level']) ? "" : trim($_REQUEST['market_level']);
 	$audit_status 	= empty($_REQUEST['audit_status']) ? "" : trim($_REQUEST['audit_status']);
 	$resource 		= empty($_REQUEST['resource']) ? "" : intval($_REQUEST['resource']);
+	$has_new 		= empty($_REQUEST['has_new']) ? "" : intval($_REQUEST['has_new']);
     
 	$start_time = empty($_REQUEST['start_time']) ? '0' : trim($_REQUEST['start_time']);
     $end_time   = empty($_REQUEST['end_time']) ? '0' : trim($_REQUEST['end_time']);
@@ -764,7 +782,7 @@ elseif($_REQUEST['act'] == 'export_db')
 	$limit = 2500;
 	$r_title = $_LANG['resource'];
 
-    $ad_list = getFull_ad_list($children,$market_level,$audit_status,$resource,$start_time,$end_time,$r_title,$limit);
+    $ad_list = getFull_ad_list($children,$market_level,$audit_status,$resource,$start_time,$end_time,$r_title,$has_new,$limit);
 	
 	$file_name = "Report_".$_SESSION['user_name']."_".local_date('Y-m-d-H-i-s', gmtime());
 
@@ -772,6 +790,8 @@ elseif($_REQUEST['act'] == 'export_db')
 	$tmp = $_LANG['city_title'];
 	$city_title = array_merge($ad_sn,$tmp);
 	$title_expend = array(
+			"start_date"=>"开始日期[数字]",
+			"end_date"=>"结束日期[数字]",
 			"lv_2"=>$_LANG['AUDIT']['2'],
 			"lv_3"=>$_LANG['AUDIT']['3'],
 			"lv_4"=>$_LANG['AUDIT']['4'],
