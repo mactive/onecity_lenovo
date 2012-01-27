@@ -83,6 +83,11 @@
 						<a class="back_url" href="city_operate.php?act=city_ad_list&city_id=<?php echo $this->_var['ad_info']['city_id']; ?>"></a>
 					</div>
 					
+					
+					<?php if ($this->_var['ad_info']['is_new']): ?>
+					<?php echo $this->fetch('library/overlap_info.htm'); ?>
+					<?php endif; ?>
+					
 					<?php echo $this->fetch('library/audit_path.htm'); ?>
 					
 					<?php $_from = $this->_var['photo_info']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item');if (count($_from)):

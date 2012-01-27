@@ -326,7 +326,9 @@ function get_city_id($ad_id)
 function get_city_info($ad_id = 0)
 {
 	if($ad_id){
-		$city_info = $GLOBALS['db']->getRow("SELECT * FROM " . $GLOBALS['ecs']->table('city') . " WHERE ad_id = $ad_id");
+		$sql = 	" SELECT * FROM " . $GLOBALS['ecs']->table('city') . " WHERE ad_id = $ad_id";
+		
+		$city_info = $GLOBALS['db']->getRow($sql);
 		return $city_info;
 	}
 }
@@ -582,6 +584,19 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
 			$res[$key]['col_42'] = $col_42_array[$val['col_42']];
 			$res[$key]['resource_type'] = $r_title[$val['resource']];
 			$res[$key]['last_audit_time'] = get_audit_time($val['ad_id'],5);
+
+			if($val['is_new'] == 1){
+				$tmp_arr = get_overlap_info(get_another_ad_id($val['city_id'],$val['ad_id']),$val['ad_id']);
+				$res[$key]['fee_1'] = $tmp_arr['fee_1'];
+				$res[$key]['fee_2'] = $tmp_arr['fee_2'];
+				$res[$key]['fee_3'] = $tmp_arr['fee_3'];
+				$res[$key]['fee_4'] = $tmp_arr['fee_4'];
+				$res[$key]['fee_5'] = $tmp_arr['fee_5'];
+			}else{
+				$res[$key]['fee_1'] = $res[$key]['fee_2'] = $res[$key]['fee_3'] = $res[$key]['fee_4'] = $res[$key]['fee_5'] = "老牌子不计算费用";
+			}
+
+			
 			//echo $res[$key]['ad_id']."-".$val['resource']."-".$res[$key]['resource_type']."<br>";
 		}
 	}
@@ -1390,6 +1405,35 @@ function sep_days($end_date,$start_date)
  	$temp = strtotime(date( 'Y-m-d ',strtotime($end_date)))-strtotime(date( 'Y-m-d ',strtotime($start_date)));
  	$days = $temp/(60*60*24);
  	return $days+1;
+}
+
+function get_overlap_info($another_ad_id,$ad_id){
+	$res = array();	
+	$old_ad_info = get_city_info($another_ad_id);
+	$ad_info = get_city_info($ad_id);
+	
+	$res['fee_1'] = sep_days($old_ad_info['col_17'],$ad_info['col_16']);
+	$res['fee_2'] = intval($ad_info['col_19'] / $ad_info['col_18'] *  $res['fee_1']);
+	$tt = $ad_info['col_19'] + $ad_info['col_20'] - $res['fee_2'];
+	$res['fee_3'] = intval($tt * 0.50 );
+	$res['fee_4'] = intval($tt * 0.15 );
+	$res['fee_5'] = intval($tt * 0.65 );
+	return $res;
+}
+
+
+function get_another_ad_id($city_id,$ad_id){
+	if($city_id && $ad_id){
+		$sql = 	" SELECT ad_id FROM " . $GLOBALS['ecs']->table('city_ad') . 
+		" WHERE city_id = $city_id AND audit_status = 5 AND is_upload = 1 AND is_audit_confirm = 1 ";
+		$tmp = $GLOBALS['db']->getCol($sql);
+		foreach($tmp AS $v){
+			if($v != $ad_id ){
+				return $v;
+			}
+		}
+	}
+	
 }
 
 

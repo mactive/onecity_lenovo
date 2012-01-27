@@ -92,6 +92,11 @@
 						<a class="back_url" href="city_operate.php?act=city_ad_list&city_id={$ad_info.city_id}"></a>
 					</div>
 					
+					<!--如果是新牌子-->
+					<!--{if $ad_info.is_new}-->
+					{include file="library/overlap_info.htm"}
+					<!--{/if}-->
+					
 					{include file="library/audit_path.htm"}
 					
 					<!--{foreach from=$photo_info item=item}-->

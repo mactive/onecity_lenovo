@@ -8,14 +8,14 @@
 	<div class="audit_level_title"><?php echo $this->_var['lang']['audit_level'][$this->_var['key']]; ?><span class="f_right">->> &nbsp;&nbsp;</span></div>
 	<div></div>
 	<div class="audit_level_content">
-		<?php $_from = $this->_var['level']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item_0_38308200_1324550200');if (count($_from)):
-    foreach ($_from AS $this->_var['item_0_38308200_1324550200']):
+		<?php $_from = $this->_var['level']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item_0_43114200_1327646757');if (count($_from)):
+    foreach ($_from AS $this->_var['item_0_43114200_1327646757']):
 ?>
 		<div class="audit_record">
-		<span class="grey999"><?php echo $this->_var['item_0_38308200_1324550200']['time']; ?></span><br />
-		<span class="grey666"><?php echo $this->_var['item_0_38308200_1324550200']['real_name']; ?></span><br />
-		<div style="padding:0px 5px;line-height:20px;" <?php if ($this->_var['item_0_38308200_1324550200']['audit_note'] == "审核通过"): ?>class="bg_green radius_5px"<?php else: ?>class="bg_red radius_5px"<?php endif; ?>>
-			<?php echo $this->_var['item_0_38308200_1324550200']['audit_note']; ?>
+		<span class="grey999"><?php echo $this->_var['item_0_43114200_1327646757']['time']; ?></span><br />
+		<span class="grey666"><?php echo $this->_var['item_0_43114200_1327646757']['real_name']; ?></span><br />
+		<div style="padding:0px 5px;line-height:20px;" <?php if ($this->_var['item_0_43114200_1327646757']['audit_note'] == "审核通过"): ?>class="bg_green radius_5px"<?php else: ?>class="bg_red radius_5px"<?php endif; ?>>
+			<?php echo $this->_var['item_0_43114200_1327646757']['audit_note']; ?>
 		</div>
 		</div>
 		<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>

@@ -12,7 +12,7 @@
     <li <?php if ($this->_var['act_step'] == "show"): ?>class="selected"<?php endif; ?>>
 		<a href="city_operate.php" style="background:url(<?php echo $this->_var['img_path']; ?>ico/flagged.png) no-repeat 10px center;">查看城市</a></li>
 	<li><a href="city_operate.php?act=export_page" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">导出报表</a></li>
-	<li><a href="download/final_model.zip" style="background:url(<?php echo $this->_var['img_path']; ?>ico/project.png) no-repeat 10px center;">模版下载</a></li>
+	<li><a href="download/FY12_model.zip" style="background:url(<?php echo $this->_var['img_path']; ?>ico/project.png) no-repeat 10px center;">模版下载</a></li>
 	<?php if ($this->_var['sm_session']['user_rank'] >= 4): ?>
 	<li><a href="city_operate.php?act=querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">确认率实时统计</a></li>
 	<?php endif; ?>

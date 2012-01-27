@@ -28,6 +28,7 @@ $all_city_content = array();
 $smarty->assign('city_title', $_LANG['city_title']);
 $smarty->assign('city_dis_title', $_LANG['city_dis_title']);
 $smarty->assign('audit_title', $_LANG['AUDIT']);
+$smarty->assign('publish_fee_title', $_LANG['publish_fee_title']);
 $smarty->assign('CONTENT_COLS', CONTENT_COLS);
 $col_42_array = $_LANG['pic_type_select_lite'];
 
@@ -433,10 +434,19 @@ elseif($_REQUEST['act'] == 'edit_ad' || $_REQUEST['act'] == 'view_ad')
 	$ad_detail = get_city_info($ad_id);
 	$ad_detail['col_42'] = $col_42_array[$ad_detail['col_42']];
 	$smarty->assign('ad_detail', $ad_detail);
-	print_r($ad_detail);
 	
 	$ad_info = get_ad_info($ad_id);
 	$smarty->assign('ad_info', $ad_info);
+	
+	if($ad_info['is_new'] == 1){
+		$another_ad_id = get_another_ad_id($ad_info['city_id'],$ad_id);
+		$smarty->assign('another_ad_id', $another_ad_id);
+		
+		$overlap_info = get_overlap_info($another_ad_id,$ad_id);
+		$smarty->assign('overlap_info', $overlap_info);
+		
+		
+	}
 
 	if($ad_info['audit_status'] > 1){
 		if($ad_info['is_audit_confirm'] == 1){
@@ -788,17 +798,20 @@ elseif($_REQUEST['act'] == 'export_db')
 
 	$ad_sn = array("ad_sn" => "广告编号");
 	$tmp = $_LANG['city_title'];
+	$publish_fee_title = $_LANG['publish_fee_title'];
 	$city_title = array_merge($ad_sn,$tmp);
 	$title_expend = array(
-			"start_date"=>"开始日期[数字]",
-			"end_date"=>"结束日期[数字]",
 			"lv_2"=>$_LANG['AUDIT']['2'],
 			"lv_3"=>$_LANG['AUDIT']['3'],
 			"lv_4"=>$_LANG['AUDIT']['4'],
 			"lv_5"=>$_LANG['AUDIT']['5'],
 			// "quarter"=>"Q1审核记录",
 			"last_audit_time"=>"最终审核时间",
-			"resource_type"=>$_LANG['resource_title']);
+			"resource_type"=>$_LANG['resource_title'],
+			"start_date"=>"开始日期[数字]",
+			"end_date"=>"结束日期[数字]");
+	
+	$title_expend = array_merge($title_expend,$publish_fee_title);
 	$title = array_merge($city_title,$title_expend);
 	//print_r($title);
 	

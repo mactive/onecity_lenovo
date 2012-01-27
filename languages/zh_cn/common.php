@@ -762,7 +762,7 @@ $_LANG['city_title']['col_16'] = "签约起始日期";
 $_LANG['city_title']['col_17'] = "签约结束日期";
 $_LANG['city_title']['col_18'] = "发布天数";
 $_LANG['city_title']['col_19'] = "媒体净价";
-$_LANG['city_title']['col_20'] = "渠道税金";
+$_LANG['city_title']['col_20'] = "渠道税金=媒体净价*渠道税点";
 $_LANG['city_title']['col_21'] = "佣金";
 $_LANG['city_title']['col_22'] = "媒体总价";
 $_LANG['city_title']['col_23'] = "媒体评分";
@@ -827,6 +827,14 @@ $_LANG['city_dis_title']['dis_30'] = "上级分销商编号";
 
 $_LANG['city_dis_title']['dis_31'] = "责任人";
 $_LANG['city_dis_title']['dis_32'] = "备注";
+
+/*重复发布费用*/
+$_LANG['publish_fee_title']['fee_1'] = "重叠发布天数=新增加广告牌与该城市旧广告牌同时发布的天数";
+$_LANG['publish_fee_title']['fee_2'] = "重叠天数发布费=媒体净价/发布天数*重叠发布天数";
+$_LANG['publish_fee_title']['fee_3'] = "返款50%=（媒体净价+渠道税金-重叠天数发布费）*50% ";
+$_LANG['publish_fee_title']['fee_4'] = "返款15%=（媒体净价+渠道税金-重叠天数发布费）*15% ";
+$_LANG['publish_fee_title']['fee_5'] = "返款65%=（媒体净价+渠道税金-重叠天数发布费）*65%";
+
 
 /*
 $_LANG['city_title']['col_28'] = "渠道编号";
