@@ -88,7 +88,7 @@
 							是否包含<?php echo $this->_var['lang']['is_xz']; ?> 
 							<select name="has_new" id="has_new">
 						      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
-						      	<option value='1'><?php echo $this->_var['lang']['is_xz']; ?></option>
+						      	<option value='1' <?php if ($this->_var['filter']['has_new']): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_xz']; ?></option>					    
 							</select>
 							&nbsp;&nbsp;&nbsp;
 						</td>

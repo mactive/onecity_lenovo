@@ -1,6 +1,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<div class="f_left">
-		<a class="back_url" href="city_operate.php?region_name={$city_name}"></a>
+		<a class="back_url" href="city_operate.php?region_name={$city_name}&has_new={$has_new}"></a>
 	</div>
 	<div class="facebox f_left">
 		<table width="100%" class="table_border table_standard" border="1">

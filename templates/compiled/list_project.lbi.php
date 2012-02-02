@@ -12,35 +12,35 @@
 			  	<th><?php echo $this->_var['lang']['city_list']; ?></th>
 			  	<th><?php echo $this->_var['lang']['handler']; ?></th>
 		    </tr>
-		<?php $_from = $this->_var['project_list']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item_0_08466700_1327571093');if (count($_from)):
-    foreach ($_from AS $this->_var['item_0_08466700_1327571093']):
+		<?php $_from = $this->_var['project_list']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item_0_81803300_1328176908');if (count($_from)):
+    foreach ($_from AS $this->_var['item_0_81803300_1328176908']):
 ?>
 			<tr>
-				<td><?php echo $this->_var['item_0_08466700_1327571093']['project_name']; ?></td>
-				<td><?php echo $this->_var['item_0_08466700_1327571093']['project_status']; ?>
-					总计<span class="underline"> <?php echo $this->_var['item_0_08466700_1327571093']['summary']['city_count']; ?> </span>块牌子<br>
-					<?php if ($this->_var['item_0_08466700_1327571093']['project_id'] == 1): ?><span class="underline"> <?php echo $this->_var['item_0_08466700_1327571093']['summary']['write_complete']; ?> </span>块牌子已填写合同信息<br><?php endif; ?>
-					<span class="underline"> <?php echo $this->_var['item_0_08466700_1327571093']['summary']['upload']; ?> </span>块牌子已反馈效果<br>
-					<span class="underline"> <?php echo $this->_var['item_0_08466700_1327571093']['summary']['confirm']; ?> </span>块牌子换画已经通过审核
+				<td><?php echo $this->_var['item_0_81803300_1328176908']['project_name']; ?></td>
+				<td><?php echo $this->_var['item_0_81803300_1328176908']['project_status']; ?>
+					总计<span class="underline"> <?php echo $this->_var['item_0_81803300_1328176908']['summary']['city_count']; ?> </span>块牌子<br>
+					<?php if ($this->_var['item_0_81803300_1328176908']['project_id'] == 1): ?><span class="underline"> <?php echo $this->_var['item_0_81803300_1328176908']['summary']['write_complete']; ?> </span>块牌子已填写合同信息<br><?php endif; ?>
+					<span class="underline"> <?php echo $this->_var['item_0_81803300_1328176908']['summary']['upload']; ?> </span>块牌子已反馈效果<br>
+					<span class="underline"> <?php echo $this->_var['item_0_81803300_1328176908']['summary']['confirm']; ?> </span>块牌子换画已经通过审核
 				</td>
-				<td><?php echo $this->_var['item_0_08466700_1327571093']['project_note']; ?></td>
-				<td><?php echo $this->_var['item_0_08466700_1327571093']['start_time']; ?></td>
+				<td><?php echo $this->_var['item_0_81803300_1328176908']['project_note']; ?></td>
+				<td><?php echo $this->_var['item_0_81803300_1328176908']['start_time']; ?></td>
 				<td>
-					<?php echo $this->_var['item_0_08466700_1327571093']['duration_time']; ?>天
+					<?php echo $this->_var['item_0_81803300_1328176908']['duration_time']; ?>天
 				</td>
 				<td><?php if ($this->_var['sm_session']['user_rank'] == 1): ?>
-						<a href="city_project.php?act=list_city_to_select&project_id=<?php echo $this->_var['item_0_08466700_1327571093']['project_id']; ?>" class="list_city_to_select"></a>
+						<a href="city_project.php?act=list_city_to_select&project_id=<?php echo $this->_var['item_0_81803300_1328176908']['project_id']; ?>&has_new=<?php echo $this->_var['has_new']; ?>" class="list_city_to_select"></a>
 					<?php else: ?>
-						<a href="city_project.php?act=list_city_to_select&project_id=<?php echo $this->_var['item_0_08466700_1327571093']['project_id']; ?>" class="view_city"></a>
+						<a href="city_project.php?act=list_city_to_select&project_id=<?php echo $this->_var['item_0_81803300_1328176908']['project_id']; ?>&has_new=<?php echo $this->_var['has_new']; ?>" class="view_city"></a>
 					<?php endif; ?>
 				</td>				
 				<td>
 					<?php if ($this->_var['sm_session']['user_rank'] == 4): ?>
-						<a href="city_project.php?act=edit_project&project_id=<?php echo $this->_var['item_0_08466700_1327571093']['project_id']; ?>">修改</a> 
+						<a href="city_project.php?act=edit_project&project_id=<?php echo $this->_var['item_0_81803300_1328176908']['project_id']; ?>">修改</a> 
 					<?php endif; ?>
 
 					<?php if ($this->_var['sm_session']['user_rank'] == 2): ?>
-						<a href="city_project.php?act=list_picture&project_id=<?php echo $this->_var['item_0_08466700_1327571093']['project_id']; ?>">广告列表</a>
+						<a href="city_project.php?act=list_picture&project_id=<?php echo $this->_var['item_0_81803300_1328176908']['project_id']; ?>">广告列表</a>
 					<?php endif; ?>
 				</td>
 			</tr>

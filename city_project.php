@@ -108,11 +108,13 @@ if (!$smarty->is_cached('project_list.dwt', $cache_id) && $act == 'list_project'
 	$position['ur_here'] .= "<li>项目列表</li>"; 
     $smarty->assign('page_title',       $position['title']);    // 页面标题
     $smarty->assign('ur_here',          $position['ur_here']);  // 当前位置
+	$has_new = isset($_REQUEST['has_new'])   && intval($_REQUEST['has_new'])  > 0 ? intval($_REQUEST['has_new'])  : 0;
 
 	$children = get_city_children_a($user_region);
 
 	$project_list = get_project_list($children);
 	$smarty->assign('project_list',    $project_list);
+	$smarty->assign('has_new',    $has_new);
 	
 	$smarty->display('project_view.dwt');	
 }

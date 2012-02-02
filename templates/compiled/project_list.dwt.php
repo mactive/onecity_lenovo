@@ -87,6 +87,11 @@
 							<select id="audit_status">
 						      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
 								<?php echo $this->html_options(array('options'=>$this->_var['lang']['audit_status_select'],'selected'=>$this->_var['filter']['audit_status'])); ?>
+							</select><br/>
+							是否包含<?php echo $this->_var['lang']['is_xz']; ?>
+							<select name="has_new" id="has_new">
+						      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
+						      	<option value='1' <?php if ($this->_var['filter']['has_new']): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_xz']; ?></option>					    
 							</select>
 							
 						</td>
@@ -128,7 +133,9 @@ if ($this->_foreach['index_idea']['total'] > 0):
 					<tr>
 						<td class="center">
 							<?php if ($this->_var['city']['pic_view']): ?><a href="<?php echo $this->_var['city']['pic_view']; ?>"><?php echo $this->_var['lang']['pic_type_select'][$this->_var['city']['nowQ']]; ?></a>
-							<?php else: ?><?php echo $this->_var['lang']['pic_type_select'][$this->_var['city']['nowQ']]; ?><?php endif; ?></td>
+							<?php else: ?><?php echo $this->_var['lang']['pic_type_select'][$this->_var['city']['nowQ']]; ?><?php endif; ?>
+							<?php if ($this->_var['city']['has_new']): ?><span class="red-block">新增</span><?php endif; ?>
+							</td>
 						<td><?php echo $this->_var['city']['region']; ?></td>
 						<td><?php echo $this->_var['city']['province']; ?></td>
 						<td><?php echo $this->_var['city']['county']; ?></td>
@@ -264,6 +271,7 @@ if ($this->_foreach['index_idea']['total'] > 0):
 			      listTable.filter['market_level'] = document.getElementById("market_level").value;
 			      listTable.filter['resource'] = document.getElementById("resource").value;
 			      listTable.filter['audit_status'] = document.getElementById("audit_status").value;
+			      listTable.filter['has_new'] = document.getElementById("has_new").value;
 			      listTable.filter['page'] = 1;
 			      listTable.loadList();
 			  }

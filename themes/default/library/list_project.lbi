@@ -28,9 +28,9 @@
 					{$item.duration_time}天
 				</td>
 				<td>{if $sm_session.user_rank == 1}
-						<a href="city_project.php?act=list_city_to_select&project_id={$item.project_id}" class="list_city_to_select"></a>
+						<a href="city_project.php?act=list_city_to_select&project_id={$item.project_id}&has_new={$has_new}" class="list_city_to_select"></a>
 					{else}
-						<a href="city_project.php?act=list_city_to_select&project_id={$item.project_id}" class="view_city"></a>
+						<a href="city_project.php?act=list_city_to_select&project_id={$item.project_id}&has_new={$has_new}" class="view_city"></a>
 					{/if}
 				</td>				
 				<td>

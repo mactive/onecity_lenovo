@@ -81,10 +81,10 @@
 					    	<?php echo $this->_var['lang']['region']; ?> <input name="region_name" type="text" id="region_name" size="10" value="<?php echo $this->_var['filter']['region_name']; ?>" />&nbsp;&nbsp;&nbsp;
 					    	<?php echo $this->_var['lang']['county']; ?> <input name="county_name" type="text" id="county_name" size="10" value="<?php echo $this->_var['filter']['county_name']; ?>" />&nbsp;&nbsp;&nbsp;
 					    	<?php echo $this->_var['lang']['market_level']; ?> <input name="market_level" type="text" id="market_level" size="5" value="<?php echo $this->_var['filter']['market_level']; ?>" /> &nbsp;&nbsp;&nbsp;
-					    	是否包含<?php echo $this->_var['lang']['is_xz']; ?> 
+					    	是否包含<?php echo $this->_var['lang']['is_xz']; ?>
 							<select name="has_new" id="has_new">
 						      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
-						      	<option value='1'><?php echo $this->_var['lang']['is_xz']; ?></option>
+						      	<option value='1' <?php if ($this->_var['filter']['has_new']): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_xz']; ?></option>					    
 							</select>
 						</td>
 					<td style="padding-left:30px;"><input type="submit" value="<?php echo $this->_var['lang']['button_search']; ?>" class="button" /> <input type="reset" value="重置" class="button" /></td>

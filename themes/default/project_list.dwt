@@ -90,6 +90,11 @@
 							<select id="audit_status">
 						      	<option value='0'>{$lang.select_please}</option>
 								{html_options options=$lang.audit_status_select selected=$filter.audit_status}
+							</select><br/>
+							是否包含{$lang.is_xz}
+							<select name="has_new" id="has_new">
+						      	<option value='0'>{$lang.select_please}</option>
+						      	<option value='1' {if $filter.has_new}selected="selected"{/if}>{$lang.is_xz}</option>					    
 							</select>
 							
 						</td>
@@ -127,7 +132,9 @@
 					<tr>
 						<td class="center">
 							{if $city.pic_view}<a href="{$city.pic_view}">{$lang.pic_type_select.$city.nowQ}</a>
-							{else}{$lang.pic_type_select.$city.nowQ}{/if}</td>
+							{else}{$lang.pic_type_select.$city.nowQ}{/if}
+							{if $city.has_new}<span class="red-block">新增</span>{/if}
+							</td>
 						<td>{$city.region}</td>
 						<td>{$city.province}</td>
 						<td>{$city.county}</td>
@@ -261,6 +268,7 @@
 			      listTable.filter['market_level'] = document.getElementById("market_level").value;
 			      listTable.filter['resource'] = document.getElementById("resource").value;
 			      listTable.filter['audit_status'] = document.getElementById("audit_status").value;
+			      listTable.filter['has_new'] = document.getElementById("has_new").value;
 			      listTable.filter['page'] = 1;
 			      listTable.loadList();
 			  }

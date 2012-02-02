@@ -143,10 +143,12 @@ elseif ($_REQUEST['act'] == 'query_show')
  */
 elseif ($_REQUEST['act'] == 'city_ad_list')
 {
-	$city_id = isset($_REQUEST['city_id'])   && intval($_REQUEST['city_id'])  > 0 ? intval($_REQUEST['city_id'])  : 0;   
+	$city_id = isset($_REQUEST['city_id'])   && intval($_REQUEST['city_id'])  > 0 ? intval($_REQUEST['city_id'])  : 0;
+	
 	$base_info = get_base_info($city_id);
 	$city_name = $base_info['region_name'];
 	$smarty->assign('city_name',   $city_name);
+	$smarty->assign('has_new',   $base_info['has_new']);
 	
 	$ad_list = get_ad_list_by_cityid($city_id);
 	$smarty->assign('ad_list',   $ad_list);

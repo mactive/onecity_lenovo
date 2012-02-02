@@ -763,6 +763,7 @@ function get_project_city($children,$limit = 0){
     $filter['resource'] = empty($_REQUEST['resource']) ? 0 : $_REQUEST['resource'];
     $filter['market_level'] = empty($_REQUEST['market_level']) ? '' : trim($_REQUEST['market_level']);
     $filter['audit_status'] = empty($_REQUEST['audit_status']) ? '' : trim($_REQUEST['audit_status']);
+    $filter['has_new'] = empty($_REQUEST['has_new']) ? '' : trim($_REQUEST['has_new']);
 
 	$filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'inv_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
@@ -806,7 +807,10 @@ function get_project_city($children,$limit = 0){
     {
         $where .= " AND a.market_level LIKE '%" . mysql_like_quote($filter['market_level']) . "%'";
     }
-
+    if ($filter['has_new'])
+    {
+        $where .= " AND a.has_new = 1 AND ad.is_new = 1    "; //AND ad.is_new = 1 
+    }
 
 
 
@@ -883,7 +887,7 @@ function get_project_city($children,$limit = 0){
 	$limit_sql = $limit > 0 ? " LIMIT 0,$limit ": " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
 	$order_sql = $_SESSION['user_rank'] == 1 ? " ORDER BY city.$update_time_quarter DESC " : " ORDER BY city.$update_time_quarter DESC " ;
 	
-	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, a.is_microsoft, ". //
+	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, a.is_microsoft, a.has_new, ". //
 			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region , ad.ad_id, ".
 			//" pr.req_id, pr.price, pr.price_amount, pr.request_price, pr.request_price_amount,  (ad.price_status - $_SESSION[user_rank]) AS t1 ".
 			" city.col_19,city.col_20  ,city.$can_modify_quarter AS can_modify, re.resource, re.$quarter AS nowQ , au.audit_note ".
@@ -1025,7 +1029,7 @@ function get_city_confirm_ad_num($city_id){
 }
 //获得城市的大区名字
 function get_base_info($city_id){
-	$sql = "SELECT a.cat_name AS city_name,a1.cat_name AS county_name, a2.cat_name AS province_name,a3.cat_name AS region_name FROM " . 
+	$sql = "SELECT a.cat_name AS city_name,a1.cat_name AS county_name, a2.cat_name AS province_name,a3.cat_name AS region_name,a.has_new  FROM " . 
 			$GLOBALS['ecs']->table('category') . " AS a ".
 			" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
@@ -1145,7 +1149,7 @@ function get_base_info_list($children,$limit = 0){
     $filter['market_level'] = empty($_REQUEST['market_level']) ? '' : trim($_REQUEST['market_level']);
     $filter['project_id'] = empty($_REQUEST['project_id']) ? 0 : $_REQUEST['project_id'];
     $filter['audit_status'] = empty($_REQUEST['audit_status']) ? '' : trim($_REQUEST['audit_status']);
-    $filter['has_new'] = empty($_REQUEST['has_new']) ? '' : trim($_REQUEST['has_new']);
+    $filter['has_new'] = empty($_REQUEST['has_new']) ? '' : intval($_REQUEST['has_new']);
 
 	$filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'inv_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);

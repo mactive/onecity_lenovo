@@ -216,6 +216,7 @@ elseif ($_REQUEST['act'] == 'update_ad_info')
 	$city_name = $base_info['region_name'];
 	$smarty->assign('city_name',   $city_name);
 	$smarty->assign('project_id',   $project_id);	
+	$smarty->assign('is_new',   $ad_info['is_new']);	
 	
 	$smarty->display('base_info_view.dwt');	
 }
