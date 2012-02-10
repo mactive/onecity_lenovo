@@ -95,6 +95,8 @@
 					<!--如果是新牌子-->
 					<!--{if $ad_info.is_new}-->
 					{include file="library/overlap_info.htm"}
+					<!--{else}-->
+					{include file="library/renew_overlap_info.htm"}
 					<!--{/if}-->
 					
 					{include file="library/audit_path.htm"}
@@ -137,6 +139,13 @@
 				
 				<!--{if $act_step == "project_querenlv"}-->
 				<!-- #BeginLibraryItem "/library/project_querenlv.lbi" -->
+				>
+				<!-- #EndLibraryItem -->
+				<!--{/if}-->
+				
+				
+				<!--{if $act_step == "new_project_querenlv"}-->
+				<!-- #BeginLibraryItem "/library/new_project_querenlv.lbi" -->
 				>
 				<!-- #EndLibraryItem -->
 				<!--{/if}-->

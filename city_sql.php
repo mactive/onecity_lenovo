@@ -278,7 +278,6 @@ elseif($_REQUEST['act'] == 'IDEA_2'){
 	echo "</table>";
 }
 
-
 elseif($_REQUEST['act'] == 'IDEA'){
 	if($_SESSION['user_rank'] < 4){
 		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
@@ -328,6 +327,58 @@ elseif($_REQUEST['act'] == 'IDEA'){
 		echo "<td>".$val['county']."</td>";
 		echo "<td>".$_LANG['audit_level'][$val['audit_status']]."</td>";
 		echo "<td>".$val['is_audit_confirm']."</td>";
+		echo "</tr>";
+	}
+	echo "</table>";
+}
+
+
+/*
+*  idea
+*/
+
+
+elseif($_REQUEST['act'] == 'material'){
+	if($_SESSION['user_rank'] < 4){
+		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
+	}
+	
+	$type =  !empty($_REQUEST['type']) ? intval($_REQUEST['type']) : 1;
+	switch ($type) {
+		case '1':
+			$sql_plus = " AND ma.is_send = 1  ";
+			break;
+		//
+		case '2':
+			$sql_plus = " AND ma.is_receive = 1 ";
+			break;
+
+	}
+	
+	$sql_1 = "SELECT a.cat_id,a.cat_name AS county , ma.time , ".
+				"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
+				" FROM ".$GLOBALS['ecs']->table('category') ." AS a ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.city_id = a.cat_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_material') . " AS ma ON ma.ad_id = ad.ad_id ".
+			" WHERE  1 ". $sql_plus .
+			" GROUP BY ad.city_id ORDER BY ad.city_id ASC ";
+	//echo $sql_1;
+	$res = $GLOBALS['db']->getAll($sql_1);
+	
+	
+	echo count($res)."<br>";
+	echo "<table>";
+	
+	foreach($res AS $val){
+		echo "<tr>";
+		echo "<td>".$val['region']."</td>";
+		echo "<td>".$val['province']."</td>";
+		echo "<td>".$val['city']."</td>";
+		echo "<td>".$val['county']."</td>";
+		echo "<td>".$val['time']."</td>";
 		echo "</tr>";
 	}
 	echo "</table>";

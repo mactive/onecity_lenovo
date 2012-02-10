@@ -789,7 +789,7 @@ $_LANG['city_title']['col_42'] = "费用来源";
 $_LANG['city_title']['col_43'] = "甲方渠道编号";
 $_LANG['city_title']['col_44'] = "甲方渠道名称";
 $_LANG['city_title']['col_45'] = "上级分销商编号";
-$_LANG['city_title']['col_46'] = "上级分销商编号";
+$_LANG['city_title']['col_46'] = "上级分销商名称";
 
 
 /* city_dis_title 个项目 */
@@ -834,6 +834,18 @@ $_LANG['publish_fee_title']['fee_2'] = "重叠天数发布费=媒体净价/发�
 $_LANG['publish_fee_title']['fee_3'] = "返款50%=（媒体净价+渠道税金-重叠天数发布费）*50% ";
 $_LANG['publish_fee_title']['fee_4'] = "返款15%=（媒体净价+渠道税金-重叠天数发布费）*15% ";
 $_LANG['publish_fee_title']['fee_5'] = "返款65%=（媒体净价+渠道税金-重叠天数发布费）*65%";
+$_LANG['publish_fee_note']['fee_1'] = "天";
+$_LANG['publish_fee_note']['fee_2'] = "元";
+$_LANG['publish_fee_note']['fee_3'] = "元";
+$_LANG['publish_fee_note']['fee_4'] = "元";
+$_LANG['publish_fee_note']['fee_5'] = "元";
+
+$_LANG['renew_fee_note']['fee_1'] = "返款50%=（媒体净价+渠道税金）*50% ";
+$_LANG['renew_fee_note']['fee_2'] = "返款15%=（媒体净价+渠道税金）*15% ";
+$_LANG['renew_fee_note']['fee_3'] = "返款65%=（媒体净价+渠道税金）*65% ";
+
+
+
 
 
 /*
@@ -881,6 +893,31 @@ $_LANG['AUDIT']['3'] = "分区总经理";
 $_LANG['AUDIT']['4'] = "中央专员";
 $_LANG['AUDIT']['5'] = "中央Leader";
 
+/* 各个分区新增牌子数量*/
+$_LANG['based_new_nums']['2'] = "24";
+$_LANG['based_new_nums']['3'] = "3";
+$_LANG['based_new_nums']['4'] = "14";
+$_LANG['based_new_nums']['5'] = "12";
+$_LANG['based_new_nums']['6'] = "26";
+$_LANG['based_new_nums']['7'] = "16";
+$_LANG['based_new_nums']['8'] = "29";
+$_LANG['based_new_nums']['9'] = "18";
+$_LANG['based_new_nums']['10'] = "33";
+$_LANG['based_new_nums']['11'] = "14";
+$_LANG['based_new_nums']['12'] = "38";
+$_LANG['based_new_nums']['13'] = "28";
+$_LANG['based_new_nums']['14'] = "24";
+$_LANG['based_new_nums']['15'] = "28";
+$_LANG['based_new_nums']['16'] = "3";
+$_LANG['based_new_nums']['17'] = "17";
+$_LANG['based_new_nums']['18'] = "24";
+$_LANG['based_new_nums']['19'] = "26";
+$_LANG['based_new_nums']['20'] = "6";
+$_LANG['based_new_nums']['21'] = "21";
+$_LANG['based_new_nums']['22'] = "2";
+$_LANG['based_new_nums']['23'] = "30";
+
+
 /*项目列表*/
 $_LANG['project_id'] = "项目ID";
 $_LANG['project_name'] = "项目名称";
@@ -901,6 +938,8 @@ $_LANG['price_title']['request_price'] = "[申请]每平米制作费";
 $_LANG['price_title']['request_price_amount'] = "[申请]制作费合计";
 $_LANG['price_title']['request_note'] = "[申请]理由";
 $_LANG['is_xz'] = "新增";
+$_LANG['is_all'] = "全部";
+$_LANG['is_no_xz'] = "不包含新增";
 
 
 /**/

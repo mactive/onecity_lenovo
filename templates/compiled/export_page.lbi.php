@@ -29,11 +29,13 @@
 						<option value="0"><?php echo $this->_var['lang']['select_please']; ?></option>
 					      <?php echo $this->html_options(array('options'=>$this->_var['audit_status_array'],'selected'=>$this->_var['item']['audit_status'])); ?>
 					</select>
-				&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;<br>
 				是否包含<?php echo $this->_var['lang']['is_xz']; ?> 
 				<select name="has_new">
 			      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
 			      	<option value='1'><?php echo $this->_var['lang']['is_xz']; ?></option>
+			      	<option value='2'><?php echo $this->_var['lang']['is_all']; ?></option>
+			      	<option value='3'><?php echo $this->_var['lang']['is_no_xz']; ?></option>
 				</select>
 				&nbsp;&nbsp;&nbsp;
 				

@@ -32,15 +32,15 @@
 			<!--{if  ($ad_detail.base_info_modify != 0 && $sm_session.user_rank == 1) && ($k != "col_1" && $k != "col_2" && $k != "col_3" && $k != "col_4" && $k != "col_5" && $k != "col_23" && $k != "col_27" && $k != "col_41" )}-->
 				{if $k == "col_16" || $k == "col_17" || $k == "col_18" || $k == "col_35" || $k == "col_37" || $k == "col_39"}
 						{if $k == "col_18" }
-						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#ffffff;" readonly=1/>
+						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="37" style="background:#ffffff;" readonly=1/>
 						{elseif $k == "col_16" || $k == "col_17"}
-						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#fffead;" rel="datepicker" onchange=sep_days() readonly=1 />
+						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="37" style="background:#fffead;" rel="datepicker" onchange=sep_days() readonly=1 />
 						{else}
-						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#fffead;" rel="datepicker" readonly=1 />
+						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="37" style="background:#fffead;" rel="datepicker" readonly=1 />
 						
 						{/if}
 				{elseif $k == "col_13" || $k == "col_15" ||  $k == "col_22"}
-						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="45" style="background:#ffffff;" readonly=1/>
+						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="37" style="background:#ffffff;" readonly=1/>
 				
 				{elseif $k == "col_10"}
 					<select id="{$k}" name="col[]">
@@ -53,7 +53,7 @@
 				{elseif $k == "col_19" || $k == "col_20" || $k == "col_21" }
 					<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" onblur=calc_price() style="background:#fffead;"/>
 				{else}
-					<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" {if $k == "col_12"}size="20"{else}size="45"{/if}  {if $k == "col_11" || $k == "col_12" || $k == "col_14"}onblur=calc_area(){/if} style="background:#fffead;"/>
+					<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" {if $k == "col_12"}size="20"{else}size="37"{/if}  {if $k == "col_11" || $k == "col_12" || $k == "col_14"}onblur=calc_area(){/if} style="background:#fffead;"/>
 				{/if}
 			<!--{else}-->
 					<span>{$ad_detail.$k}</span>

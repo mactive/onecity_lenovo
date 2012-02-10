@@ -63,6 +63,10 @@
 			<?php endif; ?>
 				
 			
+			<?php if ($this->_var['act_step'] == "new_querenlv"): ?>
+			<?php echo $this->fetch('library/new_querenlv.lbi'); ?>
+			<?php endif; ?>	
+			
 			<?php if ($this->_var['act_step'] == "city_ad_audit"): ?>
 			<?php echo $this->fetch('library/city_ad_audit.lbi'); ?>
 			<?php endif; ?>

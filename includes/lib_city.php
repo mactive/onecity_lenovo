@@ -514,7 +514,13 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
     }
     if ($has_new)
     {
-        $where .= " AND ad.is_new = 1 ";
+		if($has_new == 1){
+	        $where .= " AND ad.is_new = 1 ";
+		}elseif($has_new == 3){
+			$where .= " AND ad.is_new = 0 ";
+		}else{
+			$where .= "";
+		}
     }
 	if ($market_level)
     {
@@ -1436,9 +1442,9 @@ function get_another_ad_id($city_id,$ad_id){
 				return $v;
 			}
 		}
-	}
-	
+	}	
 }
+
 
 
 ?>

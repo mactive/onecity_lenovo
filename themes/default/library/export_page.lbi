@@ -30,11 +30,13 @@
 						<option value="0">{$lang.select_please}</option>
 					      {html_options options=$audit_status_array selected=$item.audit_status}
 					</select>
-				&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;<br>
 				是否包含{$lang.is_xz} 
 				<select name="has_new">
 			      	<option value='0'>{$lang.select_please}</option>
 			      	<option value='1'>{$lang.is_xz}</option>
+			      	<option value='2'>{$lang.is_all}</option>
+			      	<option value='3'>{$lang.is_no_xz}</option>
 				</select>
 				&nbsp;&nbsp;&nbsp;
 				

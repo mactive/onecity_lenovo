@@ -86,6 +86,8 @@
 					
 					<?php if ($this->_var['ad_info']['is_new']): ?>
 					<?php echo $this->fetch('library/overlap_info.htm'); ?>
+					<?php else: ?>
+					<?php echo $this->fetch('library/renew_overlap_info.htm'); ?>
 					<?php endif; ?>
 					
 					<?php echo $this->fetch('library/audit_path.htm'); ?>
@@ -126,6 +128,11 @@
 				
 				<?php if ($this->_var['act_step'] == "project_querenlv"): ?>
 				<?php echo $this->fetch('library/project_querenlv.lbi'); ?>
+				<?php endif; ?>
+				
+				
+				<?php if ($this->_var['act_step'] == "new_project_querenlv"): ?>
+				<?php echo $this->fetch('library/new_project_querenlv.lbi'); ?>
 				<?php endif; ?>
 				
 				<?php if ($this->_var['act_step'] == "export_page"): ?>

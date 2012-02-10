@@ -99,13 +99,12 @@
 				</table>
 			  </form>
 			</div>
-			<div class="yellow_notice" style="font-size:14px;color:#ff0000;">请按照合同内容需要重新检查的广告牌的基础信息</div>
+			<div class="yellow_notice" style="font-size:14px;color:#ff0000;">以下的广告牌都是通过审核的。请按照合同内容需要重新检查的广告牌的基础信息</div>
 			
 			<form method="post" name="listForm"  onsubmit="return confirmSubmit(this)">
 			
 			<div id="listDiv" class="table_div">
 			<?php endif; ?>
-			<?php echo $this->_var['sql']; ?>
 				<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
 				    <tr>
 					  	<th width="35"><?php echo $this->_var['lang']['is_xz']; ?></th>

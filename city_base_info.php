@@ -399,6 +399,7 @@ elseif($_REQUEST['act'] == 'update_base_info_audit')
 	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 0;
 	$confirm = !empty($_REQUEST['confirm']) ? intval($_REQUEST['confirm']) : 0;
 	$recycle = $_POST['recycle'];
+	$ad_info = get_ad_info($ad_id);
 	
 	
 	/* 写入审核历史数据库*/
@@ -410,7 +411,7 @@ elseif($_REQUEST['act'] == 'update_base_info_audit')
 	$audit_info['audit_note'] = $confirm > 0 ? "审核通过": trim($_POST['audit_note']);
 	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad_audit'), $audit_info, 'INSERT');
 	
-	$return_url = "city_base_info.php?act=ad_list&project_id=$project_id";
+	$return_url = "city_base_info.php?act=ad_list&project_id=$project_id&has_new=$ad_info[is_new]";
 	
 	if($confirm == 1){
 		$city_content['base_info_modify'] = 0;	
@@ -602,6 +603,77 @@ elseif($_REQUEST['act'] == 'base_info_querenlv')
 			}
 		}
 		
+		
+	}
+	
+	$smarty->assign('data',   $base);
+	$smarty->display('base_info_view.dwt');
+	
+}
+
+elseif($_REQUEST['act'] == 'new_querenlv')
+{
+	if($_SESSION['user_rank'] < 4 && $_SESSION['user_rank'] != 2  ){
+		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
+	}
+	
+	$based_new_nums = array();
+	$based_new_nums = $_LANG['based_new_nums'];
+	
+	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 9;
+	$smarty->assign('project_id',   $project_id);
+	$date = date('Y-m-d H:i:s',(gmtime()+28800));
+	$smarty->assign('date',   $date);
+	
+	
+	$sql = "SELECT COUNT( * ) AS  amount,col_1 FROM ".$GLOBALS['ecs']->table('city')." GROUP BY col_1  ORDER BY  CONVERT( col_1 USING GBK )   ASC ";
+	$base = $GLOBALS['db']->getAll($sql);
+	//echo $sql."<br>";
+	foreach($base AS $key => $value){
+		
+		$cat_id = get_cat_id_by_name($value['col_1']);
+		$children = get_city_children_a(array($cat_id));
+		
+		/*6级城市*/
+		$sql_6 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city_resource'). " AS a " .
+				" WHERE $children  AND a.market_level LIKE'%6%' "; //
+		
+		$sql_6_upload = "SELECT ad.ad_id  FROM ".$GLOBALS['ecs']->table('city_ad'). " AS ad " .
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ". 
+				" WHERE $children AND ad.base_info_changed = 1 ".
+				" AND ad.is_new = 1 ".
+				" GROUP BY ad.ad_id ";
+				
+		// echo $sql_6_upload."<br>";
+
+		$sql_6_plus = "SELECT au.ad_id FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ". 
+				" WHERE $children AND au.feedback_audit = '$project_id' AND au.audit_note = '审核通过' AND au.user_rank = 2  ".
+				" AND ad.is_new = 1 ".
+				" GROUP BY au.ad_id ";
+		//echo $sql_5_plus."<br>";
+		//AND ( a.market_level LIKE'%6%'  OR a.market_level LIKE'%百强镇%' )  ".
+		
+		$sql_6_plus_2 = "SELECT au.ad_id FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ". 
+				" WHERE $children AND au.feedback_audit = '$project_id' AND au.user_rank = 2  ".
+				" AND ad.is_new = 1 ".
+				" GROUP BY au.ad_id ";
+				
+		$base[$key]['lv_6']['amount'] = $based_new_nums[$cat_id];
+		$base[$key]['lv_6']['upload_amount'] = count($GLOBALS['db']->getCol($sql_6_upload));
+		$base[$key]['lv_6']['confirm_amount'] = count($GLOBALS['db']->getCol($sql_6_plus));
+		$base[$key]['lv_6']['audit_amount'] = count($GLOBALS['db']->getCol($sql_6_plus_2));
+		if(!empty($base[$key]['lv_6']['confirm_amount']) || !empty($base[$key]['lv_6']['amount'])){
+			$base[$key]['lv_6']['upload_percent'] = round(($base[$key]['lv_6']['upload_amount'] / $base[$key]['lv_6']['amount'] * 100),2);
+			if($base[$key]['lv_6']['upload_amount'] != 0){
+				$base[$key]['lv_6']['confirm_percent'] = round(($base[$key]['lv_6']['confirm_amount'] / $base[$key]['lv_6']['upload_amount'] * 100),2);
+			}else{
+				$base[$key]['lv_6']['confirm_percent'] = 0 ;
+			}
+		}		
 		
 	}
 	

@@ -74,6 +74,12 @@
 			<!--{/if}-->
 				
 			
+			<!--{if $act_step == "new_querenlv"}-->
+			<!-- #BeginLibraryItem "/library/new_querenlv.lbi" -->
+			>
+			<!-- #EndLibraryItem -->
+			<!--{/if}-->	
+			
 			<!--{if $act_step == "city_ad_audit"}-->
 			<!-- #BeginLibraryItem "/library/city_ad_audit.lbi" -->
 			>

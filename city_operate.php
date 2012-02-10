@@ -27,11 +27,12 @@ if ((DEBUG_MODE & 2) != 2)
 $all_city_content = array();
 $smarty->assign('city_title', $_LANG['city_title']);
 $smarty->assign('city_dis_title', $_LANG['city_dis_title']);
-$smarty->assign('audit_title', $_LANG['AUDIT']);
 $smarty->assign('publish_fee_title', $_LANG['publish_fee_title']);
+$smarty->assign('publish_fee_note', $_LANG['publish_fee_note']);
+$smarty->assign('renew_fee_note', $_LANG['renew_fee_note']);
+$smarty->assign('audit_title', $_LANG['AUDIT']);
 $smarty->assign('CONTENT_COLS', CONTENT_COLS);
 $col_42_array = $_LANG['pic_type_select_lite'];
-
 
 
 
@@ -447,7 +448,13 @@ elseif($_REQUEST['act'] == 'edit_ad' || $_REQUEST['act'] == 'view_ad')
 		$overlap_info = get_overlap_info($another_ad_id,$ad_id);
 		$smarty->assign('overlap_info', $overlap_info);
 		
-		
+	}else{
+		$overlap_info = array();	
+		$tt = $ad_detail['col_19'] + $ad_detail['col_20'];
+		$overlap_info['fee_1'] = intval($tt * 0.50 );
+		$overlap_info['fee_2'] = intval($tt * 0.15 );
+		$overlap_info['fee_3'] = intval($tt * 0.65 );
+		$smarty->assign('overlap_info', $overlap_info);
 	}
 
 	if($ad_info['audit_status'] > 1){
@@ -1117,6 +1124,75 @@ elseif($_REQUEST['act'] == 'project_querenlv')
 				$base[$key]['lv_7']['confirm_percent'] = 0 ;
 			}
 		}
+		
+		
+	}
+	
+	$smarty->assign('data',   $base);
+	$smarty->display('city_view.dwt');
+	
+}
+
+/**
+ * 动态确认率 显示页面
+ */
+elseif($_REQUEST['act'] == 'new_project_querenlv')
+{
+	if($_SESSION['user_rank'] < 4){
+		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
+	}
+	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 2;
+	$smarty->assign('project_id',   $project_id);
+	$date = date('Y-m-d H:i:s',(gmtime()+28800));
+	$smarty->assign('date',   $date);
+	
+	$based_new_nums = array();
+	$based_new_nums = $_LANG['based_new_nums'];
+	
+	$sql = "SELECT COUNT( * ) AS  amount,col_1 FROM ".$GLOBALS['ecs']->table('city')." GROUP BY col_1  ORDER BY  CONVERT( col_1 USING GBK )   ASC ";
+	$base = $GLOBALS['db']->getAll($sql);
+	//echo $sql."<br>";
+	foreach($base AS $key => $value){
+		
+		$cat_id = get_cat_id_by_name($value['col_1']);
+		$children = get_city_children(array($cat_id));
+		
+		
+		/*6级城市*/
+		$sql_6 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
+				" WHERE $children  AND a.market_level LIKE'%6%' "; //
+		
+		$sql_6_upload = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
+				" WHERE $children AND g.feedback = '$project_id'   ".
+				" AND a.has_new = 1 AND ad.is_new = 1 ".
+				" GROUP BY g.ad_id ";
+		//echo $sql_5_upload."<br>";
+
+		$sql_6_plus = "SELECT au.ad_id FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
+				" WHERE $children AND au.feedback_audit = '$project_id' AND au.audit_note = '审核通过' AND au.user_rank = 2  ".
+				" AND a.has_new = 1 AND ad.is_new = 1 ".
+				" GROUP BY au.ad_id ";
+		//echo $sql_5_plus."<br>";
+		//AND ( a.market_level LIKE'%6%'  OR a.market_level LIKE'%百强镇%' )  ".
+				
+		$base[$key]['lv_6']['amount'] = $based_new_nums[$cat_id];
+		$base[$key]['lv_6']['upload_amount'] = count($GLOBALS['db']->getCol($sql_6_upload));
+		$base[$key]['lv_6']['confirm_amount'] = count($GLOBALS['db']->getCol($sql_6_plus));
+		if(!empty($base[$key]['lv_6']['confirm_amount']) || !empty($base[$key]['lv_6']['amount'])){
+			$base[$key]['lv_6']['upload_percent'] = round(($base[$key]['lv_6']['upload_amount'] / $base[$key]['lv_6']['amount'] * 100),2);
+			if($base[$key]['lv_6']['upload_amount'] != 0){
+				$base[$key]['lv_6']['confirm_percent'] = round(($base[$key]['lv_6']['confirm_amount'] / $base[$key]['lv_6']['upload_amount'] * 100),2);
+			}else{
+				$base[$key]['lv_6']['confirm_percent'] = 0 ;
+			}
+		}
+		
+		
+		
 		
 		
 	}

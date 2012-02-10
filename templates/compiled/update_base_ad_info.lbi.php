@@ -4,12 +4,12 @@
 
 <div class="radius_5px city_info" style="width:95%;height:200px;padding:0px 10px;">
 	<span class="green-color font14px">未换画之前</span><br>
-<?php $_from = $this->_var['old_photo_info']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_85257200_1328176550');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_85257200_1328176550']):
+<?php $_from = $this->_var['old_photo_info']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_39011700_1328440999');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_39011700_1328440999']):
 ?>
 	<div style="width:160px;height:160px;text-align:center;float:left;margin:10px 20px;">
-	<a href="<?php echo $this->_var['item_0_85257200_1328176550']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_85257200_1328176550']['thumb_url']; ?>"></a>
-	<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_85257200_1328176550']['img_sort']]; ?>
+	<a href="<?php echo $this->_var['item_0_39011700_1328440999']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_39011700_1328440999']['thumb_url']; ?>"></a>
+	<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_39011700_1328440999']['img_sort']]; ?>
 	</div>
 <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 </div>
@@ -22,11 +22,11 @@
 <?php endif; ?>
 <?php if ($this->_var['ad_info']['is_audit_confirm'] == 1 && $this->_var['ad_info']['audit_status'] == 5): ?>
 	<form method="post" action="city_base_info.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
-	<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_85307200_1328176550');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_85307200_1328176550']):
+	<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_39059200_1328440999');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_39059200_1328440999']):
 ?>
 	<div class="city_info radius_5px">
-		<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_85307200_1328176550']; ?></div>
+		<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_39059200_1328440999']; ?></div>
 		<div class="f_left right_content">		
 			<span class="f_right"><?php if ($this->_var['k'] == "col_12"): ?>如是两块牌子请写合计尺寸 &nbsp;<?php endif; ?>
 				<a target="_blank"  class="grey666" href="city_operate.php?act=view_log&ad_id=<?php echo $this->_var['ad_detail']['ad_id']; ?>&col_name=<?php echo $this->_var['k']; ?>">
@@ -35,15 +35,15 @@
 			<?php if (( $this->_var['ad_detail']['base_info_modify'] != 0 && $this->_var['sm_session']['user_rank'] == 1 ) && ( $this->_var['k'] != "col_1" && $this->_var['k'] != "col_2" && $this->_var['k'] != "col_3" && $this->_var['k'] != "col_4" && $this->_var['k'] != "col_5" && $this->_var['k'] != "col_23" && $this->_var['k'] != "col_27" && $this->_var['k'] != "col_41" )): ?>
 				<?php if ($this->_var['k'] == "col_16" || $this->_var['k'] == "col_17" || $this->_var['k'] == "col_18" || $this->_var['k'] == "col_35" || $this->_var['k'] == "col_37" || $this->_var['k'] == "col_39"): ?>
 						<?php if ($this->_var['k'] == "col_18"): ?>
-						<input type="text" name="col[]" id="<?php echo $this->_var['k']; ?>" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" size="45" style="background:#ffffff;" readonly=1/>
+						<input type="text" name="col[]" id="<?php echo $this->_var['k']; ?>" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" size="37" style="background:#ffffff;" readonly=1/>
 						<?php elseif ($this->_var['k'] == "col_16" || $this->_var['k'] == "col_17"): ?>
-						<input type="text" name="col[]" id="<?php echo $this->_var['k']; ?>" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" size="45" style="background:#fffead;" rel="datepicker" onchange=sep_days() readonly=1 />
+						<input type="text" name="col[]" id="<?php echo $this->_var['k']; ?>" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" size="37" style="background:#fffead;" rel="datepicker" onchange=sep_days() readonly=1 />
 						<?php else: ?>
-						<input type="text" name="col[]" id="<?php echo $this->_var['k']; ?>" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" size="45" style="background:#fffead;" rel="datepicker" readonly=1 />
+						<input type="text" name="col[]" id="<?php echo $this->_var['k']; ?>" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" size="37" style="background:#fffead;" rel="datepicker" readonly=1 />
 						
 						<?php endif; ?>
 				<?php elseif ($this->_var['k'] == "col_13" || $this->_var['k'] == "col_15" || $this->_var['k'] == "col_22"): ?>
-						<input type="text" name="col[]" id="<?php echo $this->_var['k']; ?>" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" size="45" style="background:#ffffff;" readonly=1/>
+						<input type="text" name="col[]" id="<?php echo $this->_var['k']; ?>" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" size="37" style="background:#ffffff;" readonly=1/>
 				
 				<?php elseif ($this->_var['k'] == "col_10"): ?>
 					<select id="<?php echo $this->_var['k']; ?>" name="col[]">
@@ -56,7 +56,7 @@
 				<?php elseif ($this->_var['k'] == "col_19" || $this->_var['k'] == "col_20" || $this->_var['k'] == "col_21"): ?>
 					<input type="text" name="col[]" id="<?php echo $this->_var['k']; ?>" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" onblur=calc_price() style="background:#fffead;"/>
 				<?php else: ?>
-					<input type="text" name="col[]" id="<?php echo $this->_var['k']; ?>" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" <?php if ($this->_var['k'] == "col_12"): ?>size="20"<?php else: ?>size="45"<?php endif; ?>  <?php if ($this->_var['k'] == "col_11" || $this->_var['k'] == "col_12" || $this->_var['k'] == "col_14"): ?>onblur=calc_area()<?php endif; ?> style="background:#fffead;"/>
+					<input type="text" name="col[]" id="<?php echo $this->_var['k']; ?>" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" <?php if ($this->_var['k'] == "col_12"): ?>size="20"<?php else: ?>size="37"<?php endif; ?>  <?php if ($this->_var['k'] == "col_11" || $this->_var['k'] == "col_12" || $this->_var['k'] == "col_14"): ?>onblur=calc_area()<?php endif; ?> style="background:#fffead;"/>
 				<?php endif; ?>
 			<?php else: ?>
 					<span><?php echo $this->_var['ad_detail'][$this->_var['k']]; ?></span>

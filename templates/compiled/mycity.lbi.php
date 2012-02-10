@@ -1,3 +1,19 @@
+<div class="nav_top_red">
+    <span>新牌子管理和操作</span>
+    <div class="bgr"> </div>
+</div>
+<div>
+  <ul class="mycity_ul">
+    <li><a href="city_operate.php?has_new=1" style="background:url(<?php echo $this->_var['img_path']; ?>ico/flagged.png) no-repeat 10px center;">查看城市</a></li>
+	<li><a href="city_base_info.php?act=ad_list&project_id=9&has_new=1" style="background:url(<?php echo $this->_var['img_path']; ?>ico/my_task.png) no-repeat 10px center;">基础信息修改</a></li>
+	<li><a href="city_project.php?has_new=1" style="background:url(<?php echo $this->_var['img_path']; ?>red_arrow.png) no-repeat 10px center;">项目管理</a></li>
+	<?php if ($this->_var['sm_session']['user_rank'] >= 4 || $this->_var['sm_session']['user_rank'] == 2): ?>
+	<li><a href="city_base_info.php?act=new_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">基础信息确认率</a></li>
+	<li><a href="city_operate.php?act=new_project_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">换画反馈确认率</a></li>
+	<?php endif; ?>
+  </ul>
+</div>
+<div class="height_5px" style="background:#cb5a42;"></div>
 <div class="left_menu" style="height:<?php if ($this->_var['act_step'] == "upload_file"): ?>200<?php else: ?>600<?php endif; ?>px;">
 <div class="nav_top_lite_grey">
     <span>广告位管理</span>
@@ -76,19 +92,4 @@
 
 
 
-<div class="nav_top_red">
-    <span>新牌子管理和操作</span>
-    <div class="bgr"> </div>
-</div>
-<div>
-  <ul class="mycity_ul">
-    <li><a href="city_operate.php?has_new=1" style="background:url(<?php echo $this->_var['img_path']; ?>ico/flagged.png) no-repeat 10px center;">查看城市</a></li>
-	<li><a href="city_base_info.php?act=ad_list&project_id=9&has_new=1" style="background:url(<?php echo $this->_var['img_path']; ?>ico/my_task.png) no-repeat 10px center;">基础信息修改</a></li>
-	<li><a href="city_project.php?has_new=1" style="background:url(<?php echo $this->_var['img_path']; ?>red_arrow.png) no-repeat 10px center;">项目管理</a></li>
-	<?php if ($this->_var['sm_session']['user_rank'] >= 4 || $this->_var['sm_session']['user_rank'] == 2): ?>
-	<li><a href="city_base_info.php?act=base_info_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">基础信息确认率</a></li>
-	<li><a href="city_operate.php?act=project_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">换画反馈确认率</a></li>
-	<?php endif; ?>
-  </ul>
-</div>
 
