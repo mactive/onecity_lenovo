@@ -28,7 +28,7 @@
 						class="city_upload"
 					{/if}
 				{/if}>
-				<td>{if $item.is_xz}<span class="red-block">新增</span>{else}<span class="grey999">已有</span>{/if}</td>
+				<td>{if $item.is_new}<span class="red-block">新增</span>{else}<span class="grey999">已有</span>{/if}</td>
 				<td>{$item.city_name}</td>
 				<td>{$item.col_7}</td>
 				<td>{if $item.is_upload}{$item.user_time}{else}{$lang.upload_pending}{/if}</td>

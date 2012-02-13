@@ -126,6 +126,11 @@
 				<?php endif; ?>
 				
 				
+				<?php if ($this->_var['act_step'] == "new_querenlv"): ?>
+				<?php echo $this->fetch('library/new_city_querenlv.lbi'); ?>
+				<?php endif; ?>
+				
+				
 				<?php if ($this->_var['act_step'] == "project_querenlv"): ?>
 				<?php echo $this->fetch('library/project_querenlv.lbi'); ?>
 				<?php endif; ?>

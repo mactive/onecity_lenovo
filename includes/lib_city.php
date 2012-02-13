@@ -221,7 +221,6 @@ function get_ad_list_by_cityid($city_id)
 	{
 		$res[$key]['time_original'] = $val['user_time'];
 		$res[$key]['user_time'] = local_date('Y-m-d', $val['user_time']);
-		$res[$key]['is_xz'] = stripos($val['ad_sn'],'XZ') ? 1 : 0; 
 	}
 	return $res;
 }
@@ -598,6 +597,7 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
 				$res[$key]['fee_3'] = $tmp_arr['fee_3'];
 				$res[$key]['fee_4'] = $tmp_arr['fee_4'];
 				$res[$key]['fee_5'] = $tmp_arr['fee_5'];
+				$res[$key]['fee_6'] = $tmp_arr['fee_2'] + $tmp_arr['fee_5'];
 			}else{
 				$res[$key]['fee_1'] = $res[$key]['fee_2'] = $res[$key]['fee_3'] = $res[$key]['fee_4'] = $res[$key]['fee_5'] = "老牌子不计算费用";
 			}
@@ -1312,7 +1312,7 @@ function make_ad_sn($ad_id, $city_id){
 	    $passed_count =  $GLOBALS['db']->getOne($sql);
 
 		// 已经有一块牌子通过 或者 新增的城市[ID>2779] 那么都算新城市
-		if($passed_count >= 1 || $city_id > 2779){
+		if($passed_count >= 1 || $city_id > NEWCITYAFTERID){
 			$has_new = 1;
 
 			//更新分类信息 for 如果是新城市那么就更新 caegory
@@ -1428,6 +1428,7 @@ function get_overlap_info($another_ad_id,$ad_id){
 	$res['fee_3'] = intval($tt * 0.50 );
 	$res['fee_4'] = intval($tt * 0.15 );
 	$res['fee_5'] = intval($tt * 0.65 );
+	$res['fee_6'] = $res['fee_2'] + $res['fee_5'];	
 	return $res;
 }
 

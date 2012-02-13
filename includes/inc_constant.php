@@ -26,7 +26,7 @@ define('IDEA',       	2); //IDEA-0-IDEA-0
 define('MIDHKAB',       3); //MIDH-KAB-SMB-IDEA
 define('BRAND',       5); //MIDH-KAB-SMB-IDEA
 define('MICROSOFT',       6); //MIDH-KAB-SMB-IDEA
-
+define('NEWCITYAFTERID',		2779);
 
 
 /* 图片处理相关常数 */

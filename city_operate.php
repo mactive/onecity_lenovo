@@ -449,6 +449,9 @@ elseif($_REQUEST['act'] == 'edit_ad' || $_REQUEST['act'] == 'view_ad')
 		$smarty->assign('overlap_info', $overlap_info);
 		
 	}else{
+		$another_ad_id = get_another_ad_id($ad_info['city_id'],$ad_id);
+		$smarty->assign('another_ad_id', $another_ad_id);
+		
 		$overlap_info = array();	
 		$tt = $ad_detail['col_19'] + $ad_detail['col_20'];
 		$overlap_info['fee_1'] = intval($tt * 0.50 );
@@ -598,6 +601,26 @@ elseif($_REQUEST['act'] == 'audit')
 	$ad_info = get_ad_info($ad_id);
 	$smarty->assign('ad_info', $ad_info);
 	
+	if($ad_info['is_new'] == 1){
+		$another_ad_id = get_another_ad_id($ad_info['city_id'],$ad_id);
+		$smarty->assign('another_ad_id', $another_ad_id);
+		
+		$overlap_info = get_overlap_info($another_ad_id,$ad_id);
+		$smarty->assign('overlap_info', $overlap_info);
+		
+	}else{
+		$another_ad_id = get_another_ad_id($ad_info['city_id'],$ad_id);
+		$smarty->assign('another_ad_id', $another_ad_id);
+			
+		$overlap_info = array();	
+		$tt = $ad_detail['col_19'] + $ad_detail['col_20'];
+		$overlap_info['fee_1'] = intval($tt * 0.50 );
+		$overlap_info['fee_2'] = intval($tt * 0.15 );
+		$overlap_info['fee_3'] = intval($tt * 0.65 );
+		$smarty->assign('overlap_info', $overlap_info);
+	}
+	
+	
 	$photo_info = get_ad_photo_info($ad_id);
 	$smarty->assign('photo_info', $photo_info);
 	$smarty->assign('ad_id', $ad_id);
@@ -617,9 +640,7 @@ elseif($_REQUEST['act'] == 'audit')
 			
 		$passed_audit_path = get_audit_path($passed_ad_id,$audit_level_array); //审核路径图
 		$smarty->assign('passed_audit_path', $passed_audit_path);
-		
-		$is_xz = stripos($ad_detail['ad_sn'],'XZ') ? 1 : 0; 
-		$smarty->assign('is_xz', $is_xz);
+
 	}
 	
 
@@ -888,319 +909,7 @@ elseif($_REQUEST['act'] == 'batch_audit')
 		make_json_result($str);		
 	}
 }
-/**
- * 动态确认率 显示页面
- */
-elseif($_REQUEST['act'] == 'querenlv')
-{
-	if($_SESSION['user_rank'] < 4){
-		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
-	}
-	$date = date('Y-m-d H:i:s',(gmtime()+28800));
-	$smarty->assign('date',   $date);
-	
-	$sql = "SELECT COUNT( * ) AS  amount,col_1 FROM ".$GLOBALS['ecs']->table('city')." GROUP BY col_1  ORDER BY  CONVERT( col_1 USING GBK )   ASC ";
-	$base = $GLOBALS['db']->getAll($sql);
-	//echo $sql."<br>";
-	foreach($base AS $key => $value){
-		
-		$cat_id = get_cat_id_by_name($value['col_1']);
-		$children = get_city_children(array($cat_id));
-		
-		$sql_4 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
-						" WHERE $children  AND a.market_level = 4 ";
-				//echo $sql_4;
-		$sql_4_plus = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city'). " AS c " .
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = c.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS cat ON cat.cat_id = c.city_id ". 
-				" WHERE c.col_1 = '$value[col_1]'  AND cat.market_level = 4 ".
-				" AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ";
 
-		$base[$key]['lv_4']['amount'] = $GLOBALS['db']->getOne($sql_4);
-		$base[$key]['lv_4']['confirm_amount'] = $GLOBALS['db']->getOne($sql_4_plus);
-		if(!empty($base[$key]['lv_4']['confirm_amount']) || !empty($base[$key]['lv_4']['amount'])){
-			$base[$key]['lv_4']['percent'] = round(($base[$key]['lv_4']['confirm_amount'] / $base[$key]['lv_4']['amount'] * 100),2);
-		}
-		
-		
-		$sql_5 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
-				" WHERE $children  AND a.market_level = 5 ";
-		//echo $sql_5;
-		$sql_5_plus = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city'). " AS c " .
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = c.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS cat ON cat.cat_id = c.city_id ". 
-				" WHERE c.col_1 = '$value[col_1]'  AND cat.market_level = 5 ".
-				" AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ";
-				
-		$base[$key]['lv_5']['amount'] = $GLOBALS['db']->getOne($sql_5);
-		$base[$key]['lv_5']['confirm_amount'] = $GLOBALS['db']->getOne($sql_5_plus);
-		if(!empty($base[$key]['lv_5']['confirm_amount']) || !empty($base[$key]['lv_5']['amount'])){
-			$base[$key]['lv_5']['percent'] = round(($base[$key]['lv_5']['confirm_amount'] / $base[$key]['lv_5']['amount'] * 100),2);
-		}
-		
-		$sql_6 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
-				" WHERE $children  AND  a.market_level LIKE'%6%' "; //
-		
-		$sql_6_plus = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city'). " AS c " .
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = c.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS cat ON cat.cat_id = c.city_id ". 
-				" WHERE c.col_1 LIKE '$value[col_1]'  AND cat.market_level LIKE'%6%'  ". // 
-				" AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ";
-			 // echo $sql_6."<br>";
-			 // echo $sql_6_plus."<br>";
-		$base[$key]['lv_6']['amount'] = $GLOBALS['db']->getOne($sql_6);
-		$base[$key]['lv_6']['confirm_amount'] = $GLOBALS['db']->getOne($sql_6_plus);
-		$base[$key]['lv_6']['percent'] =round(($base[$key]['lv_6']['confirm_amount'] / $base[$key]['lv_6']['amount'] * 100),2);
-		
-		
-		
-		$sql_7 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
-				" WHERE $children  AND a.market_level LIKE'百强镇'";
-		
-		$sql_7_plus = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city'). " AS c " .
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = c.ad_id ". 
-				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS cat ON cat.cat_id = c.city_id ". 
-				" WHERE c.col_1 LIKE '$value[col_1]'  AND cat.market_level LIKE '百强镇'".
-				" AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ";
-				//echo $sql_7."<br>";
-		$base[$key]['lv_7']['amount'] = $GLOBALS['db']->getOne($sql_7);
-		$base[$key]['lv_7']['confirm_amount'] = $GLOBALS['db']->getOne($sql_7_plus);
-		if(!empty($base[$key]['lv_7']['confirm_amount']) || !empty($base[$key]['lv_7']['amount'])){
-			$base[$key]['lv_7']['percent'] =round(($base[$key]['lv_7']['confirm_amount'] / $base[$key]['lv_7']['amount'] * 100),2);
-		}
-		
-		
-	}
-	
-	$smarty->assign('data',   $base);
-	$smarty->display('city_view.dwt');
-	
-}
-
-
-/**
- * 动态确认率 显示页面
- */
-elseif($_REQUEST['act'] == 'project_querenlv')
-{
-	if($_SESSION['user_rank'] < 4){
-		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
-	}
-	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 1;
-	$smarty->assign('project_id',   $project_id);
-	$date = date('Y-m-d H:i:s',(gmtime()+28800));
-	$smarty->assign('date',   $date);
-	
-	
-	$sql = "SELECT COUNT( * ) AS  amount,col_1 FROM ".$GLOBALS['ecs']->table('city')." GROUP BY col_1  ORDER BY  CONVERT( col_1 USING GBK )   ASC ";
-	$base = $GLOBALS['db']->getAll($sql);
-	//echo $sql."<br>";
-	foreach($base AS $key => $value){
-		
-		$cat_id = get_cat_id_by_name($value['col_1']);
-		$children = get_city_children(array($cat_id));
-		
-		/*4级城市*/		
-		$sql_4 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
-				" WHERE $children  AND a.market_level = 4 ";
-		//echo $sql_4;
-		$sql_4_upload = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
-				" WHERE $children AND g.feedback = '$project_id' AND a.market_level = 4 ".
-				" GROUP BY g.ad_id ";
-		//echo $sql_4_upload."<br>";
-
-		$sql_4_plus = "SELECT au.ad_id FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
-				" WHERE $children AND au.feedback_audit = '$project_id' AND au.audit_note = '审核通过' AND au.user_rank = 2 AND a.market_level = 4  ".
-				" GROUP BY au.ad_id ";
-		//echo $sql_4_plus."<br>";
-		
-				
-		$base[$key]['lv_4']['amount'] = $GLOBALS['db']->getOne($sql_4);
-		$base[$key]['lv_4']['upload_amount'] = count($GLOBALS['db']->getCol($sql_4_upload));
-		$base[$key]['lv_4']['confirm_amount'] = count($GLOBALS['db']->getCol($sql_4_plus));
-		if(!empty($base[$key]['lv_4']['confirm_amount']) || !empty($base[$key]['lv_4']['amount'])){
-			$base[$key]['lv_4']['upload_percent'] = round(($base[$key]['lv_4']['upload_amount'] / $base[$key]['lv_4']['amount'] * 100),2);
-			if($base[$key]['lv_4']['upload_amount'] != 0){
-				$base[$key]['lv_4']['confirm_percent'] = round(($base[$key]['lv_4']['confirm_amount'] / $base[$key]['lv_4']['upload_amount'] * 100),2);
-			}else{
-				$base[$key]['lv_4']['confirm_percent'] = 0 ;
-			}
-		}
-		
-		/*5级城市*/		
-		$sql_5 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
-				" WHERE $children  AND a.market_level = 5 ";
-		//echo $sql_5;
-		$sql_5_upload = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
-				" WHERE $children AND g.feedback = '$project_id' AND a.market_level = 5 ".
-				" GROUP BY g.ad_id ";
-		//echo $sql_5_upload."<br>";
-
-		$sql_5_plus = "SELECT au.ad_id FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
-				" WHERE $children AND au.feedback_audit = '$project_id' AND au.audit_note = '审核通过' AND au.user_rank = 2 AND a.market_level = 5  ".
-				" GROUP BY au.ad_id ";
-		//echo $sql_5_plus."<br>";
-		
-				
-		$base[$key]['lv_5']['amount'] = $GLOBALS['db']->getOne($sql_5);
-		$base[$key]['lv_5']['upload_amount'] = count($GLOBALS['db']->getCol($sql_5_upload));
-		$base[$key]['lv_5']['confirm_amount'] = count($GLOBALS['db']->getCol($sql_5_plus));
-		if(!empty($base[$key]['lv_5']['confirm_amount']) || !empty($base[$key]['lv_5']['amount'])){
-			$base[$key]['lv_5']['upload_percent'] = round(($base[$key]['lv_5']['upload_amount'] / $base[$key]['lv_5']['amount'] * 100),2);
-			if($base[$key]['lv_5']['upload_amount'] != 0){
-				$base[$key]['lv_5']['confirm_percent'] = round(($base[$key]['lv_5']['confirm_amount'] / $base[$key]['lv_5']['upload_amount'] * 100),2);
-			}else{
-				$base[$key]['lv_5']['confirm_percent'] = 0 ;
-			}
-		}
-		
-		/*6级城市*/
-		$sql_6 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
-				" WHERE $children  AND a.market_level LIKE'%6%' "; //
-		
-		$sql_6_upload = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
-				" WHERE $children AND g.feedback = '$project_id' AND a.market_level LIKE'%6%'  ".
-				" GROUP BY g.ad_id ";
-		//echo $sql_5_upload."<br>";
-
-		$sql_6_plus = "SELECT au.ad_id FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
-				" WHERE $children AND au.feedback_audit = '$project_id' AND au.audit_note = '审核通过' AND au.user_rank = 2 AND a.market_level LIKE'%6%' ".
-				" GROUP BY au.ad_id ";
-		//echo $sql_5_plus."<br>";
-		//AND ( a.market_level LIKE'%6%'  OR a.market_level LIKE'%百强镇%' )  ".
-				
-		$base[$key]['lv_6']['amount'] = $GLOBALS['db']->getOne($sql_6);
-		$base[$key]['lv_6']['upload_amount'] = count($GLOBALS['db']->getCol($sql_6_upload));
-		$base[$key]['lv_6']['confirm_amount'] = count($GLOBALS['db']->getCol($sql_6_plus));
-		if(!empty($base[$key]['lv_6']['confirm_amount']) || !empty($base[$key]['lv_6']['amount'])){
-			$base[$key]['lv_6']['upload_percent'] = round(($base[$key]['lv_6']['upload_amount'] / $base[$key]['lv_6']['amount'] * 100),2);
-			if($base[$key]['lv_6']['upload_amount'] != 0){
-				$base[$key]['lv_6']['confirm_percent'] = round(($base[$key]['lv_6']['confirm_amount'] / $base[$key]['lv_6']['upload_amount'] * 100),2);
-			}else{
-				$base[$key]['lv_6']['confirm_percent'] = 0 ;
-			}
-		}
-		
-		
-		/*单独百强镇*/
-		$sql_7 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
-				" WHERE $children  AND  a.market_level LIKE'%百强镇%' "; //
-
-		$sql_7_upload = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
-				" WHERE $children AND g.feedback = '$project_id' AND  a.market_level LIKE'%百强镇%'  ".
-				" GROUP BY g.ad_id ";
-		//echo $sql_5_upload."<br>";
-
-		$sql_7_plus = "SELECT au.ad_id FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
-				" WHERE $children AND au.feedback_audit = '$project_id' AND au.audit_note = '审核通过' AND au.user_rank = 2 AND a.market_level LIKE'%百强镇%'  ".
-				" GROUP BY au.ad_id ";
-		//echo $sql_5_plus."<br>";
-
-
-		$base[$key]['lv_7']['amount'] = $GLOBALS['db']->getOne($sql_7);
-		$base[$key]['lv_7']['upload_amount'] = count($GLOBALS['db']->getCol($sql_7_upload));
-		$base[$key]['lv_7']['confirm_amount'] = count($GLOBALS['db']->getCol($sql_7_plus));
-		if(!empty($base[$key]['lv_7']['confirm_amount']) || !empty($base[$key]['lv_7']['amount'])){
-			$base[$key]['lv_7']['upload_percent'] = round(($base[$key]['lv_7']['upload_amount'] / $base[$key]['lv_7']['amount'] * 100),2);
-			if($base[$key]['lv_7']['upload_amount'] != 0){
-				$base[$key]['lv_7']['confirm_percent'] = round(($base[$key]['lv_7']['confirm_amount'] / $base[$key]['lv_7']['upload_amount'] * 100),2);
-			}else{
-				$base[$key]['lv_7']['confirm_percent'] = 0 ;
-			}
-		}
-		
-		
-	}
-	
-	$smarty->assign('data',   $base);
-	$smarty->display('city_view.dwt');
-	
-}
-
-/**
- * 动态确认率 显示页面
- */
-elseif($_REQUEST['act'] == 'new_project_querenlv')
-{
-	if($_SESSION['user_rank'] < 4){
-		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
-	}
-	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 2;
-	$smarty->assign('project_id',   $project_id);
-	$date = date('Y-m-d H:i:s',(gmtime()+28800));
-	$smarty->assign('date',   $date);
-	
-	$based_new_nums = array();
-	$based_new_nums = $_LANG['based_new_nums'];
-	
-	$sql = "SELECT COUNT( * ) AS  amount,col_1 FROM ".$GLOBALS['ecs']->table('city')." GROUP BY col_1  ORDER BY  CONVERT( col_1 USING GBK )   ASC ";
-	$base = $GLOBALS['db']->getAll($sql);
-	//echo $sql."<br>";
-	foreach($base AS $key => $value){
-		
-		$cat_id = get_cat_id_by_name($value['col_1']);
-		$children = get_city_children(array($cat_id));
-		
-		
-		/*6级城市*/
-		$sql_6 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
-				" WHERE $children  AND a.market_level LIKE'%6%' "; //
-		
-		$sql_6_upload = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
-				" WHERE $children AND g.feedback = '$project_id'   ".
-				" AND a.has_new = 1 AND ad.is_new = 1 ".
-				" GROUP BY g.ad_id ";
-		//echo $sql_5_upload."<br>";
-
-		$sql_6_plus = "SELECT au.ad_id FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
-				" WHERE $children AND au.feedback_audit = '$project_id' AND au.audit_note = '审核通过' AND au.user_rank = 2  ".
-				" AND a.has_new = 1 AND ad.is_new = 1 ".
-				" GROUP BY au.ad_id ";
-		//echo $sql_5_plus."<br>";
-		//AND ( a.market_level LIKE'%6%'  OR a.market_level LIKE'%百强镇%' )  ".
-				
-		$base[$key]['lv_6']['amount'] = $based_new_nums[$cat_id];
-		$base[$key]['lv_6']['upload_amount'] = count($GLOBALS['db']->getCol($sql_6_upload));
-		$base[$key]['lv_6']['confirm_amount'] = count($GLOBALS['db']->getCol($sql_6_plus));
-		if(!empty($base[$key]['lv_6']['confirm_amount']) || !empty($base[$key]['lv_6']['amount'])){
-			$base[$key]['lv_6']['upload_percent'] = round(($base[$key]['lv_6']['upload_amount'] / $base[$key]['lv_6']['amount'] * 100),2);
-			if($base[$key]['lv_6']['upload_amount'] != 0){
-				$base[$key]['lv_6']['confirm_percent'] = round(($base[$key]['lv_6']['confirm_amount'] / $base[$key]['lv_6']['upload_amount'] * 100),2);
-			}else{
-				$base[$key]['lv_6']['confirm_percent'] = 0 ;
-			}
-		}
-		
-		
-		
-		
-		
-	}
-	
-	$smarty->assign('data',   $base);
-	$smarty->display('city_view.dwt');
-	
-}
 
 
 ?>

@@ -834,10 +834,12 @@ $_LANG['publish_fee_title']['fee_2'] = "重叠天数发布费=媒体净价/发�
 $_LANG['publish_fee_title']['fee_3'] = "返款50%=（媒体净价+渠道税金-重叠天数发布费）*50% ";
 $_LANG['publish_fee_title']['fee_4'] = "返款15%=（媒体净价+渠道税金-重叠天数发布费）*15% ";
 $_LANG['publish_fee_title']['fee_5'] = "返款65%=（媒体净价+渠道税金-重叠天数发布费）*65%";
+$_LANG['publish_fee_title']['fee_6'] = "联想承担费用=重叠天数发布费+返款65%";
 $_LANG['publish_fee_note']['fee_1'] = "天";
 $_LANG['publish_fee_note']['fee_2'] = "元";
 $_LANG['publish_fee_note']['fee_3'] = "元";
 $_LANG['publish_fee_note']['fee_4'] = "元";
+$_LANG['publish_fee_note']['fee_5'] = "元";
 $_LANG['publish_fee_note']['fee_5'] = "元";
 
 $_LANG['renew_fee_note']['fee_1'] = "返款50%=（媒体净价+渠道税金）*50% ";

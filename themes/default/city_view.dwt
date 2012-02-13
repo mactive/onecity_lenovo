@@ -137,6 +137,13 @@
 				<!--{/if}-->
 				
 				
+				<!--{if $act_step == "new_querenlv"}-->
+				<!-- #BeginLibraryItem "/library/new_city_querenlv.lbi" -->
+				>
+				<!-- #EndLibraryItem -->
+				<!--{/if}-->
+				
+				
 				<!--{if $act_step == "project_querenlv"}-->
 				<!-- #BeginLibraryItem "/library/project_querenlv.lbi" -->
 				>
