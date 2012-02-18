@@ -790,6 +790,7 @@ $_LANG['city_title']['col_43'] = "甲方渠道编号";
 $_LANG['city_title']['col_44'] = "甲方渠道名称";
 $_LANG['city_title']['col_45'] = "上级分销商编号";
 $_LANG['city_title']['col_46'] = "上级分销商名称";
+$_LANG['city_title']['col_47'] = "是否使用推广费用";
 
 
 /* city_dis_title 个项目 */
@@ -840,7 +841,7 @@ $_LANG['publish_fee_note']['fee_2'] = "元";
 $_LANG['publish_fee_note']['fee_3'] = "元";
 $_LANG['publish_fee_note']['fee_4'] = "元";
 $_LANG['publish_fee_note']['fee_5'] = "元";
-$_LANG['publish_fee_note']['fee_5'] = "元";
+$_LANG['publish_fee_note']['fee_6'] = "元";
 
 $_LANG['renew_fee_note']['fee_1'] = "返款50%=（媒体净价+渠道税金）*50% ";
 $_LANG['renew_fee_note']['fee_2'] = "返款15%=（媒体净价+渠道税金）*15% ";
@@ -902,9 +903,9 @@ $_LANG['based_new_nums']['4'] = "14";
 $_LANG['based_new_nums']['5'] = "12";
 $_LANG['based_new_nums']['6'] = "26";
 $_LANG['based_new_nums']['7'] = "16";
-$_LANG['based_new_nums']['8'] = "29";
+$_LANG['based_new_nums']['8'] = "33";
 $_LANG['based_new_nums']['9'] = "18";
-$_LANG['based_new_nums']['10'] = "33";
+$_LANG['based_new_nums']['10'] = "38";
 $_LANG['based_new_nums']['11'] = "14";
 $_LANG['based_new_nums']['12'] = "38";
 $_LANG['based_new_nums']['13'] = "28";
@@ -974,6 +975,10 @@ $_LANG['resource_type']['LED'] 	= "LED";
 $_LANG['resource_type']['照明路牌'] = "照明路牌";
 $_LANG['resource_type']['其他']= "其他";
 
+
+$_LANG['promotion_select'][0] = "请选择...";
+$_LANG['promotion_select'][1] = "没有使用推广费";
+$_LANG['promotion_select'][2] = "使用推广费";
 
 $_LANG['pic_type_select_lite'][0] = "请选择...";
 $_LANG['pic_type_select_lite'][1] = "SMB";

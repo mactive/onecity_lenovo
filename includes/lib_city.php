@@ -85,9 +85,16 @@ function get_city_list($children,$limit = 0){
     {
         $where .= " AND a.audit_status = $filter[audit_status] ";
     }
+
     if ($filter['has_new'])
     {
-        $where .= " AND a.has_new = $filter[has_new] ";
+		if($filter['has_new'] == 1){
+	        $where .= " AND a.has_new = 1 ";
+		}elseif($filter['has_new'] == 3){
+			$where .= " AND a.has_new = 0 ";
+		}else{
+			$where .= "";
+		}
     }
 
 
@@ -251,6 +258,8 @@ function full_city_content($xls_array,$city_content)
 			
 			if(strripos($val,"_)")){
 				$city_content["col_".$key] = substr($val,0,strlen(trim($val))-2);
+			}elseif(strripos($val,",")){
+				$city_content["col_".$key] = str_replace(",","",$val);
 			}
 			else{
 				$city_content["col_".$key] = trim($val);
@@ -583,8 +592,8 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
 			$res[$key]['lv_4'] = get_audit_note($val['ad_id'],4);
 			$res[$key]['lv_5'] = get_audit_note($val['ad_id'],5);
 			
-			$res[$key]['start_date'] = intval(sep_days($val['col_16'],"01/01/1970"));
-			$res[$key]['end_date'] = intval(sep_days($val['col_17'],"01/01/1970"));
+			$res[$key]['start_date'] = intval(sep_days($val['col_16'],"01/01/1941"));
+			$res[$key]['end_date'] = intval(sep_days($val['col_17'],"01/01/1941"));
 			
 			$res[$key]['col_42'] = $col_42_array[$val['col_42']];
 			$res[$key]['resource_type'] = $r_title[$val['resource']];

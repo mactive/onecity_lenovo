@@ -3,7 +3,15 @@
 	<a class="back_url" href="city_operate.php?act=city_ad_list&city_id=<?php echo $this->_var['ad_info']['city_id']; ?>"></a>
 </div>
 
-<?php if ($this->_var['is_xz']): ?>
+
+<?php if ($this->_var['ad_info']['is_new']): ?>
+<?php echo $this->fetch('library/overlap_info.htm'); ?>
+<?php else: ?>
+<?php echo $this->fetch('library/renew_overlap_info.htm'); ?>
+<?php endif; ?>
+
+
+<?php if ($this->_var['ad_detail']['is_new']): ?>
 <?php echo $this->fetch('library/passed_audit_path.htm'); ?>	
 <?php endif; ?>
 
@@ -16,14 +24,14 @@
 	<tr>
 		<td>已经上传照片</td>
 		<td>
-			<?php $_from = $this->_var['photo_info']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item_0_32442400_1324879058');$this->_foreach['photo_info'] = array('total' => count($_from), 'iteration' => 0);
+			<?php $_from = $this->_var['photo_info']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item_0_30991700_1329217876');$this->_foreach['photo_info'] = array('total' => count($_from), 'iteration' => 0);
 if ($this->_foreach['photo_info']['total'] > 0):
-    foreach ($_from AS $this->_var['item_0_32442400_1324879058']):
+    foreach ($_from AS $this->_var['item_0_30991700_1329217876']):
         $this->_foreach['photo_info']['iteration']++;
 ?>
 				<div style="width:160px;height:160px;text-align:center;float:left;margin:10px;">
-				<a href="<?php echo $this->_var['item_0_32442400_1324879058']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_32442400_1324879058']['thumb_url']; ?>"></a>
-				<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_32442400_1324879058']['img_sort']]; ?>
+				<a href="<?php echo $this->_var['item_0_30991700_1329217876']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_30991700_1329217876']['thumb_url']; ?>"></a>
+				<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_30991700_1329217876']['img_sort']]; ?>
 				</div>
 			<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 		</td>
@@ -117,11 +125,11 @@ function validate2()
 			<div class="clear"></div>
 		</div>
 		<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate2()">
-		<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_32517200_1324879058');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_32517200_1324879058']):
+		<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_31066200_1329217876');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_31066200_1329217876']):
 ?>
 		<div class="city_info radius_5px">
-			<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_32517200_1324879058']; ?></div>
+			<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_31066200_1329217876']; ?></div>
 			<div class="f_left right_content">
 				<?php if ($this->_var['k'] == "col_1" || $this->_var['k'] == "col_2" || $this->_var['k'] == "col_3" || $this->_var['k'] == "col_4" || $this->_var['k'] == "col_5"): ?>
 					<span><?php echo $this->_var['ad_detail'][$this->_var['k']]; ?></span>
@@ -141,8 +149,8 @@ function validate2()
 			<input type="hidden" name="act" value="update_ad" />
 			<input type="hidden" name="form_audit" value="1" />
 			<input type="hidden" name="ad_id" value="<?php echo $this->_var['ad_detail']['ad_id']; ?>" />
-			<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_32575800_1324879058');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_32575800_1324879058']):
+			<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_31120200_1329217876');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_31120200_1329217876']):
 ?>
 			<input type="hidden" name="old_col[]" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" />
 			<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
@@ -150,11 +158,11 @@ function validate2()
 		</div>
 		</form>
 	<?php else: ?>
-		<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_32597100_1324879058');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_32597100_1324879058']):
+		<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_31138000_1329217876');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_31138000_1329217876']):
 ?>
 		<div class="city_info radius_5px">
-			<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_32597100_1324879058']; ?></div>
+			<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_31138000_1329217876']; ?></div>
 			<div class="f_left right_content"><?php echo $this->_var['ad_detail'][$this->_var['k']]; ?></div>	
 			<div class="clear"></div>
 		</div>

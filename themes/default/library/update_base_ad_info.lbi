@@ -50,6 +50,10 @@
 						<select id="{$k}" name="col[]">
 						      {html_options options=$lang.pic_type_select_lite selected=$ad_detail.$k}
 						</select>
+				{elseif $k == "col_47"}
+						<select id="{$k}" name="col[]" onChange="hide_items()">
+						      {html_options options=$lang.promotion_select selected=$ad_detail.$k}
+						</select>
 				{elseif $k == "col_19" || $k == "col_20" || $k == "col_21" }
 					<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" onblur=calc_price() style="background:#fffead;"/>
 				{else}
@@ -80,6 +84,7 @@
 
 
 <script type="text/javascript">
+hide_items();
 /**
  * 检查表单输入的数据
  */
@@ -90,12 +95,15 @@ function validate()
 	var col_28 = document.getElementById('col_28');
 	var col_29 = document.getElementById('col_29');
 	var col_42 = document.getElementById('col_42');
+	var col_47 = document.getElementById('col_47');
     
     if (col_42.value == 0 )
     {
         alert("费用来源必须选择!");
         return false;
-    }else{
+    }else if(col_47.value == 0 ){
+        alert("是否使用推广费必须选择!");
+	}else{
 		return true;
 	}
 
@@ -107,6 +115,22 @@ function validate()
 	*/
 	
     //return validator.passed();
+}
+
+function hide_items(){
+	var _value = $("#col_47").val();
+	
+	if(_value == 1){
+		$("input#col_43").parentsUntil(".city_info").parent().hide();
+		$("input#col_44").parentsUntil(".city_info").parent().hide();
+		$("input#col_45").parentsUntil(".city_info").parent().hide();
+		$("input#col_46").parentsUntil(".city_info").parent().hide();
+	}else{
+		$("input#col_43").parentsUntil(".city_info").parent().show();
+		$("input#col_44").parentsUntil(".city_info").parent().show();
+		$("input#col_45").parentsUntil(".city_info").parent().show();
+		$("input#col_46").parentsUntil(".city_info").parent().show();
+	}
 }
 
 function calc_area(){

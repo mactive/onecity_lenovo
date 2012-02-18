@@ -88,6 +88,8 @@
 							<select name="has_new" id="has_new">
 						      	<option value='0'>{$lang.select_please}</option>
 						      	<option value='1' {if $filter.has_new}selected="selected"{/if}>{$lang.is_xz}</option>					    
+						      	<option value='2'>{$lang.is_all}</option>
+						      	<option value='3'>{$lang.is_no_xz}</option>
 							</select>
 						</td>
 					<td style="padding-left:30px;"><input type="submit" value="{$lang.button_search}" class="button" /> <input type="reset" value="重置" class="button" /></td>

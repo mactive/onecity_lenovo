@@ -114,8 +114,7 @@
 						<div class="f_left right_content">{$ad_detail.$k}</div>	
 						<div class="clear"></div>
 					</div>
-					<!--{/foreach}-->
-					
+					<!--{/foreach}-->					
 				<!--{/if}-->
 				
 				<!--{if $act_step == "upload_photo"}-->
@@ -132,6 +131,13 @@
 				
 				<!--{if $act_step == "querenlv"}-->
 				<!-- #BeginLibraryItem "/library/city_querenlv.lbi" -->
+				>
+				<!-- #EndLibraryItem -->
+				<!--{/if}-->
+				
+				
+				<!--{if $act_step == "audit_status_summary"}-->
+				<!-- #BeginLibraryItem "/library/audit_status_summary.lbi" -->
 				>
 				<!-- #EndLibraryItem -->
 				<!--{/if}-->

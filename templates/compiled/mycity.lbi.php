@@ -9,8 +9,8 @@
 	<li><a href="city_project.php?has_new=1" style="background:url(<?php echo $this->_var['img_path']; ?>red_arrow.png) no-repeat 10px center;">项目管理</a></li>
 	<?php if ($this->_var['sm_session']['user_rank'] >= 4 || $this->_var['sm_session']['user_rank'] == 2): ?>
 	<li><a href="city_querenlv.php?act=new_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">确认率实时统计</a></li>
-	<li><a href="city_base_info.php?act=new_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">基础信息确认率</a></li>
-	<li><a href="city_operate.php?act=new_project_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">换画反馈确认率</a></li>
+	<li><a href="city_querenlv.php?act=new_base_info_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">基础信息确认率</a></li>
+	<li><a href="city_querenlv.php?act=new_project_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">换画反馈确认率</a></li>
 	<?php endif; ?>
   </ul>
 </div>
@@ -31,7 +31,9 @@
 	<li><a href="city_operate.php?act=export_page" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">导出报表</a></li>
 	<li><a href="download/FY12_model.rar" style="background:url(<?php echo $this->_var['img_path']; ?>ico/project.png) no-repeat 10px center;">模版下载</a></li>
 	<?php if ($this->_var['sm_session']['user_rank'] >= 4): ?>
-	<li><a href="city_operate.php?act=querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">确认率实时统计</a></li>
+	<li><a href="city_querenlv.php?act=querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">确认率实时统计</a></li>
+	<li><a href="city_querenlv.php?act=audit_status_summary" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">确认率实时统计</a></li>
+	
 	<?php endif; ?>
   </ul>
 </div>
@@ -43,7 +45,7 @@
 <ul class="mycity_ul">
 	<li><a href="city_base_info.php?act=ad_list&project_id=9" style="background:url(<?php echo $this->_var['img_path']; ?>ico/my_task.png) no-repeat 10px center;">基础信息修改</a></li>
 	<?php if ($this->_var['sm_session']['user_rank'] >= 4 || $this->_var['sm_session']['user_rank'] == 2): ?>
-	<li><a href="city_base_info.php?act=base_info_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">基础信息确认率</a></li>
+	<li><a href="city_querenlv.php?act=base_info_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">基础信息确认率</a></li>
 	<?php endif; ?>
 	<?php if ($this->_var['sm_session']['user_rank'] >= 4 || $this->_var['sm_session']['user_id'] == 54): ?>
 	<li><a href="city_base_info.php?act=city_ad_audit" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">电通工作统计表</a></li>
@@ -60,7 +62,7 @@
 	<?php endif; ?>
 	<li><a href="download/project_help.rar" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">项目管理使用说明</a></li>
 	<?php if ($this->_var['sm_session']['user_rank'] >= 4): ?>
-	<li><a href="city_operate.php?act=project_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">换画反馈确认率</a></li>
+	<li><a href="city_querenlv.php?act=project_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">换画反馈确认率</a></li>
 	<?php endif; ?>
 </ul>
 

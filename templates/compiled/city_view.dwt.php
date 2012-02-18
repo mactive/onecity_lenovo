@@ -109,8 +109,7 @@
 						<div class="f_left right_content"><?php echo $this->_var['ad_detail'][$this->_var['k']]; ?></div>	
 						<div class="clear"></div>
 					</div>
-					<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
-					
+					<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>					
 				<?php endif; ?>
 				
 				<?php if ($this->_var['act_step'] == "upload_photo"): ?>
@@ -123,6 +122,11 @@
 				
 				<?php if ($this->_var['act_step'] == "querenlv"): ?>
 				<?php echo $this->fetch('library/city_querenlv.lbi'); ?>
+				<?php endif; ?>
+				
+				
+				<?php if ($this->_var['act_step'] == "audit_status_summary"): ?>
+				<?php echo $this->fetch('library/audit_status_summary.lbi'); ?>
 				<?php endif; ?>
 				
 				
