@@ -42,7 +42,7 @@
 	      
 			
 				<!--{if $act_step == "upload_file"}-->
-					<div class="yellow_notice" style="width:600px;">{$upload_message}</div>
+					<div class="yellow_notice font14px" style="width:600px;">{$upload_message}</div>
 					<br><a href="city_operate.php?act=confirm_insert" class="confirm_btn f_left">确认写入数据库</a>
 					<a href="city_operate.php?act=cancel_insert" class="cancel_btn f_left" style="margin-left:100px;">取消写入</a>
 					<br>
@@ -98,33 +98,33 @@
 				<!--{/if}-->
 				
 
-				
+				<!--{if $act_step == "upload_file"}-->
+				<div class="table_div" {if $act_step == "upload_file"}style="width:1800px;margin-top:100px;"{/if}>
+				<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
+					<tr>
+						<!--{foreach from=$city_dis_title item=item }-->
+					  	<th>{$item}</th>
+						<!--{/foreach}-->
+				    </tr>
+				<!--{foreach from=$all_city_content item=city}-->
+					<tr>
+						<!--{foreach from=$city item=item name=city_content}-->
+						{if $smarty.foreach.city_content.index < $CONTENT_COLS}
+						<td>{$item}</td>
+						{/if}
+						<!--{/foreach}-->
+					</tr>
+				<!--{/foreach}-->
+				</table>
+				</div>
+				<!--{/if}-->
 			
 		</div>			
 		<!-- End #page-middle -->
 		
 		<div class="clear"></div>
 		
-		<!--{if $act_step == "upload_file"}-->
-		<div class="table_div" {if $act_step == "upload_file"}style="width:2500px;"{/if}>
-		<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
-			<tr>
-				<!--{foreach from=$city_dis_title item=item }-->
-			  	<th>{$item}</th>
-				<!--{/foreach}-->
-		    </tr>
-		<!--{foreach from=$all_city_content item=city}-->
-			<tr>
-				<!--{foreach from=$city item=item name=city_content}-->
-				{if $smarty.foreach.city_content.index < $CONTENT_COLS}
-				<td>{$item}</td>
-				{/if}
-				<!--{/foreach}-->
-			</tr>
-		<!--{/foreach}-->
-		</table>
-		</div>
-		<!--{/if}-->
+
 		
 		<!-- #BeginLibraryItem "/library/page_footer.lbi" -->
 		>

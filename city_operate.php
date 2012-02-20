@@ -251,8 +251,12 @@ elseif($_REQUEST['act'] == 'upload_file')
 		    //        )
 		    //   )
 		}
-		
-		$smarty->assign('upload_message', $num."个文件上传成功,请在5分钟之内检查下面的表格,确认数据是否正确");
+		$content_count = count($all_city_content);
+		if($content_count){
+			$smarty->assign('upload_message', $num."个文件上传成功,请在5分钟之内检查下面的".$content_count."条数据,确认数据是否正确");
+		}else{
+			$smarty->assign('upload_message', "Excel文件未能识别,请下最新的模版,将数据复制记事本，然后重新粘贴到空白模版文件,再次上传");
+		}
 
 	}
 	else {
@@ -801,6 +805,7 @@ elseif($_REQUEST['act'] == 'export_page')
 /*------------------------------------------------------ */
 elseif($_REQUEST['act'] == 'export_db')
 {	
+	error_reporting(0);
 	$region 		= empty($_REQUEST['region']) ? "0" : intval($_REQUEST['region']);
 	$market_level 	= empty($_REQUEST['market_level']) ? "" : trim($_REQUEST['market_level']);
 	$audit_status 	= empty($_REQUEST['audit_status']) ? "" : trim($_REQUEST['audit_status']);

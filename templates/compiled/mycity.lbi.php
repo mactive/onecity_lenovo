@@ -27,12 +27,12 @@
 		<a href="city_operate.php?act=upload_panel" style="background:url(<?php echo $this->_var['img_path']; ?>ico/inbox.png) no-repeat 10px center;">上传数据</a></li>
 	<?php endif; ?>
     <li <?php if ($this->_var['act_step'] == "show"): ?>class="selected"<?php endif; ?>>
-		<a href="city_operate.php" style="background:url(<?php echo $this->_var['img_path']; ?>ico/flagged.png) no-repeat 10px center;">查看城市</a></li>
+		<a href="city_operate.php?has_new=3" style="background:url(<?php echo $this->_var['img_path']; ?>ico/flagged.png) no-repeat 10px center;">查看城市</a></li>
 	<li><a href="city_operate.php?act=export_page" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">导出报表</a></li>
 	<li><a href="download/FY12_model.rar" style="background:url(<?php echo $this->_var['img_path']; ?>ico/project.png) no-repeat 10px center;">模版下载</a></li>
 	<?php if ($this->_var['sm_session']['user_rank'] >= 4): ?>
 	<li><a href="city_querenlv.php?act=querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">确认率实时统计</a></li>
-	<li><a href="city_querenlv.php?act=audit_status_summary" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">确认率实时统计</a></li>
+	<li><a href="city_querenlv.php?act=audit_status_summary" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">审核状态汇总表</a></li>
 	
 	<?php endif; ?>
   </ul>

@@ -4,7 +4,7 @@
 	<table width="80%" style="margin:10px auto;background:url(../images/container_bg.png) #ffffff;" class="table_standard table_border_dark" border="1">
 		<tr>
 			<td rowspan="1">分区</td>
-			<td colspan="6">全部级别</td>
+			<td colspan="8">全部级别</td>
 		</tr>
 		<tr>
 			<td></td>
@@ -14,6 +14,8 @@
 			<td>审核数量<br>(电通工作量)</td>
 			<td>通过数量</td>
 			<td>通过率</td>
+			<td><span class="red-block">寄出</span></td>
+			<td><span class="red-block">收到</span></td>
 		</tr>
 		<!--{foreach from=$data key=k item=item }-->
 		<tr>
@@ -21,6 +23,8 @@
 			<td>{$item.lv_6.amount}</td>
 			<td>{$item.lv_6.upload_amount}</td><td>{$item.lv_6.upload_percent}%</td>
 			<td>{$item.lv_6.audit_amount}<td>{$item.lv_6.confirm_amount}</td><td>{$item.lv_6.confirm_percent}%</td>
+			<td>{$item.lv_6.send_amount}<td>{$item.lv_6.receive_amount}</td>
+			
 		</tr>
 		<!--{/foreach}-->
 			

@@ -1,7 +1,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <div class="font20px">基础信息实时统计表 当前时间:{$date}</div>
 
-	<table width="1900px" style="margin:10px auto;background:url(../images/container_bg.png) #ffffff;" class="table_standard table_border_dark" border="1">
+	<table width="2000px" style="margin:10px auto;background:url(../images/container_bg.png) #ffffff;" class="table_standard table_border_dark" border="1">
 		<tr>
 			<td rowspan="1">分区</td>
 			<td colspan="8">4级</td>

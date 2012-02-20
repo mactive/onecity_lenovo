@@ -577,7 +577,7 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
 			"$where GROUP BY a.ad_id ORDER BY a.ad_id DESC ";
 	//echo $sql."<br>";	 //
 	$col_42_array = array('0'=>"未指定",'1'=>"SMB",'2'=>"IDEA");
-	
+	$col_47_array = array('0'=>"未指定",'1'=>"没有使用推广费",'2'=>"使用推广费");
 	$res = $GLOBALS['db']->getAll($sql);
 	foreach($res AS $key => $val)
 	{
@@ -592,10 +592,11 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
 			$res[$key]['lv_4'] = get_audit_note($val['ad_id'],4);
 			$res[$key]['lv_5'] = get_audit_note($val['ad_id'],5);
 			
-			$res[$key]['start_date'] = intval(sep_days($val['col_16'],"01/01/1941"));
-			$res[$key]['end_date'] = intval(sep_days($val['col_17'],"01/01/1941"));
+			$res[$key]['start_date'] = intval(sep_days($val['col_16'],"01/01/1900"));
+			$res[$key]['end_date'] = intval(sep_days($val['col_17'],"01/01/1900"));
 			
 			$res[$key]['col_42'] = $col_42_array[$val['col_42']];
+			$res[$key]['col_47'] = $col_47_array[$val['col_47']];
 			$res[$key]['resource_type'] = $r_title[$val['resource']];
 			$res[$key]['last_audit_time'] = get_audit_time($val['ad_id'],5);
 
@@ -1428,10 +1429,18 @@ function sep_days($end_date,$start_date)
 
 function get_overlap_info($another_ad_id,$ad_id){
 	$res = array();	
-	$old_ad_info = get_city_info($another_ad_id);
 	$ad_info = get_city_info($ad_id);
 	
-	$res['fee_1'] = sep_days($old_ad_info['col_17'],$ad_info['col_16']);
+	if($another_ad_id){
+		$old_ad_info = get_city_info($another_ad_id);
+		$res['fee_1'] = sep_days($old_ad_info['col_17'],$ad_info['col_16']);
+		
+	}else{
+		$res['fee_1'] = 0; //重叠发布天数
+		
+	}
+
+	
 	$res['fee_2'] = intval($ad_info['col_19'] / $ad_info['col_18'] *  $res['fee_1']);
 	$tt = $ad_info['col_19'] + $ad_info['col_20'] - $res['fee_2'];
 	$res['fee_3'] = intval($tt * 0.50 );

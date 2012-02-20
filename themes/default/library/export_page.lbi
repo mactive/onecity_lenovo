@@ -30,7 +30,7 @@
 						<option value="0">{$lang.select_please}</option>
 					      {html_options options=$audit_status_array selected=$item.audit_status}
 					</select>
-				&nbsp;&nbsp;&nbsp;<br>
+				&nbsp;&nbsp;&nbsp;<br><br>
 				是否包含{$lang.is_xz} 
 				<select name="has_new">
 			      	<option value='0'>{$lang.select_please}</option>
@@ -56,8 +56,8 @@
 			    
 			</td>
 		<td style="padding-left:30px;">
-			<input type="hidden" name="act" value="export_db" />
-			<input type="submit" value="导出" class="button" /> <input type="reset" value="重置" class="button" /></td>
+			<input type="hidden" name="act" value="export_db"/>
+			<input type="submit" value="导出" class="button btn" /> <input type="reset" value="重置" class="button btn" /></td>
 		</tr>
 	</table>
   </form>

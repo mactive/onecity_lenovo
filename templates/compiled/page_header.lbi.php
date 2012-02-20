@@ -2,7 +2,7 @@
 </head>
 
 <div class="header_city">
-	<div class="login_title">
+	<div class="login_title"><a href="index.php" style="width:250px;height:40px;display:block;"></a>
 	</div>
 	<div class="menu_title">
 		<?php if ($this->_var['sm_session']['user_rank'] > 0): ?>

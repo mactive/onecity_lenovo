@@ -74,8 +74,8 @@
 			<!--{/if}-->
 				
 			
-			<!--{if $act_step == "new_querenlv"}-->
-			<!-- #BeginLibraryItem "/library/new_querenlv.lbi" -->
+			<!--{if $act_step == "new_base_info_querenlv"}-->
+			<!-- #BeginLibraryItem "/library/new_base_info_querenlv.lbi" -->
 			>
 			<!-- #EndLibraryItem -->
 			<!--{/if}-->	

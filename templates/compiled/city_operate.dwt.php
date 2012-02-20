@@ -84,9 +84,9 @@
 					    	是否包含<?php echo $this->_var['lang']['is_xz']; ?>
 							<select name="has_new" id="has_new">
 						      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
-						      	<option value='1' <?php if ($this->_var['filter']['has_new']): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_xz']; ?></option>					    
-						      	<option value='2'><?php echo $this->_var['lang']['is_all']; ?></option>
-						      	<option value='3'><?php echo $this->_var['lang']['is_no_xz']; ?></option>
+						      	<option value='1' <?php if ($this->_var['filter']['has_new'] == 1): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_xz']; ?></option>					    
+						      	<option value='2' <?php if ($this->_var['filter']['has_new'] == 2): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_all']; ?></option>
+						      	<option value='3' <?php if ($this->_var['filter']['has_new'] == 3): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_no_xz']; ?></option>
 							</select>
 						</td>
 					<td style="padding-left:30px;"><input type="submit" value="<?php echo $this->_var['lang']['button_search']; ?>" class="button" /> <input type="reset" value="重置" class="button" /></td>

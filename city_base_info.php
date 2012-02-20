@@ -230,7 +230,6 @@ elseif($_REQUEST['act'] == 'act_update_ad_info')
 	
 	$form_audit = !empty($_REQUEST['form_audit']) ? intval($_REQUEST['form_audit']) : 0;
 	$col = $_REQUEST['col'];
-	print_r($col);
 	for($i=0;$i<count($col);$i++)
 	{	
 		$i_plus = $i +1;
