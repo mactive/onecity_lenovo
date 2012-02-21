@@ -607,7 +607,7 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
 				$res[$key]['fee_3'] = $tmp_arr['fee_3'];
 				$res[$key]['fee_4'] = $tmp_arr['fee_4'];
 				$res[$key]['fee_5'] = $tmp_arr['fee_5'];
-				$res[$key]['fee_6'] = $tmp_arr['fee_2'] + $tmp_arr['fee_5'];
+				$res[$key]['fee_6'] = $tmp_arr['fee_6'];
 			}else{
 				$res[$key]['fee_1'] = $res[$key]['fee_2'] = $res[$key]['fee_3'] = $res[$key]['fee_4'] = $res[$key]['fee_5'] = "老牌子不计算费用";
 			}
@@ -708,7 +708,7 @@ function excel_write_with_sub_array($_name,$title = array(),$data = array(),$sub
 
 
 /**/
-function get_project_list($children){
+function get_project_list($children){	
 	$sql = "SELECT p.*  ".
 			" FROM ".$GLOBALS['ecs']->table('project') . " AS p ".			
 			"WHERE 1 ORDER BY p.project_id DESC ";
@@ -722,6 +722,67 @@ function get_project_list($children){
 		
 		
 	}
+	return $res;
+}
+
+/**/
+function get_new_project_list($children,$user_region,$based_new_nums){
+	$sql = "SELECT p.*  ".
+			" FROM ".$GLOBALS['ecs']->table('project') . " AS p ".			
+			"WHERE 1 ORDER BY p.project_id DESC LIMIT 1";
+	//echo $sql;	 GROUP BY ad.ad_id
+	
+	$res = $GLOBALS['db']->getAll($sql);
+	
+	$pic_count = 0;
+	foreach($based_new_nums AS $v){
+		$pic_count = $pic_count + intval($v);
+	}
+	
+	
+	foreach($res AS $key => $val){
+		$res[$key]['end_time'] 	= date( 'Y-m-d',(strtotime($val['start_time']) + $val['duration_time'] * 86400 ));
+		$res[$key]['pic_count']	= $pic_count;
+		$res[$key]['summary']	= get_new_project_summary($val['project_id'],$user_region,$children,$based_new_nums);
+		
+		
+	}
+	return $res;
+}
+
+function get_new_project_summary($project_id,$user_region,$children,$based_new_nums){
+	$res = array();
+	$quarter = " AND a.Q".$project_id;
+	
+	$amount = 0;
+	foreach($based_new_nums AS $v){
+		$amount = $amount + intval($v);
+	}
+	
+	$res['city_count'] = $user_region[0] == 1 ? $amount : $based_new_nums[$user_region[0]]; 
+	
+	$quarter_1 = " AND re.Q".$project_id;
+	$sql_1 = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('city') ." AS a ".
+			" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') ." AS re ON re.city_id = a.city_id ". 
+			" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') ." AS ad ON ad.city_id = a.city_id ". 
+			 " WHERE $quarter_1 > 0  AND a.col_43 > 0 AND ad.is_new = 1";
+	
+	
+	$sql_2 = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('city_ad') ." AS a ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_gallery') ." AS g ON g.ad_id = a.ad_id ". 
+			 	" WHERE $children AND g.feedback = $project_id AND a.is_new = 1 GROUP BY a.city_id ";
+
+	$sql_3 = "SELECT count(au.ad_id) FROM ".$GLOBALS['ecs']->table('city_ad'). " AS a ".
+			" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') ." AS au ON au.ad_id = a.ad_id ". 
+			 " WHERE $children AND a.is_new =1 AND au.feedback_audit = $project_id AND au.audit_note LIKE '审核通过' GROUP BY au.ad_id";
+	
+	// echo $sql_3;
+	
+	$res['write_complete'] = $project_id == 1 ? $GLOBALS['db']->getOne($sql_1) : 0 ;
+	$tmp_1 = $GLOBALS['db']->getOne($sql_2);
+	$res['upload'] = $tmp_1 > 0 ? $tmp_1 : 0 ;
+	$tmp_2 = $GLOBALS['db']->getAll($sql_3);
+	$res['confirm'] = count($tmp_2 );
 	return $res;
 }
 
@@ -1442,11 +1503,11 @@ function get_overlap_info($another_ad_id,$ad_id){
 
 	
 	$res['fee_2'] = intval($ad_info['col_19'] / $ad_info['col_18'] *  $res['fee_1']);
-	$tt = $ad_info['col_19'] + $ad_info['col_20'] - $res['fee_2'];
+	$tt = $ad_info['col_19'] - $res['fee_2'];
 	$res['fee_3'] = intval($tt * 0.50 );
 	$res['fee_4'] = intval($tt * 0.15 );
 	$res['fee_5'] = intval($tt * 0.65 );
-	$res['fee_6'] = $res['fee_2'] + $res['fee_5'];	
+	$res['fee_6'] = $ad_info['col_20'] + $res['fee_2']  + $res['fee_5'];	
 	return $res;
 }
 

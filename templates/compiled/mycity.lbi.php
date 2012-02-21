@@ -6,7 +6,7 @@
   <ul class="mycity_ul">
     <li><a href="city_operate.php?has_new=1" style="background:url(<?php echo $this->_var['img_path']; ?>ico/flagged.png) no-repeat 10px center;">查看城市</a></li>
 	<li><a href="city_base_info.php?act=ad_list&project_id=9&has_new=1" style="background:url(<?php echo $this->_var['img_path']; ?>ico/my_task.png) no-repeat 10px center;">基础信息修改</a></li>
-	<li><a href="city_project.php?has_new=1" style="background:url(<?php echo $this->_var['img_path']; ?>red_arrow.png) no-repeat 10px center;">项目管理</a></li>
+	<li><a href="city_project.php?act=new_adbrand&has_new=1" style="background:url(<?php echo $this->_var['img_path']; ?>red_arrow.png) no-repeat 10px center;">项目管理</a></li>
 	<?php if ($this->_var['sm_session']['user_rank'] >= 4 || $this->_var['sm_session']['user_rank'] == 2): ?>
 	<li><a href="city_querenlv.php?act=new_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">确认率实时统计</a></li>
 	<li><a href="city_querenlv.php?act=new_base_info_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">基础信息确认率</a></li>

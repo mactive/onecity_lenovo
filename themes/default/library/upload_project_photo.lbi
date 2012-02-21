@@ -26,7 +26,7 @@
 <table width="70%" id="lesson-table" class="table_border table_standard" border="1">
     <tr>
       <td width="100">{$lang.project_name}:</td>
-      <td><span class="red_color font16px">{$project_info.project_name}</span></td>
+      <td><span class="red_color font16px">{if $ad_info.is_new}新增换画{else}{$project_info.project_name}{/if}</span></td>
     </tr>
 	<tr>
       <td width="100">{$lang.county}:</td>
@@ -102,7 +102,7 @@
 <table width="70%" id="lesson-table" class="table_border table_standard" border="1">
 	<tr>
       <td width="100">{$lang.project_name}:</td>
-      <td><span class="red_color font16px">{$project_info.project_name}</span></td>
+      <td><span class="red_color font16px">{if $ad_info.is_new}新增换画{else}{$project_info.project_name}{/if}</span></td>
     </tr>
 	<tr>
       <td width="100">{$lang.county}:</td>
@@ -111,7 +111,7 @@
 </table>
 
 <div class="radius_5px city_info" style="width:95%;height:200px;padding:0px 10px;">
-	<span class="green-color font14px">{$project_info.project_name}</span><br>
+	<span class="green-color font14px">{if $ad_info.is_new}新增换画{else}{$project_info.project_name}{/if}</span><br>
 <!--{foreach from=$photo_info item=item}-->	
 <div style="width:160px;height:160px;text-align:center;float:left;margin:10px 20px;">
 <a href="{$item.img_url}" target="_blank" class="city_photo"><img src="{$item.thumb_url}"></a>

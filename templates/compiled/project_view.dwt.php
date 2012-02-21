@@ -45,6 +45,13 @@
 			<?php endif; ?>
 			
 			
+			<?php if ($this->_var['act_step'] == "new_adbrand"): ?>
+			
+				<?php echo $this->fetch('library/new_adbrand.lbi'); ?>
+				
+			<?php endif; ?>
+			
+			
 			<?php if ($this->_var['act_step'] == "add_project" || $this->_var['act_step'] == "edit_project"): ?>
 			
 				<?php echo $this->fetch('library/edit_project.lbi'); ?>

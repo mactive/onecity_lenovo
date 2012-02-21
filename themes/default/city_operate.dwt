@@ -86,10 +86,14 @@
 					    	{$lang.market_level} <input name="market_level" type="text" id="market_level" size="5" value="{$filter.market_level}" /> &nbsp;&nbsp;&nbsp;
 					    	是否包含{$lang.is_xz}
 							<select name="has_new" id="has_new">
+								<!--{if $filter.has_new != 1}-->
 						      	<option value='0'>{$lang.select_please}</option>
+						      	<!--{/if}-->
 						      	<option value='1' {if $filter.has_new == 1}selected="selected"{/if}>{$lang.is_xz}</option>					    
-						      	<option value='2' {if $filter.has_new == 2}selected="selected"{/if}>{$lang.is_all}</option>
+						      	<!--{if $filter.has_new != 1}-->
+								<option value='2' {if $filter.has_new == 2}selected="selected"{/if}>{$lang.is_all}</option>
 						      	<option value='3' {if $filter.has_new == 3}selected="selected"{/if}>{$lang.is_no_xz}</option>
+						      	<!--{/if}-->
 							</select>
 						</td>
 					<td style="padding-left:30px;"><input type="submit" value="{$lang.button_search}" class="button" /> <input type="reset" value="重置" class="button" /></td>

@@ -83,10 +83,14 @@
 					    	<?php echo $this->_var['lang']['market_level']; ?> <input name="market_level" type="text" id="market_level" size="5" value="<?php echo $this->_var['filter']['market_level']; ?>" /> &nbsp;&nbsp;&nbsp;
 					    	是否包含<?php echo $this->_var['lang']['is_xz']; ?>
 							<select name="has_new" id="has_new">
+								<?php if ($this->_var['filter']['has_new'] != 1): ?>
 						      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
+						      	<?php endif; ?>
 						      	<option value='1' <?php if ($this->_var['filter']['has_new'] == 1): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_xz']; ?></option>					    
-						      	<option value='2' <?php if ($this->_var['filter']['has_new'] == 2): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_all']; ?></option>
+						      	<?php if ($this->_var['filter']['has_new'] != 1): ?>
+								<option value='2' <?php if ($this->_var['filter']['has_new'] == 2): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_all']; ?></option>
 						      	<option value='3' <?php if ($this->_var['filter']['has_new'] == 3): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_no_xz']; ?></option>
+						      	<?php endif; ?>
 							</select>
 						</td>
 					<td style="padding-left:30px;"><input type="submit" value="<?php echo $this->_var['lang']['button_search']; ?>" class="button" /> <input type="reset" value="重置" class="button" /></td>

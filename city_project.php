@@ -118,6 +118,28 @@ if (!$smarty->is_cached('project_list.dwt', $cache_id) && $act == 'list_project'
 	
 	$smarty->display('project_view.dwt');	
 }
+elseif ($_REQUEST['act'] == 'new_adbrand')
+{
+    /* 如果页面没有被缓存则重新获得页面的内容 */
+	
+	$position['ur_here'] .= "<li>新增牌子项目列表</li>"; 
+    $smarty->assign('page_title',       $position['title']);    // 页面标题
+    $smarty->assign('ur_here',          $position['ur_here']);  // 当前位置
+	$has_new = isset($_REQUEST['has_new'])   && intval($_REQUEST['has_new'])  > 0 ? intval($_REQUEST['has_new'])  : 0;
+
+	$based_new_nums = array();
+	$based_new_nums = $_LANG['based_new_nums'];
+	
+	$children = get_city_children_a($user_region);
+	$based_new_nums = array();
+	$based_new_nums = $_LANG['based_new_nums'];
+	
+	$project_list = get_new_project_list($children,$user_region,$based_new_nums);
+	$smarty->assign('project_list',    $project_list);
+	$smarty->assign('has_new',    $has_new);
+	
+	$smarty->display('project_view.dwt');	
+}
 /* 添加项目 一个季度一个项目 */
 elseif ($_REQUEST['act'] == 'add_project' || $_REQUEST['act'] == 'edit_project' )
 {

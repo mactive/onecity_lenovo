@@ -52,6 +52,15 @@
 			<!--{/if}-->
 			
 			
+			<!--{if $act_step == "new_adbrand"}-->
+			
+				<!-- #BeginLibraryItem "/library/new_adbrand.lbi" -->
+				>
+				<!-- #EndLibraryItem -->
+				
+			<!--{/if}-->
+			
+			
 			<!--{if $act_step == "add_project" || $act_step == "edit_project" }-->
 			
 				<!-- #BeginLibraryItem "/library/edit_project.lbi" -->
