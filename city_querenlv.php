@@ -90,24 +90,59 @@ if($_REQUEST['act'] == 'new_querenlv')
 	$sql = "SELECT COUNT( * ) AS  amount,col_1 FROM ".$GLOBALS['ecs']->table('city')." GROUP BY col_1  ORDER BY  CONVERT( col_1 USING GBK )   ASC ";
 	$base = $GLOBALS['db']->getAll($sql);
 	//echo $sql."<br>";
+	
 	foreach($base AS $key => $value){
 		
 		$cat_id = get_cat_id_by_name($value['col_1']);
 		$children = get_city_children(array($cat_id));
+		$base[$key]['amount'] = $based_new_nums[$cat_id];
 
-		
-		$sql_6_plus = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city'). " AS c " .
+		$sql_4_plus = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city'). " AS c " .
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = c.ad_id ". 
 			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS cat ON cat.cat_id = c.city_id ". 
-				" WHERE c.col_1 LIKE '$value[col_1]' ". // 
+				" WHERE c.col_1 LIKE '$value[col_1]' AND cat.market_level = 4  ". // 
 				" AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ".
 				" AND cat.has_new = 1 AND ad.is_new = 1 ";
 				
 			 // echo $sql_6."<br>";
 			  // echo $sql_6_plus."<br>";
-		$base[$key]['lv_6']['amount'] = $based_new_nums[$cat_id];
+		$base[$key]['lv_4']['confirm_amount'] = $GLOBALS['db']->getOne($sql_4_plus);
+		
+		$sql_5_plus = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city'). " AS c " .
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = c.ad_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS cat ON cat.cat_id = c.city_id ". 
+				" WHERE c.col_1 LIKE '$value[col_1]' AND cat.market_level = 5 ". // 
+				" AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ".
+				" AND cat.has_new = 1 AND ad.is_new = 1 ";
+				
+			 // echo $sql_6."<br>";
+			  // echo $sql_6_plus."<br>";
+		$base[$key]['lv_5']['confirm_amount'] = $GLOBALS['db']->getOne($sql_5_plus);
+		
+		
+		$sql_6_plus = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city'). " AS c " .
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = c.ad_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS cat ON cat.cat_id = c.city_id ". 
+				" WHERE c.col_1 LIKE '$value[col_1]' AND cat.market_level LIKE'%6%' ". // 
+				" AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ".
+				" AND cat.has_new = 1 AND ad.is_new = 1 ";
+				
+			 // echo $sql_6."<br>";
+			  // echo $sql_6_plus."<br>";
 		$base[$key]['lv_6']['confirm_amount'] = $GLOBALS['db']->getOne($sql_6_plus);
-		$base[$key]['lv_6']['percent'] =round(($base[$key]['lv_6']['confirm_amount'] / $base[$key]['lv_6']['amount'] * 100),2);
+		
+		$sql_7_plus = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city'). " AS c " .
+				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = c.ad_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS cat ON cat.cat_id = c.city_id ". 
+				" WHERE c.col_1 LIKE '$value[col_1]' AND cat.market_level LIKE'%百强镇%' ". // 
+				" AND ad.audit_status = 5 AND ad.is_audit_confirm = 1 ".
+				" AND cat.has_new = 1 AND ad.is_new = 1 ";
+				
+			 // echo $sql_6."<br>";
+			  // echo $sql_6_plus."<br>";
+		$base[$key]['lv_7']['confirm_amount'] = $GLOBALS['db']->getOne($sql_7_plus);
+		$passed_count = $base[$key]['lv_4']['confirm_amount'] +  $base[$key]['lv_5']['confirm_amount'] +  $base[$key]['lv_6']['confirm_amount'] +  $base[$key]['lv_7']['confirm_amount'];
+		$base[$key]['percent'] = round(( $passed_count / $base[$key]['amount'] * 100),2);
 		
 		
 	}
@@ -738,11 +773,11 @@ elseif($_REQUEST['act'] == 'new_base_info_querenlv')
 		$sql_6 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city_resource'). " AS a " .
 				" WHERE $children  AND a.market_level LIKE'%6%' "; //
 		
-		$sql_6_upload = "SELECT ad.ad_id  FROM ".$GLOBALS['ecs']->table('city_ad'). " AS ad " .
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ". 
+		$sql_6_upload = "SELECT count(ad.ad_id) AS num,a.market_level AS  market_level  FROM ".$GLOBALS['ecs']->table('city_ad'). " AS ad " .
+		 		" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ". 
 				" WHERE $children AND ad.base_info_changed = 1 ".
 				" AND ad.is_new = 1 ".
-				" GROUP BY ad.ad_id ";
+				" GROUP BY a.market_level ";
 				
 		// echo $sql_6_upload."<br>";
 
@@ -778,16 +813,23 @@ elseif($_REQUEST['act'] == 'new_base_info_querenlv')
 				" GROUP BY ad.ad_id ";
 				
 		$base[$key]['lv_6']['amount'] = $based_new_nums[$cat_id];
-		$base[$key]['lv_6']['upload_amount'] = count($GLOBALS['db']->getCol($sql_6_upload));
+		
+		$base[$key]['upload_array'] = array();
+		$base[$key]['upload_array'] = $GLOBALS['db']->getAll($sql_6_upload);
+		$base[$key]['upload_amount'] = 0;
+		foreach($base[$key]['upload_array'] AS $v){
+			$base[$key]['upload_amount'] = $base[$key]['upload_amount'] + $v['num'];
+		}
+		
 		$base[$key]['lv_6']['confirm_amount'] = count($GLOBALS['db']->getCol($sql_6_plus));
 		$base[$key]['lv_6']['audit_amount'] = count($GLOBALS['db']->getCol($sql_6_plus_2));
 		
 		$base[$key]['lv_6']['send_amount'] = count($GLOBALS['db']->getCol($sql_6_plus_3));
 		$base[$key]['lv_6']['receive_amount'] = count($GLOBALS['db']->getCol($sql_6_plus_4));
 		if(!empty($base[$key]['lv_6']['confirm_amount']) || !empty($base[$key]['lv_6']['amount'])){
-			$base[$key]['lv_6']['upload_percent'] = round(($base[$key]['lv_6']['upload_amount'] / $base[$key]['lv_6']['amount'] * 100),2);
-			if($base[$key]['lv_6']['upload_amount'] != 0){
-				$base[$key]['lv_6']['confirm_percent'] = round(($base[$key]['lv_6']['confirm_amount'] / $base[$key]['lv_6']['upload_amount'] * 100),2);
+			$base[$key]['lv_6']['upload_percent'] = round(($base[$key]['upload_amount'] / $base[$key]['lv_6']['amount'] * 100),2);
+			if($base[$key]['upload_amount'] != 0){
+				$base[$key]['lv_6']['confirm_percent'] = round(($base[$key]['lv_6']['confirm_amount'] / $base[$key]['upload_amount'] * 100),2);
 			}else{
 				$base[$key]['lv_6']['confirm_percent'] = 0 ;
 			}

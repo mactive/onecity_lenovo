@@ -87,16 +87,20 @@
 								{html_options options=$lang.audit_status_select selected=$filter.audit_status}
 							</select>
 							&nbsp;&nbsp;&nbsp;
-							
+							<span {if $filter.has_new == 1}style="display:none;"{/if}>
+							<br>
 							是否包含{$lang.is_xz} 
 							<select name="has_new" id="has_new">
-						      	<option value='0'>{$lang.select_please}</option>
-						      	<option value='1' {if $filter.has_new}selected="selected"{/if}>{$lang.is_xz}</option>					    
+								<option value='0'>{$lang.select_please}</option>
+						      	<option value='1' {if $filter.has_new == 1}selected="selected"{/if}>{$lang.is_xz}</option>					    
+								<option value='2' {if $filter.has_new == 2}selected="selected"{/if}>{$lang.is_all}</option>
+						      	<option value='3' {if $filter.has_new == 3}selected="selected"{/if}>{$lang.is_no_xz}</option>					    
 							</select>
+							</span>
 							&nbsp;&nbsp;&nbsp;
 						</td>
 
-					<td style="padding-left:30px;"><input type="submit" value="{$lang.button_search}" class="button" /> <input type="reset" value="重置" class="button" /></td>
+					<td style="padding-left:30px;"><input type="submit" value="{$lang.button_search}" class="btn" /> <input type="reset" value="重置" class="btn" /></td>
 					</tr>
 
 				</table>

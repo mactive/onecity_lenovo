@@ -82,21 +82,24 @@
 							<select id="resource">
 						      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
 								<?php echo $this->html_options(array('options'=>$this->_var['lang']['pic_type_select'])); ?>
-							</select>
+							</select><br/>
 							审核情况
 							<select id="audit_status">
 						      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
 								<?php echo $this->html_options(array('options'=>$this->_var['lang']['audit_status_select'],'selected'=>$this->_var['filter']['audit_status'])); ?>
-							</select><br/>
-							是否包含<?php echo $this->_var['lang']['is_xz']; ?>
-							<select name="has_new" id="has_new">
-						      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
-						      	<option value='1' <?php if ($this->_var['filter']['has_new']): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_xz']; ?></option>					    
 							</select>
-							
+							<span <?php if ($this->_var['filter']['has_new'] == 1): ?>style="display:none;"<?php endif; ?>>
+							 &nbsp;&nbsp;&nbsp;是否包含<?php echo $this->_var['lang']['is_xz']; ?>
+							<select name="has_new" id="has_new">
+								<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
+					      		<option value='1' <?php if ($this->_var['filter']['has_new'] == 1): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_xz']; ?></option>					    
+								<option value='2' <?php if ($this->_var['filter']['has_new'] == 2): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_all']; ?></option>
+					      		<option value='3' <?php if ($this->_var['filter']['has_new'] == 3): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_no_xz']; ?></option>					    
+							</select>
+							</span>
 						</td>
 
-					<td style="padding-left:30px;"><input type="submit" value="<?php echo $this->_var['lang']['button_search']; ?>" class="button" /> <input type="reset" value="重置" class="button" /></td>
+					<td style="padding-left:30px;"><input type="submit" value="<?php echo $this->_var['lang']['button_search']; ?>" class="btn" /> <input type="reset" value="重置" class="btn" /></td>
 					</tr>
 
 				</table>

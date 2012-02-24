@@ -348,7 +348,7 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 						$tmp['col_15'] = $tmp['col_13'] *  intval($tmp['col_14']); //总面积
 						$tmp['col_18'] = sep_days( $val['col_17'],$val['col_16']); //发布天数
 						$tmp['col_22'] = intval($val['col_19']) + intval($val['col_20']) + intval($val['col_21']); //媒体总价
-						
+												
 						$tmp['col_40'] = $val['col_31']; //责任人
 						$tmp['col_41'] = $val['col_32']; //备注
 						
@@ -364,16 +364,26 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 						$tmp['is_upload'] = 1; //要等上传完照片
 						$tmp['audit_status'] = 1;
 						
-						/**/
-						$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $tmp, 'INSERT');
-						$tmp['ad_id'] = $GLOBALS['db']->insert_id();
-						$tmp['ad_sn'] = make_ad_sn($tmp['ad_id'], $val['city_id']);
-						$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $tmp, 'INSERT');
+						// 如果数据有错误
+						if($tmp['col_18'] < 2){
+							$issue = $val;
+							$issue['temp_status'] = "发布时期为零,请检查开始日期和结束日期";
+							array_push($problem_array,$issue);
+							break;
+						}else{
+							/*成功写入*/
+							$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $tmp, 'INSERT');
+							$tmp['ad_id'] = $GLOBALS['db']->insert_id();
+							$tmp['ad_sn'] = make_ad_sn($tmp['ad_id'], $val['city_id']);
+							$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $tmp, 'INSERT');
 
-						//4级城市直接通过
-						if($market_level == "4"){
-							act_level_4_city_upload($val['city_id'],$tmp['ad_id']);
+							//4级城市直接通过
+							if($market_level == "4"){
+								act_level_4_city_upload($val['city_id'],$tmp['ad_id']);
+							}	
 						}
+						
+
 					}
 				}else{
 					$issue = $val;
@@ -556,6 +566,8 @@ elseif($_REQUEST['act'] == 'delete_ad')
 	
 	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city') . "WHERE ad_id =  $ad_id ");
 	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city_ad') . "WHERE ad_id =  $ad_id ");
+	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city_ad_audit') . "WHERE ad_id =  $ad_id ");
+	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city_material') . "WHERE ad_id =  $ad_id ");	
 	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city_gallery') . "WHERE ad_id =  $ad_id ");
 	
 	act_city_request_delete($city_id,$ad_info['audit_status'],1);

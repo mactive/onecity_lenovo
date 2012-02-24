@@ -90,22 +90,34 @@ hide_items();
  */
 function validate()
 {
-	var col_19 = document.getElementById('col_19');
-	var col_20 = document.getElementById('col_20');
-	var col_28 = document.getElementById('col_28');
-	var col_29 = document.getElementById('col_29');
+	// var col_19 = document.getElementById('col_19');
+	// var col_20 = document.getElementById('col_20');
+	// var col_28 = document.getElementById('col_28');
+	// var col_29 = document.getElementById('col_29');
 	var col_42 = document.getElementById('col_42');
 	var col_47 = document.getElementById('col_47');
-    
-    if (col_42.value == 0 )
-    {
-        alert("费用来源必须选择!");
-        return false;
-    }else if(col_47.value == 0 ){
-        alert("是否使用推广费必须选择!");
-	}else{
-		return true;
-	}
+
+	    if (col_42.value == 0 )
+	    {
+	        alert("费用来源必须选择!");
+	        return false;
+	    }
+	
+		else if(col_47.value == 0 ){
+			alert("是否使用推广费必须选择!");
+			return false;
+		}
+		
+		else if(col_47.value != 2){
+			if($("input#col_43").val() =="" || $("input#col_44").val() =="" || $("input#col_45").val() =="" || $("input#col_46").val() =="" || $("input#col_48").val() ==""  || $("input#col_49").val() =="" ){
+				alert("甲方，上级，推广费，营销折扣金额等6项必须填写");
+				return false;
+			}
+		}
+		else{
+			return true;
+		}
+		
 
 	/*
 	var con = confirm("只有一次填写机会，请确认填写和修改的数据无错误");
@@ -120,16 +132,22 @@ function validate()
 function hide_items(){
 	var _value = $("#col_47").val();
 	
-	if(_value == 1){
+	if(_value == 2){
 		$("input#col_43").parentsUntil(".city_info").parent().hide();
 		$("input#col_44").parentsUntil(".city_info").parent().hide();
 		$("input#col_45").parentsUntil(".city_info").parent().hide();
 		$("input#col_46").parentsUntil(".city_info").parent().hide();
-	}else{
+		$("input#col_48").parentsUntil(".city_info").parent().hide();
+		$("input#col_49").parentsUntil(".city_info").parent().hide();
+	}
+	else{
 		$("input#col_43").parentsUntil(".city_info").parent().show();
 		$("input#col_44").parentsUntil(".city_info").parent().show();
 		$("input#col_45").parentsUntil(".city_info").parent().show();
 		$("input#col_46").parentsUntil(".city_info").parent().show();
+		$("input#col_48").parentsUntil(".city_info").parent().show();
+		$("input#col_49").parentsUntil(".city_info").parent().show();
+
 	}
 }
 

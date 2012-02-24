@@ -4,12 +4,12 @@
 
 <div class="radius_5px city_info" style="width:95%;height:200px;padding:0px 10px;">
 	<span class="green-color font14px">未换画之前</span><br>
-<?php $_from = $this->_var['old_photo_info']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_05967600_1329547741');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_05967600_1329547741']):
+<?php $_from = $this->_var['old_photo_info']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_87005300_1330003281');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_87005300_1330003281']):
 ?>
 	<div style="width:160px;height:160px;text-align:center;float:left;margin:10px 20px;">
-	<a href="<?php echo $this->_var['item_0_05967600_1329547741']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_05967600_1329547741']['thumb_url']; ?>"></a>
-	<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_05967600_1329547741']['img_sort']]; ?>
+	<a href="<?php echo $this->_var['item_0_87005300_1330003281']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_87005300_1330003281']['thumb_url']; ?>"></a>
+	<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_87005300_1330003281']['img_sort']]; ?>
 	</div>
 <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 </div>
@@ -22,11 +22,11 @@
 <?php endif; ?>
 <?php if ($this->_var['ad_info']['is_audit_confirm'] == 1 && $this->_var['ad_info']['audit_status'] == 5): ?>
 	<form method="post" action="city_base_info.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
-	<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_06015200_1329547741');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_06015200_1329547741']):
+	<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_87203900_1330003281');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_87203900_1330003281']):
 ?>
 	<div class="city_info radius_5px">
-		<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_06015200_1329547741']; ?></div>
+		<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_87203900_1330003281']; ?></div>
 		<div class="f_left right_content">		
 			<span class="f_right"><?php if ($this->_var['k'] == "col_12"): ?>如是两块牌子请写合计尺寸 &nbsp;<?php endif; ?>
 				<a target="_blank"  class="grey666" href="city_operate.php?act=view_log&ad_id=<?php echo $this->_var['ad_detail']['ad_id']; ?>&col_name=<?php echo $this->_var['k']; ?>">
@@ -93,22 +93,34 @@ hide_items();
  */
 function validate()
 {
-	var col_19 = document.getElementById('col_19');
-	var col_20 = document.getElementById('col_20');
-	var col_28 = document.getElementById('col_28');
-	var col_29 = document.getElementById('col_29');
+	// var col_19 = document.getElementById('col_19');
+	// var col_20 = document.getElementById('col_20');
+	// var col_28 = document.getElementById('col_28');
+	// var col_29 = document.getElementById('col_29');
 	var col_42 = document.getElementById('col_42');
 	var col_47 = document.getElementById('col_47');
-    
-    if (col_42.value == 0 )
-    {
-        alert("费用来源必须选择!");
-        return false;
-    }else if(col_47.value == 0 ){
-        alert("是否使用推广费必须选择!");
-	}else{
-		return true;
-	}
+
+	    if (col_42.value == 0 )
+	    {
+	        alert("费用来源必须选择!");
+	        return false;
+	    }
+	
+		else if(col_47.value == 0 ){
+			alert("是否使用推广费必须选择!");
+			return false;
+		}
+		
+		else if(col_47.value != 2){
+			if($("input#col_43").val() =="" || $("input#col_44").val() =="" || $("input#col_45").val() =="" || $("input#col_46").val() =="" || $("input#col_48").val() ==""  || $("input#col_49").val() =="" ){
+				alert("甲方，上级，推广费，营销折扣金额等6项必须填写");
+				return false;
+			}
+		}
+		else{
+			return true;
+		}
+		
 
 	/*
 	var con = confirm("只有一次填写机会，请确认填写和修改的数据无错误");
@@ -123,16 +135,22 @@ function validate()
 function hide_items(){
 	var _value = $("#col_47").val();
 	
-	if(_value == 1){
+	if(_value == 2){
 		$("input#col_43").parentsUntil(".city_info").parent().hide();
 		$("input#col_44").parentsUntil(".city_info").parent().hide();
 		$("input#col_45").parentsUntil(".city_info").parent().hide();
 		$("input#col_46").parentsUntil(".city_info").parent().hide();
-	}else{
+		$("input#col_48").parentsUntil(".city_info").parent().hide();
+		$("input#col_49").parentsUntil(".city_info").parent().hide();
+	}
+	else{
 		$("input#col_43").parentsUntil(".city_info").parent().show();
 		$("input#col_44").parentsUntil(".city_info").parent().show();
 		$("input#col_45").parentsUntil(".city_info").parent().show();
 		$("input#col_46").parentsUntil(".city_info").parent().show();
+		$("input#col_48").parentsUntil(".city_info").parent().show();
+		$("input#col_49").parentsUntil(".city_info").parent().show();
+
 	}
 }
 

@@ -1,7 +1,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <div class="font20px"><span class="red-block f_left" style="padding:5px 20px;">新增</span>基础信息实时统计表 当前时间:{$date}</div>
 
-	<table width="80%" style="margin:10px auto;background:url(../images/container_bg.png) #ffffff;" class="table_standard table_border_dark" border="1">
+	<table width="100%" style="margin:10px auto;background:url(../images/container_bg.png) #ffffff;" class="table_standard table_border_dark" border="1">
 		<tr>
 			<td rowspan="1">分区</td>
 			<td colspan="8">全部级别</td>
@@ -21,7 +21,7 @@
 		<tr>
 			<td>{$item.col_1}</td>
 			<td>{$item.lv_6.amount}</td>
-			<td>{$item.lv_6.upload_amount}</td><td>{$item.lv_6.upload_percent}%</td>
+			<td>{$item.upload_amount}<td>{$item.lv_6.upload_percent}%</td>
 			<td>{$item.lv_6.audit_amount}<td>{$item.lv_6.confirm_amount}</td><td>{$item.lv_6.confirm_percent}%</td>
 			<td>{$item.lv_6.send_amount}<td>{$item.lv_6.receive_amount}</td>
 			

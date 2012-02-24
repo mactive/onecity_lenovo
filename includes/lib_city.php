@@ -884,9 +884,17 @@ function get_project_city($children,$limit = 0){
     {
         $where .= " AND a.market_level LIKE '%" . mysql_like_quote($filter['market_level']) . "%'";
     }
+
+
     if ($filter['has_new'])
     {
-        $where .= " AND a.has_new = 1 AND ad.is_new = 1    "; //AND ad.is_new = 1 
+		if($filter['has_new'] == 1){
+	        $where .= " AND ad.is_new = 1 AND a.has_new = 1 ";
+		}elseif($filter['has_new'] == 3){
+			$where .= " AND a.has_new = 0 ";
+		}else{
+			$where .= "";
+		}
     }
 
 
@@ -1269,7 +1277,13 @@ function get_base_info_list($children,$limit = 0){
     }
     if ($filter['has_new'])
     {
-        $where .= " AND a.has_new = 1 AND ad.is_new = 1    "; //AND ad.is_new = 1 
+		if($filter['has_new'] == 1){
+	        $where .= " AND a.has_new = 1 AND ad.is_new = 1";
+		}elseif($filter['has_new'] == 3){
+			$where .= " AND a.has_new = 0 ";
+		}else{
+			$where .= "";
+		}
     }
 
 

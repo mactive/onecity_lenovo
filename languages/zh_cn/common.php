@@ -791,6 +791,9 @@ $_LANG['city_title']['col_44'] = "甲方渠道名称";
 $_LANG['city_title']['col_45'] = "上级分销商编号";
 $_LANG['city_title']['col_46'] = "上级分销商名称";
 $_LANG['city_title']['col_47'] = "是否使用推广费用";
+$_LANG['city_title']['col_48'] = "推广费";
+$_LANG['city_title']['col_49'] = "营销折扣费";
+
 
 
 /* city_dis_title 个项目 */
@@ -901,7 +904,7 @@ $_LANG['based_new_nums']['2'] = "24";
 $_LANG['based_new_nums']['3'] = "3";
 $_LANG['based_new_nums']['4'] = "14";
 $_LANG['based_new_nums']['5'] = "12";
-$_LANG['based_new_nums']['6'] = "26";
+$_LANG['based_new_nums']['6'] = "27";
 $_LANG['based_new_nums']['7'] = "16";
 $_LANG['based_new_nums']['8'] = "36";
 $_LANG['based_new_nums']['9'] = "18";
@@ -977,10 +980,9 @@ $_LANG['resource_type']['其他']= "其他";
 
 
 $_LANG['promotion_select'][0] = "请选择...";
-$_LANG['promotion_select'][1] = "没有使用推广费";
 $_LANG['promotion_select'][2] = "使用推广费";
 $_LANG['promotion_select'][3] = "使用营销折扣费";
-$_LANG['promotion_select'][4] = "使用推广费营&销折扣费";
+$_LANG['promotion_select'][4] = "推广费&营销折扣费";
 
 $_LANG['pic_type_select_lite'][0] = "请选择...";
 $_LANG['pic_type_select_lite'][1] = "SMB";
