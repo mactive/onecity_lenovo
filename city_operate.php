@@ -472,6 +472,9 @@ elseif($_REQUEST['act'] == 'edit_ad' || $_REQUEST['act'] == 'view_ad')
 		$overlap_info['fee_2'] = intval($tt * 0.15 );
 		$overlap_info['fee_3'] = intval($tt * 0.65 );
 		$smarty->assign('overlap_info', $overlap_info);
+		
+		$photo_info = get_ad_photo_info($ad_id,2);
+		$smarty->assign('photo_info', $photo_info);
 	}
 
 	if($ad_info['audit_status'] > 1){
