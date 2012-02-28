@@ -17,7 +17,7 @@
 		</tr>
 		<!--{foreach from=$data key=k item=item }-->
 		<tr>
-			<td>{$item.col_1}</td>
+			<td>{$item.cat_id}-{$item.col_1}</td>
 			<td>{$item.amount}</td>
 			<td>{$item.lv_4.confirm_amount}</td>
 			<td>{$item.lv_5.confirm_amount}</td>

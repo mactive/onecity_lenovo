@@ -15,16 +15,16 @@
 			<td>百强镇确认城市数量</td>
 			<td>总确认率</td>
 		</tr>
-		<?php $_from = $this->_var['data']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_78669100_1329921297');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_78669100_1329921297']):
+		<?php $_from = $this->_var['data']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_63036900_1330435041');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_63036900_1330435041']):
 ?>
 		<tr>
-			<td><?php echo $this->_var['item_0_78669100_1329921297']['col_1']; ?></td>
-			<td><?php echo $this->_var['item_0_78669100_1329921297']['amount']; ?></td>
-			<td><?php echo $this->_var['item_0_78669100_1329921297']['lv_4']['confirm_amount']; ?></td>
-			<td><?php echo $this->_var['item_0_78669100_1329921297']['lv_5']['confirm_amount']; ?></td>
-			<td><?php echo $this->_var['item_0_78669100_1329921297']['lv_6']['confirm_amount']; ?></td>
-			<td><?php echo $this->_var['item_0_78669100_1329921297']['lv_7']['confirm_amount']; ?></td><td><?php echo $this->_var['item_0_78669100_1329921297']['percent']; ?>%</td>
+			<td><?php echo $this->_var['item_0_63036900_1330435041']['cat_id']; ?>-<?php echo $this->_var['item_0_63036900_1330435041']['col_1']; ?></td>
+			<td><?php echo $this->_var['item_0_63036900_1330435041']['amount']; ?></td>
+			<td><?php echo $this->_var['item_0_63036900_1330435041']['lv_4']['confirm_amount']; ?></td>
+			<td><?php echo $this->_var['item_0_63036900_1330435041']['lv_5']['confirm_amount']; ?></td>
+			<td><?php echo $this->_var['item_0_63036900_1330435041']['lv_6']['confirm_amount']; ?></td>
+			<td><?php echo $this->_var['item_0_63036900_1330435041']['lv_7']['confirm_amount']; ?></td><td><?php echo $this->_var['item_0_63036900_1330435041']['percent']; ?>%</td>
 
 		</tr>
 		<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>

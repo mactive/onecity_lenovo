@@ -27,7 +27,7 @@
 		<a href="city_operate.php?act=upload_panel" style="background:url(<?php echo $this->_var['img_path']; ?>ico/inbox.png) no-repeat 10px center;">上传数据</a></li>
 	<?php endif; ?>
     <li <?php if ($this->_var['act_step'] == "show"): ?>class="selected"<?php endif; ?>>
-		<a href="city_operate.php?has_new=3" style="background:url(<?php echo $this->_var['img_path']; ?>ico/flagged.png) no-repeat 10px center;">查看城市</a></li>
+		<a href="city_operate.php?has_new=2" style="background:url(<?php echo $this->_var['img_path']; ?>ico/flagged.png) no-repeat 10px center;">查看城市</a></li>
 	<li><a href="city_operate.php?act=export_page" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">导出报表</a></li>
 	<li><a href="download/FY12_model.rar" style="background:url(<?php echo $this->_var['img_path']; ?>ico/project.png) no-repeat 10px center;">模版下载</a></li>
 	<?php if ($this->_var['sm_session']['user_rank'] >= 4): ?>
@@ -43,7 +43,7 @@
 </div>
 
 <ul class="mycity_ul">
-	<li><a href="city_base_info.php?act=ad_list&project_id=9" style="background:url(<?php echo $this->_var['img_path']; ?>ico/my_task.png) no-repeat 10px center;">基础信息修改</a></li>
+	<li><a href="city_base_info.php?act=ad_list&project_id=9&has_new=2" style="background:url(<?php echo $this->_var['img_path']; ?>ico/my_task.png) no-repeat 10px center;">基础信息修改</a></li>
 	<?php if ($this->_var['sm_session']['user_rank'] >= 4 || $this->_var['sm_session']['user_rank'] == 2): ?>
 	<li><a href="city_querenlv.php?act=base_info_querenlv" style="background:url(<?php echo $this->_var['img_path']; ?>blue_arrow.png) no-repeat 10px center;">基础信息确认率</a></li>
 	<?php endif; ?>
@@ -56,7 +56,7 @@
     <div class="bgr"> </div>
 </div>
 <ul class="mycity_ul">
-	<li><a href="city_project.php" style="background:url(<?php echo $this->_var['img_path']; ?>red_arrow.png) no-repeat 10px center;">项目管理</a></li>
+	<li><a href="city_project.php?has_new=2" style="background:url(<?php echo $this->_var['img_path']; ?>red_arrow.png) no-repeat 10px center;">项目管理</a></li>
 	<?php if ($this->_var['sm_session']['user_rank'] == 2): ?>
 	<li><a href="city_project.php?act=project_picture" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">广告大图</a></li>
 	<?php endif; ?>

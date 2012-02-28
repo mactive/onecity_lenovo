@@ -435,6 +435,31 @@ elseif($_REQUEST['act'] == "batch_delete_photo")
 	echo "一共成功删除".count($tt)."座城市的原始照片";
 	    	
 }
+elseif($_REQUEST['act'] == "add_new_city"){
+	$res = array();
+	$res[0] = array("a"=>"三江侗族自治县","b"=>"267","c"=>"6B");
+	$res[1] = array("a"=>"合山市","b"=>"278","c"=>"6B");
+	$res[2] = array("a"=>"天等县","b"=>"279","c"=>"6B");
+	$res[3] = array("a"=>"鹿寨县","b"=>"267","c"=>"6A");
+	$res[4] = array("a"=>"上林县","b"=>"266","c"=>"6B");
+	$res[5] = array("a"=>"苍梧县","b"=>"269","c"=>"6B");
+	$res[6] = array("a"=>"南丹县","b"=>"277","c"=>"6A");
+	$res[7] = array("a"=>"灵川县","b"=>"268","c"=>"6B");
+	$res[8] = array("a"=>"恭城瑶族自治县","b"=>"268","c"=>"6B");
+	
+	foreach($res AS $v){
+		$cat_id = $GLOBALS['db']->getOne("SELECT MAX(`cat_id`)+1 FROM " .$GLOBALS['ecs']->table('category'));
+		$sql_1 = "INSERT INTO ".$GLOBALS['ecs']->table('category') ." VALUES($cat_id, '$v[a]', $v[b], '', NULL, '', 0, '', '', 1, '', 1, 0, 0, 5, 1, 0, 1, '县级市', '$v[c]', '新兴', 'VD', 3, 0, 0, 0)";
+		$sql_2 = "INSERT INTO ".$GLOBALS['ecs']->table('city_resource') ." VALUES($cat_id, '$v[a]', 2, 5, 2, 0, $v[b], 5, '', '$v[c]', 2)";
+		$sql_3 = "INSERT INTO ".$GLOBALS['ecs']->table('city_request') ." VALUES($cat_id, '$v[a]', $v[b], 5, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)";
+		
+		echo $sql_1."<br>".$sql_2."<br>".$sql_3."<br>";
+		// echo "<br><br>====<br><br>";
+		// $GLOBALS['db']->query($sql_1);
+		// $GLOBALS['db']->query($sql_2);
+		// $GLOBALS['db']->query($sql_3);    	
+	}
+}
 elseif($_REQUEST['act'] == "jinmeng")
 {
 	if($_SESSION['user_id'] != 1){

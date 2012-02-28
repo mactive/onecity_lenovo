@@ -96,6 +96,7 @@ if($_REQUEST['act'] == 'new_querenlv')
 		$cat_id = get_cat_id_by_name($value['col_1']);
 		$children = get_city_children(array($cat_id));
 		$base[$key]['amount'] = $based_new_nums[$cat_id];
+		$base[$key]['cat_id'] = $cat_id;
 
 		$sql_4_plus = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city'). " AS c " .
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = c.ad_id ". 
