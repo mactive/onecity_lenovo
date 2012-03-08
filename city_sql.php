@@ -228,7 +228,7 @@ elseif($_REQUEST['act'] == 'IDEA_2'){
 		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
 	}
 	
-	$type =  !empty($_REQUEST['type']) ? intval($_REQUEST['type']) : 1;
+	$type =  !empty($_REQUEST['type']) ? intval($_REQUEST['type']) : 2;
 	switch ($type) {
 		case '1':
 			$sql_plus = " AND au.audit_note='审核通过' AND user_rank = 5 ";
@@ -246,19 +246,21 @@ elseif($_REQUEST['act'] == 'IDEA_2'){
 			$sql_plus = " AND ad.audit_status is NULL AND ad.is_audit_confirm is NULL ";
 			break;
 	}
+	$sql_plus_2 = " AND re.Q2 = 6";
 	
-	$sql_1 = "SELECT a.cat_id,a.cat_name AS county , au.ad_id ".
-				//",a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
-				" FROM ".$GLOBALS['ecs']->table('city_ad_audit') ." AS au ".
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ".
-				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ".
-				//" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
-			 	//" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
-			 	//" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
-			 	//" LEFT JOIN " .$GLOBALS['ecs']->table('sm_city') . " AS c ON c.city_id = a.cat_id ".
-			" WHERE a.resource = 2 AND a.sys_level = 5 ". $sql_plus .
-			" GROUP BY ad.city_id ";
-	echo $sql_1;
+	$sql_1 = "SELECT a.cat_id,a.market_level,a.cat_name AS county ".
+				",a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
+				" FROM " .$GLOBALS['ecs']->table('category') . " AS a ".
+				
+				// " FROM ".$GLOBALS['ecs']->table('city_ad_audit') ." AS au ".
+				// " LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.city_id = a.cat_id ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS re ON re.city_id = a.cat_id ".
+			" WHERE a.sys_level = 5 ".  $sql_plus_2 .
+			" GROUP BY a.cat_id ";
+	//echo $sql_1;
 	$res = $GLOBALS['db']->getAll($sql_1);
 	
 	
@@ -271,6 +273,7 @@ elseif($_REQUEST['act'] == 'IDEA_2'){
 		echo "<td>".$val['province']."</td>";
 		echo "<td>".$val['city']."</td>";
 		echo "<td>".$val['county']."</td>";
+		echo "<td>".$val['market_level']."</td>";
 		echo "<td>".$_LANG['audit_level'][$val['audit_status']]."</td>";
 		echo "<td>".$val['is_audit_confirm']."</td>";
 		echo "</tr>";
@@ -437,15 +440,17 @@ elseif($_REQUEST['act'] == "batch_delete_photo")
 }
 elseif($_REQUEST['act'] == "add_new_city"){
 	$res = array();
-	$res[0] = array("a"=>"三江侗族自治县","b"=>"267","c"=>"6B");
-	$res[1] = array("a"=>"合山市","b"=>"278","c"=>"6B");
-	$res[2] = array("a"=>"天等县","b"=>"279","c"=>"6B");
-	$res[3] = array("a"=>"鹿寨县","b"=>"267","c"=>"6A");
-	$res[4] = array("a"=>"上林县","b"=>"266","c"=>"6B");
-	$res[5] = array("a"=>"苍梧县","b"=>"269","c"=>"6B");
-	$res[6] = array("a"=>"南丹县","b"=>"277","c"=>"6A");
-	$res[7] = array("a"=>"灵川县","b"=>"268","c"=>"6B");
-	$res[8] = array("a"=>"恭城瑶族自治县","b"=>"268","c"=>"6B");
+		$res[0] = array("a"=>"海林市","b"=>"123","c"=>"6B");	// 
+	
+	// $res[0] = array("a"=>"三江侗族自治县","b"=>"267","c"=>"6B");
+		// $res[1] = array("a"=>"合山市","b"=>"278","c"=>"6B");
+		// $res[2] = array("a"=>"天等县","b"=>"279","c"=>"6B");
+		// $res[3] = array("a"=>"鹿寨县","b"=>"267","c"=>"6A");
+		// $res[4] = array("a"=>"上林县","b"=>"266","c"=>"6B");
+		// $res[5] = array("a"=>"苍梧县","b"=>"269","c"=>"6B");
+		// $res[6] = array("a"=>"南丹县","b"=>"277","c"=>"6A");
+		// $res[7] = array("a"=>"灵川县","b"=>"268","c"=>"6B");
+		// $res[8] = array("a"=>"恭城瑶族自治县","b"=>"268","c"=>"6B");
 	
 	foreach($res AS $v){
 		$cat_id = $GLOBALS['db']->getOne("SELECT MAX(`cat_id`)+1 FROM " .$GLOBALS['ecs']->table('category'));

@@ -1,10 +1,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <div class="font20px">2011年Q{$project_id} 换画反馈实时统计表 当前时间:{$date}</div>
 <div class="font14px">
-<a href="city_operate.php?act=project_querenlv&project_id=1">Q1</a>
-<a href="city_operate.php?act=project_querenlv&project_id=2">Q2</a>
-<a href="city_operate.php?act=project_querenlv&project_id=3">Q3</a>
-<a href="city_operate.php?act=project_querenlv&project_id=4">Q4</a>
+<a href="city_querenlv.php?act=project_querenlv&project_id=1">Q1</a>
+<a href="city_querenlv.php?act=project_querenlv&project_id=2">Q2</a>
+<a href="city_querenlv.php?act=project_querenlv&project_id=3">Q3</a>
+<a href="city_querenlv.php?act=project_querenlv&project_id=4">Q4</a>
 </div>
 	<table width="1200px" style="margin:10px auto;background:url(../images/container_bg.png) #ffffff;" class="table_standard table_border_dark" border="1">
 		<tr>
