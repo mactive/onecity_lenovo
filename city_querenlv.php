@@ -268,7 +268,7 @@ elseif($_REQUEST['act'] == 'project_querenlv')
 	if($_SESSION['user_rank'] < 4){
 		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
 	}
-	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 1;
+	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 2;
 	$smarty->assign('project_id',   $project_id);
 	$date = date('Y-m-d H:i:s',(gmtime()+28800));
 	$smarty->assign('date',   $date);
@@ -284,12 +284,15 @@ elseif($_REQUEST['act'] == 'project_querenlv')
 		
 		/*4级城市*/		
 		$sql_4 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
-				" WHERE $children  AND a.market_level = 4 ";
+				" WHERE $children  AND a.market_level = 4 ".
+				" AND a.cat_id <= ". NEWCITYAFTERID ; //
 		//echo $sql_4;
+		
 		$sql_4_upload = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
 			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
 				" WHERE $children AND g.feedback = '$project_id' AND a.market_level = 4 ".
+				" AND a.cat_id <= " .NEWCITYAFTERID ." AND ad.is_new = 0 ".
 				" GROUP BY g.ad_id ";
 		//echo $sql_4_upload."<br>";
 
@@ -297,6 +300,7 @@ elseif($_REQUEST['act'] == 'project_querenlv')
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
 			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
 				" WHERE $children AND au.feedback_audit = '$project_id' AND au.audit_note = '审核通过' AND au.user_rank = 2 AND a.market_level = 4  ".
+				" AND a.cat_id <= " .NEWCITYAFTERID ." AND ad.is_new = 0 ".
 				" GROUP BY au.ad_id ";
 		//echo $sql_4_plus."<br>";
 		
@@ -315,12 +319,15 @@ elseif($_REQUEST['act'] == 'project_querenlv')
 		
 		/*5级城市*/		
 		$sql_5 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
-				" WHERE $children  AND a.market_level = 5 ";
+				" WHERE $children  AND a.market_level = 5 ".
+				" AND a.cat_id <= " .NEWCITYAFTERID ;
+				
 		//echo $sql_5;
 		$sql_5_upload = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
 			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
 				" WHERE $children AND g.feedback = '$project_id' AND a.market_level = 5 ".
+				" AND a.cat_id <= " .NEWCITYAFTERID ." AND ad.is_new = 0 ".
 				" GROUP BY g.ad_id ";
 		//echo $sql_5_upload."<br>";
 
@@ -328,6 +335,7 @@ elseif($_REQUEST['act'] == 'project_querenlv')
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
 			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
 				" WHERE $children AND au.feedback_audit = '$project_id' AND au.audit_note = '审核通过' AND au.user_rank = 2 AND a.market_level = 5  ".
+				" AND a.cat_id <= " .NEWCITYAFTERID ." AND ad.is_new = 0 ".
 				" GROUP BY au.ad_id ";
 		//echo $sql_5_plus."<br>";
 		
@@ -346,20 +354,26 @@ elseif($_REQUEST['act'] == 'project_querenlv')
 		
 		/*6级城市*/
 		$sql_6 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
-				" WHERE $children  AND a.market_level LIKE'%6%' "; //
+				" WHERE $children  AND a.market_level LIKE'%6%' ".
+				" AND a.cat_id <= " .NEWCITYAFTERID ;
+		// if($cat_id == 9){echo $value['col_1'].$sql_6."<br>";}
 		
 		$sql_6_upload = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
 			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
 				" WHERE $children AND g.feedback = '$project_id' AND a.market_level LIKE'%6%'  ".
+				" AND a.cat_id <= " .NEWCITYAFTERID ." AND ad.is_new = 0 ".
 				" GROUP BY g.ad_id ";
-		//echo $sql_5_upload."<br>";
+		// if($cat_id == 9){echo $value['col_1'].$sql_6_upload."<br>";}
 
 		$sql_6_plus = "SELECT au.ad_id FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
 			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
 				" WHERE $children AND au.feedback_audit = '$project_id' AND au.audit_note = '审核通过' AND au.user_rank = 2 AND a.market_level LIKE'%6%' ".
+				" AND a.cat_id <= " .NEWCITYAFTERID ." AND ad.is_new = 0 ".
 				" GROUP BY au.ad_id ";
+		// if($cat_id == 9){echo $sql_6_plus."<br>";}
+		
 		//echo $sql_5_plus."<br>";
 		//AND ( a.market_level LIKE'%6%'  OR a.market_level LIKE'%百强镇%' )  ".
 				
@@ -378,12 +392,14 @@ elseif($_REQUEST['act'] == 'project_querenlv')
 		
 		/*单独百强镇*/
 		$sql_7 = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
-				" WHERE $children  AND  a.market_level LIKE'%百强镇%' "; //
+				" WHERE $children  AND  a.market_level LIKE'%百强镇%' ".
+				" AND a.cat_id <= " .NEWCITYAFTERID ;
 
 		$sql_7_upload = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
 			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
 				" WHERE $children AND g.feedback = '$project_id' AND  a.market_level LIKE'%百强镇%'  ".
+				" AND a.cat_id <= " .NEWCITYAFTERID ." AND ad.is_new = 0 ".
 				" GROUP BY g.ad_id ";
 		//echo $sql_5_upload."<br>";
 
@@ -391,6 +407,7 @@ elseif($_REQUEST['act'] == 'project_querenlv')
 				" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
 			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a ON a.cat_id = ad.city_id ". 
 				" WHERE $children AND au.feedback_audit = '$project_id' AND au.audit_note = '审核通过' AND au.user_rank = 2 AND a.market_level LIKE'%百强镇%'  ".
+				" AND a.cat_id <= " .NEWCITYAFTERID ." AND ad.is_new = 0 ".
 				" GROUP BY au.ad_id ";
 		//echo $sql_5_plus."<br>";
 

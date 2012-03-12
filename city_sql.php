@@ -952,7 +952,6 @@ elseif($_REQUEST['act'] == 'DIFF'){
 	}
 	echo "</table>";
 }
-
 elseif($_REQUEST['act'] == 'add_col'){
 	
 	$sql = "SELECT ad_id,city_id,col_3 FROM ".$GLOBALS['ecs']->table('city')." Where ad_id = 1";
@@ -1220,7 +1219,6 @@ function get_city_huanhua_progress($city_id,$project_id){
 	return $array;
 	
 }
-
 
 
 
