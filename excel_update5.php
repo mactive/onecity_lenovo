@@ -50,7 +50,7 @@ for ($y=0;$y<count($all_sheets);$y++)
 	$count = 0;
 
 	
-	for ($row=2;$row<=$all_sheets[$y]['numRows'];$row++) 
+	for ($row=1;$row<=$all_sheets[$y]['numRows'];$row++) 
 	{
 		// $city = trim($all_sheets[$y]['cells'][$row][4]);
 		// $county = trim($all_sheets[$y]['cells'][$row][5]);
@@ -60,9 +60,7 @@ for ($y=0;$y<count($all_sheets);$y++)
 		
 		// $region = trim($all_sheets[$y]['cells'][$row][1]);
 		// $province = trim($all_sheets[$y]['cells'][$row][2]);
-		$county = trim($all_sheets[$y]['cells'][$row][1]);
-		$tmp = trim($all_sheets[$y]['cells'][$row][2]);
-		$type = ($tmp == "SMB") ? 1 : 2 ; 
+		$county = trim($all_sheets[$y]['cells'][$row][4]);
 		
 		$city_id = get_cat_id($county);
 		
@@ -72,20 +70,25 @@ for ($y=0;$y<count($all_sheets);$y++)
 		
 		// SMB
 		if(!empty($city_id)){
-			/*
-			$sql = "UPDATE " . $GLOBALS['ecs']->table('city') .
-	                " SET `col_42` = '1' ".
-	                "WHERE city_id = $city_id" ;			
+			/**/
+			$sql = "UPDATE " . $GLOBALS['ecs']->table('category') .
+	                " SET `is_microsoft` = '1' ".
+	                "WHERE cat_id = $city_id" ;			
 			
 			echo $sql.";<br>";
+			
+			$sql_2 = "UPDATE " . $GLOBALS['ecs']->table('city_resource') .
+	                " SET `Q2` = '6' ".
+	                "WHERE city_id = $city_id" ;
 		    
+			echo $sql_2.";<br>";
 			
-			*/
-			echo $county."-".$city_id."-".$type."<br>";
 			
-			$sql = "UPDATE " . $GLOBALS['ecs']->table('city') .
-	                " SET `col_42` = $type ".
-	                "WHERE city_id = $city_id" ;			
+			// echo $county."-".$city_id."<br>";
+			
+			// $sql = "UPDATE " . $GLOBALS['ecs']->table('city') .
+			// 	                " SET `col_42` = $type ".
+			// 	                "WHERE city_id = $city_id" ;			
 			
 			//echo $sql.";<br>";
 			

@@ -4,7 +4,7 @@
 
 <div class="form-div">
 <form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data">
-	<table width="80%" style="margin:10px auto;" class="table_standard table_border" border="1">
+	<table width="95%" style="margin:10px auto;" class="table_standard table_border" border="1">
 		<tr><td>
 			<img src="themes/default/images/green_arrow.png" alt=""/>
 			</td>
@@ -29,7 +29,7 @@
 						<option value="0"><?php echo $this->_var['lang']['select_please']; ?></option>
 					      <?php echo $this->html_options(array('options'=>$this->_var['audit_status_array'],'selected'=>$this->_var['item']['audit_status'])); ?>
 					</select>
-				&nbsp;&nbsp;&nbsp;<br>
+				&nbsp;&nbsp;&nbsp;<br><br>
 				是否包含<?php echo $this->_var['lang']['is_xz']; ?> 
 				<select name="has_new">
 			      	<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
@@ -55,8 +55,8 @@
 			    
 			</td>
 		<td style="padding-left:30px;">
-			<input type="hidden" name="act" value="export_db" />
-			<input type="submit" value="导出" class="button" /> <input type="reset" value="重置" class="button" /></td>
+			<input type="hidden" name="act" value="export_db"/>
+			<input type="submit" value="导出" class="button btn" /> <input type="reset" value="重置" class="button btn" /></td>
 		</tr>
 	</table>
   </form>

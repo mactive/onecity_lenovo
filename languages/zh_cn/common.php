@@ -795,7 +795,6 @@ $_LANG['city_title']['col_48'] = "推广费";
 $_LANG['city_title']['col_49'] = "营销折扣费";
 
 
-
 /* city_dis_title 个项目 */
 $_LANG['city_dis_title']['dis_1'] = "分区";
 $_LANG['city_dis_title']['dis_2'] = "省份";
@@ -1006,10 +1005,13 @@ $_LANG['resource'][5] = "BRAND";
 $_LANG['resource'][6] = "MICROSOFT";
 $_LANG['is_audit_confirm'] = "是否通过";
 $_LANG['is_shanghua'] = "是否上画";
-$_LANG[''] = "";
-$_LANG[''] = "";
-$_LANG[''] = "";
-$_LANG[''] = "";
+
+$_LANG['dealer_id'] = "渠道ID";
+$_LANG['dealer_sn'] = "渠道编号";
+$_LANG['dealer_name'] = "渠道名称";
+$_LANG['is_dealer'][1] = "甲方渠道";
+$_LANG['is_dealer'][0] ="上级经销商";
+
 $_LANG[''] = "";
 $_LANG[''] = "";
 

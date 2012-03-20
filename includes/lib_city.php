@@ -514,7 +514,7 @@ function act_city_request($city_id,$level,$is_cancel = 0)
 /**/
 function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_time,$end_time,$r_title,$has_new,$limit = 0){
 	
-	$where = ' WHERE '. $children ;
+	$where = 'WHERE 1 ';// ' WHERE '. $children ;
 	
     if ($resource)
     {
@@ -575,9 +575,9 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') . " AS au ON au.ad_id = a.ad_id ". 
 			
 			"$where GROUP BY a.ad_id ORDER BY a.ad_id DESC ";
-	//echo $sql."<br>";	 //
+	echo $sql."<br>";	 //
 	$col_42_array = array('0'=>"未指定",'1'=>"SMB",'2'=>"IDEA");
-	$col_47_array = array('0'=>"未指定",'1'=>"没有使用推广费",'2'=>"使用推广费");
+	$col_47_array = array('0'=>"未指定",'2'=>"使用推广费",'3'=>"使用营销折扣费",'4'=>"推广费&营销折扣费");
 	$res = $GLOBALS['db']->getAll($sql);
 	foreach($res AS $key => $val)
 	{

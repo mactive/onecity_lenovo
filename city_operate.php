@@ -11,6 +11,7 @@ define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 require(dirname(__FILE__) . '/includes/lib_city.php');
+require(dirname(__FILE__) . '/includes/lib_dealer.php');
 require(dirname(__FILE__) . '/includes/lib_clips.php');
 require_once(ROOT_PATH . 'admin/includes/lib_main.php');
 require_once(ROOT_PATH . 'admin/includes/cls_exchange.php');
@@ -376,7 +377,9 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 							$tmp['ad_id'] = $GLOBALS['db']->insert_id();
 							$tmp['ad_sn'] = make_ad_sn($tmp['ad_id'], $val['city_id']);
 							$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $tmp, 'INSERT');
-
+							insert_dealer($tmp['col_43'],$tmp['col_44'],$base_info['region_name'],$tmp['ad_id']);
+							insert_dealer($tmp['col_45'],$tmp['col_46'],$base_info['region_name'],$tmp['ad_id']);
+							
 							//4级城市直接通过
 							if($market_level == "4"){
 								act_level_4_city_upload($val['city_id'],$tmp['ad_id']);
@@ -867,7 +870,7 @@ elseif($_REQUEST['act'] == 'export_db')
 	
 	//echo "count_data:".count($ad_list);
 	
-	$tt = excel_write_with_sub_array($file_name,$title,$ad_list,'city');		
+	// $tt = excel_write_with_sub_array($file_name,$title,$ad_list,'city');		
 	
 	//print_r($title);	
 	//print_r($city_list['citys']);

@@ -5,7 +5,7 @@
 
 <div class="form-div">
 <form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data">
-	<table width="80%" style="margin:10px auto;" class="table_standard table_border" border="1">
+	<table width="95%" style="margin:10px auto;" class="table_standard table_border" border="1">
 		<tr><td>
 			<img src="images/green_arrow.png" alt=""/>
 			</td>
