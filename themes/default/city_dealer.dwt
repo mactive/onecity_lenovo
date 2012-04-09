@@ -51,7 +51,8 @@
 			<!-- #EndLibraryItem -->
 		</div>
 		<div id="page-middle">
-
+			<div class="yellow_notice" style="text-align:center;">{$operate_message}</div>
+			
 			<div class="form-div">
 			  <form action="javascript:searchCRM()" name="searchForm">
 				<table width="90%" style="margin:10px auto;" class="table_standard table_border" border="1">
@@ -83,17 +84,20 @@
 				<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
 				    <tr>
 					  	<th width = "100">{$lang.region}</th>
+				      	<th>{$lang.dealer_summary}</th>
 				      	<th>{$lang.dealer_sn}</th>
 				      	<th>{$lang.dealer_name}</th>
 				      	<th width="70">类型</th>
 					  	<th width="50">是否通过</th>
-					  	<th>{$lang.handler}</th>
+						<th> 查看</th>
+					  	<th width="100">{$lang.handler}</th>
 				    </tr>
 				<!--{foreach from=$dealer_list item=item name=index_idea}-->
 					<tr {if $city.is_upload}
 								class="city_upload"
 						{/if}>
 						<td>{$item.region_name}</td>
+						<td><a href="city_dealer.php?act=used_list&dealer_sn={$item.dealer_id}">{$item.dealer_summary}</a></td>
 						<td>{$item.dealer_sn}</td>
 						<td>{$item.dealer_name}</td>
 						<td>{$lang.is_dealer.$item.is_dealer}</td>
@@ -102,7 +106,17 @@
 							{else}
 							<a class="audit_idle"></a>
 							{/if}</td>
-						<td><a href="city_dealer.php?act=city_ad_list&city_id={$city.cat_id}">查看详情</a></td>
+						<td>	<a href="city_dealer.php?act=view_dealer&dealer_id={$item.dealer_id}">查看</a> 
+						</td>
+						<td width=150>
+							<a href="city_dealer.php?act=edit_dealer&dealer_id={$item.dealer_id}">修改</a> &nbsp;&nbsp;&nbsp;&nbsp;
+							{if $item.is_audit}
+							<a href="city_dealer.php?act=reject_dealer&dealer_id={$item.dealer_id}">否决</a>&nbsp;&nbsp;
+							<a href="city_dealer.php?act=confirm_dealer&dealer_id={$item.dealer_id}">重通过</a>
+							{else}
+							<a href="city_dealer.php?act=confirm_dealer&dealer_id={$item.dealer_id}">通过</a>
+							{/if}
+						</td>
 					</tr>
 			    <!--{/foreach}-->
 				</table>

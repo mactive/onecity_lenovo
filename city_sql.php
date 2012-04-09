@@ -440,7 +440,7 @@ elseif($_REQUEST['act'] == "batch_delete_photo")
 }
 elseif($_REQUEST['act'] == "add_new_city"){
 	$res = array();
-		$res[0] = array("a"=>"海林市","b"=>"123","c"=>"6B");	// 
+		$res[0] = array("a"=>"南安市","b"=>"171","c"=>"5");	// 
 	
 	// $res[0] = array("a"=>"三江侗族自治县","b"=>"267","c"=>"6B");
 		// $res[1] = array("a"=>"合山市","b"=>"278","c"=>"6B");

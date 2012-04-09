@@ -83,6 +83,7 @@ function get_dealer_list($limit = 0){
 	foreach($res AS $key => $val)
 	{
 		$res[$key]['dealer_summary'] = get_dealer_used_summary($val['dealer_id']);//用做弹窗 
+		
 
 	}
 	$arr = array('dealers' => $res, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count'],'sql' => $sql,'count_sql' => $count_sql, 'page_size' => $filter['page_size']);
@@ -91,7 +92,31 @@ function get_dealer_list($limit = 0){
 
 
 function get_dealer_used_summary($dealer_id){
-	return 0;
+	$dealer_id = intval($dealer_id);
+	$sql = "SELECT count(*) ". //
+			" FROM ".$GLOBALS['ecs']->table('city') .
+			" WHERE dealer_id = $dealer_id ";
+	$count = $GLOBALS['db']->getOne($sql);
+	return $count;
+}
+
+function get_dealer_used_list($dealer_id){
+	$dealer_id = intval($dealer_id);
+	$sql = "SELECT * ". //
+			" FROM ".$GLOBALS['ecs']->table('city') .
+				" WHERE dealer_id = $dealer_id ";
+	$res  = $GLOBALS['db']->getAll($sql);
+	return $res;
+}
+
+
+function get_dealer_info($dealer_id){
+	$sql = "SELECT * FROM " . $GLOBALS['ecs']->table('city_dealer') .
+			" WHERE dealer_id = $dealer_id";
+		
+		$tmp = $GLOBALS['db']->getRow($sql);
+		$tmp['region_name'] = get_region_name($tmp['region_id']);
+		return $tmp;
 }
 
 
@@ -146,8 +171,51 @@ function get_region_id($cat_name){
            " WHERE cat_name LIKE '%$cat_name%' AND  parent_id = 1 ";
 	
     return $GLOBALS['db']->getOne($sql);
-	
 }
 
+function get_region_name($cat_id){
+	$sql = 'SELECT cat_name FROM ' .$GLOBALS['ecs']->table('category').
+           " WHERE cat_id  = $cat_id ";
+	
+    return $GLOBALS['db']->getOne($sql);
+}
+
+
+function act_city_dealer($dealer_info,$is_confirm,$dealer_id = 0){
+	$sql = 'SELECT ad_id,dealer_id, col_1,col_2,col_3,col_7 FROM ' .$GLOBALS['ecs']->table('city').
+           " WHERE ( col_43 LIKE '$dealer_info[dealer_sn]' OR col_45 LIKE '$dealer_info[dealer_sn]' ) "; // AND dealer_id < 1 
+	$res = $GLOBALS['db']->getAll($sql);
+	if($is_confirm){
+		//通过的数据
+
+		foreach($res AS $val){
+			$sql = "UPDATE " . $GLOBALS['ecs']->table('city') . " SET dealer_id = '$dealer_info[dealer_id]'  WHERE ad_id = '$val[ad_id]'";
+		    $GLOBALS['db']->query($sql);
+		}
+	   
+		//更新 city.dealer_id
+	}else{
+		// 不通过的数据 已经通过的去掉
+		update_city_dealer_id($dealer_id,0);
+		// foreach($res AS $val){
+		// 	$sql = "UPDATE " . $GLOBALS['ecs']->table('city') . " SET dealer_id = '0'  WHERE ad_id = '$val[ad_id]'";
+		//     $GLOBALS['db']->query($sql);
+		// }
+	}	// 
+		// echo $sql;
+		// print_r($res);
+	return $res;
+}
+
+function update_city_dealer_id($_old_id,$_new_id){
+	$old_id = intval(trim($_old_id));
+	$new_id = $_new_id == 0 ? 0 : intval(trim($_new_id));
+	if($old_id){
+		$sql = "UPDATE " . $GLOBALS['ecs']->table('city') . " SET dealer_id = '$new_id'  WHERE dealer_id = '$old_id'";
+		$GLOBALS['db']->query($sql);
+	}
+    
+
+}
 
 ?>

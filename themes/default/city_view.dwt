@@ -109,7 +109,7 @@
 					<!--{/foreach}-->					
 					
 					<!--{foreach from=$city_title key=k item=item }-->
-					<div class="city_info radius_5px">
+					<div class="city_info radius_5px"  id="area_{$k}">
 						<div class="f_left left_title left_radius_5px">{$item}</div>
 						<div class="f_left right_content">{$ad_detail.$k}</div>	
 						<div class="clear"></div>

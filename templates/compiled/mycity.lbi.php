@@ -84,6 +84,10 @@
 </div>
 <div>
   <ul class="mycity_ul">
+	<?php if ($this->_var['sm_session']['user_rank'] == 2): ?>
+	<div class="height_5px" style="background:#cb5a42;"></div>	
+	<li><a href="city_dealer.php" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">渠道管理</a></li>
+	<?php endif; ?>
 	<li><a href="download/help.rar" style="background:url(<?php echo $this->_var['img_path']; ?>ico/my_task.png) no-repeat 10px center;">系统使用说明</a></li>	
 	<li><a href="user.php?act=profile" style="background:url(<?php echo $this->_var['img_path']; ?>ico/delegate.png) no-repeat 10px center;">个人密码资料</a></li>
     <li><a href="user.php?act=logout" style="background:url(<?php echo $this->_var['img_path']; ?>ico/delegated.png) no-repeat 10px center;">退出</a></li>

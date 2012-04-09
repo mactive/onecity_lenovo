@@ -20,19 +20,17 @@
 <body>
 <div id="globalWrapper">  <div style="float:left;"></div>
 <div id="wrapper">
-	{if $back_act}
-	<div class="header_5">
 
-	</div>
-	{else}
 	<!-- #BeginLibraryItem "/library/page_header.lbi" -->
 	>
 	<!-- #EndLibraryItem -->
-	{/if}
 
 
     <div id="container2" style="padding: 20px 20px 20px 180px;">
       <p style="font-size: 14px; font-weight:bold; color: red; width:500px">{$message.content}</p>
+	<p>
+		{$message.detail}
+	</p>
       <p><a href="{$message.href}">&gt;&gt; {$message.link}</a></p>
     </div>
     <!-- End #container2 --><!-- #BeginLibraryItem "/library/help.lbi" -->

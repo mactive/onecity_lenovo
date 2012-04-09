@@ -1427,33 +1427,26 @@ function upload_file($upload, $type)
  * @param   string  $type       信息类型：warning, error, info
  * @return  void
  */
-function show_message($content, $link = '', $href = '', $type = 'info', $auto_redirect = false,$back_act = '')
+function show_message($content, $link = '', $href = '', $type = 'info', $auto_redirect = false,$detail = '')
 {
     assign_template();
-
-	$href = $back_act == 'five' ? "five.php" : $href ;
 
     $msg['content'] = $content;
     $msg['link']    = empty($link) ? $GLOBALS['_LANG']['back_up_page'] : $link;
     $msg['href']    = empty($href) ? 'javascript:history.back()'       : $href;
     $msg['type']    = $type;
+	$msg['detail'] = $detail;
 
     $position = assign_ur_here(0, $GLOBALS['_LANG']['sys_msg']);
-	if(!empty($back_act))
-	{
-		$GLOBALS['smarty']->assign('page_title', '联想广告平台');   // 页面标题
-	}else{
+
 		$GLOBALS['smarty']->assign('page_title', $position['title']);   // 页面标题
-	}
 
     $GLOBALS['smarty']->assign('ur_here',    $position['ur_here']); // 当前位置
 
 
     $GLOBALS['smarty']->assign('auto_redirect', $auto_redirect);
     $GLOBALS['smarty']->assign('message', $msg);
-    $GLOBALS['smarty']->assign('back_act', $back_act);
     $GLOBALS['smarty']->display('message.dwt');
-
     exit;
 }
 

@@ -1,0 +1,29 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="f_left">
+	<a class="back_url" href="city_dealer.php?region_name={$dealer_info.region_name}"></a>	
+</div>
+<div class="yellow_notice" style="text-align:center;">{$upload_message}
+	<a class="font20px" href="city_dealer.php?act=edit_dealer&dealer_id={$dealer_info.dealer_id}">修改渠道信息</a>
+	</div>
+	
+	<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data">
+	<!--{foreach from=$dealer_info_title key=k item=item }-->
+	<div class="city_info radius_5px">
+		<div class="f_left left_title left_radius_5px">{$item}</div>
+		<div class="f_left right_content">
+			<!--{if $k == "is_dealer"}-->
+				{foreach from=$lang.is_dealer key=key item=i}{if $key == $dealer_info.$k }{$i}{/if}{/foreach}
+			<!--{elseif $k == "is_audit"}-->
+				{if $dealer_info.$k}是{else}否{/if}
+			<!--{else}-->
+				{$dealer_info.$k}
+			<!--{/if}-->
+		</div>	
+		<div class="clear"></div>
+	</div>
+	<!--{/foreach}-->
+
+	</form>
+	
+
+

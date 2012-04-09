@@ -906,7 +906,7 @@ $_LANG['based_new_nums']['5'] = "12";
 $_LANG['based_new_nums']['6'] = "29";
 $_LANG['based_new_nums']['7'] = "16";
 $_LANG['based_new_nums']['8'] = "29";
-$_LANG['based_new_nums']['9'] = "18";
+$_LANG['based_new_nums']['9'] = "19";
 $_LANG['based_new_nums']['10'] = "33";
 $_LANG['based_new_nums']['11'] = "14";
 $_LANG['based_new_nums']['12'] = "30";
@@ -1011,10 +1011,22 @@ $_LANG['dealer_sn'] = "渠道编号";
 $_LANG['dealer_name'] = "渠道名称";
 $_LANG['is_dealer'][1] = "甲方渠道";
 $_LANG['is_dealer'][0] ="上级经销商";
+$_LANG['dealer_summary'] = "数量";
 
+$_LANG['dealer_info_title']['dealer_id'] = "渠道ID";
+$_LANG['dealer_info_title']['dealer_sn'] = "渠道编号";
+$_LANG['dealer_info_title']['dealer_name'] = "渠道名称";
+$_LANG['dealer_info_title']['is_dealer'] = "是否甲方渠道";
+$_LANG['dealer_info_title']['is_audit'] = "是否通过";
+$_LANG['dealer_info_title']['region_name'] = "分区名称";
+$_LANG['dealer_info_title']['region_id'] = "分区ID";
 $_LANG[''] = "";
 $_LANG[''] = "";
-
+$_LANG[''] = "";
+$_LANG[''] = "";
+$_LANG[''] = "";
+$_LANG[''] = "";
+$_LANG[''] = "";
 
 
  

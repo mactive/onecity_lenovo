@@ -16,15 +16,15 @@
 			<td><span class="red-block">寄出</span></td>
 			<td><span class="red-block">收到</span></td>
 		</tr>
-		<?php $_from = $this->_var['data']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_98365600_1329923998');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_98365600_1329923998']):
+		<?php $_from = $this->_var['data']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_52878200_1333183869');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_52878200_1333183869']):
 ?>
 		<tr>
-			<td><?php echo $this->_var['item_0_98365600_1329923998']['col_1']; ?></td>
-			<td><?php echo $this->_var['item_0_98365600_1329923998']['lv_6']['amount']; ?></td>
-			<td><?php echo $this->_var['item_0_98365600_1329923998']['upload_amount']; ?><td><?php echo $this->_var['item_0_98365600_1329923998']['lv_6']['upload_percent']; ?>%</td>
-			<td><?php echo $this->_var['item_0_98365600_1329923998']['lv_6']['audit_amount']; ?><td><?php echo $this->_var['item_0_98365600_1329923998']['lv_6']['confirm_amount']; ?></td><td><?php echo $this->_var['item_0_98365600_1329923998']['lv_6']['confirm_percent']; ?>%</td>
-			<td><?php echo $this->_var['item_0_98365600_1329923998']['lv_6']['send_amount']; ?><td><?php echo $this->_var['item_0_98365600_1329923998']['lv_6']['receive_amount']; ?></td>
+			<td><?php echo $this->_var['item_0_52878200_1333183869']['col_1']; ?></td>
+			<td><?php echo $this->_var['item_0_52878200_1333183869']['lv_6']['amount']; ?></td>
+			<td><?php echo $this->_var['item_0_52878200_1333183869']['upload_amount']; ?><td><?php echo $this->_var['item_0_52878200_1333183869']['lv_6']['upload_percent']; ?>%</td>
+			<td><?php echo $this->_var['item_0_52878200_1333183869']['lv_6']['audit_amount']; ?><td><?php echo $this->_var['item_0_52878200_1333183869']['lv_6']['confirm_amount']; ?></td><td><?php echo $this->_var['item_0_52878200_1333183869']['lv_6']['confirm_percent']; ?>%</td>
+			<td><?php echo $this->_var['item_0_52878200_1333183869']['lv_6']['send_amount']; ?><td><?php echo $this->_var['item_0_52878200_1333183869']['lv_6']['receive_amount']; ?></td>
 			
 		</tr>
 		<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>

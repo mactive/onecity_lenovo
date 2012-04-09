@@ -842,7 +842,8 @@ elseif($_REQUEST['act'] == 'export_db')
 		$children = get_city_children_a($user_region);
 	}	
 	
-	$limit = 2500;
+	// echo "region:".$region."<br>"; 
+	$limit = 5000;
 	$r_title = $_LANG['resource'];
 
     $ad_list = getFull_ad_list($children,$market_level,$audit_status,$resource,$start_time,$end_time,$r_title,$has_new,$limit);
@@ -870,7 +871,7 @@ elseif($_REQUEST['act'] == 'export_db')
 	
 	//echo "count_data:".count($ad_list);
 	
-	// $tt = excel_write_with_sub_array($file_name,$title,$ad_list,'city');		
+	$tt = excel_write_with_sub_array($file_name,$title,$ad_list,'city');		
 	
 	//print_r($title);	
 	//print_r($city_list['citys']);

@@ -100,6 +100,7 @@ if (!$smarty->is_cached('city_dealer.dwt', $cache_id) && $act == 'list_dealer')
     $smarty->assign('page_size',   $dealer_list['page_size']);
     $smarty->assign('sql',   $dealer_list['sql']);
     $smarty->assign('count_sql',   $dealer_list['count_sql']);
+    $smarty->assign('operate_message',   "通过或重通过一个渠道商，系统会自动为对应的牌子指定渠道商。  否决一个牌子，系统会自动取消对应牌子的渠道商指定。");
 	
 	$smarty->display('city_dealer.dwt');
 }
@@ -125,6 +126,22 @@ elseif ($_REQUEST['act'] == 'query_dealer')
 //	$smarty->assign('order_id',       $order_id);
 	
     make_json_result($smarty->fetch('city_dealer.dwt'), '', array('filter' => $dealer_list['filter'], 'order_id' => $order_id , 'page_count' => $dealer_list['page_count'],'record_count' => $dealer_list['record_count'],'page_size' => $dealer_list['page_size']));
+	
+}
+elseif($_REQUEST['act'] == 'used_list'){
+	if($_SESSION['user_rank'] == 1){
+		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
+	}
+	
+	
+	$dealer_id = isset($_REQUEST['dealer_id']) && intval($_REQUEST['dealer_id']) > 0 ? intval($_REQUEST['dealer_id']) : 0;
+	$dealer_used_list = get_dealer_used_list($dealer_id);
+	
+
+	$smarty->assign('dealer_used_list',    $dealer_used_list);	
+	$smarty->display('dealer_view.dwt');
+	
+	
 	
 }
 elseif($_REQUEST['act'] == 'check'){
@@ -156,6 +173,89 @@ elseif($_REQUEST['act'] == 'check'){
 		
 	}
 	
+}
+
+elseif($_REQUEST['act'] == "reject_dealer"){
+	$dealer_id = isset($_REQUEST['dealer_id']) && intval($_REQUEST['dealer_id']) > 0 ? intval($_REQUEST['dealer_id']) : 0;
+	$return_url = "city_dealer.php";
+	$dealer_info = get_dealer_info($dealer_id);
+	
+	if($dealer_id){
+		$sql = "UPDATE " . $GLOBALS['ecs']->table('city_dealer') . " SET is_audit = '0'  WHERE dealer_id = '$dealer_id' ";
+	    $GLOBALS['db']->query($sql);
+	
+		$is_confirm = 0;
+		$notice = "受影响城市<br>";
+		$dealer_used_list = get_dealer_used_list($dealer_id);
+		act_city_dealer($dealer_info,$is_confirm,$dealer_id);// 更新操作并列出来	
+		
+		foreach($dealer_used_list AS $val){
+			$notice.= $val['col_1']."-".$val['col_2']."-".$val['col_3']."<br>".$val['col_7']."<br><br>";
+		}
+		show_message("经销商 ' ".$dealer_info['dealer_name']." '未通过。", $_LANG['back_home_lnk'], $return_url, 'info', false,$notice);
+		
+	}
+}
+elseif($_REQUEST['act'] == "confirm_dealer"){
+	$dealer_id = isset($_REQUEST['dealer_id']) && intval($_REQUEST['dealer_id']) > 0 ? intval($_REQUEST['dealer_id']) : 0;
+	$return_url = "city_dealer.php";
+	$dealer_info = get_dealer_info($dealer_id);
+	
+	if($dealer_id){
+		$sql = "UPDATE " . $GLOBALS['ecs']->table('city_dealer') . " SET is_audit = '1'  WHERE dealer_id = '$dealer_id' ";
+	    $GLOBALS['db']->query($sql);
+	
+		$is_confirm = 1;
+		$dealer_used_list = act_city_dealer($dealer_info,$is_confirm);// 更新操作并列出来
+		$notice = "下面的城市都自动匹配了<br>";
+		foreach($dealer_used_list AS $val){
+			$notice.= $val['col_1']."-".$val['col_2']."-".$val['col_3']."<br>".$val['col_7']."<br><br>";
+		}
+		show_message("经销商 ' ".$dealer_info['dealer_name']." '已经通过。", $_LANG['back_home_lnk'], $return_url, 'info', false,$notice);
+	
+	}
+	
+}
+
+elseif($_REQUEST['act'] == "view_dealer" || $_REQUEST['act'] == 'edit_dealer'){
+	$dealer_id = isset($_REQUEST['dealer_id']) && intval($_REQUEST['dealer_id']) > 0 ? intval($_REQUEST['dealer_id']) : 0;
+	
+	$dealer_info_title = $_LANG['dealer_info_title'];
+	$smarty->assign('dealer_info_title', $dealer_info_title);
+	
+	$dealer_info = get_dealer_info($dealer_id);
+	$smarty->assign('dealer_info', $dealer_info);
+	
+	$smarty->display('dealer_view.dwt');
+	
+}
+elseif($_REQUEST['act'] == "update_dealer"){
+
+	$dealer_id = isset($_REQUEST['dealer_id']) && intval($_REQUEST['dealer_id']) > 0 ? intval($_REQUEST['dealer_id']) : 0;
+	$dealer_sn = isset($_REQUEST['dealer_sn']) ? trim($_REQUEST['dealer_sn']) : "";
+	$dealer_name = isset($_REQUEST['dealer_name']) ? trim($_REQUEST['dealer_name']) : "";
+	$is_dealer = isset($_REQUEST['is_dealer']) && intval($_REQUEST['is_dealer']) > 0 ? intval($_REQUEST['is_dealer']) : 0;
+	$is_audit = isset($_REQUEST['is_audit']) && intval($_REQUEST['is_audit']) > 0 ? intval($_REQUEST['is_audit']) : 0;
+	
+	$col = array();
+	$col['dealer_sn'] = $dealer_sn;
+	$col['dealer_name'] = $dealer_name;
+	$col['is_dealer'] = $is_dealer;
+	$col['is_audit'] = $is_audit;
+	
+	$dealer_info = get_dealer_info($dealer_id);
+	
+	
+	if($dealer_id){
+		// print_r($col);
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_dealer'), $col, 'update', "dealer_id='$dealer_id'");
+		if($dealer_info['dealer_sn'] != $col['dealer_sn']){ //如果编号改变 那么更新 city的数量
+			update_city_dealer_id($dealer_info['dealer_sn'],$col['dealer_sn']);
+		}
+	}
+	
+	show_message("修改成功", "查看信息", 'city_dealer.php?act=view_dealer&dealer_id='.$dealer_id, 'info', true);       
+
 }
 
 

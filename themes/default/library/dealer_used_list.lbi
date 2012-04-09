@@ -1,0 +1,19 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="yellow_notice" style="text-align:center;">渠道信息使用详情</div>
+
+<div class="f_left">
+	<a class="back_url" href="city_dealer.php"></a>	
+</div>
+	<!--{foreach from=$dealer_used_list key=k item=item }-->
+	<div class="city_info radius_5px" style="height:60px;">
+		<div class="f_left left_title left_radius_5px" style="width:100px;background:#cdcdcd;">{$item.col_1}</div>
+		<div class="f_left left_title left_radius_5px" style="width:100px;"><a href="city_operate.php?act=view_ad&ad_id={$item.ad_id}#area_col_43" target="_blank">{$item.col_3}</a></div>
+		<div class="f_left right_content" style="width:600px;">
+			{$item.col_7}
+		</div>	
+		<div class="clear"></div>
+	</div>
+	<!--{/foreach}-->
+
+
+

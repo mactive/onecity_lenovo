@@ -48,7 +48,8 @@
 			<?php echo $this->fetch('library/mycity.lbi'); ?>
 		</div>
 		<div id="page-middle">
-
+			<div class="yellow_notice" style="text-align:center;"><?php echo $this->_var['operate_message']; ?></div>
+			
 			<div class="form-div">
 			  <form action="javascript:searchCRM()" name="searchForm">
 				<table width="90%" style="margin:10px auto;" class="table_standard table_border" border="1">
@@ -62,8 +63,8 @@
 					    	<?php echo $this->_var['lang']['dealer_name']; ?> <input name="dealer_name" type="text" id="dealer_name" size="10" value="<?php echo $this->_var['filter']['dealer_name']; ?>" /> &nbsp;&nbsp;&nbsp;
 							是否通过
 							<select name="audit_status" id="audit_status">
-						      	<option value='9' <?php if ($this->_var['filter']['is_audit'] == 9): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['select_please']; ?></option>
-								<option value='0' <?php if ($this->_var['filter']['is_audit'] == 0): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['no']; ?></option>
+						      	<option value='9' <?php if ($this->_var['filter']['is_audit'] == 0): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['select_please']; ?></option>
+								<option value='0' ><?php echo $this->_var['lang']['no']; ?></option>
 						      	<option value='1' <?php if ($this->_var['filter']['is_audit'] == 1): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['yes']; ?></option>
 							</select>
 							
@@ -80,11 +81,13 @@
 				<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
 				    <tr>
 					  	<th width = "100"><?php echo $this->_var['lang']['region']; ?></th>
+				      	<th><?php echo $this->_var['lang']['dealer_summary']; ?></th>
 				      	<th><?php echo $this->_var['lang']['dealer_sn']; ?></th>
 				      	<th><?php echo $this->_var['lang']['dealer_name']; ?></th>
 				      	<th width="70">类型</th>
 					  	<th width="50">是否通过</th>
-					  	<th><?php echo $this->_var['lang']['handler']; ?></th>
+						<th> 查看</th>
+					  	<th width="100"><?php echo $this->_var['lang']['handler']; ?></th>
 				    </tr>
 				<?php $_from = $this->_var['dealer_list']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item');$this->_foreach['index_idea'] = array('total' => count($_from), 'iteration' => 0);
 if ($this->_foreach['index_idea']['total'] > 0):
@@ -95,6 +98,7 @@ if ($this->_foreach['index_idea']['total'] > 0):
 								class="city_upload"
 						<?php endif; ?>>
 						<td><?php echo $this->_var['item']['region_name']; ?></td>
+						<td><a href="city_dealer.php?act=used_list&dealer_sn=<?php echo $this->_var['item']['dealer_id']; ?>"><?php echo $this->_var['item']['dealer_summary']; ?></a></td>
 						<td><?php echo $this->_var['item']['dealer_sn']; ?></td>
 						<td><?php echo $this->_var['item']['dealer_name']; ?></td>
 						<td><?php echo $this->_var['lang']['is_dealer'][$this->_var['item']['is_dealer']]; ?></td>
@@ -103,7 +107,17 @@ if ($this->_foreach['index_idea']['total'] > 0):
 							<?php else: ?>
 							<a class="audit_idle"></a>
 							<?php endif; ?></td>
-						<td><a href="city_dealer.php?act=city_ad_list&city_id=<?php echo $this->_var['city']['cat_id']; ?>">查看详情</a></td>
+						<td>	<a href="city_dealer.php?act=view_dealer&dealer_id=<?php echo $this->_var['item']['dealer_id']; ?>">查看</a> 
+						</td>
+						<td width=150>
+							<a href="city_dealer.php?act=edit_dealer&dealer_id=<?php echo $this->_var['item']['dealer_id']; ?>">修改</a> &nbsp;&nbsp;&nbsp;&nbsp;
+							<?php if ($this->_var['item']['is_audit']): ?>
+							<a href="city_dealer.php?act=reject_dealer&dealer_id=<?php echo $this->_var['item']['dealer_id']; ?>">否决</a>&nbsp;&nbsp;
+							<a href="city_dealer.php?act=confirm_dealer&dealer_id=<?php echo $this->_var['item']['dealer_id']; ?>">重通过</a>
+							<?php else: ?>
+							<a href="city_dealer.php?act=confirm_dealer&dealer_id=<?php echo $this->_var['item']['dealer_id']; ?>">通过</a>
+							<?php endif; ?>
+						</td>
 					</tr>
 			    <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 				</table>

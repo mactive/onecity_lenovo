@@ -19,7 +19,6 @@
 
 <script src="admin/js/listtable.js" type="text/javascript"></script>
 <script src="admin/js/common.js" type="text/javascript"></script>
-
 </head>
 
 <body>
@@ -35,39 +34,24 @@
 		</div>
 		<div id="page-middle">
 			
-			<?php echo $this->fetch('library/ur_here.lbi'); ?>
-			
-			
-			<?php if ($this->_var['act_step'] == "project_picture"): ?>
-			
-				<?php echo $this->fetch('library/project_picture.lbi'); ?>
+		
+				<?php if ($this->_var['act_step'] == "edit_dealer"): ?>
 				
-			<?php endif; ?>
-			
-			
-			<?php if ($this->_var['act_step'] == "list_picture"): ?>
-			
-				<?php echo $this->fetch('library/list_picture.lbi'); ?>
-				
-			<?php endif; ?>
-			
-			
-			<?php if ($this->_var['act_step'] == "add_picture" || $this->_var['act_step'] == "edit_picture"): ?>
-			
-				<?php echo $this->fetch('library/edit_picture.lbi'); ?>
-				
-			<?php endif; ?>
-			
-			<?php if ($this->_var['act_step'] == "view_picture"): ?>
-			
-				<?php echo $this->fetch('library/view_picture.lbi'); ?>
-				
-			<?php endif; ?>
+					<?php echo $this->fetch('library/edit_dealer.lbi'); ?>
+					
+				<?php endif; ?>
 				
 				
 				
+				<?php if ($this->_var['act_step'] == "view_dealer"): ?>
+					<?php echo $this->fetch('library/view_dealer.lbi'); ?>
+				<?php endif; ?>
 				
-
+			
+				
+				<?php if ($this->_var['act_step'] == "used_list"): ?>
+					<?php echo $this->fetch('library/dealer_used_list.lbi'); ?>
+				<?php endif; ?>
 				
 			
 		</div>			

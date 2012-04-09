@@ -21,17 +21,15 @@
 <body>
 <div id="globalWrapper">  <div style="float:left;"></div>
 <div id="wrapper">
-	<?php if ($this->_var['back_act']): ?>
-	<div class="header_5">
 
-	</div>
-	<?php else: ?>
 	<?php echo $this->fetch('library/page_header.lbi'); ?>
-	<?php endif; ?>
 
 
     <div id="container2" style="padding: 20px 20px 20px 180px;">
       <p style="font-size: 14px; font-weight:bold; color: red; width:500px"><?php echo $this->_var['message']['content']; ?></p>
+	<p>
+		<?php echo $this->_var['message']['detail']; ?>
+	</p>
       <p><a href="<?php echo $this->_var['message']['href']; ?>">&gt;&gt; <?php echo $this->_var['message']['link']; ?></a></p>
     </div>
     <?php echo $this->fetch('library/help.lbi'); ?><?php echo $this->fetch('library/page_footer.lbi'); ?></div>
