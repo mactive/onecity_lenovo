@@ -1238,6 +1238,7 @@ margin-top:10px;
   -ms-transition: 0.1s linear all;
   -o-transition: 0.1s linear all;
   transition: 0.1s linear all;
+  text-decoration:none;
 }
 .btn:hover {
   background-position: 0 -15px;

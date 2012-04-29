@@ -82,7 +82,7 @@ function edit_profile($profile)
     if (!empty($profile['other']))
     {
 		//print_r($profile);
-		judge_user_rank($profile);
+		// judge_user_rank($profile);
         $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('users'), $profile['other'], 'UPDATE', "user_id = '$profile[user_id]'");
 		
     }

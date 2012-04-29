@@ -592,8 +592,8 @@ function getFull_ad_list($children,$market_level,$audit_status,$resource,$start_
 			$res[$key]['lv_4'] = get_audit_note($val['ad_id'],4);
 			$res[$key]['lv_5'] = get_audit_note($val['ad_id'],5);
 			
-			$res[$key]['start_date'] = intval(sep_days($val['col_16'],"01/01/1900"));
-			$res[$key]['end_date'] = intval(sep_days($val['col_17'],"01/01/1900"));
+			$res[$key]['start_date'] = intval(sep_days($val['col_16'],"01/01/1900") + 2);
+			$res[$key]['end_date'] = intval(sep_days($val['col_17'],"01/01/1900") + 2);
 			
 			$res[$key]['col_42'] = $col_42_array[$val['col_42']];
 			$res[$key]['col_47'] = $col_47_array[$val['col_47']];
@@ -729,7 +729,7 @@ function get_project_list($children){
 function get_new_project_list($children,$user_region,$based_new_nums){
 	$sql = "SELECT p.*  ".
 			" FROM ".$GLOBALS['ecs']->table('project') . " AS p ".			
-			"WHERE 1 ORDER BY p.project_id DESC LIMIT 1";
+			"WHERE 1 ORDER BY p.project_id DESC LIMIT 2";
 	//echo $sql;	 GROUP BY ad.ad_id
 	
 	$res = $GLOBALS['db']->getAll($sql);
