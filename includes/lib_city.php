@@ -729,7 +729,7 @@ function get_project_list($children){
 function get_new_project_list($children,$user_region,$based_new_nums){
 	$sql = "SELECT p.*  ".
 			" FROM ".$GLOBALS['ecs']->table('project') . " AS p ".			
-			"WHERE 1 ORDER BY p.project_id DESC LIMIT 2";
+			"WHERE 1 ORDER BY p.project_id DESC LIMIT 1";
 	//echo $sql;	 GROUP BY ad.ad_id
 	
 	$res = $GLOBALS['db']->getAll($sql);
