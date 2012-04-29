@@ -1,0 +1,120 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<div class="f_left">
+		<a class="back_url" href="city_renew.php?region_name={$city_name}&has_new={$has_new}"></a>
+	</div>
+	<div class="facebox f_left">
+		<table width="100%" class="table_border table_standard" border="1">
+		    <tr>
+		      	<th width="35">{$lang.is_xz}</th>
+		      	<th>{$lang.county}</th>
+		      	<th width="150">具体位置描述</th>
+			  	<th>检查时间</th>
+		      	<th>照片数量</th>
+			  	<th>审核状态</th>
+			  	<th width="50">续,改,删</th>
+			  	<th width="200">{$lang.handler}</th>
+		    </tr>
+		<!--{foreach from=$ad_list item=item}-->
+			<tr {if $item.is_upload}
+					{if $item.audit_status gt 1}
+						{if $item.is_audit_confirm}
+							class="city_audit_confirm"
+						{else}
+							class="city_audit_cancel"
+						{/if}
+					{else}
+						class="city_upload"
+					{/if}
+				{/if}>
+				<td>{if $item.is_new}<span class="red-block">新增</span>{else}<span class="grey999">已有</span>{/if}</td>
+				<td>{$item.city_name}</td>
+				<td><a href="city_renew.php?act=view_ad&ad_id={$item.ad_id}">{$item.col_7}</a></td>
+				<td>{if $item.is_upload}{$item.user_time}{else}{$lang.upload_pending}{/if}</td>
+				<td>
+					<span {if $item.photo_num}class="red-color font14px"{/if}>{$item.photo_num}</span></td>
+				<td>
+					{if $item.audit_status > 1}
+							{$audit_title.$item.audit_status}-
+							{if $item.is_audit_confirm}
+								<span class="green-color">{$lang.audit_confirm}</span>
+							{else}
+								<span class="red-color">{$lang.audit_cancel}</span>
+							{/if}
+						{else}
+							{$lang.audit_pending}
+						{/if}
+				</td>
+				<td>
+					<!--{if $item.is_change}-->已修改
+					<!--{/if}-->
+
+					<!--{if $item.is_renew}-->已续签
+					<!--{/if}-->
+
+				</td>
+				<td>
+					{if $sm_session.user_rank == 1}
+						{if $item.is_audit_confirm == 0 }
+							{if $item.audit_status == 1}
+							<a href="city_renew.php?act=view_ad&ad_id={$item.ad_id}">查看</a> &nbsp; | &nbsp;
+							<a href="city_renew.php?act=edit_ad&ad_id={$item.ad_id}">修改</a> &nbsp; | &nbsp;
+							<a href="city_renew.php?act=upload_photo&ad_id={$item.ad_id}">传照片</a>							
+							{else}
+							<a href="city_renew.php?act=view_ad&ad_id={$item.ad_id}">查看</a>
+							{/if}
+						{else}
+							{if $item.audit_status  == 5}
+
+								<!--{if $item.is_renew || $item.is_change}-->
+								<a class="btn disabled">续签</a>
+								<!--{else}-->
+								<a href="city_renew.php?act=renew_ad&ad_id={$item.ad_id}" class="btn success">续签</a>
+								<!--{/if}-->
+								 |
+								<!--{if $item.is_change || $item.is_renew}-->
+								<a 	class="btn disabled">修改</a>
+								<!--{else}-->
+								<a href="city_renew.php?act=edit_ad&ad_id={$item.ad_id}" class="btn">修改</a>
+								<!--{/if}-->
+								 |
+								<a onclick="confrim_delete({$item.ad_id})" class="btn danger">删除</a>
+						
+							{/if}
+						{/if}
+						
+					{else}
+					
+						{if $item.is_upload && $item.photo_num}
+							{if $item.is_audit_confirm == 0 }
+								{if $item.audit_status == 1}
+									{if $sm_session.user_rank == 2}
+										<a href="city_renew.php?act=audit&ad_id={$item.ad_id}">审核</a>
+									{else}
+										<a href="city_renew.php?act=view_ad&ad_id={$item.ad_id}">查看</a>
+									{/if}
+								{else}
+								<a href="city_renew.php?act=view_ad&ad_id={$item.ad_id}">查看</a>
+									{if $sm_session.user_rank >= 2}
+									<a href="city_renew.php?act=audit&ad_id={$item.ad_id}">审核</a>
+									{/if}
+								{/if}
+							{else}
+								{if ($sm_session.user_rank - $item.audit_status == 1)}
+								<a href="city_renew.php?act=audit&ad_id={$item.ad_id}">重
+									审</a>
+								{else}
+								<a href="city_renew.php?act=view_ad&ad_id={$item.ad_id}">查看</a>
+								{/if}
+							{/if}							
+						{else}
+						<span class="grey999">资料不全</a>
+						{/if}
+						{if $sm_session.user_rank >= 4}<a onclick="confrim_delete({$item.ad_id})" class="red_color">删除</a>{/if}
+						
+					{/if}
+				</td>
+			</tr>
+		<!--{/foreach}-->
+		</table>
+	</div>
+

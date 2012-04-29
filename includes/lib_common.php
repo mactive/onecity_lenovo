@@ -454,7 +454,7 @@ function cat_list($cat_id = 0, $selected = 0, $re_type = true, $level = 0, $is_s
                 'FROM ' . $GLOBALS['ecs']->table('category') . " AS c ".
                 "LEFT JOIN " . $GLOBALS['ecs']->table('category') . " AS s ON s.parent_id=c.cat_id ".
                 "GROUP BY c.cat_id ".
-                'ORDER BY parent_id, sort_order ASC';
+                'ORDER BY parent_id ASC';
 		//echo $sql;
         $res = $GLOBALS['db']->getAllCached($sql);
 

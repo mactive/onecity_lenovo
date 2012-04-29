@@ -4,11 +4,11 @@
 <div class="yellow_notice" style="text-align:center;"><?php echo $this->_var['upload_message']; ?></div>
 <?php if ($this->_var['ad_info']['is_audit_confirm'] == 0): ?>
 	<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data">
-	<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_93545400_1332487273');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_93545400_1332487273']):
+	<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_01436200_1335697547');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_01436200_1335697547']):
 ?>
 	<div class="city_info radius_5px">
-		<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_93545400_1332487273']; ?></div>
+		<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_01436200_1335697547']; ?></div>
 		<div class="f_left right_content">
 			<?php if ($this->_var['k'] == "col_1" || $this->_var['k'] == "col_2" || $this->_var['k'] == "col_3" || $this->_var['k'] == "col_4" || $this->_var['k'] == "col_5"): ?>
 				<span><?php echo $this->_var['ad_detail'][$this->_var['k']]; ?></span>
@@ -30,11 +30,11 @@
 
 <?php if ($this->_var['ad_info']['is_audit_confirm'] == 1 && $this->_var['ad_info']['audit_status'] < 3 && $this->_var['sm_session']['user_rank'] == 1): ?>
 <form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data">
-<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_93608900_1332487273');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_93608900_1332487273']):
+<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_01504000_1335697547');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_01504000_1335697547']):
 ?>
 <div class="city_info radius_5px">
-	<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_93608900_1332487273']; ?></div>
+	<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_01504000_1335697547']; ?></div>
 	<div class="f_left right_content">
 		<?php if ($this->_var['k'] == "col_19" || $this->_var['k'] == "col_20" || $this->_var['k'] == "col_21" || $this->_var['k'] == "col_22" || $this->_var['k'] == "col_24" || $this->_var['k'] == "col_25" || $this->_var['k'] == "col_26" || $this->_var['k'] == "col_27" || $this->_var['k'] == "col_28" || $this->_var['k'] == "col_29" || $this->_var['k'] == "col_30" || $this->_var['k'] == "col_31" || $this->_var['k'] == "col_32" || $this->_var['k'] == "col_33" || $this->_var['k'] == "col_34" || $this->_var['k'] == "col_35" || $this->_var['k'] == "col_36" || $this->_var['k'] == "col_37" || $this->_var['k'] == "col_38" || $this->_var['k'] == "col_39" || $this->_var['k'] == "col_40" || $this->_var['k'] == "col_41"): ?>
 			<input type="text" name="col[]" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" size="50" />

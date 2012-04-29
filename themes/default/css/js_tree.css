@@ -142,10 +142,7 @@
 	width:260px;
 }
 
-.nav_bot{
-background:url(../images/nav_bot_bg.png) no-repeat center top; 
-width:168px; line-height:1px; font-size:1px; height:8px; 
-float:left;}
+
 .nav_bot_260{
 background:url(../images/nav_bot_bg_260.png) no-repeat center top; 
 width:260px; line-height:1px; font-size:1px; height:8px; 

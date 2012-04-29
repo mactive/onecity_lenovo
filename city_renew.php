@@ -1,7 +1,7 @@
 <?php
 /**
  * SINEMALL 资料分类 * $Author: testyang $
- * $Id: city_operate.php 14481 2008-04-18 11:23:01Z testyang $
+ * $Id: city_renew.php 14481 2008-04-18 11:23:01Z testyang $
 */
 
 //error_reporting(0); 
@@ -10,7 +10,7 @@ define('IN_ECS', true);
 
 
 require(dirname(__FILE__) . '/includes/init.php');
-require(dirname(__FILE__) . '/includes/lib_city.php');
+require(dirname(__FILE__) . '/includes/lib_city_renew.php');
 require(dirname(__FILE__) . '/includes/lib_dealer.php');
 require(dirname(__FILE__) . '/includes/lib_clips.php');
 require_once(ROOT_PATH . 'admin/includes/lib_main.php');
@@ -90,7 +90,7 @@ if (!isset($_REQUEST['act']))
 
 /* 获得页面的缓存ID */
 $cache_id = sprintf('%X', crc32($_SESSION['user_id'] . '-' . $page . '-' . $_CFG['lang']));
-if (!$smarty->is_cached('city_operate.dwt', $cache_id) && $_REQUEST['act'] == 'show')
+if (!$smarty->is_cached('city_renew.dwt', $cache_id) && $_REQUEST['act'] == 'show')
 //if ($_REQUEST['act'] == 'show')
 {
     /* 如果页面没有被缓存则重新获得页面的内容 */
@@ -112,7 +112,7 @@ if (!$smarty->is_cached('city_operate.dwt', $cache_id) && $_REQUEST['act'] == 's
     $smarty->assign('sql',   $city_list['sql']);
     $smarty->assign('count_sql',   $city_list['count_sql']);
 	
-	$smarty->display('city_operate.dwt');	
+	$smarty->display('city_renew.dwt');	
 }
 /* 响应页面内刷新 query_show*/
 elseif ($_REQUEST['act'] == 'query_show')
@@ -137,7 +137,7 @@ elseif ($_REQUEST['act'] == 'query_show')
     $order_id = isset($_REQUEST['order_id'])   && intval($_REQUEST['order_id'])  > 0 ? intval($_REQUEST['order_id'])  : 0;
 //	$smarty->assign('order_id',       $order_id);
 	
-    make_json_result($smarty->fetch('city_operate.dwt'), '', array('filter' => $city_list['filter'], 'order_id' => $order_id , 'page_count' => $city_list['page_count'],'record_count' => $city_list['record_count'],'page_size' => $city_list['page_size']));
+    make_json_result($smarty->fetch('city_renew.dwt'), '', array('filter' => $city_list['filter'], 'order_id' => $order_id , 'page_count' => $city_list['page_count'],'record_count' => $city_list['record_count'],'page_size' => $city_list['page_size']));
 	
 }
 /**
@@ -155,7 +155,7 @@ elseif ($_REQUEST['act'] == 'city_ad_list')
 	$ad_list = get_ad_list_by_cityid($city_id);
 	$smarty->assign('ad_list',   $ad_list);
 
-	$smarty->display('city_view.dwt');	
+	$smarty->display('city_renew_view.dwt');	
 }
 /**
  * 删除excel导入的临时文件
@@ -295,7 +295,6 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 
 		$val['user_time'] = $now;
 		
-		//county 和 地址相同 那么 询问郭婷
 		$exist_ad_info = is_exist_city_ad($val['city_id'],$val['col_7']);
 		$sys_level = get_sys_level($val['city_id']);
 		$record_id = $exist_ad_info['record_id'];
@@ -314,7 +313,6 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 					$issue['temp_status'] = "该广告已经开始审核，请勿再上传";
 					array_push($problem_array,$issue);
 				}
-			//echo "update<br>";
 			}
 			elseif($sys_level < 5 ){
 				$issue = $val;
@@ -324,7 +322,6 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 			}
 			else{
 				$city_ad_num = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('city') . " WHERE city_id = $val[city_id]");
-//				echo "**city_ad_num - $city_ad_num - insert<br>";
 				$city_confirm_ad_num = get_city_confirm_ad_num($val['city_id']);
 			
 				if(CITY_AD_LIMIT - $city_ad_num > 0)
@@ -440,10 +437,45 @@ elseif($_REQUEST['act'] == 'cancel_insert')
 		$GLOBALS['db']->query("DELETE FROM" . $GLOBALS['ecs']->table('city_temp') . " WHERE temp_id = $val[temp_id] LIMIT 1");
 	}
 	
-	show_message("重新上传", $_LANG['profile_lnk'], 'city_operate.php?act=upload_panel', 'info', true);        
+	show_message("重新上传", $_LANG['profile_lnk'], 'city_renew.php?act=upload_panel', 'info', true);        
 	
 	
 }
+#续签广告牌子
+elseif ($_REQUEST['act'] == 'renew_ad') {
+	# code... 更新牌子 日期加1年 然后 is_renew = 1
+	$ad_id = isset($_REQUEST['ad_id']) && intval($_REQUEST['ad_id']) > 0 ? intval($_REQUEST['ad_id']) : 0;
+
+	$ad_detail = get_city_info($ad_id);
+	$ad_info = get_ad_info($ad_id);
+	if ($ad_info['is_renew'] == 1) {
+		show_message("已经续签过，不要重复续签", $_LANG['profile_lnk'], 'city_renew.php?act=city_ad_list&city_id='.$ad_detail['city_id'], 'info', true);
+	}
+
+	$year = intval(date( 'Y',strtotime($ad_detail['col_16']))) + 1;
+	$year2 = intval(date( 'Y',strtotime($ad_detail['col_17']))) + 1;
+
+	$new_start_time = trim(date('m/d/',strtotime($ad_detail['col_16'])).$year);
+	$new_end_time = trim(date('m/d/',strtotime($ad_detail['col_17'])).$year2);
+
+	$detail_data['col_16'] = $new_start_time;
+	$detail_data['col_17'] = $new_end_time;
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $detail_data, 'UPDATE', "ad_id = '$ad_id'");
+
+	$data['is_renew'] = 1;
+	$data['checked_time'] = gmtime();
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $data, 'UPDATE', "ad_id = '$ad_id'");
+
+	$message = "续签成功.<br>"."时间从:&nbsp;&nbsp;".$ad_detail['col_16']."-".$ad_detail['col_17']."<br>变成为:&nbsp;&nbsp;".$new_start_time."-".$new_end_time;
+
+	insert_ad_log($ad_id,'col_16',$ad_detail['col_16'],$new_start_time);
+	insert_ad_log($ad_id,'col_17',$ad_detail['col_17'],$new_end_time);
+	show_message($message, $_LANG['profile_lnk'], 'city_renew.php?act=city_ad_list&city_id='.$ad_detail['city_id'], 'info', false);
+
+
+}
+
+/* 修改城市信息 */
 /**
  * 添加编辑 广告牌子
  */
@@ -480,16 +512,8 @@ elseif($_REQUEST['act'] == 'edit_ad' || $_REQUEST['act'] == 'view_ad')
 		$smarty->assign('photo_info', $photo_info);
 	}
 
-	if($ad_info['audit_status'] > 1){
-		if($ad_info['is_audit_confirm'] == 1){
-			if($ad_info['audit_status'] < 3){
-				$upload_message = "分区可以修改 从媒体净价——更改城市备注 的所有项 ，其中媒体评分不能更改 .";
-			}else{
-				$upload_message = "已经开始审核不能修改了.<a href='city_operate.php?act=view_ad&ad_id=$ad_id'>点此查看</a>";
-			}
-		}else{
-			$upload_message = "审核不通过,可以修改,但是不能修改 具体位置描述 .";
-		}
+	if($ad_info['audit_status']> 3){
+		$upload_message = "上个财年通过的牌子才能修改.";
 	}
 	
 	$smarty->assign('upload_message', $upload_message);
@@ -501,56 +525,56 @@ elseif($_REQUEST['act'] == 'edit_ad' || $_REQUEST['act'] == 'view_ad')
 	$audit_path = get_audit_path($ad_id,$audit_level_array); //审核路径图
 	$smarty->assign('audit_path', $audit_path);
 	
-	$smarty->display('city_view.dwt');
+	$smarty->display('city_renew_view.dwt');
 	
 }
 /**
  * 更新牌子页面
  */
-elseif($_REQUEST['act'] == 'update_ad')
+elseif($_REQUEST['act'] == 'act_update_renew_info')
 {
 	$city_content = make_city_content();
 	$ad_id = !empty($_REQUEST['ad_id']) ? intval($_REQUEST['ad_id']) : '';
-	$form_audit = !empty($_REQUEST['form_audit']) ? intval($_REQUEST['form_audit']) : 0;
+	$ad_info = get_ad_info($ad_id);
 	$col = $_REQUEST['col'];
-	if($form_audit){
+	for($i=0;$i<count($col);$i++)
+	{	
+		$i_plus = $i +1;
+		$city_content['col_'.$i_plus] = trim($col[$i]);
+	}
+
+
+	//$city_content['base_info_modify'] = 0; 电通来点
+	
+	$city_content['col_13'] = round($city_content['col_12'] * $city_content['col_11'],1); //面积 = 宽 * 高
+	$city_content['col_15'] = $city_content['col_13'] *  intval($city_content['col_14']); //总面积
+	$city_content['col_18'] = sep_days( $city_content['col_17'],$city_content['col_16']); //发布天数
+	$city_content['col_22'] = intval($city_content['col_19']) + intval($city_content['col_20']) + intval($city_content['col_21']); //媒体总价
+
+
+	
+	if($ad_id){
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $city_content, 'update', "ad_id='$ad_id'");
+		
+		$data = array();
+		$data['is_change'] = 1;//已经修改过
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $data, 'update', "ad_id='$ad_id'");
+		
+		//记录修改记录
 		$old_col = $_REQUEST['old_col'];
 		
 		foreach($old_col AS $key => $val){
 			if($val != $col[$key] && !empty($val) && !empty($col[$key]) ){
 				//echo $val."-".$col[$key]."<br>";
-				
-				$log = array();
-				$log['ad_id'] 	= $ad_id;
-				$log['user_id'] = $_SESSION['user_id'];
-				$name = $key + 1;
-				$log['col_name']= "col_".$name;
-				$log['value'] 	= $col[$key];
-				$log['old_value'] = $val;
-				$log['time'] 	= gmtime();
-				//print_r($log);
-				$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad_log'), $log, 'INSERT');	
+				insert_ad_log($ad_id,"col_".$name,$val,$col[$key]);
 			}
-		}
-		
-	}
-
-	for($i=0;$i<count($col);$i++)
-	{	
-		$i_plus = $i +1;
-		$city_content['col_'.$i_plus] = $col[$i];
-	}	
-	$city_content['user_time'] = gmtime();
-	
-	if($ad_id){
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $city_content, 'update', "ad_id='$ad_id'");
+		}		
 	}
 	
-	if($form_audit){
-		show_message("修改成功", $_LANG['profile_lnk'], 'city_operate.php?act=audit&ad_id='.$ad_id, 'info', true);       
-	}else{
-		show_message("修改成功", $_LANG['profile_lnk'], 'city_operate.php?act=edit_ad&ad_id='.$ad_id, 'info', true);       
-	}
+	
+	
+	
+	show_message("修改成功", "返回牌子列表", 'city_renew.php?act=city_ad_list&city_id='.$ad_info['city_id'], 'info', true);       
 }
 /**
  * 删除牌子
@@ -562,28 +586,29 @@ elseif($_REQUEST['act'] == 'delete_ad')
 	$json = new JSON;
     $filters = $json->decode($_GET['JSON']);
 	$ad_id = $filters->ad_id;
-		
 	$ad_detail = get_city_info($ad_id);
-	$ad_info = get_ad_info($ad_id);
+	// $ad_info = get_ad_info($ad_id);
 	$city_id = get_city_id($ad_id);
-	//echo "ad_id".$ad_id;
+	echo "ad_id".$ad_id;
+	$data['is_delete'] = 1;
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $data, 'UPDATE', "ad_id = '$ad_id'");
+
+	// $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_delete'), $ad_detail, 'INSERT');
 	
-	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_delete'), $ad_detail, 'INSERT');
-	
-	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city') . "WHERE ad_id =  $ad_id ");
-	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city_ad') . "WHERE ad_id =  $ad_id ");
-	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city_ad_audit') . "WHERE ad_id =  $ad_id ");
-	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city_material') . "WHERE ad_id =  $ad_id ");	
-	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city_gallery') . "WHERE ad_id =  $ad_id ");
+	// $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city') . "WHERE ad_id =  $ad_id ");
+	// $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city_ad') . "WHERE ad_id =  $ad_id ");
+	// $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city_ad_audit') . "WHERE ad_id =  $ad_id ");
+	// $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city_material') . "WHERE ad_id =  $ad_id ");	
+	// $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table('city_gallery') . "WHERE ad_id =  $ad_id ");
 	
 	act_city_request_delete($city_id,$ad_info['audit_status'],1);
 	
 	
 	$message = "删除成功";
-	$loaction = 'city_operate.php?act=city_ad_list&city_id='.$ad_detail['city_id'];
+	$loaction = 'city_renew.php?act=city_ad_list&city_id='.$ad_detail['city_id'];
 	make_json_result($loaction,$message);
     
-	//show_message("删除成功", $_LANG['profile_lnk'], 'city_operate.php?act=city_ad_list&city_id='.$ad_detail['city_id'], 'info', true);       
+	//show_message("删除成功", $_LANG['profile_lnk'], 'city_renew.php?act=city_ad_list&city_id='.$ad_detail['city_id'], 'info', true);       
 	
 	
 }
@@ -604,7 +629,7 @@ elseif($_REQUEST['act'] == 'view_log')
 	
 	$smarty->assign('log_list', $res);
 	$smarty->assign('col_name', $col_name);
-	$smarty->display('city_view.dwt');
+	$smarty->display('city_renew_view.dwt');
 	
 }
 /**
@@ -674,7 +699,7 @@ elseif($_REQUEST['act'] == 'audit')
 	$highest_audit_level = $GLOBALS['db']->getOne($sql_2);
 	$smarty->assign('highest_audit_level', $highest_audit_level);
 	
-	$smarty->display('city_view.dwt');
+	$smarty->display('city_renew_view.dwt');
 	
 }
 /**
@@ -695,7 +720,7 @@ elseif($_REQUEST['act'] == 'update_audit')
 	$audit_info['audit_note'] = $confirm > 0 ? "审核通过": trim($_POST['audit_note']);
 	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad_audit'), $audit_info, 'INSERT');
 	
-	$return_url = "city_operate.php?act=city_ad_list&city_id=$city_id";
+	$return_url = "city_renew.php?act=city_ad_list&city_id=$city_id";
 	
 	if($confirm == 1){
 		$cat_info['audit_status'] = $_SESSION['user_rank'];
@@ -718,7 +743,7 @@ elseif($_REQUEST['act'] == 'update_audit')
 		act_city_request($city_id,$_SESSION['user_rank'],1);//更新请求库	
 		
 		show_message("审核信息已经提交。", $_LANG['back_home_lnk'], $return_url, 'info', true);
-		//$smarty->display('city_view.dwt');
+		//$smarty->display('city_renew_view.dwt');
 	}
 }
 
@@ -738,7 +763,7 @@ elseif($_REQUEST['act'] == 'upload_photo')
 			if($ad_info['audit_status'] < 3){
 				$upload_message = "分区可以修改 从媒体净价——更改城市备注 的所有项 ，其中媒体评分不能更改 .";
 			}else{
-				$upload_message = "已经开始审核不能修改了.<a href='city_operate.php?act=view_ad&ad_id=$ad_id'>点此查看</a>";
+				$upload_message = "已经开始审核不能修改了.<a href='city_renew.php?act=view_ad&ad_id=$ad_id'>点此查看</a>";
 			}
 		}else{
 			$upload_message = "审核不通过,可以修改,但是不能修改 具体位置描述 .";
@@ -754,7 +779,7 @@ elseif($_REQUEST['act'] == 'upload_photo')
 	$smarty->assign('ad_id', $ad_id);
 	$smarty->assign('is_change', $is_change);
 	
-	$smarty->display('city_view.dwt');
+	$smarty->display('city_renew_view.dwt');
 }
 /**
  * 响应上传照片
@@ -796,7 +821,7 @@ elseif($_REQUEST['act'] == "act_upload_photo")
     //$GLOBALS['db']->query($sql);
 	
 	act_city_request($ad_info['city_id'],AUDIT_1);//更新请求库	
-	show_message("恭喜您,照片上传成功。", $_LANG['back_home_lnk'], "city_operate.php?act=city_ad_list&city_id=$ad_info[city_id]", 'info', true);
+	show_message("恭喜您,照片上传成功。", $_LANG['back_home_lnk'], "city_renew.php?act=city_ad_list&city_id=$ad_info[city_id]", 'info', true);
 }
 
 elseif($_REQUEST['act'] == 'export_page')
@@ -816,7 +841,7 @@ elseif($_REQUEST['act'] == 'export_page')
 	
 	//market_level_array
 	//audit_status_array
-	$smarty->display('city_view.dwt');
+	$smarty->display('city_renew_view.dwt');
 }
 /*------------------------------------------------------ */
 //-- 导出报表
@@ -879,7 +904,7 @@ elseif($_REQUEST['act'] == 'export_db')
 	if(true)
 	{
 		$link[0]['text'] = '下载地址';
-	    $link[0]['href'] = 'city_operate.php?act=show';
+	    $link[0]['href'] = 'city_renew.php?act=show';
 
 		$link[1]['text'] = '请下载报表.'."共".count($ad_list)."条数据";
 	    $link[1]['href'] = 'xls/city/'.$file_name.'.xls';
@@ -894,7 +919,7 @@ elseif($_REQUEST['act'] == 'export_db')
 elseif($_REQUEST['act'] == 'batch_audit')
 {
 	if($_SESSION['user_rank'] != 5){
-		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
+		show_message("权限不够", $_LANG['profile_lnk'], 'city_renew.php', 'info', true);        
 	}
 	include_once(ROOT_PATH . 'includes/cls_json.php');
 	
