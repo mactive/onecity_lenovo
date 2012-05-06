@@ -50,7 +50,7 @@
 				
 				<!--{if $act_step == "upload_panel"}-->
 				<div class="audit_info radius_5px" style="width:600px;padding:20px;margin:30px 0px 0px 20px;">
-					<div class="font14px grey333" style="margin:20px 0px;">请提交 - FY11财年联想“一城一牌”资源位申报表格 <br>
+					<div class="font14px grey333" style="margin:20px 0px;">请提交 - FY12新财年联想“一城一牌”资源位申报表格 <br>
 						可以分几次上传全部的县／市,每一个县市限传5条广告位置信息。
 					</div>
 				<form method="post" action="city_operate.php" name="theForm" enctype="multipart/form-data">

@@ -83,6 +83,8 @@ if (!isset($_REQUEST['act']))
 }else{
 	$smarty->assign('act_step',       $_REQUEST['act']);
 }
+	$smarty->assign('PHP_SELF',       get_page_name($_SERVER['PHP_SELF']));
+
 
 /*------------------------------------------------------ */
 //-- PROCESSOR

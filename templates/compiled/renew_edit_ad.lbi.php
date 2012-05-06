@@ -5,19 +5,19 @@
 <?php if ($this->_var['sm_session']['user_rank'] == 1): ?>
 <div class="yellow_notice" style="text-align:center;"><?php echo $this->_var['upload_message']; ?></div>
 <?php endif; ?>
-<?php if ($this->_var['ad_info']['is_audit_confirm'] == 1 && $this->_var['ad_info']['audit_status'] == 5): ?>
+<?php if ($this->_var['ad_info']['is_delete'] == 0): ?>
 	<form method="post" action="city_renew.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
-	<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_79048800_1335701967');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_79048800_1335701967']):
+	<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_47646700_1336281605');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_47646700_1336281605']):
 ?>
 	<div class="city_info radius_5px">
-		<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_79048800_1335701967']; ?></div>
+		<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_47646700_1336281605']; ?></div>
 		<div class="f_left right_content">		
 			<span class="f_right"><?php if ($this->_var['k'] == "col_12"): ?>如是两块牌子请写合计尺寸 &nbsp;<?php endif; ?>
 				<a target="_blank"  class="grey666" href="city_operate.php?act=view_log&ad_id=<?php echo $this->_var['ad_detail']['ad_id']; ?>&col_name=<?php echo $this->_var['k']; ?>">
 				修改记录</a></span>
 				
-			<?php if (( $this->_var['ad_info']['is_change'] == 0 && $this->_var['sm_session']['user_rank'] == 1 ) && ( $this->_var['k'] != "col_1" && $this->_var['k'] != "col_2" && $this->_var['k'] != "col_3" && $this->_var['k'] != "col_4" && $this->_var['k'] != "col_5" && $this->_var['k'] != "col_6" && $this->_var['k'] != "col_7" && $this->_var['k'] != "col_8" && $this->_var['k'] != "col_9" && $this->_var['k'] != "col_10" && $this->_var['k'] != "col_11" && $this->_var['k'] != "col_12" && $this->_var['k'] != "col_13" && $this->_var['k'] != "col_14" && $this->_var['k'] != "col_15" && $this->_var['k'] != "col_23" && $this->_var['k'] != "col_27" && $this->_var['k'] != "col_41" )): ?>
+			<?php if (( $this->_var['ad_info']['is_change'] == 0 || ( $this->_var['ad_info']['is_audit_confirm'] == 0 && $this->_var['ad_info']['audit_status'] == 2 ) ) && ( $this->_var['k'] != "col_1" && $this->_var['k'] != "col_2" && $this->_var['k'] != "col_3" && $this->_var['k'] != "col_4" && $this->_var['k'] != "col_5" && $this->_var['k'] != "col_6" && $this->_var['k'] != "col_7" && $this->_var['k'] != "col_8" && $this->_var['k'] != "col_9" && $this->_var['k'] != "col_10" && $this->_var['k'] != "col_11" && $this->_var['k'] != "col_12" && $this->_var['k'] != "col_13" && $this->_var['k'] != "col_14" && $this->_var['k'] != "col_15" && $this->_var['k'] != "col_23" && $this->_var['k'] != "col_27" && $this->_var['k'] != "col_41" )): ?>
 				<?php if ($this->_var['k'] == "col_16" || $this->_var['k'] == "col_17" || $this->_var['k'] == "col_18" || $this->_var['k'] == "col_35" || $this->_var['k'] == "col_37" || $this->_var['k'] == "col_39"): ?>
 						<?php if ($this->_var['k'] == "col_18"): ?>
 						<input type="text" name="col[]" id="<?php echo $this->_var['k']; ?>" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" size="37" style="background:#ffffff;" readonly=1/>
@@ -57,7 +57,7 @@
 	<input type="hidden" name="old_col[]" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" />
 	<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 	
-	<?php if ($this->_var['ad_info']['is_change'] == 0 && $this->_var['sm_session']['user_rank'] == 1): ?>
+	<?php if (( $this->_var['ad_info']['is_change'] == 0 && $this->_var['sm_session']['user_rank'] == 1 ) || ( $this->_var['ad_info']['is_audit_confirm'] == 0 && $this->_var['ad_info']['audit_status'] == 2 )): ?>
 	
 	<div style="width:500px;float:left;">
 		<input type="hidden" name="act" value="act_update_renew_info" />

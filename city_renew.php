@@ -11,7 +11,6 @@ define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 require(dirname(__FILE__) . '/includes/lib_city_renew.php');
-require(dirname(__FILE__) . '/includes/lib_dealer.php');
 require(dirname(__FILE__) . '/includes/lib_clips.php');
 require_once(ROOT_PATH . 'admin/includes/lib_main.php');
 require_once(ROOT_PATH . 'admin/includes/cls_exchange.php');
@@ -83,6 +82,8 @@ if (!isset($_REQUEST['act']))
 }else{
 	$smarty->assign('act_step',       $_REQUEST['act']);
 }
+	$smarty->assign('PHP_SELF',       get_page_name($_SERVER['PHP_SELF']));
+
 
 /*------------------------------------------------------ */
 //-- PROCESSOR
@@ -466,6 +467,8 @@ elseif ($_REQUEST['act'] == 'renew_ad') {
 	$data['checked_time'] = gmtime();
 	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $data, 'UPDATE', "ad_id = '$ad_id'");
 
+	act_renew_plus($ad_info['city_id']);
+
 	$message = "续签成功.<br>"."时间从:&nbsp;&nbsp;".$ad_detail['col_16']."-".$ad_detail['col_17']."<br>变成为:&nbsp;&nbsp;".$new_start_time."-".$new_end_time;
 
 	insert_ad_log($ad_id,'col_16',$ad_detail['col_16'],$new_start_time);
@@ -558,23 +561,28 @@ elseif($_REQUEST['act'] == 'act_update_renew_info')
 		
 		$data = array();
 		$data['is_change'] = 1;//已经修改过
+		$data['checked_time'] = gmtime();
 		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $data, 'update', "ad_id='$ad_id'");
 		
+		act_change_plus($ad_info['city_id']);
+
+
 		//记录修改记录
 		$old_col = $_REQUEST['old_col'];
 		
 		foreach($old_col AS $key => $val){
 			if($val != $col[$key] && !empty($val) && !empty($col[$key]) ){
 				//echo $val."-".$col[$key]."<br>";
-				insert_ad_log($ad_id,"col_".$name,$val,$col[$key]);
+				$col_key = $key + 1;
+				insert_ad_log($ad_id,"col_".$col_key,$val,$col[$key]);
 			}
-		}		
+		}
+
+		act_city_request($ad_info['city_id'],$_SESSION['user_rank']);//更新请求库	
+		
 	}
 	
-	
-	
-	
-	show_message("修改成功", "返回牌子列表", 'city_renew.php?act=city_ad_list&city_id='.$ad_info['city_id'], 'info', true);       
+	show_message("修改成功", "返回改城市牌子列表", 'city_renew.php?act=city_ad_list&city_id='.$ad_info['city_id'], 'info', true);       
 }
 /**
  * 删除牌子
@@ -648,14 +656,7 @@ elseif($_REQUEST['act'] == 'audit')
 	$ad_info = get_ad_info($ad_id);
 	$smarty->assign('ad_info', $ad_info);
 	
-	if($ad_info['is_new'] == 1){
-		$another_ad_id = get_another_ad_id($ad_info['city_id'],$ad_id);
-		$smarty->assign('another_ad_id', $another_ad_id);
-		
-		$overlap_info = get_overlap_info($another_ad_id,$ad_id);
-		$smarty->assign('overlap_info', $overlap_info);
-		
-	}else{
+
 		$another_ad_id = get_another_ad_id($ad_info['city_id'],$ad_id);
 		$smarty->assign('another_ad_id', $another_ad_id);
 			
@@ -665,7 +666,7 @@ elseif($_REQUEST['act'] == 'audit')
 		$overlap_info['fee_2'] = intval($tt * 0.15 );
 		$overlap_info['fee_3'] = intval($tt * 0.65 );
 		$smarty->assign('overlap_info', $overlap_info);
-	}
+	
 	
 	
 	$photo_info = get_ad_photo_info($ad_id);
@@ -673,23 +674,10 @@ elseif($_REQUEST['act'] == 'audit')
 	$smarty->assign('ad_id', $ad_id);
 	
 	// 获得消失的id
-	
-
-	
-	$passed_ad_id = get_passed_ad_id($ad_detail['city_id']);
-	if($passed_ad_id){
 		
-		$passed_ad_detail = get_city_info($passed_ad_id);
-		$smarty->assign('passed_ad_detail', $passed_ad_detail);
+	$changed_detail = get_changed_detail($ad_id);
+	$smarty->assign('changed_detail', $changed_detail);
 		
-		$passed_photo_info = get_ad_photo_info($passed_ad_id);
-		$smarty->assign('passed_photo_info', $passed_photo_info);
-			
-		$passed_audit_path = get_audit_path($passed_ad_id,$audit_level_array); //审核路径图
-		$smarty->assign('passed_audit_path', $passed_audit_path);
-
-	}
-	
 
 	$audit_path = get_audit_path($ad_id,$audit_level_array); //审核路径图
 	$smarty->assign('audit_path', $audit_path);
@@ -717,7 +705,7 @@ elseif($_REQUEST['act'] == 'update_audit')
 	$audit_info['ad_id'] = $ad_id;
 	$audit_info['user_id'] = $_SESSION['user_id'];
 	$audit_info['user_rank'] = $_SESSION['user_rank'];
-	$audit_info['audit_note'] = $confirm > 0 ? "审核通过": trim($_POST['audit_note']);
+	$audit_info['audit_note'] = $confirm > 0 ? "续签审核通过": trim($_POST['audit_note']);
 	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad_audit'), $audit_info, 'INSERT');
 	
 	$return_url = "city_renew.php?act=city_ad_list&city_id=$city_id";
@@ -728,9 +716,8 @@ elseif($_REQUEST['act'] == 'update_audit')
 		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $cat_info, 'UPDATE', "ad_id = '$ad_id'");
 		
 		//大列表的流程状态
-		$audit_status = $cat_info['audit_status'] + 1; //上一级别可看
-		$sql = "UPDATE " . $GLOBALS['ecs']->table('category') . " SET audit_status = '$audit_status'  WHERE cat_id = '$city_id'";
-        $GLOBALS['db']->query($sql);
+		act_renew_audit($city_id);
+
 		act_city_request($city_id,$_SESSION['user_rank']);//更新请求库	
 		
 		show_message("审核通过,其他人会看到。", $_LANG['back_home_lnk'], $return_url, 'info', true);

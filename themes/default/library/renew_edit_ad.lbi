@@ -6,7 +6,7 @@
 <!--{if $sm_session.user_rank == 1}-->
 <div class="yellow_notice" style="text-align:center;">{$upload_message}</div>
 <!--{/if}-->
-<!--{if $ad_info.is_audit_confirm == 1 && $ad_info.audit_status == 5 }-->
+<!--{if $ad_info.is_delete == 0 }-->
 	<form method="post" action="city_renew.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
 	<!--{foreach from=$city_title key=k item=item }-->
 	<div class="city_info radius_5px">
@@ -16,7 +16,7 @@
 				<a target="_blank"  class="grey666" href="city_operate.php?act=view_log&ad_id={$ad_detail.ad_id}&col_name={$k}">
 				修改记录</a></span>
 				
-			<!--{if  ($ad_info.is_change == 0 && $sm_session.user_rank == 1) && ($k != "col_1" && $k != "col_2" && $k != "col_3" && $k != "col_4" && $k != "col_5" && $k != "col_6" && $k != "col_7" && $k != "col_8" && $k != "col_9" && $k != "col_10" && $k != "col_11" && $k != "col_12" && $k != "col_13" && $k != "col_14" && $k != "col_15" && $k != "col_23" && $k != "col_27" && $k != "col_41" )}-->
+			<!--{if  ($ad_info.is_change == 0 ||  ($ad_info.is_audit_confirm == 0 && $ad_info.audit_status == 2)) && ($k != "col_1" && $k != "col_2" && $k != "col_3" && $k != "col_4" && $k != "col_5" && $k != "col_6" && $k != "col_7" && $k != "col_8" && $k != "col_9" && $k != "col_10" && $k != "col_11" && $k != "col_12" && $k != "col_13" && $k != "col_14" && $k != "col_15" && $k != "col_23" && $k != "col_27" && $k != "col_41" )}-->
 				{if $k == "col_16" || $k == "col_17" || $k == "col_18" || $k == "col_35" || $k == "col_37" || $k == "col_39"}
 						{if $k == "col_18" }
 						<input type="text" name="col[]" id="{$k}" value="{$ad_detail.$k}" size="37" style="background:#ffffff;" readonly=1/>
@@ -56,7 +56,7 @@
 	<input type="hidden" name="old_col[]" value="{$ad_detail.$k}" />
 	<!--{/foreach}-->
 	
-	<!--{if $ad_info.is_change == 0 &&  $sm_session.user_rank == 1 }-->
+	<!--{if ($ad_info.is_change == 0 &&  $sm_session.user_rank == 1 )|| ($ad_info.is_audit_confirm == 0 && $ad_info.audit_status == 2) }-->
 	
 	<div style="width:500px;float:left;">
 		<input type="hidden" name="act" value="act_update_renew_info" />

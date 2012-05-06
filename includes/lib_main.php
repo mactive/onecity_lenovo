@@ -2025,4 +2025,11 @@ function get_cat_info($cat_id)
     $sql = "SELECT * FROM " .$GLOBALS['ecs']->table('category'). " WHERE cat_id='$cat_id' LIMIT 1";
     return $GLOBALS['db']->getRow($sql);
 }
+
+function get_page_name($str){
+    $array = explode('/', $str);
+    $last = $array[count($array) - 1];
+    $array = explode('.', $last);
+    return $array[0];
+}
 ?>

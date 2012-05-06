@@ -25,7 +25,7 @@
 	margin:0;
 	background:url(../images/left_menu_top_bg.png) left -24px no-repeat;
 }
-.nav_top_red span{ float:left;}
+.nav_top_red span{ float:left;width:150px;text-align:center;}
 .nav_top_red span.s_right{ float:left;}
 .nav_top_red span.s_right a{ 
 	background:transparent url(../images/menu_arrow.png) no-repeat scroll 100% 50%; color:#fff;

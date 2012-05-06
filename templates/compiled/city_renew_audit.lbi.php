@@ -1,0 +1,132 @@
+<div class="yellow_notice" style="text-align:center;">
+	<?php if ($this->_var['ad_info']['is_renew']): ?>续签广告牌 <?php endif; ?>
+	<?php if ($this->_var['ad_info']['is_change']): ?>修改广告牌 <?php endif; ?>
+</div>
+<div class="f_left">
+	<a class="back_url" href="city_renew.php?act=city_ad_list&city_id=<?php echo $this->_var['ad_info']['city_id']; ?>"></a>
+</div>
+
+
+
+<?php echo $this->fetch('library/renew_audit_path.htm'); ?>					
+
+<div class="upload_board" style="height:auto;float:left;">
+	
+<form method="post" action="city_renew.php" name="theForm" id="theForm" enctype="multipart/form-data" onsubmit="return validate()">
+  <table width="100%" border="0" cellspacing="0" class="table_standard">
+	<tr>
+		<td>已经上传照片</td>
+		<td>
+			<?php $_from = $this->_var['photo_info']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item_0_27454800_1336279158');$this->_foreach['photo_info'] = array('total' => count($_from), 'iteration' => 0);
+if ($this->_foreach['photo_info']['total'] > 0):
+    foreach ($_from AS $this->_var['item_0_27454800_1336279158']):
+        $this->_foreach['photo_info']['iteration']++;
+?>
+				<div style="width:160px;height:160px;text-align:center;float:left;margin:10px;">
+				<a href="<?php echo $this->_var['item_0_27454800_1336279158']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_27454800_1336279158']['thumb_url']; ?>"></a>
+				<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_27454800_1336279158']['img_sort']]; ?>
+				</div>
+			<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+		</td>
+	</tr>
+	
+	<?php if (( $this->_var['sm_session']['user_rank'] == 2 )): ?>
+	<tr>
+		<td width="130">如果审核不通过,<br>请写下明确的原因:</td>
+		<td><br>
+			<textarea name="audit_note" id="audit_note" cols="40" rows="4"></textarea></td>
+	</tr>
+	
+
+    <tr>
+      <td>&nbsp;</td>
+      <td>
+        <input type="hidden" name="ad_id" value="<?php echo $this->_var['ad_info']['ad_id']; ?>" />
+        <input type="hidden" name="confirm" id="confirm" value="0" />
+        <input type="hidden" name="city_id" value="<?php echo $this->_var['ad_info']['city_id']; ?>" />
+      	<input type="hidden" name="act" value="update_audit" />
+		<input type="submit" class="input_s3 f_left" value="不通过" />
+		<a onclick="update_audit()" class="cancel_lite_btn f_left" style="margin-left:20px;">通过审核</a> 
+      </td>
+    </tr>
+	<?php endif; ?>
+  </table>
+</form>
+</div>
+
+
+<script src="admin/js/validator.js" type="text/javascript"></script>
+<script type="text/javascript">
+function update_audit(){
+	document.getElementById('confirm').value = 1;
+	
+	document.getElementById("theForm").submit();
+	
+}
+/**
+ * 检查表单输入的数据
+ */
+function validate()
+{
+	
+	var obj = document.getElementById('audit_note');
+
+    if (obj.value == "")
+    {
+        alert("请填写不通过原因");
+        return false;
+    }
+	return true;
+    //return validator.passed();
+}
+function validate2()
+{
+	
+	var obj_2 = document.getElementById('col_23');
+    if (obj_2.value == "")
+    {
+        alert("请填写媒体评分");
+        return false;
+    }
+	return true;
+    //return validator.passed();
+}
+</script>
+
+
+<?php if ($this->_var['sm_session']['user_rank'] > 1): ?>
+	<?php if ($this->_var['sm_session']['user_rank'] == 2): ?>
+	
+		
+		<div class="city_info radius_5px">
+			<div class="f_left left_title left_radius_5px">牌子编号</div>
+			<div class="f_left right_content" style="width:300px;"><?php echo $this->_var['ad_detail']['ad_sn']; ?>
+			</div>
+			<div class="past_content" style="width:200px;"><span class="red-block">修改前的项目</span></div>
+			<div class="clear"></div>
+		</div>
+		<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_27506100_1336279158');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_27506100_1336279158']):
+?>
+		<div class="city_info radius_5px">
+			<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_27506100_1336279158']; ?></div>
+			<div class="f_left right_content" style="width:300px;"><?php echo $this->_var['ad_detail'][$this->_var['k']]; ?></div>	
+			<div class="past_content" style="width:200px;"><span class="bg_yellow"><?php echo $this->_var['changed_detail'][$this->_var['k']]; ?></span></div>
+			<div class="clear"></div>
+		</div>
+		<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+		<div style="width:500px;float:left;">
+			<input type="hidden" name="act" value="update_ad" />
+			<input type="hidden" name="form_audit" value="1" />
+			<input type="hidden" name="ad_id" value="<?php echo $this->_var['ad_detail']['ad_id']; ?>" />
+			<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_27527500_1336279158');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_27527500_1336279158']):
+?>
+			<input type="hidden" name="old_col[]" value="<?php echo $this->_var['ad_detail'][$this->_var['k']]; ?>" />
+			<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+		</div>
+	<?php endif; ?>
+<?php endif; ?>
+
+
+

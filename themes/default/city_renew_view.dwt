@@ -40,7 +40,7 @@
 					if (result.content)
 				      {
 						alert(result.message);
-						//var new_location = "city_operate.php";
+						//var new_location = "city_renew.php";
 						window.location.assign(result.content);
 						  //document.getElementById('city_div_'+cityID).innerHTML = result.content;
 				      }
@@ -98,17 +98,11 @@
 				<!--{if $act_step == "view_ad"}-->
 									
 					<div class="f_left">
-						<a class="back_url" href="city_operate.php?act=city_ad_list&city_id={$ad_info.city_id}"></a>
+						<a class="back_url" href="city_renew.php?act=city_ad_list&city_id={$ad_info.city_id}"></a>
 					</div>
+
 					
-					<!--如果是新牌子-->
-					<!--{if $ad_info.is_new}-->
-					{include file="library/overlap_info.htm"}
-					<!--{else}-->
-					{include file="library/renew_overlap_info.htm"}
-					<!--{/if}-->
-					
-					{include file="library/audit_path.htm"}
+					{include file="library/renew_audit_path.htm"}
 
 					<!--{foreach from=$photo_info item=item}-->
 						<div style="width:160px;height:160px;text-align:center;float:left;margin:10px;">
@@ -133,7 +127,7 @@
 				<!--{/if}-->
 				
 				<!--{if $act_step == "audit"}-->
-				<!-- #BeginLibraryItem "/library/city_audit.lbi" -->
+				<!-- #BeginLibraryItem "/library/city_renew_audit.lbi" -->
 				>
 				<!-- #EndLibraryItem -->
 				<!--{/if}-->
@@ -146,19 +140,7 @@
 				>
 				<!-- #EndLibraryItem -->
 				<!--{/if}-->
-				
-
-				
-				<!--{if $act_step == "export_page"}-->
-				<!-- #BeginLibraryItem "/library/export_page.lbi" -->
-				>
-				<!-- #EndLibraryItem -->
-				<!--{/if}-->
-				
-				
-				
-
-				
+			
 			
 		</div>			
 		<!-- End #page-middle -->

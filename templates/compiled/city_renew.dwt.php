@@ -107,6 +107,8 @@
 						<?php endif; ?>
 					  	<th>检查时间</th>
 					  	<th>数量</th>
+					  	<th>续签数量</th>
+					  	<th>修改数量</th>
 					  	<th><?php echo $this->_var['lang']['handler']; ?></th>
 				    </tr>
 				<?php $_from = $this->_var['city_list']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'city');$this->_foreach['index_idea'] = array('total' => count($_from), 'iteration' => 0);
@@ -114,7 +116,7 @@ if ($this->_foreach['index_idea']['total'] > 0):
     foreach ($_from AS $this->_var['city']):
         $this->_foreach['index_idea']['iteration']++;
 ?>
-					<tr <?php if ($this->_var['city']['is_upload']): ?>
+					<tr <?php if ($this->_var['city']['change_num'] || $this->_var['city']['renew_num']): ?>
 								class="city_upload"
 						<?php endif; ?>>
 						<td><?php echo $this->_var['city']['region']; ?></td>
@@ -123,10 +125,14 @@ if ($this->_foreach['index_idea']['total'] > 0):
 						<td><?php echo $this->_var['city']['market_level']; ?></td>
 						<?php if ($this->_var['sm_session']['user_rank'] > 1): ?>
 						<td>
-							<?php if ($this->_var['city']['city_request'] > 0): ?>
-							<a href="city_renew.php?act=city_ad_list&city_id=<?php echo $this->_var['city']['cat_id']; ?>">								
-								<span class="red-color"><?php echo $this->_var['city']['city_request']; ?>条</span>待审
-							</a><?php else: ?>无待审核<?php endif; ?>
+							<?php if ($this->_var['city']['is_checked'] == 1): ?>
+								<?php if ($this->_var['city']['renew_audit_request'] > 0): ?>
+									<a href="city_renew.php?act=city_ad_list&city_id=<?php echo $this->_var['city']['cat_id']; ?>">	
+									<span class="red-color"><?php echo $this->_var['city']['renew_audit_request']; ?>条</span>待审</a>
+								<?php else: ?>
+									<span class="green-color">已通过</span>
+								<?php endif; ?>
+							<?php else: ?>无待审核<?php endif; ?>
 							
 							<?php $_from = $this->_var['city']['status_summary']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('key', 'item');if (count($_from)):
     foreach ($_from AS $this->_var['key'] => $this->_var['item']):
@@ -137,10 +143,22 @@ if ($this->_foreach['index_idea']['total'] > 0):
 							<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 						</td>
 						<?php else: ?>
-						<td><?php if ($this->_var['city']['is_checked'] == 1): ?><span class="red-color">检查过</span><?php else: ?>待检查<?php endif; ?></td>
+						<td>
+							<?php if ($this->_var['city']['city_request'] > 0): ?>
+							<a href="city_renew.php?act=city_ad_list&city_id=<?php echo $this->_var['city']['cat_id']; ?>">								
+								<span class="red-color"><?php echo $this->_var['city']['city_request']; ?>条</span>待修改
+							</a>
+							<?php else: ?>
+								<?php if ($this->_var['city']['city_request'] == 0 && $this->_var['city']['renew_audit'] > 0): ?><span class="green-color">已通过</span><?php else: ?>
+								<?php if ($this->_var['city']['is_checked'] == 1): ?><span class="red-color">检查过</span><?php else: ?>待检查<?php endif; ?><?php endif; ?>
+							
+							<?php endif; ?>
+						</td>
 						<?php endif; ?>
 						<td><?php if ($this->_var['city']['is_upload']): ?><?php echo $this->_var['city']['time_summary']; ?><?php else: ?><?php echo $this->_var['lang']['upload_pending']; ?><?php endif; ?></td>
 						<td><?php echo $this->_var['city']['ad_count']; ?></td>
+						<td><?php echo $this->_var['city']['renew_num']; ?></td>
+						<td><?php echo $this->_var['city']['change_num']; ?></td>						
 						<td><a href="city_renew.php?act=city_ad_list&city_id=<?php echo $this->_var['city']['cat_id']; ?>">查看详情</a></td>
 					</tr>
 			    <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>

@@ -4,12 +4,19 @@
 </div>
 <div>
   <ul class="mycity_ul">
-    <li><a href="city_renew.php" style="background:url(<?php echo $this->_var['img_path']; ?>ico/flagged.png) no-repeat 10px center;">FY12检查牌子</a></li>
+    <li <?php if ($this->_var['PHP_SELF'] == "city_renew"): ?>class="selected"<?php endif; ?>>
+<a href="city_renew.php" style="background:url(<?php echo $this->_var['img_path']; ?>ico/flagged.png) no-repeat 10px center;">FY12修改续签牌子</a></li>
+  <?php if ($this->_var['sm_session']['user_rank'] == 1): ?>
+    <li <?php if ($this->_var['act_step'] == "upload_panel"): ?>class="selected"<?php endif; ?>>
+    <a href="city_operate.php?act=upload_panel" style="background:url(<?php echo $this->_var['img_path']; ?>ico/inbox.png) no-repeat 10px center;">上传数据</a></li>
+  <?php endif; ?>
+    <li <?php if ($this->_var['PHP_SELF'] == "city_operate" && $this->_var['act_step'] == "show"): ?>class="selected"<?php endif; ?>>
+    <a href="city_operate.php" style="background:url(<?php echo $this->_var['img_path']; ?>audit_status_bg.png) no-repeat 8px 4px;">FY12新上传牌子</a></li>
+  <li><a href="download/FY12_model.rar" style="background:url(<?php echo $this->_var['img_path']; ?>ico/project.png) no-repeat 10px center;">模版下载</a></li>
   </ul>
 </div>
 <div class="height_5px" style="background:#cb5a42;"></div>
 <div class="left_menu" style="height:<?php if ($this->_var['act_step'] == "upload_file"): ?>200<?php else: ?>600<?php endif; ?>px;">
-
 
 <div class="nav_top_lite_grey">
     <span>操作权限</span>

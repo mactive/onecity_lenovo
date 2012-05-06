@@ -24,7 +24,7 @@ if (empty($_SESSION['user_id']))
 	ecs_header('Location: ' .$url. "\n");
 	exit;
 }else{
-	$url = "city_operate.php";
+	$url = "city_renew.php";
 	ecs_header('Location: ' .$url. "\n");
 	exit;
 }

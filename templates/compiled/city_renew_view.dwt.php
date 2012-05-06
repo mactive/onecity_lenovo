@@ -41,7 +41,7 @@
 					if (result.content)
 				      {
 						alert(result.message);
-						//var new_location = "city_operate.php";
+						//var new_location = "city_renew.php";
 						window.location.assign(result.content);
 						  //document.getElementById('city_div_'+cityID).innerHTML = result.content;
 				      }
@@ -89,17 +89,12 @@
 				<?php if ($this->_var['act_step'] == "view_ad"): ?>
 									
 					<div class="f_left">
-						<a class="back_url" href="city_operate.php?act=city_ad_list&city_id=<?php echo $this->_var['ad_info']['city_id']; ?>"></a>
+						<a class="back_url" href="city_renew.php?act=city_ad_list&city_id=<?php echo $this->_var['ad_info']['city_id']; ?>"></a>
 					</div>
+
 					
-					
-					<?php if ($this->_var['ad_info']['is_new']): ?>
-					<?php echo $this->fetch('library/overlap_info.htm'); ?>
-					<?php else: ?>
-					<?php echo $this->fetch('library/renew_overlap_info.htm'); ?>
-					<?php endif; ?>
-					
-					
+					<?php echo $this->fetch('library/renew_audit_path.htm'); ?>
+
 					<?php $_from = $this->_var['photo_info']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item');if (count($_from)):
     foreach ($_from AS $this->_var['item']):
 ?>
@@ -125,7 +120,7 @@
 				<?php endif; ?>
 				
 				<?php if ($this->_var['act_step'] == "audit"): ?>
-				<?php echo $this->fetch('library/city_audit.lbi'); ?>
+				<?php echo $this->fetch('library/city_renew_audit.lbi'); ?>
 				<?php endif; ?>
 				
 
@@ -134,17 +129,7 @@
 				<?php if ($this->_var['act_step'] == "audit_status_summary"): ?>
 				<?php echo $this->fetch('library/audit_status_summary.lbi'); ?>
 				<?php endif; ?>
-				
-
-				
-				<?php if ($this->_var['act_step'] == "export_page"): ?>
-				<?php echo $this->fetch('library/export_page.lbi'); ?>
-				<?php endif; ?>
-				
-				
-				
-
-				
+			
 			
 		</div>			
 		

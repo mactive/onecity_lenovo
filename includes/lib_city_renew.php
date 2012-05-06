@@ -142,9 +142,11 @@ function get_city_list($children,$limit = 0){
 	$request_title = "re.lv_".$_SESSION['user_rank'];
 	$limit_sql = $limit > 0 ? " LIMIT 0,$limit ": " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
 	
-	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, a.has_new,". 
+	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, a.renew_audit,
+			a.has_new,re.renew_num,re.change_num,re.is_audit_confirm ,re.audit_status ,". 
 			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
 			",$request_title AS city_request " . 
+
 			" FROM ".$GLOBALS['ecs']->table('category') . " AS a ".
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ". 
 		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
@@ -153,7 +155,7 @@ function get_city_list($children,$limit = 0){
 			
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('city'). 		' AS c  ON c.city_id = a.cat_id '.
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad'). 	' AS ad ON ad.city_id = a.cat_id '.
-			"$where ORDER BY city_request DESC, a.is_upload DESC, a.audit_status DESC ".
+			"$where ORDER BY re.renew_num DESC, re.change_num DESC, a.is_upload DESC, a.audit_status DESC ". 
 			$limit_sql;
 	//echo $sql;	 GROUP BY ad.ad_id
 	
@@ -164,7 +166,7 @@ function get_city_list($children,$limit = 0){
 		$res[$key]['is_checked'] = get_city_ad_is_checked($val['cat_id']);
 		$res[$key]['ad_count'] = get_city_ad_num($val['cat_id']);		//上传条数
 		$res[$key]['time_summary'] = get_city_ad_is_checked($val['cat_id'],1); 	//最新检查时间
-
+		$res[$key]['renew_audit_request'] = intval($res[$key]['ad_count'] - $val['renew_audit']);
 
 /*
 		$ad_list = get_ad_list_by_cityid($val['cat_id']);//用做弹窗 
@@ -189,11 +191,49 @@ function get_city_ad_num($city_id)
 	return $GLOBALS['db']->getOne($sql);
 }
 
+function act_renew_plus($city_id,$is_plus = 1){
+	$data['renew_num'] = $GLOBALS['db']->getOne("SELECT renew_num FROM " . $GLOBALS['ecs']->table('city_request') .
+				" WHERE city_id = $city_id ");//已经修改过
+	if ($is_plus == 0) {
+		$data['renew_num'] -= 1;
+	}else{
+		$data['renew_num'] += 1;
+	}
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_request'), $data, 'update', "city_id='$city_id'");	
+}
+
+
+function act_change_plus($city_id,$is_plus = 1){
+	$data['change_num'] = $GLOBALS['db']->getOne("SELECT change_num FROM " . $GLOBALS['ecs']->table('city_request') .
+				" WHERE city_id = $city_id ");//已经修改过
+	if ($is_plus == 0) {
+		$data['change_num'] -= 1;
+	}else{
+		$data['change_num'] += 1;
+	}
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_request'), $data, 'update', "city_id='$city_id'");	
+}
+
+
+function act_renew_audit($city_id,$is_plus = 1){
+	$data['renew_audit'] = $GLOBALS['db']->getOne("SELECT renew_audit FROM " . $GLOBALS['ecs']->table('category') .
+				" WHERE cat_id = $city_id ");//已经修改过
+	if ($is_plus == 0) {
+		$data['renew_audit'] -= 1;
+	}else{
+		$data['renew_audit'] += 1;
+	}
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('category'), $data, 'update', "cat_id='$city_id'");	
+
+}
+
+
+
 // 检查城市下的牌子是不是都检查过了
 function get_city_ad_is_checked($city_id,$time = 0 ){
 	if($city_id){
 		$sql = "SELECT checked_time FROM " . $GLOBALS['ecs']->table('city_ad') .
-				" WHERE city_id = $city_id ";
+				" WHERE city_id = $city_id AND is_delete = 0  ";
 		$res = $GLOBALS['db']->getCol($sql);
 		$count = 0;
 		foreach ($res as $var) { 
@@ -201,7 +241,7 @@ function get_city_ad_is_checked($city_id,$time = 0 ){
 				$count += 1;
 			}
 		}
-		if ($time) {
+		if ($time && count($res)) {
 			return local_date('Y-m-d', max($res));
 		}else{
 			if ($count < count($res)) {
@@ -215,6 +255,38 @@ function get_city_ad_is_checked($city_id,$time = 0 ){
 	}else{
 		return 0;
 	}
+}
+
+// 检查城市下的牌子是不是都检查过了
+function get_city_ad_is_modified($city_id){
+	if($city_id){
+		$sql = "SELECT is_change,checked_time FROM " . $GLOBALS['ecs']->table('city_ad') .
+				" WHERE city_id = $city_id AND is_delete = 0  ";
+		$res = $GLOBALS['db']->getAll($sql);
+		$count = 0;
+		foreach ($res as $key => $var) { 
+			if ($var['is_change']) {
+				$count += 1;
+			}
+		}
+		return $count;
+
+
+	}else{
+		return 0;
+	}
+}
+
+//修改过的项目
+function get_changed_detail($ad_id){
+	$sql = "SELECT col_name,value,old_value  FROM " . $GLOBALS['ecs']->table('city_ad_log') .
+			" WHERE ad_id = $ad_id ";
+	$res = $GLOBALS['db']->getAll($sql);
+	$data = array();
+	foreach ($res as $key => $value) {
+		$data[$value['col_name']] =  $value['old_value'];
+	}
+	return $data;
 }
 
 
@@ -262,7 +334,7 @@ function get_ad_list_by_cityid($city_id)
 			" FROM ".$GLOBALS['ecs']->table('city_ad') . " AS a ".
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city'). 		' AS c ON c.ad_id = a.ad_id '.
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city_gallery'). ' AS g ON g.ad_id = a.ad_id '.
-			" WHERE a.city_id = $city_id AND a.is_delete = 0 GROUP BY c.record_id ORDER BY a.ad_id ASC ";
+			" WHERE a.city_id = $city_id AND a.is_delete = 0  GROUP BY c.record_id ORDER BY a.ad_id ASC ";
 		//echo $sql."<br>";	
 	
 	$res = $GLOBALS['db']->getAll($sql);
@@ -541,7 +613,7 @@ function act_city_request($city_id,$level,$is_cancel = 0)
 	//print_r($res);
 	$now_num  = $res[$now_level_col] - 1; //当前等级减1
 	$next_num = $res[$next_level_col] + 1; //下一等级加1
-	$prev_num = $res[$prev_level_col] + 1; //下一等级加1
+	$prev_num = $res[$prev_level_col] + 1; //上一等级加1
 	
 	
 	//更新city_request
@@ -555,7 +627,7 @@ function act_city_request($city_id,$level,$is_cancel = 0)
 	//echo $sql_2."<br>";
 	$GLOBALS['db']->query($sql_2);
 	
-	//echo $now_level_col."-".$now_num."-".$next_level_col."-".$next_num."-"."<br>".$sql."<br>".$sql_2;
+	// echo $now_level_col."-".$now_num."-".$next_level_col."-".$next_num."-"."<br>".$sql."<br>".$sql_2;
 	
 }
 

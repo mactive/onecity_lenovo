@@ -110,10 +110,12 @@
 						<!--{/if}-->
 					  	<th>检查时间</th>
 					  	<th>数量</th>
+					  	<th>续签数量</th>
+					  	<th>修改数量</th>
 					  	<th>{$lang.handler}</th>
 				    </tr>
 				<!--{foreach from=$city_list item=city name=index_idea}-->
-					<tr {if $city.is_upload}
+					<tr {if $city.change_num || $city.renew_num}
 								class="city_upload"
 						{/if}>
 						<td>{$city.region}</td>
@@ -122,10 +124,14 @@
 						<td>{$city.market_level}</td>
 						<!--{if $sm_session.user_rank > 1}-->
 						<td>
-							{if $city.city_request > 0}
-							<a href="city_renew.php?act=city_ad_list&city_id={$city.cat_id}">								
-								<span class="red-color">{$city.city_request}条</span>待审
-							</a>{else}无待审核{/if}
+							{if $city.is_checked  == 1}
+								{if $city.renew_audit_request > 0 }
+									<a href="city_renew.php?act=city_ad_list&city_id={$city.cat_id}">	
+									<span class="red-color">{$city.renew_audit_request}条</span>待审</a>
+								{else}
+									<span class="green-color">已通过</span>
+								{/if}
+							{else}无待审核{/if}
 							
 							<!--{foreach from=$city.status_summary key=key item=item}-->
 								{if $key > 1 && $key == $sm_session.user_rank}
@@ -134,10 +140,22 @@
 							<!--{/foreach}-->
 						</td>
 						<!--{else}-->
-						<td><!--{if $city.is_checked == 1}--><span class="red-color">检查过</span><!--{else}-->待检查<!--{/if}--></td>
+						<td>
+							{if $city.city_request > 0}
+							<a href="city_renew.php?act=city_ad_list&city_id={$city.cat_id}">								
+								<span class="red-color">{$city.city_request}条</span>待修改
+							</a>
+							{else}
+								{if $city.city_request == 0 && $city.renew_audit > 0}<span class="green-color">已通过</span>{else}
+								<!--{if $city.is_checked == 1}--><span class="red-color">检查过</span><!--{else}-->待检查<!--{/if}-->{/if}
+							
+							{/if}
+						</td>
 						<!--{/if}-->
 						<td>{if $city.is_upload}{$city.time_summary}{else}{$lang.upload_pending}{/if}</td>
 						<td>{$city.ad_count}</td>
+						<td>{$city.renew_num}</td>
+						<td>{$city.change_num}</td>						
 						<td><a href="city_renew.php?act=city_ad_list&city_id={$city.cat_id}">查看详情</a></td>
 					</tr>
 			    <!--{/foreach}-->

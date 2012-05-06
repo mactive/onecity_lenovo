@@ -1,0 +1,23 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!--权限大于1才可见，电通级别的可以编辑-->
+<div class="f_left" style="width:100%;">
+<!--{foreach from=$audit_path key=key item=level }-->
+<div class="audit_board radius_5px">
+	<div class="audit_level_title">{$lang.audit_level.$key}<span class="f_right">->> &nbsp;&nbsp;</span></div>
+	<div></div>
+	<div class="audit_level_content">
+		<!--{foreach from=$level item=item }-->
+		<div class="audit_record">
+		<span class="grey999">{$item.time}</span><br />
+		<span class="grey666">{$item.real_name}</span><br />
+		<div style="padding:0px 5px;line-height:20px;" {if $item.audit_note == "续签审核通过" }class="bg_green radius_5px"{else}class="bg_red radius_5px"{/if}>
+			{$item.audit_note}
+		</div>
+		</div>
+		<!--{/foreach}-->
+	</div>
+		
+	<div class="clear"></div>
+</div>
+<!--{/foreach}-->
+</div>
