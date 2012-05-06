@@ -379,6 +379,10 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 							$tmp['ad_id'] = $GLOBALS['db']->insert_id();
 							$tmp['ad_sn'] = make_ad_sn($tmp['ad_id'], $val['city_id']);
 							$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $tmp, 'INSERT');
+							
+							$sql ="UPDATE " . $GLOBALS['ecs']->table('category') . " SET renew_upload = '1'  WHERE cat_id = '$val[city_id]'";
+							$GLOBALS['db']->query($sql);
+
 							insert_dealer($tmp['col_43'],$tmp['col_44'],$base_info['region_name'],$tmp['ad_id']);
 							insert_dealer($tmp['col_45'],$tmp['col_46'],$base_info['region_name'],$tmp['ad_id']);
 							

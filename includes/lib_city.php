@@ -63,7 +63,7 @@ function get_city_list($children,$limit = 0){
 	$filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'inv_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-	$where = ' WHERE '. $children ." AND a.sys_level = 5 ";
+	$where = ' WHERE '. $children ." AND a.sys_level = 5 AND a.renew_upload = 1";
 	
     if ($filter['county_name'])
     {
