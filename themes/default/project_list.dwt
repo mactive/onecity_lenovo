@@ -96,8 +96,8 @@
 							<select name="has_new" id="has_new">
 								<option value='0'>{$lang.select_please}</option>
 					      		<option value='1' {if $filter.has_new == 1}selected="selected"{/if}>{$lang.is_xz}</option>					    
-								<!-- <option value='2' {if $filter.has_new == 2}selected="selected"{/if}>{$lang.is_all}</option> -->
-					      		<option value='3' {if $filter.has_new == 3}selected="selected"{/if}>{$lang.is_no_xz}</option>					    
+								<option value='2' {if $filter.has_new == 2}selected="selected"{/if}>{$lang.is_all}</option>
+					      		<!-- <option value='3' {if $filter.has_new == 3}selected="selected"{/if}>{$lang.is_no_xz}</option>					     -->
 							</select>
 							</span>
 						</td>

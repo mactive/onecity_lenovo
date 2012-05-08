@@ -26,7 +26,7 @@
 <table width="70%" id="lesson-table" class="table_border table_standard" border="1">
     <tr>
       <td width="100">{$lang.project_name}:</td>
-      <td><span class="red_color font16px">{if $ad_info.is_new}新增换画{else}{$project_info.project_name}{/if}</span></td>
+      <td><span class="red_color font16px">{if $ad_info.is_new}[新增]{/if}{$project_info.project_name}</span></td>
     </tr>
 	<tr>
       <td width="100">{$lang.county}:</td>
