@@ -473,9 +473,11 @@ function get_ad_photo_info($ad_id = 0,$project = 0 ){
 	if($ad_id){
 		$photo_info = $GLOBALS['db']->getAll("SELECT * FROM " . $GLOBALS['ecs']->table('city_gallery') . " WHERE ad_id = $ad_id AND feedback = $project ");
 		foreach ($photo_info as $key => $data) {
-			$photo_info[$key]['img_url'] = '../'.$data['img_url'];
-			$photo_info[$key]['thumb_url'] = '../'.$data['thumb_url'];
-			$photo_info[$key]['img_original'] = '../'.$data['img_original'];
+			if ($data['img_id'] <= 26952) {
+				$photo_info[$key]['img_url'] = '../'.$data['img_url'];
+				$photo_info[$key]['thumb_url'] = '../'.$data['thumb_url'];
+				$photo_info[$key]['img_original'] = '../'.$data['img_original'];			
+			}
 		}
 
 		return $photo_info;
