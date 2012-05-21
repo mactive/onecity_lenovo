@@ -145,7 +145,7 @@ function insert_dealer($sn,$name,$region_name,$ad_id){
 				//echo $sql."<br>";
 
 				$GLOBALS['db']->query($sql);
-				echo $sql."<br>";
+				//echo $sql."<br>";
 				
 			}
 			

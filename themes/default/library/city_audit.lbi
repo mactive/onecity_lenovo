@@ -4,12 +4,6 @@
 	<a class="back_url" href="city_operate.php?act=city_ad_list&city_id={$ad_info.city_id}"></a>
 </div>
 
-<!--如果是新牌子-->
-<!--{if $ad_info.is_new}-->
-{include file="library/overlap_info.htm"}
-<!--{else}-->
-{include file="library/renew_overlap_info.htm"}
-<!--{/if}-->
 
 
 {if $ad_detail.is_new}

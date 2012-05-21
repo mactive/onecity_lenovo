@@ -122,14 +122,18 @@
 						<td>{$city.province}</td>
 						<td>{$city.county}</td>
 						<td>{$city.market_level}</td>
-						<!--{if $sm_session.user_rank > 1}-->
+						<!--{if $sm_session.user_rank == 2}-->
 						<td>
 							{if $city.is_checked  == 1}
 								{if $city.renew_audit_request > 0 }
 									<a href="city_renew.php?act=city_ad_list&city_id={$city.cat_id}">	
 									<span class="red-color">{$city.renew_audit_request}条</span>待审</a>
 								{else}
-									<span class="green-color">已通过</span>
+									{if $city.ad_count == 0}
+										<span>无牌子</span>
+									{else}
+										<span class="green-color">已通过</span>
+									{/if}
 								{/if}
 							{else}无待审核{/if}
 							
@@ -152,7 +156,7 @@
 							{/if}
 						</td>
 						<!--{/if}-->
-						<td>{if $city.is_upload}{$city.time_summary}{else}{$lang.upload_pending}{/if}</td>
+						<td>{if $city.is_upload && $city.ad_count}{$city.time_summary}{else}{$lang.upload_pending}{/if}</td>
 						<td>{$city.ad_count}</td>
 						<td>{$city.renew_num}</td>
 						<td>{$city.change_num}</td>						

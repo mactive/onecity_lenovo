@@ -578,7 +578,7 @@ elseif($_REQUEST['act'] == 'act_update_renew_info')
 			}
 		}
 
-		act_city_request($ad_info['city_id'],$_SESSION['user_rank']);//更新请求库	
+		//act_city_request($ad_info['city_id'],$_SESSION['user_rank']);//更新请求库	
 		
 	}
 	
@@ -717,8 +717,8 @@ elseif($_REQUEST['act'] == 'update_audit')
 		
 		//大列表的流程状态
 		act_renew_audit($city_id);
-
-		act_city_request($city_id,$_SESSION['user_rank']);//更新请求库	
+		act_change_plus($city_id,0);
+		//act_city_request($city_id,$_SESSION['user_rank']);//更新请求库	
 		
 		show_message("审核通过,其他人会看到。", $_LANG['back_home_lnk'], $return_url, 'info', true);
 		
@@ -727,89 +727,13 @@ elseif($_REQUEST['act'] == 'update_audit')
 		$cat_info['audit_status'] = $_SESSION['user_rank'];
 		$cat_info['is_audit_confirm'] = 0;
 		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $cat_info, 'UPDATE', "ad_id = '$ad_id'");
-		act_city_request($city_id,$_SESSION['user_rank'],1);//更新请求库	
+		//act_city_request($city_id,$_SESSION['user_rank'],1);//更新请求库	
 		
 		show_message("审核信息已经提交。", $_LANG['back_home_lnk'], $return_url, 'info', true);
 		//$smarty->display('city_renew_view.dwt');
 	}
 }
 
-
-/**
- * 上传城市照片
- */
-elseif($_REQUEST['act'] == 'upload_photo')
-{
-	$ad_id = isset($_REQUEST['ad_id']) && intval($_REQUEST['ad_id']) > 0 ? intval($_REQUEST['ad_id']) : 0;
-	$is_change = isset($_REQUEST['is_change']) && intval($_REQUEST['is_change']) > 0 ? intval($_REQUEST['is_change']) : 0;
-	$ad_info = get_ad_info($ad_id);
-	$smarty->assign('ad_info', $ad_info);
-
-	if($ad_info['audit_status'] > 1){
-		if($ad_info['is_audit_confirm'] == 1){
-			if($ad_info['audit_status'] < 3){
-				$upload_message = "分区可以修改 从媒体净价——更改城市备注 的所有项 ，其中媒体评分不能更改 .";
-			}else{
-				$upload_message = "已经开始审核不能修改了.<a href='city_renew.php?act=view_ad&ad_id=$ad_id'>点此查看</a>";
-			}
-		}else{
-			$upload_message = "审核不通过,可以修改,但是不能修改 具体位置描述 .";
-		}
-	}
-	
-	$smarty->assign('upload_message', $upload_message);
-	
-	$photo_info = get_ad_photo_info($ad_id);
-	$smarty->assign('photo_info', $photo_info);
-	$smarty->assign('reupload_message', "重新上传将替换照片");
-	
-	$smarty->assign('ad_id', $ad_id);
-	$smarty->assign('is_change', $is_change);
-	
-	$smarty->display('city_renew_view.dwt');
-}
-/**
- * 响应上传照片
- */
-elseif($_REQUEST['act'] == "act_upload_photo")
-{
-	$ad_id  = empty($_REQUEST['ad_id']) ? 30 : $_REQUEST['ad_id'] ;
-	$ad_info = get_ad_info($ad_id);
-	$photo  = $_FILES['idea_photo'];
-	$desc  = $_REQUEST['idea_desc'];
-	$img_id  = $_POST['img_id'];
-
-	$sort_array = array();
-	$desc_array = array();
-	$id_array = array();
-	
-	$modify  = empty($_REQUEST['modify']) ? 0 : $_REQUEST['modify'] ;
-	//数量和大小判断
-	foreach($photo['size'] AS $key => $val){
-		if($val == 0 && $modify == 0 ){
-			show_message("图片数量不全");
-		}else{
-			if($val > 1024000  && $modify == 0 ){
-				$key_1 = $key + 1;
-				show_message("第".$key_1."张图片尺寸大于1MB");
-			}else{
-				//操作写入数据库
-				$desc_array[$key] = $desc[$key];
-				$sort_array[$key] = $key;
-				$id_array[$key] = $img_id[$key];
-			}
-		}
-	}
-
-	
-	handle_ad_gallery_image($ad_info['city_id'],$ad_id, $photo, $desc_array, $sort_array,$id_array);
-	//算是完整上传
-	//$sql = "UPDATE " . $GLOBALS['ecs']->table('city_ad') . " SET is_upload = '1'  WHERE ad_id = '$ad_id'";
-    //$GLOBALS['db']->query($sql);
-	
-	act_city_request($ad_info['city_id'],AUDIT_1);//更新请求库	
-	show_message("恭喜您,照片上传成功。", $_LANG['back_home_lnk'], "city_renew.php?act=city_ad_list&city_id=$ad_info[city_id]", 'info', true);
-}
 
 elseif($_REQUEST['act'] == 'export_page')
 {

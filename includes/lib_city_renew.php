@@ -186,7 +186,7 @@ function get_city_list($children,$limit = 0){
 function get_city_ad_num($city_id)
 {
 	$sql = "SELECT count(*) FROM " . $GLOBALS['ecs']->table('city_ad') .
-				" WHERE city_id = $city_id AND is_delete = 0 ";
+				" WHERE city_id = $city_id AND is_delete = 0 AND renew_upload = 0 ";
 
 	return $GLOBALS['db']->getOne($sql);
 }
@@ -233,7 +233,7 @@ function act_renew_audit($city_id,$is_plus = 1){
 function get_city_ad_is_checked($city_id,$time = 0 ){
 	if($city_id){
 		$sql = "SELECT checked_time FROM " . $GLOBALS['ecs']->table('city_ad') .
-				" WHERE city_id = $city_id AND is_delete = 0  ";
+				" WHERE city_id = $city_id AND is_delete = 0 AND renew_upload = 0 ";
 		$res = $GLOBALS['db']->getCol($sql);
 		$count = 0;
 		foreach ($res as $var) { 
@@ -334,7 +334,7 @@ function get_ad_list_by_cityid($city_id)
 			" FROM ".$GLOBALS['ecs']->table('city_ad') . " AS a ".
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city'). 		' AS c ON c.ad_id = a.ad_id '.
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city_gallery'). ' AS g ON g.ad_id = a.ad_id '.
-			" WHERE a.city_id = $city_id AND a.is_delete = 0  GROUP BY c.record_id ORDER BY a.ad_id ASC ";
+			" WHERE a.city_id = $city_id AND a.is_delete = 0  AND a.renew_upload =  0 GROUP BY c.record_id ORDER BY a.ad_id ASC ";
 		//echo $sql."<br>";	
 	
 	$res = $GLOBALS['db']->getAll($sql);

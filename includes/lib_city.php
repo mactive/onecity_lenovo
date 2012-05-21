@@ -63,7 +63,7 @@ function get_city_list($children,$limit = 0){
 	$filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'inv_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
 
-	$where = ' WHERE '. $children ." AND a.sys_level = 5 AND a.renew_upload = 1";
+	$where = ' WHERE '. $children ." AND a.sys_level = 5 AND a.renew_upload = 1 ";
 	
     if ($filter['county_name'])
     {
@@ -220,7 +220,7 @@ function get_ad_list_by_cityid($city_id)
 			" FROM ".$GLOBALS['ecs']->table('city_ad') . " AS a ".
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city'). 		' AS c ON c.ad_id = a.ad_id '.
 			" LEFT JOIN " .$GLOBALS['ecs']->table('city_gallery'). ' AS g ON g.ad_id = a.ad_id '.
-			" WHERE a.city_id = $city_id GROUP BY c.record_id ORDER BY a.ad_id ASC ";
+			" WHERE a.city_id = $city_id  AND a.renew_upload =  1 GROUP BY c.record_id ORDER BY a.ad_id ASC ";
 		//echo $sql."<br>";	
 	
 	$res = $GLOBALS['db']->getAll($sql);
@@ -729,11 +729,10 @@ function get_project_list($children){
 function get_new_project_list($children,$user_region,$based_new_nums){
 	$sql = "SELECT p.*  ".
 			" FROM ".$GLOBALS['ecs']->table('project') . " AS p ".			
-			"WHERE 1 ORDER BY p.project_id DESC LIMIT 1";
+			"WHERE 1 ORDER BY p.project_id DESC LIMIT 2";
 	//echo $sql;	 GROUP BY ad.ad_id
 	
 	$res = $GLOBALS['db']->getAll($sql);
-	
 	$pic_count = 0;
 	foreach($based_new_nums AS $v){
 		$pic_count = $pic_count + intval($v);
@@ -973,7 +972,7 @@ function get_project_city($children,$limit = 0){
 	$order_sql = $_SESSION['user_rank'] == 1 ? " ORDER BY city.$update_time_quarter DESC " : " ORDER BY city.$update_time_quarter DESC " ;
 	
 	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, a.is_microsoft, a.has_new, ". //
-			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region , ad.ad_id, ".
+			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region , ad.ad_id, ad.is_new, ".
 			//" pr.req_id, pr.price, pr.price_amount, pr.request_price, pr.request_price_amount,  (ad.price_status - $_SESSION[user_rank]) AS t1 ".
 			" city.col_19,city.col_20  ,city.$can_modify_quarter AS can_modify, re.resource, re.$quarter AS nowQ , au.audit_note ".
 			" FROM ".$GLOBALS['ecs']->table('category') . " AS a ".
@@ -987,7 +986,7 @@ function get_project_city($children,$limit = 0){
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('project_request').   " AS pr ON pr.city_id = a.cat_id  AND pr.ad_id  = ad.ad_id ".
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('city'). 		' AS c  ON c.city_id = a.cat_id '.
 			" LEFT JOIN (" . $sql_max . ') AS au ON au.ad_id = ad.ad_id '.
-			"$where "." GROUP BY a.cat_id  "." $order_sql ".
+			"$where "." GROUP BY ad.ad_id  "." $order_sql ".
 			$limit_sql;
 	//echo $sql;	 //GROUP BY ad.ad_id 
 	

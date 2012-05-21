@@ -70,6 +70,7 @@
 
 
 <script type="text/javascript">
+document.getElementById('col_47').value = 2;
 hide_items();
 /**
  * 检查表单输入的数据

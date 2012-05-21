@@ -366,6 +366,7 @@ elseif($_REQUEST['act'] == 'confirm_insert')
 						
 						$tmp['is_upload'] = 1; //要等上传完照片
 						$tmp['audit_status'] = 1;
+						$tmp['renew_upload'] = 1;
 						
 						// 如果数据有错误
 						if($tmp['col_18'] < 2){
