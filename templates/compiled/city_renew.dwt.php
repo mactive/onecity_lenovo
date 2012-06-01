@@ -123,14 +123,18 @@ if ($this->_foreach['index_idea']['total'] > 0):
 						<td><?php echo $this->_var['city']['province']; ?></td>
 						<td><?php echo $this->_var['city']['county']; ?></td>
 						<td><?php echo $this->_var['city']['market_level']; ?></td>
-						<?php if ($this->_var['sm_session']['user_rank'] > 1): ?>
+						<?php if ($this->_var['sm_session']['user_rank'] == 2): ?>
 						<td>
 							<?php if ($this->_var['city']['is_checked'] == 1): ?>
 								<?php if ($this->_var['city']['renew_audit_request'] > 0): ?>
 									<a href="city_renew.php?act=city_ad_list&city_id=<?php echo $this->_var['city']['cat_id']; ?>">	
 									<span class="red-color"><?php echo $this->_var['city']['renew_audit_request']; ?>条</span>待审</a>
 								<?php else: ?>
-									<span class="green-color">已通过</span>
+									<?php if ($this->_var['city']['ad_count'] == 0): ?>
+										<span>无牌子</span>
+									<?php else: ?>
+										<span class="green-color">已通过</span>
+									<?php endif; ?>
 								<?php endif; ?>
 							<?php else: ?>无待审核<?php endif; ?>
 							
@@ -155,7 +159,7 @@ if ($this->_foreach['index_idea']['total'] > 0):
 							<?php endif; ?>
 						</td>
 						<?php endif; ?>
-						<td><?php if ($this->_var['city']['is_upload']): ?><?php echo $this->_var['city']['time_summary']; ?><?php else: ?><?php echo $this->_var['lang']['upload_pending']; ?><?php endif; ?></td>
+						<td><?php if ($this->_var['city']['is_upload'] && $this->_var['city']['ad_count']): ?><?php echo $this->_var['city']['time_summary']; ?><?php else: ?><?php echo $this->_var['lang']['upload_pending']; ?><?php endif; ?></td>
 						<td><?php echo $this->_var['city']['ad_count']; ?></td>
 						<td><?php echo $this->_var['city']['renew_num']; ?></td>
 						<td><?php echo $this->_var['city']['change_num']; ?></td>						
