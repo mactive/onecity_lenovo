@@ -1651,7 +1651,7 @@ function get_parent_grade($cat_id)
     if ($res === NULL)
     {
         $sql = "SELECT parent_id, cat_id, grade ".
-               " FROM " . $GLOBALS['ecs']->table('category');
+               " FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category');
         $res = $GLOBALS['db']->getAllCached($sql);
     }
 

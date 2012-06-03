@@ -571,7 +571,7 @@ function get_step_list($order_id,$_page_size = 0){
 //			" LEFT JOIN " .$GLOBALS['ecs']->table('supplier') ." AS s ON s.supplier_id = o.supplier_id " .
 //			" LEFT JOIN " .$GLOBALS['ecs']->table('supplier_contact') ." AS sc ON sc.contact_id = o.supplier_contact_id " .
             //" FROM " . $GLOBALS['ecs']->table('inventory') ." AS o " .
-            //" LEFT JOIN " .$GLOBALS['ecs']->table('category'). " AS c ON c.cat_id=o.cat_id ".
+            //" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category'). " AS c ON c.cat_id=o.cat_id ".
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('inventory_status'). " AS st ON st.status_id=o.status_id ".
             "$where ORDER BY  o.cat_id ASC, o.step_price DESC ".
 			" LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
@@ -768,7 +768,7 @@ function get_agency_contactList($user_id){
             " FROM " . $GLOBALS['ecs']->table('agency_contact') . " AS c " .
 			" LEFT JOIN " .$GLOBALS['ecs']->table('agency') ." AS o ON o.agency_id = c.agency_id " .
             //" FROM " . $GLOBALS['ecs']->table('inventory') ." AS o " .
-            //" LEFT JOIN " .$GLOBALS['ecs']->table('category'). " AS c ON c.cat_id=o.cat_id ".
+            //" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category'). " AS c ON c.cat_id=o.cat_id ".
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('inventory_status'). " AS st ON st.status_id=o.status_id ".
             "$where ORDER BY c.contact_id DESC  ".
 			" LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
@@ -902,7 +902,7 @@ function send_solution_order_email($contact_name,$customer_email,$subject,$order
 function get_father_cat_id($old_id)
 {
 	//循环部分 获得父 ID
-	$sql = 'SELECT parent_id FROM ' . $GLOBALS['ecs']->table('category') . ' WHERE cat_id = '.$old_id;
+	$sql = 'SELECT parent_id FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . ' WHERE cat_id = '.$old_id;
 	$tmp_id = $GLOBALS['db']->getOne($sql);
 	
 	if($tmp_id ==1){
@@ -925,11 +925,11 @@ function get_father_cat_id($old_id)
 */
 function get_top_cat_id_array($priority_cat_id = 0)
 {
-	$sql = 'SELECT cat_id FROM ' . $GLOBALS['ecs']->table('category') . ' WHERE parent_id = 0' .' ORDER BY cat_id ASC';
+	$sql = 'SELECT cat_id FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . ' WHERE parent_id = 0' .' ORDER BY cat_id ASC';
     $res = $GLOBALS['db']->getAll($sql);
 
 	if($priority_cat_id){
-		$sql2 = 'SELECT cat_id FROM ' . $GLOBALS['ecs']->table('category') . ' WHERE parent_id = ' . $priority_cat_id . ' ORDER BY cat_id ASC';
+		$sql2 = 'SELECT cat_id FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . ' WHERE parent_id = ' . $priority_cat_id . ' ORDER BY cat_id ASC';
 	    $res2 = $GLOBALS['db']->getAll($sql2);
 		$result = array_merge($res2,$res);	
 	}

@@ -332,7 +332,7 @@ function get_parent_cats($cat)
         return array();
     }
 
-    $arr = $GLOBALS['db']->GetAll('SELECT cat_id, cat_name, parent_id FROM ' . $GLOBALS['ecs']->table('category'));
+    $arr = $GLOBALS['db']->GetAll('SELECT cat_id, cat_name, parent_id FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category'));
 
     if (empty($arr))
     {
@@ -2022,7 +2022,7 @@ function get_goods_rank_common($goods_id)
  */
 function get_cat_info($cat_id)
 {
-    $sql = "SELECT * FROM " .$GLOBALS['ecs']->table('category'). " WHERE cat_id='$cat_id' LIMIT 1";
+    $sql = "SELECT * FROM " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category'). " WHERE cat_id='$cat_id' LIMIT 1";
     return $GLOBALS['db']->getRow($sql);
 }
 

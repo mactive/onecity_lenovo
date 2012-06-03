@@ -451,15 +451,15 @@ function cat_list($cat_id = 0, $selected = 0, $re_type = true, $level = 0, $is_s
     if ($res === NULL)
     {
         $sql = "SELECT c.*, COUNT(s.cat_id) AS has_children ".
-                'FROM ' . $GLOBALS['ecs']->table('category') . " AS c ".
-                "LEFT JOIN " . $GLOBALS['ecs']->table('category') . " AS s ON s.parent_id=c.cat_id ".
+                'FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS c ".
+                "LEFT JOIN " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS s ON s.parent_id=c.cat_id ".
                 "GROUP BY c.cat_id ".
                 'ORDER BY parent_id ASC';
 		//echo $sql;
         $res = $GLOBALS['db']->getAllCached($sql);
 
         $sql = "SELECT c.cat_id as cat_id, COUNT(g.goods_id) AS goods_num ".
-                'FROM ' . $GLOBALS['ecs']->table('category') . " AS c ".
+                'FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS c ".
                 "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g ON g.cat_id=c.cat_id ".
                 "GROUP BY c.cat_id ".
 				'ORDER BY c.cat_id ASC';
@@ -4329,86 +4329,5 @@ function get_idea_list($filter)
     $ol->build_select();
 }
 
-/**
- * 保存某商品的相册图片
- * @param   int     $goods_id
- * @param   array   $image_files
- * @param   array   $image_descs
- * @return  void
- */
-function handle_ad_gallery_image($city_id,$ad_id, $image_files, $image_descs,$image_sorts,$img_ids,$feedback = 0)
-{
-    foreach ($image_descs AS $key => $img_desc)
-    {
-        /* 是否成功上传 */
-        $flag = false;
-        if (isset($image_files['error']))
-        {
-            if ($image_files['error'][$key] == 0)
-            {
-                $flag = true;
-            }
-        }
-        else
-        {
-            if ($image_files['tmp_name'][$key] != 'none')
-            {
-                $flag = true;
-            }
-        }
-
-        if ($flag)
-        {
-            // 生成缩略图
-            $thumb_url = $GLOBALS['image']->make_thumb($image_files['tmp_name'][$key], $GLOBALS['_CFG']['thumb_width'],  $GLOBALS['_CFG']['thumb_height']);
-            $thumb_url = is_string($thumb_url) ? $thumb_url : '';
-
-			$img_url = $GLOBALS['image']->make_thumb($image_files['tmp_name'][$key], 1024,  768);
-            $img_url = is_string($img_url) ? $img_url : '';
-
-            $upload = array(
-                'name' => $image_files['name'][$key],
-                'type' => $image_files['type'][$key],
-                'tmp_name' => $image_files['tmp_name'][$key],
-                'size' => $image_files['size'][$key],
-            );
-            if (isset($image_files['error']))
-            {
-                $upload['error'] = $image_files['error'][$key];
-            }
-            $img_original = "";//$GLOBALS['image']->upload_image($upload);
-
-            /* 如果服务器支持GD 则添加水印
-            if (gd_version() > 0)
-            {
-                $pos        = strpos(basename($img_original), '.');
-                $newname    = dirname($img_original) . '/' . $GLOBALS['image']->random_filename() . substr(basename($img_original), $pos);
-                copy('../' . $img_original, '../' . $newname);
-                $img_url    = $newname;
-
-                $GLOBALS['image']->add_watermark('../'.$img_url,'',$GLOBALS['_CFG']['watermark'], $GLOBALS['_CFG']['watermark_place'], $GLOBALS['_CFG']['watermark_alpha']);
-            }
-			*/
-			
-			$img_sort = $image_sorts[$key];
-			$img_id = $img_ids[$key];
-			
-			if($img_id > 0)
-			{
-				 /* 更新图片 */
-			    $sql = "UPDATE ".$GLOBALS['ecs']->table('city_gallery')." SET ".
-			           "img_url = '$img_url' ,".
-			           "thumb_url = '$thumb_url' ,".
-			           "img_original = '$img_original' ".
-			           "WHERE img_id = $img_id";
-			}else{
-				$sql = "INSERT INTO " . $GLOBALS['ecs']->table('city_gallery') . " (city_id, ad_id, img_url, img_desc, img_sort, thumb_url, img_original,feedback) " .
-	                    "VALUES ('$city_id','$ad_id', '$img_url', '$img_desc', '$img_sort', '$thumb_url', '$img_original','$feedback')";
-			}
-			//echo $sql."<br>";
-			$GLOBALS['db']->query($sql);
-        }
-    }
-}
 
 ?>

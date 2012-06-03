@@ -83,8 +83,8 @@ if (!isset($_REQUEST['act']))
 //  update_request_price 2个price
 /*------------------------------------------------------ */
 
-$position['title'] = "项目管理";
-$position['ur_here'] = '<li><a href="city_project.php">项目管理</a></li>'; 
+$position['title'] = "换画管理";
+$position['ur_here'] = '<li><a href="city_project.php">换画管理</a></li>'; 
  
 
 /* 获得页面的缓存ID */
@@ -115,14 +115,14 @@ elseif($_REQUEST['act'] == 'refreshv_lv_4_request'){
 		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
 	}
 	$sql_1 = "SELECT a.cat_id AS city_id,a.cat_name AS city_name , a.parent_id, a.sys_level,b.is_upload, b.audit_status	, b.is_audit_confirm, b.lv_0, b.lv_1, b.lv_2, b.lv_3, b.lv_4, b.lv_5, b.lv_6 ".
-			" FROM ".$GLOBALS['ecs']->table('category') . " AS a ".
-			" LEFT JOIN " .$GLOBALS['ecs']->table('city_request_back') . " AS b ON b.city_name = a.cat_name AND b.parent_id = a.parent_id ". 
+			" FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a ".
+			" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_request_back') . " AS b ON b.city_name = a.cat_name AND b.parent_id = a.parent_id ". 
 			" WHERE a.cat_id > 0 ";
 	$res = $GLOBALS['db']->getAll($sql_1);
 	
 	foreach($res AS $val){
 		echo $val['city_name']."<br>";
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_request'), $val, 'INSERT');
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_request'), $val, 'INSERT');
 		
 	}
 	
@@ -137,14 +137,14 @@ elseif($_REQUEST['act'] == 'refresh_lv_4_resource'){
 		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
 	}
 	$sql_1 = "SELECT a.cat_id AS city_id,a.cat_name AS city_name , a.parent_id, a.sys_level,a.market_level,a.resource, b.Q1, b.Q2, b.Q3, b.Q4 ".
-			" FROM ".$GLOBALS['ecs']->table('category') . " AS a ".
-			" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS b ON b.city_name = a.cat_name AND b.parent_id = a.parent_id ". 
+			" FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a ".
+			" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_resource') . " AS b ON b.city_name = a.cat_name AND b.parent_id = a.parent_id ". 
 			" WHERE a.cat_id > 0 ";
 	$res = $GLOBALS['db']->getAll($sql_1);
 	echo count($res)."<br>";
 	foreach($res AS $val){
 		//echo $val['city_name']."<br>";
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_resource_1'), $val, 'INSERT');
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_resource_1'), $val, 'INSERT');
 		
 	}
 	
@@ -160,7 +160,7 @@ elseif($_REQUEST['act'] == 'batch_recount')
 		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
 	}
 	
-	$sql = "SELECT city_id FROM ".$GLOBALS['ecs']->table('city_request')." WHERE sys_level = 5 ";
+	$sql = "SELECT city_id FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_request')." WHERE sys_level = 5 ";
     $res = $GLOBALS['db']->getAll($sql);
 	echo count($res);
 	foreach($res AS $k => $v){
@@ -174,15 +174,15 @@ elseif($_REQUEST['act'] == 'batch_recount')
 		$lv['lv_6'] = 0;
 		
 		//通过照片给电通初始值
-		$sql_3 = "SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('city_ad'). " AS ad ".
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_gallery') . " AS g ON g.ad_id = ad.ad_id ". 
+		$sql_3 = "SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad'). " AS ad ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery') . " AS g ON g.ad_id = ad.ad_id ". 
 			 	
 				" WHERE ad.city_id = $v[city_id] AND ad.audit_status = 1  AND ad.is_upload = 1 AND g.img_id > 0 ";
 		$tmp1 = $GLOBALS['db']->getOne($sql_3);
 		$lv['lv_2'] = $tmp1 / 4 ;
 		echo $sql_3."<br>";
 		
-		$sql = "SELECT audit_status FROM ".$GLOBALS['ecs']->table('city_ad')." WHERE city_id = $v[city_id] AND is_upload = 1 AND is_audit_confirm = 1 ";
+		$sql = "SELECT audit_status FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad')." WHERE city_id = $v[city_id] AND is_upload = 1 AND is_audit_confirm = 1 ";
 		$tt = $GLOBALS['db']->getAll($sql);
 		echo $sql."<br>";
 		
@@ -209,7 +209,7 @@ elseif($_REQUEST['act'] == 'batch_recount')
 		print_r($lv) ;
 		echo "<br>";
 		
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_request'), $lv, 'update', "city_id='$v[city_id]'");
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_request'), $lv, 'update', "city_id='$v[city_id]'");
 
 	}	
 }
@@ -245,21 +245,30 @@ elseif($_REQUEST['act'] == 'IDEA_2'){
 		case '4':
 			$sql_plus = " AND ad.audit_status is NULL AND ad.is_audit_confirm is NULL ";
 			break;
+		case '5':
+			$sql_plus = " AND ad.audit_status is NULL AND ad.is_audit_confirm is NULL ";
+			break;
 	}
 	$sql_plus_2 = " AND re.Q2 = 6";
 	
+
+	$max_record_array = $GLOBALS['db']->getCol("SELECT MAX(record_id) FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit'). " WHERE feedback_audit = 0  GROUP BY ad_id ");
+	$sql_max = "SELECT ad_id,audit_note FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit') .
+            " WHERE record_id " . db_create_in($max_record_array);
+
 	$sql_1 = "SELECT a.cat_id,a.market_level,a.cat_name AS county ".
 				",a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
-				" FROM " .$GLOBALS['ecs']->table('category') . " AS a ".
-				
-				// " FROM ".$GLOBALS['ecs']->table('city_ad_audit') ." AS au ".
-				// " LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.city_id = a.cat_id ".
-				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS re ON re.city_id = a.cat_id ".
-			" WHERE a.sys_level = 5 ".  $sql_plus_2 .
-			" GROUP BY a.cat_id ";
+				",city.ad_sn, ad.is_new, au.audit_note".
+				" FROM " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a1 ON a1.cat_id = a.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city') . " AS city ON city.city_id = a.cat_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " AS ad ON ad.ad_id = city.ad_id ".
+				" LEFT JOIN (" . $sql_max . ') AS au ON au.ad_id = city.ad_id '.
+			 	// " LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_resource') . " AS re ON re.city_id = a.cat_id ".
+			" WHERE a.sys_level = 5 AND LENGTH(au.audit_note) > 1 ".
+			" GROUP BY ad.ad_id ";
 	//echo $sql_1;
 	$res = $GLOBALS['db']->getAll($sql_1);
 	
@@ -268,19 +277,80 @@ elseif($_REQUEST['act'] == 'IDEA_2'){
 	echo "<table>";
 	
 	foreach($res AS $val){
+		//$tmp = get_audit_status_q3($val['cat_id']);
+		$str = $val['is_new'] ? "新增" : "老牌子";
 		echo "<tr>";
+		echo "<td>".$val['ad_sn']."</td>";
 		echo "<td>".$val['region']."</td>";
 		echo "<td>".$val['province']."</td>";
 		echo "<td>".$val['city']."</td>";
 		echo "<td>".$val['county']."</td>";
 		echo "<td>".$val['market_level']."</td>";
-		echo "<td>".$_LANG['audit_level'][$val['audit_status']]."</td>";
-		echo "<td>".$val['is_audit_confirm']."</td>";
+		echo "<td>".$val['audit_note']."</td>";
+		echo "<td>".$str."</td>";
+		// echo "<td>".$tmp['status']."</td>";
+		// echo "<td>".$val['is_audit_confirm']."</td>";
 		echo "</tr>";
 	}
 	echo "</table>";
 }
+elseif($_REQUEST['act'] == 'huanhua'){
+	if($_SESSION['user_rank'] < 2){
+		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
+	}
+	
+	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 3;
+	
 
+	$max_record_array = $GLOBALS['db']->getCol("SELECT MAX(record_id) FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit'). " WHERE feedback_audit = $project_id GROUP BY ad_id ");
+	$sql_max = "SELECT ad_id,audit_note FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit') .
+            " WHERE record_id " . db_create_in($max_record_array);
+
+	$sql_1 = "SELECT a.cat_id,a.market_level,a.cat_name AS county ".
+				",a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
+				",city.ad_sn, ad.is_new ,au.audit_note".
+				" FROM " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a1 ON a1.cat_id = a.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city') . " AS city ON city.city_id = a.cat_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " AS ad ON ad.ad_id = city.ad_id ".
+				 " LEFT JOIN (" . $sql_max . ') AS au ON au.ad_id = city.ad_id '.
+			 	// " LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_resource') . " AS re ON re.city_id = a.cat_id ".
+			" WHERE a.sys_level = 5  AND LENGTH(au.audit_note) > 0".
+			" GROUP BY ad.ad_id ";
+	//echo $sql_1;
+	$res = $GLOBALS['db']->getAll($sql_1);
+	
+	foreach($res AS $key => $val){
+		// $info = get_city_huanhua_progress($val['cat_id'],$project_id);
+		// $res[$key]['is_audit_confirm'] = $info['is_audit_confirm'];
+		// $res[$key]['is_shanghua'] = $info['is_shanghua'];
+		// $res_1[$key]['col_7'] = $info['col_7'];
+	}
+	
+	echo count($res)."<br>";
+	echo "<table>";
+	
+	foreach($res AS $val){
+		//$tmp = get_audit_status_q3($val['cat_id']);
+		$str = $val['is_new'] ? "新增" : "老牌子";
+		echo "<tr>";
+		echo "<td>".$val['ad_sn']."</td>";
+		echo "<td>".$val['region']."</td>";
+		echo "<td>".$val['province']."</td>";
+		echo "<td>".$val['city']."</td>";
+		echo "<td>".$val['county']."</td>";
+		echo "<td>".$val['market_level']."</td>";
+		echo "<td>".$val['audit_note']."</td>";
+		echo "<td>".$val['is_shanghua']."</td>";
+		echo "<td>".$str."</td>";
+		// echo "<td>".$tmp['status']."</td>";
+		// echo "<td>".$val['is_audit_confirm']."</td>";
+		echo "</tr>";
+	}
+	echo "</table>";
+}
 elseif($_REQUEST['act'] == 'IDEA'){
 	if($_SESSION['user_rank'] < 4){
 		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
@@ -307,12 +377,12 @@ elseif($_REQUEST['act'] == 'IDEA'){
 	
 	$sql_1 = "SELECT a.cat_id,a.cat_name AS county , ad.audit_status, ad.is_audit_confirm , ".
 				"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
-				" FROM ".$GLOBALS['ecs']->table('category') ." AS a ".
-				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+				" FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') ." AS a ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a1 ON a1.cat_id = a.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a3 ON a3.cat_id = a2.parent_id ".
 			 	//" LEFT JOIN " .$GLOBALS['ecs']->table('sm_city') . " AS c ON c.city_id = a.cat_id ".
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.city_id = a.cat_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " AS ad ON ad.city_id = a.cat_id ".
 			" WHERE a.resource = 2 AND a.sys_level = 5 ". $sql_plus .
 			" GROUP BY ad.city_id ORDER BY ad.city_id ASC ";
 	//echo $sql_1;
@@ -360,12 +430,12 @@ elseif($_REQUEST['act'] == 'material'){
 	
 	$sql_1 = "SELECT a.cat_id,a.cat_name AS county , ma.time , ".
 				"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
-				" FROM ".$GLOBALS['ecs']->table('category') ." AS a ".
-				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.city_id = a.cat_id ".
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_material') . " AS ma ON ma.ad_id = ad.ad_id ".
+				" FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') ." AS a ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a1 ON a1.cat_id = a.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " AS ad ON ad.city_id = a.cat_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_material') . " AS ma ON ma.ad_id = ad.ad_id ".
 			" WHERE  1 ". $sql_plus .
 			" GROUP BY ad.city_id ORDER BY ad.city_id ASC ";
 	//echo $sql_1;
@@ -397,7 +467,7 @@ elseif($_REQUEST['act'] == 'delete_photo'){
 		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
 	}
 	
-	$sql_1 = "SELECT ad_id "." FROM ".$GLOBALS['ecs']->table('city_delete') .
+	$sql_1 = "SELECT ad_id "." FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_delete') .
 			" WHERE 1  ";
 	$res = $GLOBALS['db']->getAll($sql_1);
 	
@@ -405,7 +475,7 @@ elseif($_REQUEST['act'] == 'delete_photo'){
 	
 	foreach($res AS $val){
 		//echo $val['city_name']."<br>";
-		$GLOBALS['db']->query("DELETE FROM" . $GLOBALS['ecs']->table('city_gallery') . " WHERE ad_id = $val[ad_id]");	
+		$GLOBALS['db']->query("DELETE FROM" . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery') . " WHERE ad_id = $val[ad_id]");	
 	}
 	
 }
@@ -420,16 +490,16 @@ elseif($_REQUEST['act'] == "batch_delete_photo")
 		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
 	}
 	
-	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table('city_ad'). " WHERE audit_status = 5 AND is_audit_confirm = 1  ";
+	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad'). " WHERE audit_status = 5 AND is_audit_confirm = 1  ";
 	$tt = $GLOBALS['db']->getAll($sql);//审核完成的广告牌子
 	foreach($tt AS $v){
-		$sql = "SELECT img_id,img_original FROM ".$GLOBALS['ecs']->table('city_gallery'). " WHERE ad_id = $v[ad_id]  ";
+		$sql = "SELECT img_id,img_original FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery'). " WHERE ad_id = $v[ad_id]  ";
 		$res = $GLOBALS['db']->getAll($sql);
 		foreach($res AS $val){
 			echo "--".$val['img_original']."<br>";
 			if(!empty($val['img_original'])){
 				@unlink(ROOT_PATH .$val['img_original']);
-				$sql = "UPDATE " . $GLOBALS['ecs']->table('city_gallery') . " SET img_original = '0' WHERE img_id = $val[img_id] ";
+				$sql = "UPDATE " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery') . " SET img_original = '0' WHERE img_id = $val[img_id] ";
 		    	$GLOBALS['db']->query($sql);
 			}
 		}
@@ -453,10 +523,10 @@ elseif($_REQUEST['act'] == "add_new_city"){
 		// $res[8] = array("a"=>"恭城瑶族自治县","b"=>"268","c"=>"6B");
 	
 	foreach($res AS $v){
-		$cat_id = $GLOBALS['db']->getOne("SELECT MAX(`cat_id`)+1 FROM " .$GLOBALS['ecs']->table('category'));
-		$sql_1 = "INSERT INTO ".$GLOBALS['ecs']->table('category') ." VALUES($cat_id, '$v[a]', $v[b], '', NULL, '', 0, '', '', 1, '', 1, 0, 0, 5, 1, 0, 1, '县级市', '$v[c]', '新兴', 'VD', 3, 0, 0, 0)";
-		$sql_2 = "INSERT INTO ".$GLOBALS['ecs']->table('city_resource') ." VALUES($cat_id, '$v[a]', 2, 5, 2, 0, $v[b], 5, '', '$v[c]', 2)";
-		$sql_3 = "INSERT INTO ".$GLOBALS['ecs']->table('city_request') ." VALUES($cat_id, '$v[a]', $v[b], 5, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)";
+		$cat_id = $GLOBALS['db']->getOne("SELECT MAX(`cat_id`)+1 FROM " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category'));
+		$sql_1 = "INSERT INTO ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') ." VALUES($cat_id, '$v[a]', $v[b], '', NULL, '', 0, '', '', 1, '', 1, 0, 0, 5, 1, 0, 1, '县级市', '$v[c]', '新兴', 'VD', 3, 0, 0, 0)";
+		$sql_2 = "INSERT INTO ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_resource') ." VALUES($cat_id, '$v[a]', 2, 5, 2, 0, $v[b], 5, '', '$v[c]', 2)";
+		$sql_3 = "INSERT INTO ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_request') ." VALUES($cat_id, '$v[a]', $v[b], 5, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)";
 		
 		echo $sql_1."<br>".$sql_2."<br>".$sql_3."<br>";
 		// echo "<br><br>====<br><br>";
@@ -476,7 +546,7 @@ elseif($_REQUEST['act'] == "jinmeng")
 	/*
 	$children = get_city_children(array('18'));
 
-	$sql_5 = "SELECT cat_id FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
+	$sql_5 = "SELECT cat_id FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'category'). " AS a " .
 			" WHERE $children  AND a.sys_level = 5 ";
 	$sichuan = $GLOBALS['db']->getCol($sql_5);
 	*/
@@ -484,12 +554,12 @@ elseif($_REQUEST['act'] == "jinmeng")
 	$count = 0;
 	foreach($sichuan AS $val){
 		$city_id = $val;
-		$sql = "SELECT ad_id,city_name FROM ".$GLOBALS['ecs']->table('city_ad')." WHERE city_id = $city_id AND audit_status = 3 AND is_audit_confirm = 1";
+		$sql = "SELECT ad_id,city_name FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad')." WHERE city_id = $city_id AND audit_status = 3 AND is_audit_confirm = 1";
 		$res = $GLOBALS['db']->getRow($sql);
 		if($res['ad_id']){
 			$ad_info = get_ad_info($res['ad_id']);
 			echo $res['ad_id']."-".$res['city_name']."<br>";
-			$GLOBALS['db']->query("DELETE FROM" . $GLOBALS['ecs']->table('city_ad') . " WHERE ad_id = $res[ad_id]");	
+			$GLOBALS['db']->query("DELETE FROM" . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " WHERE ad_id = $res[ad_id]");	
 			act_city_request_delete($city_id,$ad_info['audit_status'],1);
 			$count += 1;
 			
@@ -551,12 +621,12 @@ elseif($_REQUEST['act'] == 'CITY'){
 	$sql_1 = "SELECT a.cat_id,a.cat_name AS county ,a.market_level,a.resource, ".
 				"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
 				//", count(ag.img_id) AS ag_num  ".
-				" FROM ".$GLOBALS['ecs']->table('category') ." AS a ".
-				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.city_id = a.cat_id ".
-			 	//" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') . " AS au ON au.ad_id = ad.ad_id  ".
+				" FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') ." AS a ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a1 ON a1.cat_id = a.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " AS ad ON ad.city_id = a.cat_id ".
+			 	//" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit') . " AS au ON au.ad_id = ad.ad_id  ".
 			" WHERE a.sys_level = 5 ". $sql_plus .
 			" GROUP BY a.cat_id ORDER BY a.cat_id ASC ";
 	//echo $sql_1;
@@ -568,11 +638,11 @@ elseif($_REQUEST['act'] == 'CITY'){
 		$sql_2 = "SELECT a.cat_id,a.cat_name AS county ,a.market_level,a.resource, ".
 					"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
 					//", count(ag.img_id) AS ag_num  ".
-					" FROM ".$GLOBALS['ecs']->table('category') ." AS a ".
-					" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
-				 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
-				 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
-				 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.city_id = a.cat_id ".
+					" FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') ." AS a ".
+					" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a1 ON a1.cat_id = a.parent_id ".
+				 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+				 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+				 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " AS ad ON ad.city_id = a.cat_id ".
 				" WHERE a.sys_level = 5 ". $sql_plus . 
 				" GROUP BY a.cat_id ORDER BY a.cat_id DESC ";
 		//echo $sql_1;
@@ -680,12 +750,12 @@ elseif($_REQUEST['act'] == 'CITY_base'){
 	$sql_1 = "SELECT a.cat_id,a.cat_name AS county ,a.market_level,a.resource, ".
 				"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
 				//", count(ag.img_id) AS ag_num  ".
-				" FROM ".$GLOBALS['ecs']->table('category') ." AS a ".
-				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
-			 	//" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.city_id = a.cat_id ".
-			 	//" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') . " AS au ON au.ad_id = ad.ad_id  ".
+				" FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') ." AS a ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a1 ON a1.cat_id = a.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+			 	//" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " AS ad ON ad.city_id = a.cat_id ".
+			 	//" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit') . " AS au ON au.ad_id = ad.ad_id  ".
 			" WHERE a.sys_level = 5 ". $sql_plus .
 			" GROUP BY a.cat_id ORDER BY a.cat_id ASC ";
 	//echo $sql_1;
@@ -731,19 +801,19 @@ elseif($_REQUEST['act'] == 'CITY_base'){
 /*更新分区上传错误的数据*/
 elseif($_REQUEST['act'] == 'querenlv_data')
 {
-	$sql = "UPDATE " . $GLOBALS['ecs']->table('city') . " SET col_1 = '山东大区' WHERE col_1 = '山东分区'";
+	$sql = "UPDATE " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city') . " SET col_1 = '山东大区' WHERE col_1 = '山东分区'";
 	echo $sql;
 	$GLOBALS['db']->query($sql);
 	
-	$sql = "UPDATE " . $GLOBALS['ecs']->table('city') . " SET col_1 = '江苏大区' WHERE col_1 = '江苏分区'";
+	$sql = "UPDATE " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city') . " SET col_1 = '江苏大区' WHERE col_1 = '江苏分区'";
 	echo $sql;
 	$GLOBALS['db']->query($sql);
 	
-	$sql = "UPDATE " . $GLOBALS['ecs']->table('city') . " SET col_1 = '浙江大区' WHERE col_1 = '浙江分区'";
+	$sql = "UPDATE " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city') . " SET col_1 = '浙江大区' WHERE col_1 = '浙江分区'";
 	echo $sql;
 	$GLOBALS['db']->query($sql);
 
-	$sql = "UPDATE " . $GLOBALS['ecs']->table('city') . " SET col_1 = '京津冀大区' WHERE col_1 = '京津冀分区'";
+	$sql = "UPDATE " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city') . " SET col_1 = '京津冀大区' WHERE col_1 = '京津冀分区'";
 	echo $sql;
 	$GLOBALS['db']->query($sql);
 	
@@ -752,24 +822,24 @@ elseif($_REQUEST['act'] == 'querenlv_data')
 /*更新分区上传错误的数据*/
 elseif($_REQUEST['act'] == 'array_cha')
 {
-	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table('city')." WHERE 1 ORDER BY user_time DESC";
+	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city')." WHERE 1 ORDER BY user_time DESC";
 	$a1 = $GLOBALS['db']->getCol($sql);
 	
-	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table('city_ad')." WHERE 1 ";
+	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad')." WHERE 1 ";
 	$a2 = $GLOBALS['db']->getCol($sql);
 	
 	$res = array_diff($a1,$a2);
 	foreach($res AS $val){
-		$sql = "SELECT col_3,user_time FROM ".$GLOBALS['ecs']->table('city')." WHERE ad_id = $val ";
+		$sql = "SELECT col_3,user_time FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city')." WHERE ad_id = $val ";
 		$a = $GLOBALS['db']->getRow($sql);
 		
-		$sql = "SELECT audit_note,user_rank,time FROM ".$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = $val ORDER BY time DESC limit 1  ";
+		$sql = "SELECT audit_note,user_rank,time FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit')." WHERE ad_id = $val ORDER BY time DESC limit 1  ";
 		$b = $GLOBALS['db']->getRow($sql);
 		
 		
 		echo $a['col_3']."-".local_date('Y-m-d', $a['user_time'])."-".$val."-".$b['audit_note']."-".$b['user_rank']."-".$b['time']."<br>";
 		
-		//$GLOBALS['db']->query("DELETE FROM" . $GLOBALS['ecs']->table('city') . " WHERE ad_id = $val");	
+		//$GLOBALS['db']->query("DELETE FROM" . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city') . " WHERE ad_id = $val");	
 		
 		
 	}
@@ -778,25 +848,25 @@ elseif($_REQUEST['act'] == 'array_cha')
 /* exec_4_level*/
 elseif($_REQUEST['act'] == 'exec_4_level')
 {
-	$sql = "SELECT cat_id AS city_id,cat_name AS city_name FROM ".$GLOBALS['ecs']->table('category')." WHERE market_level = 4 ";
+	$sql = "SELECT cat_id AS city_id,cat_name AS city_name FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'category')." WHERE market_level = 4 ";
 	$res = $GLOBALS['db']->getAll($sql);
 	$count = 0;
 	foreach($res AS $val){
-		$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table('city')." WHERE city_id = $val[city_id] ";
+		$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city')." WHERE city_id = $val[city_id] ";
 		$ad_id = $GLOBALS['db']->getOne($sql);
 		if($ad_id){
 			echo $val['city_id']."-".$val['city_name']."<br>";
 			act_level_4_city_upload($ad_id,$val['city_id']);
 			
-			$sql_1 = "UPDATE " . $GLOBALS['ecs']->table('city_ad') . " SET audit_status = '5', is_audit_confirm = '1' WHERE ad_id = '$ad_id' ";
+			$sql_1 = "UPDATE " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " SET audit_status = '5', is_audit_confirm = '1' WHERE ad_id = '$ad_id' ";
 			echo $sql_1;
 			$GLOBALS['db']->query($sql_1);
 			
-			$sql_2 = "UPDATE " . $GLOBALS['ecs']->table('city_request') . " SET lv_0 = '0',lv_1 = '0',lv_2 = '0',lv_3 = '0',lv_4 = '0',lv_5 = '0',lv_6 = '1' WHERE city_id = '$val[city_id]'";
+			$sql_2 = "UPDATE " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_request') . " SET lv_0 = '0',lv_1 = '0',lv_2 = '0',lv_3 = '0',lv_4 = '0',lv_5 = '0',lv_6 = '1' WHERE city_id = '$val[city_id]'";
 			echo $sql_2;
 			$GLOBALS['db']->query($sql_2);
 			
-			$sql_3 = "UPDATE " . $GLOBALS['ecs']->table('city_gallery') . " SET feedback = '1' WHERE ad_id = '$ad_id'";
+			$sql_3 = "UPDATE " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery') . " SET feedback = '1' WHERE ad_id = '$ad_id'";
 			echo $sql_3;
 			$GLOBALS['db']->query($sql_3);
 			
@@ -805,7 +875,7 @@ elseif($_REQUEST['act'] == 'exec_4_level')
 			$audit['user_id'] = 63;
 			$audit['user_rank'] = 5;
 			$audit['audit_note'] = "审核通过";			
-			$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad_audit'), $audit, 'INSERT');
+			$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit'), $audit, 'INSERT');
 			
 			
 			
@@ -822,7 +892,7 @@ elseif($_REQUEST['act'] == 'fankui_pic')
 {
 	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 1;
 	
-	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table('city_gallery')." WHERE feedback  = $project_id GROUP BY ad_id LIMIT 4 ";
+	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery')." WHERE feedback  = $project_id GROUP BY ad_id LIMIT 4 ";
 	echo $sql."<br>";
 	
 	$res = $GLOBALS['db']->getCol($sql);
@@ -830,7 +900,7 @@ elseif($_REQUEST['act'] == 'fankui_pic')
 	
 
 	foreach($res AS $val){
-		$sql = "SELECT * FROM ".$GLOBALS['ecs']->table('city_gallery')." WHERE feedback  = $project_id AND ad_id = $val ORDER BY img_id DESC";
+		$sql = "SELECT * FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery')." WHERE feedback  = $project_id AND ad_id = $val ORDER BY img_id DESC";
 		echo $sql."<br>";
 		$row = $GLOBALS['db']->getAll($sql);
 		
@@ -875,12 +945,12 @@ elseif($_REQUEST['act'] == 'DIFF'){
 	$sql_1 = "SELECT a.cat_id,a.cat_name AS county ,a.market_level,a.resource, ".
 				"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
 				//", count(ag.img_id) AS ag_num  ".
-				" FROM ".$GLOBALS['ecs']->table('category') ." AS a ".
-				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
-	//		 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.city_id = a.cat_id ".
-			 	//" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') . " AS au ON au.ad_id = ad.ad_id  ".
+				" FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') ." AS a ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a1 ON a1.cat_id = a.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+	//		 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " AS ad ON ad.city_id = a.cat_id ".
+			 	//" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit') . " AS au ON au.ad_id = ad.ad_id  ".
 			" WHERE a.sys_level = 5 ".
 			" GROUP BY a.cat_id ORDER BY a.cat_id ASC ";
 	//echo $sql_1;
@@ -954,7 +1024,7 @@ elseif($_REQUEST['act'] == 'DIFF'){
 }
 elseif($_REQUEST['act'] == 'add_col'){
 	
-	$sql = "SELECT ad_id,city_id,col_3 FROM ".$GLOBALS['ecs']->table('city')." Where ad_id = 1";
+	$sql = "SELECT ad_id,city_id,col_3 FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city')." Where ad_id = 1";
 	$res = $GLOBALS['db']->getAll($sql);
 	
 	$region_array = array();
@@ -1001,7 +1071,7 @@ elseif($_REQUEST['act'] == 'add_col'){
 		$ad_number = substr(strval($val['ad_id']+10000),1,4); 
 		if(isset($region_sname) && isset($market_level) && isset($ad_number) ){
 			$ad_sn = "FY11_ZC_".$region_sname."_".$market_level."_".$ad_number;
-			$sql = "UPDATE " . $GLOBALS['ecs']->table('city') . " SET ad_sn = '$ad_sn'  WHERE ad_id = $val[ad_id] ";
+			$sql = "UPDATE " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city') . " SET ad_sn = '$ad_sn'  WHERE ad_id = $val[ad_id] ";
 			echo $ad_sn."<br>";
 	    	//$GLOBALS['db']->query($sql);
 		}else{
@@ -1010,14 +1080,8 @@ elseif($_REQUEST['act'] == 'add_col'){
 			echo $val['city_id'].",".$val['col_3'].",".$ad_sn."<br>";
 			
 		}
-
-
-
 	}
 }
-
-
-
 
 
 // 换画管理 城市列表
@@ -1027,7 +1091,7 @@ elseif($_REQUEST['act'] == 'project'){
 	}
 	
 	$type =  !empty($_REQUEST['type']) ? intval($_REQUEST['type']) : 1;
-	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 1;
+	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 3;
 	$quarter = "Q".$project_id;
 	
 	$is_upload =  !empty($_REQUEST['is_upload']) ? intval($_REQUEST['is_upload']) : 0;
@@ -1077,15 +1141,15 @@ elseif($_REQUEST['act'] == 'project'){
 				"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
 				" ,city.col_7, city.col_11, city.col_12, city.col_13, city.col_14, city.col_15, city.col_23 ".
 				//", count(ag.img_id) AS ag_num  ".
-				" FROM ".$GLOBALS['ecs']->table('category') ." AS a ".
-				" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a1 ON a1.cat_id = a.parent_id ".
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS a3 ON a3.cat_id = a2.parent_id ".
-			 	" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.city_id = a.cat_id ".
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city').  " AS city ON city.ad_id = ad.ad_id ".
-				" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource').  " AS re ON re.city_id = a.cat_id ".
+				" FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') ." AS a ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a1 ON a1.cat_id = a.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " AS ad ON ad.city_id = a.cat_id ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city').  " AS city ON city.ad_id = ad.ad_id ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_resource').  " AS re ON re.city_id = a.cat_id ".
 			
-			 	//" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') . " AS au ON au.ad_id = ad.ad_id  ".
+			 	//" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit') . " AS au ON au.ad_id = ad.ad_id  ".
 			" WHERE a.sys_level = 5 ". $sql_plus .
 			" GROUP BY a.cat_id ORDER BY a.cat_id ASC ";
 	//echo $sql_1;
@@ -1142,7 +1206,105 @@ elseif($_REQUEST['act'] == 'project'){
 	echo "</table>";
 }
 
+elseif($_REQUEST['act'] == 'shenhejilu'){
+	if($_SESSION['user_rank'] < 2){
+		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
+	}
+	
+	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 3;
+	
 
+	$max_record_array = $GLOBALS['db']->getCol("SELECT MAX(record_id) FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit'). " WHERE feedback_audit = $project_id GROUP BY ad_id ");
+	$sql_max = "SELECT ad_id,audit_note FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit') .
+            " WHERE record_id " . db_create_in($max_record_array);
+
+	$sql_1 = "SELECT a.cat_id,a.market_level,a.cat_name AS county ".
+				",a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
+				",city.ad_sn, ad.ad_id ,ad.is_new ,au.audit_note".
+				" FROM " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a1 ON a1.cat_id = a.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a3 ON a3.cat_id = a2.parent_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city') . " AS city ON city.city_id = a.cat_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " AS ad ON ad.ad_id = city.ad_id ".
+			 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit') . "  AS au ON au.ad_id = city.ad_id ".
+				 // " LEFT JOIN (" . $sql_max . ') AS au ON au.ad_id = city.ad_id '.
+			 	// " LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_resource') . " AS re ON re.city_id = a.cat_id ".
+			" WHERE a.sys_level = 5  AND LENGTH(au.audit_note) > 0 AND au.feedback_audit = 3 ".
+			" GROUP BY ad.ad_id ";
+	//echo $sql_1;
+	$res = $GLOBALS['db']->getAll($sql_1);
+	
+	foreach($res AS $key => $val){
+		$sql_max = "SELECT u.real_name,au.time,au.audit_note FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit') . " AS au " .
+					" LEFT JOIN " .$GLOBALS['ecs']->table('users') . " AS u ON u.user_id = au.user_id ".
+            		" WHERE au.ad_id = $val[ad_id] AND au.feedback_audit = 3 ".
+            		" GROUP BY au.record_id  ORDER BY au.record_id DESC ";
+        
+        $res[$key]['records'] = $GLOBALS['db']->getAll($sql_max);
+	}
+	
+	echo "<h1>2012Q1的所有换画的所有审核操作内容</h1>";
+	echo count($res)."<br>";
+	echo '<table class="table_standard table_border" border="1">';
+	
+	foreach($res AS $val){
+		//$tmp = get_audit_status_q3($val['cat_id']);
+		echo "<tr>";
+		echo "<td>".$val['ad_sn']."</td>";
+		echo "<td>".$val['region']."</td>";
+		echo "<td>".$val['city']."</td>";
+		echo "<td>".$val['county']."</td>";
+		echo "<td>".$val['market_level']."</td>";
+
+		foreach ($val['records'] as $value) {
+			echo "<td>".$value['real_name']."</td>";
+			echo "<td>".$value['time']."</td>";
+			echo "<td>".$value['audit_note']."</td>";
+		}		
+		// echo "<td>".$tmp['status']."</td>";
+		// echo "<td>".$val['is_audit_confirm']."</td>";
+		echo "</tr>";
+	}
+	echo "</table>";
+}
+
+elseif($_REQUEST['act'] == 'update_q3'){
+
+	$sql_1 = "SELECT can_modify_q3 AS modify ,update_time_q3 AS time, ad_id ".
+			" FROM ".$GLOBALS['ecs']->table("2011_".'city') .
+			" WHERE ad_id > 0 ";
+	$res = $GLOBALS['db']->getAll($sql_1);
+	
+	foreach($res AS $val){
+		$sql = "UPDATE " . $GLOBALS['ecs']->table('2012_city') . 
+				" SET can_modify_q1 = '$val[modify]' ,  update_time_q1 = '$val[time]' ".
+				"WHERE ad_id = '$val[ad_id]'";
+		echo "$val[modify] - $val[time]"."<br>";
+		$GLOBALS['db']->query($sql);
+		
+	}
+	
+}
+elseif($_REQUEST['act'] == 'update_q3_ad'){
+
+	$sql_1 = "SELECT a1.is_audit_confirm , a1.audit_status , a1.ad_id ,  a2.is_audit_confirm AS t1, a2.audit_status AS t2".
+			" FROM ".$GLOBALS['ecs']->table("2011_".'city_ad') . " AS a1 ".
+			" LEFT JOIN ".$GLOBALS['ecs']->table("2012_".'city_ad') . " AS a2 ON a2.ad_id  = a1.ad_id  ".
+			" WHERE a1.ad_id > 0 ORDER BY a1.ad_id DESC ";
+	$res = $GLOBALS['db']->getAll($sql_1);
+	
+	foreach($res AS $val){
+		$sql = "UPDATE " . $GLOBALS['ecs']->table('2012_city_ad') . 
+				" SET is_audit_confirm = '$val[is_audit_confirm]' ,  audit_status = '$val[audit_status]' ".
+				"WHERE ad_id = '$val[ad_id]'";
+
+		if($val['is_audit_confirm'] == $val['t1'] && $val['audit_status'] == $val['t2']){
+			echo "### $val[ad_id] - $val[is_audit_confirm] - $val[audit_status] == $val[t1] - $val[t2] "."<br>";
+		}
+		$GLOBALS['db']->query($sql);
+	}
+}
 
 /**
  * 
@@ -1150,15 +1312,15 @@ elseif($_REQUEST['act'] == 'project'){
 function get_city_progress($city_id){
 	$array['is_audit_confirm'] = "";
 	$array['is_shanghua'] = "";
-	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table('city_ad')." WHERE city_id = $city_id AND is_upload = 1 AND audit_status = 5 AND is_audit_confirm = 1 limit 1";
+	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad')." WHERE city_id = $city_id AND is_upload = 1 AND audit_status = 5 AND is_audit_confirm = 1 limit 1";
 	$ad_id = $GLOBALS['db']->getOne($sql);
 	if($ad_id){
 		$array['is_audit_confirm'] = "是";
 		
-		$sql = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city_gallery')." WHERE ad_id = $ad_id AND feedback = 1 ";
+		$sql = "SELECT count(*) FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery')." WHERE ad_id = $ad_id AND feedback = 1 ";
 		$count = $GLOBALS['db']->getOne($sql); 			
 			
-		$sql_2 = "SELECT col_7 FROM ".$GLOBALS['ecs']->table('city')." WHERE ad_id = $ad_id ";
+		$sql_2 = "SELECT col_7 FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city')." WHERE ad_id = $ad_id ";
 		$col_7 = $GLOBALS['db']->getOne($sql_2);
 		$array['col_7'] = $col_7;
 		
@@ -1183,21 +1345,21 @@ function get_city_progress($city_id){
 function get_city_huanhua_progress($city_id,$project_id){
 	$array['is_audit_confirm'] = "";
 	$array['is_shanghua'] = "";
-	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table('city_ad')." WHERE city_id = $city_id AND is_upload = 1 AND audit_status = 5 AND is_audit_confirm = 1 limit 1";
+	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad')." WHERE city_id = $city_id AND is_upload = 1 AND audit_status = 5 AND is_audit_confirm = 1 limit 1";
 	$ad_id = $GLOBALS['db']->getOne($sql);
 	if($ad_id){
 		
-		$sql = "SELECT count(*) FROM ".$GLOBALS['ecs']->table('city_gallery')." WHERE ad_id = $ad_id AND feedback = $project_id ";
+		$sql = "SELECT count(*) FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery')." WHERE ad_id = $ad_id AND feedback = $project_id ";
 		$pic_count = $GLOBALS['db']->getOne($sql);
 		
-		$sql = "SELECT audit_note FROM ".$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = $ad_id AND feedback_audit = $project_id ORDER BY record_id DESC limit 1 ";
+		$sql = "SELECT audit_note FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit')." WHERE ad_id = $ad_id AND feedback_audit = $project_id ORDER BY record_id DESC limit 1 ";
 		$count = $GLOBALS['db']->getOne($sql); 			
 		
 		if(!empty($count)){
 			if($count == "审核通过"){
 				$array['is_audit_confirm'] = "审核通过";			
 			}else{
-				$array['is_audit_confirm'] = "未通过";
+				$array['is_audit_confirm'] = "未通过".$count;
 			}
 		}else{
 			$array['is_audit_confirm'] = "未审核";
@@ -1220,7 +1382,42 @@ function get_city_huanhua_progress($city_id,$project_id){
 	
 }
 
+function get_audit_status_q3($city_id){
+	$sql_1 = 	" SELECT ad.ad_id , au.audit_note ".
+				" FROM " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " AS ad ".
+				" LEFT JOIN ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit') ." AS au on au.ad_id = ad.ad_id".
+				" WHERE ad.city_id = $city_id AND  au.feedback_audit = 3 ".
+				" GROUP BY ad.ad_id ";
+	//echo $sql_1;
+	$return_res = array("count"=>0,"status"=>'');
+	$res = $GLOBALS['db']->getAll($sql_1);
+	$count = count($res);
+	$int = 0;
+	foreach ($res as $value) {
+		if ($value['audit_note'] == "审核通过") {
+			$int+= 1;
+		}
+	}
+	$return_res['count'] = $count;
+	if ($count > 0) {
+		if($count == $int){
+			$return_res['status'] = "已通过";
+			return $return_res;
+		}else{
+			if($int == 0){
+				$return_res['status'] = "未通过";
+				return $return_res;
+			}else{
+				$return_res['status'] = "部分通过";
+				return $return_res;
+			}
+		}	
+	}else{
+		$return_res['status'] = "未审核或未换画";
+		return $return_res;
+	}
 
+}
 
 
 

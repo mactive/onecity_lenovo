@@ -65,7 +65,6 @@
 
 	<div id="container">
 		<div id="page-left" style="width:168px;">
-			
 			<?php echo $this->fetch('library/mycity.lbi'); ?>
 		</div>
 		<div id="page-middle">
@@ -202,6 +201,7 @@ if ($this->_foreach['index_idea']['total'] > 0):
 			      listTable.filter['county_name'] = document.getElementById("county_name").value;
 			      listTable.filter['market_level'] = document.getElementById("market_level").value;
 			      listTable.filter['has_new'] = document.getElementById("has_new").value;
+			      listTable.filter['year'] = <?php echo $this->_var['year']; ?>;
 			      listTable.filter['page'] = 1;
 			      listTable.loadList();
 			  }

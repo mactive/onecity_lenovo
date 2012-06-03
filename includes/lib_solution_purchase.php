@@ -102,7 +102,7 @@ function get_purchase_list($purchase_status = 0){
 			" LEFT JOIN " .$GLOBALS['ecs']->table('supplier') ." AS su ON su.supplier_id = p.supplier_id " .
 			" LEFT JOIN " .$GLOBALS['ecs']->table('supplier_contact') ." AS sa ON sa.contact_id = p.supplier_contact_id " .
             //" FROM " . $GLOBALS['ecs']->table('inventory') ." AS inv " .
-            //" LEFT JOIN " .$GLOBALS['ecs']->table('category'). " AS c ON c.cat_id=o.cat_id ".
+            //" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category'). " AS c ON c.cat_id=o.cat_id ".
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('inventory_status'). " AS st ON st.status_id=o.status_id ".
           //  "$where ORDER BY  o.add_time DESC , g.goods_id DESC ".
 	        "$where  ORDER BY  p.purchase_id ". $filter['sort_order'].
@@ -247,7 +247,7 @@ function get_supplier_contact_list($user_id){
             " FROM " . $GLOBALS['ecs']->table('supplier_contact') . " AS c " .
 			" LEFT JOIN " .$GLOBALS['ecs']->table('supplier') ." AS o ON o.supplier_id = c.supplier_id " .
             //" FROM " . $GLOBALS['ecs']->table('inventory') ." AS o " .
-            //" LEFT JOIN " .$GLOBALS['ecs']->table('category'). " AS c ON c.cat_id=o.cat_id ".
+            //" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category'). " AS c ON c.cat_id=o.cat_id ".
 			//" LEFT JOIN " .$GLOBALS['ecs']->table('inventory_status'). " AS st ON st.status_id=o.status_id ".
             "$where ORDER BY c.contact_id DESC  ".
 			" LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";

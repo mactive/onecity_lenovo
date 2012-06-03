@@ -464,7 +464,7 @@ function is_show_in_nav($type, $id)
 {
     if($type == 'c')
     {
-        $tablename = $GLOBALS['ecs']->table('category');
+        $tablename = $GLOBALS['ecs']->table($GLOBALS['year']."_".'category');
     }
     else
     {
@@ -480,7 +480,7 @@ function set_show_in_nav($type, $id, $val)
 {
     if($type == 'c')
     {
-        $tablename = $GLOBALS['ecs']->table('category');
+        $tablename = $GLOBALS['ecs']->table($GLOBALS['year']."_".'category');
     }
     else
     {

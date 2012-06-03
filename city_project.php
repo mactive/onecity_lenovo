@@ -93,8 +93,8 @@ if (!isset($_REQUEST['act']))
 //  update_request_price 2个price
 /*------------------------------------------------------ */
 
-$position['title'] = "项目管理";
-$position['ur_here'] = '<li><a href="city_project.php">项目管理</a></li>'; 
+$position['title'] = "换画管理";
+$position['ur_here'] = '<li><a href="city_project.php">换画管理</a></li>'; 
  
 
 /* 获得页面的缓存ID */
@@ -216,7 +216,7 @@ elseif ($_REQUEST['act'] == 'update_project' )
 		}
 	}
 	
-	$new_project_id = $GLOBALS['db']->getOne('SELECT MAX(project_id)+1 AS project_id FROM ' .$GLOBALS['ecs']->table('project'));
+	$new_project_id = $GLOBALS['db']->getOne('SELECT MAX(project_id)+1 AS project_id FROM ' .$GLOBALS['ecs']->table($GLOBALS['year']."_".'project'));
 	$project_info = array();
 
 	$project_info['project_id'] = $project_id ? $project_id : $new_project_id;
@@ -229,7 +229,7 @@ elseif ($_REQUEST['act'] == 'update_project' )
 	/*
 	if($project_id){
 	
-		$new_project_id = $GLOBALS['db']->getOne('SELECT MAX(project_id)+1 AS project_id FROM ' .$GLOBALS['ecs']->table('project'));
+		$new_project_id = $GLOBALS['db']->getOne('SELECT MAX(project_id)+1 AS project_id FROM ' .$GLOBALS['ecs']->table($GLOBALS['year']."_".'project'));
 		$project_info = array();
 	
 		$project_info['project_id'] = $project_id ? $project_id : $new_project_id;
@@ -255,10 +255,10 @@ elseif ($_REQUEST['act'] == 'update_project' )
 	*/	
 	
 	if($project_id){
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('project'), $project_info, 'update', "project_id='$project_id'");
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'project'), $project_info, 'update', "project_id='$project_id'");
 		
 	}else{
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('project'), $project_info, 'INSERT');
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'project'), $project_info, 'INSERT');
 		
 	}
 	
@@ -337,7 +337,7 @@ elseif ($_REQUEST['act'] == 'update_ad_info')
 	$ad_info = get_ad_info($ad_id);
 	$smarty->assign('ad_info', $ad_info);
 	
-	$audit_note = $GLOBALS['db']->getOne('SELECT audit_note FROM ' .$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = $ad_id AND feedback_audit > 0 ORDER BY record_id DESC limit 1");
+	$audit_note = $GLOBALS['db']->getOne('SELECT audit_note FROM ' .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit')." WHERE ad_id = $ad_id AND feedback_audit > 0 ORDER BY record_id DESC limit 1");
 	
 	$smarty->assign('audit_note', $audit_note);
 
@@ -400,7 +400,7 @@ elseif ($_REQUEST['act'] == 'edit_update_ad_info')
 	$ad_info = get_ad_info($ad_id);
 	$smarty->assign('ad_info', $ad_info);
 	
-	$audit_note = $GLOBALS['db']->getOne('SELECT audit_note FROM ' .$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = $ad_id AND feedback_audit > 0 ORDER BY record_id DESC limit 1");
+	$audit_note = $GLOBALS['db']->getOne('SELECT audit_note FROM ' .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit')." WHERE ad_id = $ad_id AND feedback_audit > 0 ORDER BY record_id DESC limit 1");
 	
 	$smarty->assign('audit_note', $audit_note);
 
@@ -454,7 +454,7 @@ elseif($_REQUEST['act'] == 'act_update_ad_info')
 	$city_content[$can_modify_q] = 0;
 	
 	if($ad_id){
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $city_content, 'update', "ad_id='$ad_id'");
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city'), $city_content, 'update', "ad_id='$ad_id'");
 		
 		//记录修改记录
 		$old_col = $_REQUEST['old_col'];
@@ -471,7 +471,7 @@ elseif($_REQUEST['act'] == 'act_update_ad_info')
 				$log['old_value'] = $val;
 				$log['time'] 	= gmtime();
 				//print_r($log);
-				$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad_log'), $log, 'INSERT');	
+				$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_log'), $log, 'INSERT');	
 			}
 		}
 		
@@ -572,11 +572,11 @@ elseif($_REQUEST['act'] == "act_upload_photo")
 	$city_content[$update_time_q] = gmtime();
 	$city_content[$can_modify_q] = 0;
 	
-	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $city_content, 'update', "ad_id='$ad_id'");
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city'), $city_content, 'update', "ad_id='$ad_id'");
 	
 	print_r($city_content);
 	//算是完整上传
-	//$sql = "UPDATE " . $GLOBALS['ecs']->table('city_ad') . " SET is_upload = '1'  WHERE ad_id = '$ad_id'";
+	//$sql = "UPDATE " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " SET is_upload = '1'  WHERE ad_id = '$ad_id'";
     //$GLOBALS['db']->query($sql);
 	show_message("恭喜您,照片上传成功。", $_LANG['back_home_lnk'], "city_project.php?act=upload_photo&project_id=$project_id&ad_id=$ad_info[ad_id]", 'info', true);
 }
@@ -595,7 +595,7 @@ elseif($_REQUEST['act'] == 'update_audit')
 	$audit_info['user_rank'] = $_SESSION['user_rank'];
 	$audit_info['feedback_audit'] = $project_id;
 	$audit_info['audit_note'] = $confirm > 0 ? "审核通过": trim($_POST['audit_note']);
-	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad_audit'), $audit_info, 'INSERT');
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit'), $audit_info, 'INSERT');
 	
 	$return_url = "city_project.php?act=list_city_to_select&project_id=$project_id";
 	
@@ -603,12 +603,12 @@ elseif($_REQUEST['act'] == 'update_audit')
 		show_message("审核通过,其他人会看到。", $_LANG['back_home_lnk'], $return_url, 'info', true);
 		$can_modify_q = "can_modify_q".$project_id;
 		$city_content[$can_modify_q] = 0;	
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $city_content, 'update', "ad_id='$ad_id'");
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city'), $city_content, 'update', "ad_id='$ad_id'");
 	}else{		
 		//打开修改权限
 		$can_modify_q = "can_modify_q".$project_id;
 		$city_content[$can_modify_q] = 2;	
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $city_content, 'update', "ad_id='$ad_id'");
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city'), $city_content, 'update', "ad_id='$ad_id'");
 		
 		show_message("审核信息已经提交。", $_LANG['back_home_lnk'], $return_url, 'info', true);
 		//$smarty->display('city_view.dwt');
@@ -729,7 +729,7 @@ elseif ($_REQUEST['act'] == 'update_picture' )
 		}
 	}
 	
-	$new_picture_id = $GLOBALS['db']->getOne('SELECT MAX(picture_id)+1 AS picture_id FROM ' .$GLOBALS['ecs']->table('project_picture'));
+	$new_picture_id = $GLOBALS['db']->getOne('SELECT MAX(picture_id)+1 AS picture_id FROM ' .$GLOBALS['ecs']->table($GLOBALS['year']."_".'project_picture'));
 	$picture_info = array();
 	
 	$picture_info['picture_id'] = $picture_id ? $picture_id : $new_picture_id;
@@ -744,10 +744,10 @@ elseif ($_REQUEST['act'] == 'update_picture' )
 	/**/
 	
 	if($picture_id){
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('project_picture'), $picture_info, 'update', "picture_id='$picture_id'");
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'project_picture'), $picture_info, 'update', "picture_id='$picture_id'");
 		
 	}else{
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('project_picture'), $picture_info, 'INSERT');
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'project_picture'), $picture_info, 'INSERT');
 		
 	}
 	
@@ -760,7 +760,7 @@ elseif($_REQUEST['act'] == 'delete_picture'){
 	$picture_id= !empty($_REQUEST['picture_id']) ? intval($_REQUEST['picture_id']) : 0;
 	if($picture_id){
 		echo $picture_id;
-		$GLOBALS['db']->query("DELETE FROM" . $GLOBALS['ecs']->table('project_picture') . " WHERE picture_id = $picture_id LIMIT 1");
+		$GLOBALS['db']->query("DELETE FROM" . $GLOBALS['ecs']->table($GLOBALS['year']."_".'project_picture') . " WHERE picture_id = $picture_id LIMIT 1");
 		show_message("删除成功", $_LANG['back_home_lnk'], "city_project.php?act=project_picture", 'info', true);
 	}	
 }
@@ -772,7 +772,7 @@ elseif($_REQUEST['act'] == 'open_modify'){
 	
 	$can_modify_q = "can_modify_q".$project_id;
 	if($ad_id){
-		$sql = "UPDATE " . $GLOBALS['ecs']->table('city') . " SET $can_modify_q = '1'  WHERE ad_id = '$ad_id'";
+		$sql = "UPDATE " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city') . " SET $can_modify_q = '1'  WHERE ad_id = '$ad_id'";
 	    $GLOBALS['db']->query($sql);
 		show_message("开启成功");
 	}	

@@ -21,7 +21,7 @@ function get_categories_tree($cat_id = 0)
 {
     if ($cat_id > 0)
     {
-        $sql = 'SELECT parent_id FROM ' . $GLOBALS['ecs']->table('category') . " WHERE cat_id = '$cat_id'"." ORDER BY cat_id ASC";
+        $sql = 'SELECT parent_id FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " WHERE cat_id = '$cat_id'"." ORDER BY cat_id ASC";
         $parent_id = $GLOBALS['db']->getOne($sql);
     }
     else
@@ -34,22 +34,22 @@ function get_categories_tree($cat_id = 0)
      如果是取出底级分类上级分类，
      如果不是取当前分类及其下的子分类
     */
-    $sql = 'SELECT count(*) FROM ' . $GLOBALS['ecs']->table('category') . " WHERE parent_id = '$cat_id' AND is_show = 1 ";
+    $sql = 'SELECT count(*) FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " WHERE parent_id = '$cat_id' AND is_show = 1 ";
     if ($GLOBALS['db']->getOne($sql) || $parent_id == 0)
     {
         /* 获取当前分类及其子分类 */
         $sql = 'SELECT a.cat_id, a.cat_name, a.sort_order AS parent_order, a.cat_id, a.is_show,' .
                     'b.cat_id AS child_id, b.cat_name AS child_name, b.sort_order AS child_order ' .
-                'FROM ' . $GLOBALS['ecs']->table('category') . ' AS a ' .
-                'LEFT JOIN ' . $GLOBALS['ecs']->table('category') . ' AS b ON b.parent_id = a.cat_id AND b.is_show = 1 ' .
+                'FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . ' AS a ' .
+                'LEFT JOIN ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . ' AS b ON b.parent_id = a.cat_id AND b.is_show = 1 ' .
                 "WHERE a.parent_id = '$parent_id' ORDER BY a.cat_id ASC, child_order ASC";
     }
     else
     {
         /* 获取当前分类及其父分类 */
         $sql = 'SELECT a.cat_id, a.cat_name, b.cat_id AS child_id, b.cat_name AS child_name, b.sort_order, b.is_show ' .
-                'FROM ' . $GLOBALS['ecs']->table('category') . ' AS a ' .
-                'LEFT JOIN ' . $GLOBALS['ecs']->table('category') . ' AS b ON b.parent_id = a.cat_id AND b.is_show = 1 ' .
+                'FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . ' AS a ' .
+                'LEFT JOIN ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . ' AS b ON b.parent_id = a.cat_id AND b.is_show = 1 ' .
                 "WHERE b.parent_id = '$parent_id' ORDER BY sort_order ASC";
     }
     $res = $GLOBALS['db']->getAll($sql);
@@ -82,7 +82,7 @@ function get_categories_tree($cat_id = 0)
  * @return  boolean
  */
 function have_no_subcategory($cat_id = 0){
-	$sql = 'SELECT cat_id FROM ' . $GLOBALS['ecs']->table('category') . " WHERE parent_id = '$cat_id'";
+	$sql = 'SELECT cat_id FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " WHERE parent_id = '$cat_id'";
 	$res = $GLOBALS['db']->getAll($sql);
 	if(sizeof($res)>0){
 		return false;
@@ -104,7 +104,7 @@ function get_name_form_ID($cat_id = 0){
 	if($cat_id == 0){
 		return "顶级分类";
 	}else{
-		$sql = 'SELECT cat_name FROM ' . $GLOBALS['ecs']->table('category') . " WHERE cat_id = '$cat_id'";
+		$sql = 'SELECT cat_name FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " WHERE cat_id = '$cat_id'";
 		$res = $GLOBALS['db']->getAll($sql);
 	    foreach ($res AS $row){
 			$cat_name = $row['cat_name'];
@@ -147,7 +147,7 @@ function get_sub_categories_tree($cat_id = 0)
 {
     if ($cat_id > 0)
     {
-        $sql = 'SELECT cat_id FROM ' . $GLOBALS['ecs']->table('category') . " WHERE cat_id = '$cat_id'";
+        $sql = 'SELECT cat_id FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " WHERE cat_id = '$cat_id'";
         $parent_id = $GLOBALS['db']->getOne($sql);
     }
     else
@@ -160,22 +160,22 @@ function get_sub_categories_tree($cat_id = 0)
      如果是取出底级分类上级分类，
      如果不是取当前分类及其下的子分类
     */
-    $sql = 'SELECT count(*) FROM ' . $GLOBALS['ecs']->table('category') . " WHERE parent_id = '$cat_id' AND is_show = 1 ";
+    $sql = 'SELECT count(*) FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " WHERE parent_id = '$cat_id' AND is_show = 1 ";
     if ($GLOBALS['db']->getOne($sql) || $parent_id == 0)
     {
         /* 获取当前分类及其子分类 */
         $sql = 'SELECT a.cat_id, a.cat_name, a.cat_logo, a.sort_order AS parent_order, a.cat_id, a.is_show,' .
                     'b.cat_id AS child_id, b.cat_name AS child_name, b.cat_logo AS child_logo, b.sort_order AS child_order ' .
-                'FROM ' . $GLOBALS['ecs']->table('category') . ' AS a ' .
-                'LEFT JOIN ' . $GLOBALS['ecs']->table('category') . ' AS b ON b.parent_id = a.cat_id AND b.is_show = 1 ' .
+                'FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . ' AS a ' .
+                'LEFT JOIN ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . ' AS b ON b.parent_id = a.cat_id AND b.is_show = 1 ' .
                 "WHERE a.parent_id = '$parent_id' ORDER BY parent_order ASC, a.cat_id ASC, child_order ASC";
     }
     else
     {
         /* 获取当前分类及其父分类 */
         $sql = 'SELECT a.cat_id, a.cat_name, b.cat_id AS child_id, b.cat_name AS child_name, b.sort_order, b.is_show ' .
-                'FROM ' . $GLOBALS['ecs']->table('category') . ' AS a ' .
-                'LEFT JOIN ' . $GLOBALS['ecs']->table('category') . ' AS b ON b.parent_id = a.cat_id AND b.is_show = 1 ' .
+                'FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . ' AS a ' .
+                'LEFT JOIN ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . ' AS b ON b.parent_id = a.cat_id AND b.is_show = 1 ' .
                 "WHERE b.parent_id = '$parent_id' ORDER BY sort_order ASC";
     }
     $res = $GLOBALS['db']->getAll($sql);
@@ -397,7 +397,7 @@ function arr_recommend_goods($ptarray = '')
  */
 function get_top_category()
 {
-	$sql = 'SELECT cat_id, cat_name FROM ' . $GLOBALS['ecs']->table('category') . 'WHERE parent_id = 0';
+	$sql = 'SELECT cat_id, cat_name FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . 'WHERE parent_id = 0';
 	$result = $GLOBALS['db']->getAll($sql);
 	//print_r($result);
 	
@@ -696,7 +696,7 @@ function get_goods_info($goods_id)
                 'IFNULL(AVG(r.comment_rank), 0) AS comment_rank, ' .
                 "IFNULL(mp.user_price, g.shop_price * '$_SESSION[discount]') AS rank_price " .
             'FROM ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
-            'LEFT JOIN ' . $GLOBALS['ecs']->table('category') . ' AS c ON g.cat_id = c.cat_id ' .
+            'LEFT JOIN ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . ' AS c ON g.cat_id = c.cat_id ' .
             'LEFT JOIN ' . $GLOBALS['ecs']->table('brand') . ' AS b ON g.brand_id = b.brand_id ' .
 			'LEFT JOIN ' . $GLOBALS['ecs']->table('goods_status') . ' AS s ON g.goods_status = s.status_id ' .
             'LEFT JOIN ' . $GLOBALS['ecs']->table('comment') . ' AS r '.
@@ -1115,7 +1115,7 @@ function assign_cat_goods($cat_id, $num = 0, $from = 'web')
     }
 
     /* 分类信息 */
-    $sql = 'SELECT cat_name FROM ' . $GLOBALS['ecs']->table('category') . " WHERE cat_id = '$cat_id'";
+    $sql = 'SELECT cat_name FROM ' . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " WHERE cat_id = '$cat_id'";
     $cat['name'] = $GLOBALS['db']->getOne($sql);
     $cat['url']  = build_uri('category', array('cid' => $cat_id), $cat['name']);
     $cat['id']   = $cat_id;

@@ -8,12 +8,12 @@
 	<?php if ($this->_var['project']): ?>
 	<div class="radius_5px city_info" style="width:95%;height:200px;padding:0px 10px;">
 		<span class="green-color font14px"><?php if ($this->_var['k'] == 0): ?>未换画之前<?php else: ?>2011Q<?php echo $this->_var['k']; ?><?php endif; ?></span><br>
-	<?php $_from = $this->_var['project']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item_0_55928700_1334457563');if (count($_from)):
-    foreach ($_from AS $this->_var['item_0_55928700_1334457563']):
+	<?php $_from = $this->_var['project']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item_0_22049200_1338643429');if (count($_from)):
+    foreach ($_from AS $this->_var['item_0_22049200_1338643429']):
 ?>	
 	<div style="width:160px;height:160px;text-align:center;float:left;margin:10px 20px;">
-	<a href="<?php echo $this->_var['item_0_55928700_1334457563']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_55928700_1334457563']['thumb_url']; ?>"></a>
-	<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_55928700_1334457563']['img_sort']]; ?>
+	<a href="<?php echo $this->_var['item_0_22049200_1338643429']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_22049200_1338643429']['thumb_url']; ?>"></a>
+	<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_22049200_1338643429']['img_sort']]; ?>
 	</div>
 	<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 	</div>
@@ -29,7 +29,7 @@
 <table width="70%" id="lesson-table" class="table_border table_standard" border="1">
     <tr>
       <td width="100"><?php echo $this->_var['lang']['project_name']; ?>:</td>
-      <td><span class="red_color font16px"><?php if ($this->_var['ad_info']['is_new']): ?>新增换画<?php else: ?><?php echo $this->_var['project_info']['project_name']; ?><?php endif; ?></span></td>
+      <td><span class="red_color font16px"><?php if ($this->_var['ad_info']['is_new']): ?>[新增]<?php endif; ?><?php echo $this->_var['project_info']['project_name']; ?></span></td>
     </tr>
 	<tr>
       <td width="100"><?php echo $this->_var['lang']['county']; ?>:</td>
@@ -115,12 +115,12 @@
 
 <div class="radius_5px city_info" style="width:95%;height:200px;padding:0px 10px;">
 	<span class="green-color font14px"><?php if ($this->_var['ad_info']['is_new']): ?>新增换画<?php else: ?><?php echo $this->_var['project_info']['project_name']; ?><?php endif; ?></span><br>
-<?php $_from = $this->_var['photo_info']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item_0_56209300_1334457563');if (count($_from)):
-    foreach ($_from AS $this->_var['item_0_56209300_1334457563']):
+<?php $_from = $this->_var['photo_info']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'item_0_22298900_1338643429');if (count($_from)):
+    foreach ($_from AS $this->_var['item_0_22298900_1338643429']):
 ?>	
 <div style="width:160px;height:160px;text-align:center;float:left;margin:10px 20px;">
-<a href="<?php echo $this->_var['item_0_56209300_1334457563']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_56209300_1334457563']['thumb_url']; ?>"></a>
-<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_56209300_1334457563']['img_sort']]; ?>
+<a href="<?php echo $this->_var['item_0_22298900_1338643429']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_22298900_1338643429']['thumb_url']; ?>"></a>
+<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_22298900_1338643429']['img_sort']]; ?>
 </div>
 <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 </div>
@@ -179,11 +179,11 @@ function validate()
 
 <?php endif; ?>
 
-<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_56245500_1334457563');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_56245500_1334457563']):
+<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_22335600_1338643429');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_22335600_1338643429']):
 ?>
 <div class="city_info radius_5px">
-	<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_56245500_1334457563']; ?></div>
+	<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_22335600_1338643429']; ?></div>
 	<div class="f_left right_content" 
 	<?php if ($this->_var['k'] == "col_28" || $this->_var['k'] == "col_29" || $this->_var['k'] == "col_42" || $this->_var['k'] == "col_43" || $this->_var['k'] == "col_44"): ?>
 	style="background:#fffead;"

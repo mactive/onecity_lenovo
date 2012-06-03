@@ -835,7 +835,7 @@ function sanitize_url($url , $check = 'http://')
  */
 function cat_exists($cat_name, $parent_cat, $exclude = 0)
 {
-    $sql = "SELECT COUNT(*) FROM " .$GLOBALS['ecs']->table('category').
+    $sql = "SELECT COUNT(*) FROM " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category').
     " WHERE parent_id = '$parent_cat' AND cat_name = '$cat_name' AND cat_id<>'$exclude'";
     return ($GLOBALS['db']->getOne($sql) > 0) ? true : false;
 }

@@ -32,7 +32,7 @@ $exist_array = array();
 /*
 $children = get_city_children(array('18'));
 
-$sql_5 = "SELECT cat_id FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
+$sql_5 = "SELECT cat_id FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'category'). " AS a " .
 		" WHERE $children  AND a.sys_level = 5 ";
 $sichuan = $GLOBALS['db']->getCol($sql_5);
 //print_r($sichuan);

@@ -2081,7 +2081,7 @@ function add_link($extension_code = '')
 }
 function get_cat_info($cat_id)
 {
-    $sql = "SELECT * FROM " .$GLOBALS['ecs']->table('category'). " WHERE cat_id='$cat_id' LIMIT 1";
+    $sql = "SELECT * FROM " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category'). " WHERE cat_id='$cat_id' LIMIT 1";
     return $GLOBALS['db']->getRow($sql);
 }
 ?>

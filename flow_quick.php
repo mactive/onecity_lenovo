@@ -644,7 +644,7 @@ function act_range_desc($favourable)
     }
     elseif ($favourable['act_range'] == FAR_CATEGORY)
     {
-        $sql = "SELECT cat_name FROM " . $GLOBALS['ecs']->table('category') .
+        $sql = "SELECT cat_name FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') .
                 " WHERE cat_id " . db_create_in($favourable['act_range_ext']);
         return join(',', $GLOBALS['db']->getCol($sql));
     }

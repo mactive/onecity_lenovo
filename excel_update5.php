@@ -37,7 +37,7 @@ $exist_array = array();
 /*
 $children = get_city_children(array('18'));
 
-$sql_5 = "SELECT cat_id FROM ".$GLOBALS['ecs']->table('category'). " AS a " .
+$sql_5 = "SELECT cat_id FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'category'). " AS a " .
 		" WHERE $children  AND a.sys_level = 5 ";
 $sichuan = $GLOBALS['db']->getCol($sql_5);
 //print_r($sichuan);
@@ -71,7 +71,7 @@ for ($y=0;$y<count($all_sheets);$y++)
 		// SMB
 		if(!empty($city_id)){
 			/**/
-			$sql = "UPDATE " . $GLOBALS['ecs']->table('category') .
+			$sql = "UPDATE " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') .
 	                " SET `is_microsoft` = '1' ".
 	                "WHERE cat_id = $city_id" ;			
 			
@@ -115,7 +115,7 @@ function act_county_array($array)
 		$tt = explode("-",$val);
 		$region_id = get_cat_id($tt[0]);
 		if($region_id){
-			$sql = "INSERT INTO " . $GLOBALS['ecs']->table('category') .
+			$sql = "INSERT INTO " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') .
 					" (`cat_id`,`cat_name`,`parent_id`,`level`,`market_level`,`mature_emerging`,`mulching` ) ".
 					"VALUES (NULL, '$tt[1]', '$region_id','$tt[2]','$tt[3]','$tt[4]','$tt[5]')";
 			echo $sql."<br>";
@@ -135,7 +135,7 @@ function act_city_array($array)
 		$tt = explode("-",$val);
 		$region_id = get_cat_id($tt[0]);
 		if($region_id){
-			$sql = "INSERT INTO " . $GLOBALS['ecs']->table('category') .
+			$sql = "INSERT INTO " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') .
 					" (`cat_id`,`cat_name`,`parent_id` ) VALUES (NULL, '$tt[1]', '$region_id')";
 			echo $sql."<br>";
 		    //$GLOBALS['db']->query($sql);
@@ -152,7 +152,7 @@ function act_province_array($province_array)
 		$tt = explode("-",$val);
 		$region_id = get_cat_id($tt[0]);
 		
-		$sql = "INSERT INTO " . $GLOBALS['ecs']->table('category') .
+		$sql = "INSERT INTO " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') .
 				" (`cat_id`,`cat_name`,`parent_id` ) VALUES (NULL, '$tt[1]', '$region_id')";
 		echo $sql."<br>";
 	    //$GLOBALS['db']->query($sql);
@@ -160,7 +160,7 @@ function act_province_array($province_array)
 }
 
 function get_cat_id($cat_name){
-	$sql = 'SELECT cat_id FROM ' .$GLOBALS['ecs']->table('category').
+	$sql = 'SELECT cat_id FROM ' .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category').
            " WHERE cat_name LIKE '%$cat_name%' ";
 	
     return $GLOBALS['db']->getOne($sql);

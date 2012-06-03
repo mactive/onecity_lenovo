@@ -121,7 +121,7 @@ if ($_REQUEST['act'] == 'insert')
     }
 
     /* 入库的操作 */
-    if ($db->autoExecute($ecs->table('category'), $cat) !== false)
+    if ($db->autoExecute($ecs->table($GLOBALS['year']."_".'category'), $cat) !== false)
     {
         if($cat['show_in_nav'] == 1)
         {
@@ -185,13 +185,13 @@ elseif ($_REQUEST['act'] == 'drop_logo')
     $cat_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
     /* 取得logo名称 */
-    $sql = "SELECT cat_logo FROM " .$ecs->table('category'). " WHERE cat_id = '$cat_id'";
+    $sql = "SELECT cat_logo FROM " .$ecs->table($GLOBALS['year']."_".'category'). " WHERE cat_id = '$cat_id'";
     $logo_name = $db->getOne($sql);
 
     if (!empty($logo_name))
     {
         @unlink(ROOT_PATH . 'data/categorylogo/' .$logo_name);
-        $sql = "UPDATE " .$ecs->table('category'). " SET cat_logo = '' WHERE cat_id = '$cat_id'";
+        $sql = "UPDATE " .$ecs->table($GLOBALS['year']."_".'category'). " SET cat_logo = '' WHERE cat_id = '$cat_id'";
         $db->query($sql);
     }
     $link[] = array('text' => $_LANG['back_list'], 'href' => 'category.php?act=edit&cat_id='.$cat_id);
@@ -212,7 +212,7 @@ elseif($_REQUEST['act'] == 'add_category')
     }
     else
     {
-        $sql = "INSERT INTO " . $ecs->table('category') . "(cat_name, parent_id, is_show)" .
+        $sql = "INSERT INTO " . $ecs->table($GLOBALS['year']."_".'category') . "(cat_name, parent_id, is_show)" .
                "VALUES ( '$category', '$parent_id', 1)";
 
         $db->query($sql);
@@ -282,9 +282,9 @@ if ($_REQUEST['act'] == 'update')
        sys_msg($_LANG['grade_error'], 0, $link);
     }
 
-    $dat = $db->getRow("SELECT cat_name, show_in_nav FROM ". $ecs->table('category') . " WHERE cat_id = '$cat_id'");
+    $dat = $db->getRow("SELECT cat_name, show_in_nav FROM ". $ecs->table($GLOBALS['year']."_".'category') . " WHERE cat_id = '$cat_id'");
 
-    if ($db->autoExecute($ecs->table('category'), $cat, 'UPDATE', "cat_id='$cat_id'"))
+    if ($db->autoExecute($ecs->table($GLOBALS['year']."_".'category'), $cat, 'UPDATE', "cat_id='$cat_id'"))
     {
         if($cat['cat_name'] != $dat['cat_name'])
         {
@@ -474,7 +474,7 @@ if ($_REQUEST['act'] == 'toggle_show_in_nav')
             //显示
             $vieworder = $db->getOne("SELECT max(vieworder) FROM ". $ecs->table('nav') . " WHERE type = 'middle'");
             $vieworder += 2;
-            $catname = $db->getOne("SELECT cat_name FROM ". $ecs->table('category') . " WHERE cat_id = '$id'");
+            $catname = $db->getOne("SELECT cat_name FROM ". $ecs->table($GLOBALS['year']."_".'category') . " WHERE cat_id = '$id'");
             //显示在自定义导航栏中
             $_CFG['rewrite'] = 0;
             $uri = build_uri('category', array('cid'=> $id));
@@ -536,10 +536,10 @@ if ($_REQUEST['act'] == 'remove')
 
     /* 初始化分类ID并取得分类名称 */
     $cat_id   = intval($_GET['id']);
-    $cat_name = $db->getOne('SELECT cat_name FROM ' .$ecs->table('category'). " WHERE cat_id='$cat_id'");
+    $cat_name = $db->getOne('SELECT cat_name FROM ' .$ecs->table($GLOBALS['year']."_".'category'). " WHERE cat_id='$cat_id'");
 
     /* 当前分类下是否有子分类 */
-    $cat_count = $db->getOne('SELECT COUNT(*) FROM ' .$ecs->table('category'). " WHERE parent_id='$cat_id'");
+    $cat_count = $db->getOne('SELECT COUNT(*) FROM ' .$ecs->table($GLOBALS['year']."_".'category'). " WHERE parent_id='$cat_id'");
 
     /* 当前分类下是否存在商品 */
     $goods_count = $db->getOne('SELECT COUNT(*) FROM ' .$ecs->table('goods'). " WHERE cat_id='$cat_id'");
@@ -548,7 +548,7 @@ if ($_REQUEST['act'] == 'remove')
     if ($cat_count == 0 && $goods_count == 0)
     {
         /* 删除分类 */
-        $sql = 'DELETE FROM ' .$ecs->table('category'). " WHERE cat_id = '$cat_id'";
+        $sql = 'DELETE FROM ' .$ecs->table($GLOBALS['year']."_".'category'). " WHERE cat_id = '$cat_id'";
         if ($db->query($sql))
         {
             $db->query("DELETE FROM " . $ecs->table('nav') . "WHERE ctype = 'c' AND cid = '" . $cat_id . "' AND type = 'middle'");
@@ -582,7 +582,7 @@ if ($_REQUEST['act'] == 'remove')
 // */
 //function cat_exists($cat_name, $parent_cat, $exclude = 0)
 //{
-//    $sql = "SELECT COUNT(*) FROM " .$GLOBALS['ecs']->table('category').
+//    $sql = "SELECT COUNT(*) FROM " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category').
 //           " WHERE parent_id = '$parent_cat' AND cat_name = '$cat_name' AND cat_id<>'$exclude'";
 //    return ($GLOBALS['db']->getOne($sql) > 0) ? true : false;
 //}
@@ -596,7 +596,7 @@ if ($_REQUEST['act'] == 'remove')
  */
 function get_cat_info($cat_id)
 {
-    $sql = "SELECT * FROM " .$GLOBALS['ecs']->table('category'). " WHERE cat_id='$cat_id' LIMIT 1";
+    $sql = "SELECT * FROM " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category'). " WHERE cat_id='$cat_id' LIMIT 1";
     return $GLOBALS['db']->getRow($sql);
 }
 
@@ -615,7 +615,7 @@ function cat_update($cat_id, $args)
         return false;
     }
 
-    return $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('category'), $args, 'update', "cat_id='$cat_id'");
+    return $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'category'), $args, 'update', "cat_id='$cat_id'");
 }
 
 

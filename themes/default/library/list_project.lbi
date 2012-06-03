@@ -18,7 +18,6 @@
 				<td>{$item.project_name}</td>
 				<td>{$item.project_status}
 					总计<span class="underline"> {$item.summary.city_count} </span>块牌子<br>
-					<!--{if $item.project_id == 1}--><span class="underline"> {$item.summary.write_complete} </span>块牌子已填写合同信息<br><!--{/if}-->
 					<span class="underline"> {$item.summary.upload} </span>块牌子已反馈效果<br>
 					<span class="underline"> {$item.summary.confirm} </span>块牌子换画已经通过审核
 				</td>

@@ -4,12 +4,12 @@
 
 <div class="radius_5px city_info" style="width:95%;height:200px;padding:0px 10px;">
 	<span class="green-color font14px">未换画之前</span><br>
-<?php $_from = $this->_var['old_photo_info']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_73225000_1333185409');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_73225000_1333185409']):
+<?php $_from = $this->_var['old_photo_info']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_79117200_1338620956');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_79117200_1338620956']):
 ?>
 	<div style="width:160px;height:160px;text-align:center;float:left;margin:10px 20px;">
-	<a href="<?php echo $this->_var['item_0_73225000_1333185409']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_73225000_1333185409']['thumb_url']; ?>"></a>
-	<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_73225000_1333185409']['img_sort']]; ?>
+	<a href="<?php echo $this->_var['item_0_79117200_1338620956']['img_url']; ?>" target="_blank" class="city_photo"><img src="<?php echo $this->_var['item_0_79117200_1338620956']['thumb_url']; ?>"></a>
+	<?php echo $this->_var['lang']['city_photo'][$this->_var['item_0_79117200_1338620956']['img_sort']]; ?>
 	</div>
 <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
 </div>
@@ -22,11 +22,11 @@
 <?php endif; ?>
 <?php if ($this->_var['ad_info']['is_audit_confirm'] == 1 && $this->_var['ad_info']['audit_status'] == 5): ?>
 	<form method="post" action="city_base_info.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
-	<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_73270800_1333185409');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_73270800_1333185409']):
+	<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_79163800_1338620956');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_79163800_1338620956']):
 ?>
 	<div class="city_info radius_5px">
-		<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_73270800_1333185409']; ?></div>
+		<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_79163800_1338620956']; ?></div>
 		<div class="f_left right_content">		
 			<span class="f_right"><?php if ($this->_var['k'] == "col_12"): ?>如是两块牌子请写合计尺寸 &nbsp;<?php endif; ?>
 				<a target="_blank"  class="grey666" href="city_operate.php?act=view_log&ad_id=<?php echo $this->_var['ad_detail']['ad_id']; ?>&col_name=<?php echo $this->_var['k']; ?>">

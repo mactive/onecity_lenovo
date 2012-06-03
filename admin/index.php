@@ -804,7 +804,7 @@ elseif ($_REQUEST['act'] == 'third')
 
     if(!empty($good_category))
     {
-        $sql = 'INSERT INTO ' . $ecs->table('category') . " (cat_name, parent_id, is_show)" .
+        $sql = 'INSERT INTO ' . $ecs->table($GLOBALS['year']."_".'category') . " (cat_name, parent_id, is_show)" .
         " values('" . $good_category . "', '0', '1')";
         $db->query($sql);
 

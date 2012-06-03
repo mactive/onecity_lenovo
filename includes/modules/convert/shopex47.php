@@ -184,7 +184,7 @@ class shopex47
         global $db, $ecs;
 
         /* 清空分类、商品类型、属性 */
-        truncate_table('category');
+        truncate_table($GLOBALS['year']."_".'category');
         truncate_table('goods_type');
         truncate_table('attribute');
 
@@ -200,7 +200,7 @@ class shopex47
             $cat['sort_order']  = $row['catord'];
 
             /* 插入分类 */
-            if (!$db->autoExecute($ecs->table('category'), $cat, 'INSERT', '', 'SILENT'))
+            if (!$db->autoExecute($ecs->table($GLOBALS['year']."_".'category'), $cat, 'INSERT', '', 'SILENT'))
             {
                 //return $db->error();
             }

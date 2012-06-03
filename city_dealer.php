@@ -74,7 +74,7 @@ if (!isset($_REQUEST['act']))
 //  update_request_price 2个price
 /*------------------------------------------------------ */
 
-$position['title'] = "项目管理";
+$position['title'] = "渠道管理";
 $position['ur_here'] = '<li><a href="city_dealer.php">渠道管理</a></li>'; 
  
 

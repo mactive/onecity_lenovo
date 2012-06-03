@@ -175,7 +175,7 @@ elseif ($_REQUEST['act'] == 'update_ad_info')
 	$smarty->assign('photo_info', $photo_info);
 	
 	$ad_detail = get_city_info($ad_id);
-	$ad_detail['base_info_modify'] = $GLOBALS['db']->getOne('SELECT base_info_modify FROM ' .$GLOBALS['ecs']->table('city_ad')." WHERE ad_id = $ad_id limit 1");
+	$ad_detail['base_info_modify'] = $GLOBALS['db']->getOne('SELECT base_info_modify FROM ' .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad')." WHERE ad_id = $ad_id limit 1");
 	$ad_detail['col_42'] = $ad_detail['col_42'];
 	$smarty->assign('ad_detail', $ad_detail);
 	
@@ -185,7 +185,7 @@ elseif ($_REQUEST['act'] == 'update_ad_info')
 	$audit_status = get_audit_status($ad_id,$project_id);
 	$smarty->assign('audit_status',   $audit_status);
 	
-	$audit_note = $GLOBALS['db']->getOne('SELECT audit_note FROM ' .$GLOBALS['ecs']->table('city_ad_audit')." WHERE ad_id = $ad_id AND feedback_audit = 9 ORDER BY record_id DESC limit 1");
+	$audit_note = $GLOBALS['db']->getOne('SELECT audit_note FROM ' .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit')." WHERE ad_id = $ad_id AND feedback_audit = 9 ORDER BY record_id DESC limit 1");
 	
 	$smarty->assign('audit_note', $audit_note);
 
@@ -247,11 +247,11 @@ elseif($_REQUEST['act'] == 'act_update_ad_info')
 
 	
 	if($ad_id){
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city'), $city_content, 'update', "ad_id='$ad_id'");
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city'), $city_content, 'update', "ad_id='$ad_id'");
 		
 		$city_ad_array = array();
 		$city_ad_array['base_info_changed'] = 1;//已经修改过
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $city_ad_array, 'update', "ad_id='$ad_id'");
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad'), $city_ad_array, 'update', "ad_id='$ad_id'");
 		
 		//记录修改记录
 		$old_col = $_REQUEST['old_col'];
@@ -269,17 +269,17 @@ elseif($_REQUEST['act'] == 'act_update_ad_info')
 				$log['old_value'] = $val;
 				$log['time'] 	= gmtime();
 				//print_r($log);
-				$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad_log'), $log, 'INSERT');	
+				$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_log'), $log, 'INSERT');	
 			}
 		}
 		
 		//分区2次修改 之后
-		$audit_note = $GLOBALS['db']->getOne("SELECT audit_note FROM " . $GLOBALS['ecs']->table('city_ad_audit') . " WHERE ad_id = $ad_id AND feedback_audit = 9 ORDER BY record_id DESC LIMIT 1 ");
+		$audit_note = $GLOBALS['db']->getOne("SELECT audit_note FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit') . " WHERE ad_id = $ad_id AND feedback_audit = 9 ORDER BY record_id DESC LIMIT 1 ");
 		if(!empty($audit_note) && $audit_note != "审核通过"){
 			$city_ad_array = array();
 			$city_ad_array['base_info_modify'] = 0;//已经修改过
 			echo $audit_note;
-			$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $city_ad_array, 'update', "ad_id='$ad_id'");
+			$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad'), $city_ad_array, 'update', "ad_id='$ad_id'");
 		}
 		
 	}
@@ -298,7 +298,7 @@ elseif($_REQUEST['act'] == 'send_material')
 	$city_ad_array = array();
 	$city_ad_array['is_send'] = 1;//已经修改过
 	$city_ad_array['ad_id'] = $ad_id;//已经修改过
-	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_material'), $city_ad_array, 'INSERT');
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_material'), $city_ad_array, 'INSERT');
 	
 	show_message("成功寄出 时间:".date("Y-m-d H:i:s"),"关闭该页","javascript:self.close()");       
 	
@@ -310,7 +310,7 @@ elseif($_REQUEST['act'] == 'receive_material')
 	$city_ad_array = array();
 	$city_ad_array['is_receive'] = 1;//已经修改过
 	$city_ad_array['ad_id'] = $ad_id;//已经修改过
-	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_material'), $city_ad_array, 'INSERT');
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_material'), $city_ad_array, 'INSERT');
 	
 	show_message("成功收到 时间:".date("Y-m-d H:i:s"),"关闭该页","javascript:self.close()");       
 	
@@ -320,13 +320,13 @@ elseif($_REQUEST['act'] == 're_send_material')
 {
 	$ad_id = !empty($_REQUEST['ad_id']) ? intval($_REQUEST['ad_id']) : '';
 
-	$is_send_time = $GLOBALS['db']->getOne("SELECT MAX(`is_send`) FROM " . $GLOBALS['ecs']->table('city_material') . " WHERE ad_id = $ad_id ");
+	$is_send_time = $GLOBALS['db']->getOne("SELECT MAX(`is_send`) FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_material') . " WHERE ad_id = $ad_id ");
 
 	
 	$city_ad_array = array();
 	$city_ad_array['is_send'] = $is_send_time + 1;//已经修改过
 	$city_ad_array['ad_id'] = $ad_id;//已经修改过
-	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_material'), $city_ad_array, 'INSERT');
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_material'), $city_ad_array, 'INSERT');
 	
 	show_message("成功第".$city_ad_array['is_send']."次寄出 时间:".date("Y-m-d H:i:s"),"关闭该页","javascript:self.close()");       
 	
@@ -335,12 +335,12 @@ elseif($_REQUEST['act'] == 're_receive_material')
 {
 	$ad_id = !empty($_REQUEST['ad_id']) ? intval($_REQUEST['ad_id']) : '';
 	
-	$is_receive_time = $GLOBALS['db']->getOne("SELECT MAX(`is_receive`) FROM " . $GLOBALS['ecs']->table('city_material') . " WHERE ad_id = $ad_id ");
+	$is_receive_time = $GLOBALS['db']->getOne("SELECT MAX(`is_receive`) FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_material') . " WHERE ad_id = $ad_id ");
 	
 	$city_ad_array = array();
 	$city_ad_array['is_receive'] = $is_receive_time + 1;//已经修改过
 	$city_ad_array['ad_id'] = $ad_id;//已经修改过
-	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_material'), $city_ad_array, 'INSERT');
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_material'), $city_ad_array, 'INSERT');
 	
 	show_message("成功第".$city_ad_array['is_receive']."次收到 时间:".date("Y-m-d H:i:s"),"关闭该页","javascript:self.close()");       
 	
@@ -408,13 +408,13 @@ elseif($_REQUEST['act'] == 'update_base_info_audit')
 	$audit_info['user_rank'] = $_SESSION['user_rank'];
 	$audit_info['feedback_audit'] = $project_id;
 	$audit_info['audit_note'] = $confirm > 0 ? "审核通过": trim($_POST['audit_note']);
-	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad_audit'), $audit_info, 'INSERT');
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit'), $audit_info, 'INSERT');
 	
 	$return_url = "city_base_info.php?act=ad_list&project_id=$project_id&has_new=$ad_info[is_new]";
 	
 	if($confirm == 1){
 		$city_content['base_info_modify'] = 0;	
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $city_content, 'update', "ad_id='$ad_id'");
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad'), $city_content, 'update', "ad_id='$ad_id'");
 		
 		show_message("审核通过,其他人会看到。", $_LANG['back_home_lnk'], $return_url, 'info', true);
 		
@@ -425,7 +425,7 @@ elseif($_REQUEST['act'] == 'update_base_info_audit')
 			$city_content['base_info_modify'] = 1;	
 		}
 		//打开修改权限
-		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('city_ad'), $city_content, 'update', "ad_id='$ad_id'");
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad'), $city_content, 'update', "ad_id='$ad_id'");
 		
 		show_message("审核信息已经提交。", $_LANG['back_home_lnk'], $return_url, 'info', true);
 		//$smarty->display('city_view.dwt');
@@ -454,7 +454,7 @@ elseif($_REQUEST['act'] == 'city_ad_audit')
 	$smarty->assign('end_time',   $end_time);
 	
 	
-	$sql = "SELECT COUNT( * ) AS  amount,col_1 FROM ".$GLOBALS['ecs']->table('city')." GROUP BY col_1  ORDER BY  CONVERT( col_1 USING GBK )   ASC ";
+	$sql = "SELECT COUNT( * ) AS  amount,col_1 FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city')." GROUP BY col_1  ORDER BY  CONVERT( col_1 USING GBK )   ASC ";
 	$base = $GLOBALS['db']->getAll($sql);
 	//echo $sql."<br>";
 	foreach($base AS $key => $value){
@@ -502,16 +502,16 @@ function get_project_passed($project_id,$start_time,$end_time,$children){
 		$sql_plus = "";
 	}
 	$res = array();
-	$sql_passed = "SELECT au.ad_id  FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
-	 		" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
-	 		" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ". 
+	$sql_passed = "SELECT au.ad_id  FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit'). " AS au " .
+	 		" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
+	 		" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_resource') . " AS a ON a.city_id = ad.city_id ". 
 			" WHERE $children AND au.feedback_audit = $project_id AND au.user_rank = 2 AND au.audit_note LIKE  '审核通过' ".
 			$sql_plus .
 			" GROUP BY au.ad_id ";
 	//
-	$sql_refused = "SELECT au.ad_id  FROM ".$GLOBALS['ecs']->table('city_ad_audit'). " AS au " .
-		 		" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
-		 		" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS a ON a.city_id = ad.city_id ".
+	$sql_refused = "SELECT au.ad_id  FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit'). " AS au " .
+		 		" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " AS ad ON ad.ad_id = au.ad_id ". 
+		 		" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_resource') . " AS a ON a.city_id = ad.city_id ".
 				" WHERE $children AND au.feedback_audit = $project_id AND au.user_rank = 2 AND au.audit_note NOT LIKE  '审核通过' ".
 				$sql_plus .
 			" GROUP BY au.ad_id ";

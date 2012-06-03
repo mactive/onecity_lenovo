@@ -10,11 +10,11 @@
 
 <?php if ($this->_var['ad_info']['is_audit_confirm'] == 1 && $this->_var['ad_info']['audit_status'] == 5): ?>
 	<form method="post" action="city_project.php" name="theForm" enctype="multipart/form-data" onsubmit="return validate()">
-	<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_61552500_1335537839');if (count($_from)):
-    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_61552500_1335537839']):
+	<?php $_from = $this->_var['city_title']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('k', 'item_0_40114300_1338640113');if (count($_from)):
+    foreach ($_from AS $this->_var['k'] => $this->_var['item_0_40114300_1338640113']):
 ?>
 	<div class="city_info radius_5px">
-		<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_61552500_1335537839']; ?></div>
+		<div class="f_left left_title left_radius_5px"><?php echo $this->_var['item_0_40114300_1338640113']; ?></div>
 		<div class="f_left right_content">		
 			<span class="f_right"><a target="_blank"  class="grey666" href="city_operate.php?act=view_log&ad_id=<?php echo $this->_var['ad_detail']['ad_id']; ?>&col_name=<?php echo $this->_var['k']; ?>">
 				修改记录</a></span>	

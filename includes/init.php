@@ -170,6 +170,18 @@ if (!defined('INIT_NO_SMARTY'))
     $smarty->assign('lang', $_LANG);//语言项
 	$smarty->assign('img_path',   'themes/default/images/');     // 图片路径
 
+    // INIT SETTING
+    global $year;
+    if ($_SESSION['year']) {
+        $year = $_SESSION['year'];
+    }else{
+        $year = !empty($_REQUEST['year']) ? intval($_REQUEST['year']) : 2012;
+        $_SESSION['year'] = $year;
+    }
+
+    $smarty->assign('year', $year);//语言项
+    $smarty->assign('PHP_URL', urlencode($_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']));
+
 	/* 全局变量 */
 	
 

@@ -94,7 +94,7 @@
 								<option value='0'><?php echo $this->_var['lang']['select_please']; ?></option>
 					      		<option value='1' <?php if ($this->_var['filter']['has_new'] == 1): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_xz']; ?></option>					    
 								<option value='2' <?php if ($this->_var['filter']['has_new'] == 2): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_all']; ?></option>
-					      		<option value='3' <?php if ($this->_var['filter']['has_new'] == 3): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_no_xz']; ?></option>					    
+					      		<!-- <option value='3' <?php if ($this->_var['filter']['has_new'] == 3): ?>selected="selected"<?php endif; ?>><?php echo $this->_var['lang']['is_no_xz']; ?></option>					     -->
 							</select>
 							</span>
 						</td>
@@ -275,6 +275,7 @@ if ($this->_foreach['index_idea']['total'] > 0):
 			      listTable.filter['resource'] = document.getElementById("resource").value;
 			      listTable.filter['audit_status'] = document.getElementById("audit_status").value;
 			      listTable.filter['has_new'] = document.getElementById("has_new").value;
+			      listTable.filter['year'] = <?php echo $this->_var['year']; ?>;
 			      listTable.filter['page'] = 1;
 			      listTable.loadList();
 			  }

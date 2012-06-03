@@ -209,7 +209,7 @@ elseif ($_REQUEST['act'] == 'add' || $_REQUEST['act'] == 'edit')
     {
         if ($favourable['act_range'] == FAR_CATEGORY)
         {
-            $sql = "SELECT cat_id AS id, cat_name AS name FROM " . $ecs->table('category') .
+            $sql = "SELECT cat_id AS id, cat_name AS name FROM " . $ecs->table($GLOBALS['year']."_".'category') .
                 " WHERE cat_id " . db_create_in($favourable['act_range_ext']);
         }
         elseif ($favourable['act_range'] == FAR_BRAND)
@@ -382,7 +382,7 @@ elseif ($_REQUEST['act'] == 'search')
     }
     elseif ($filter->act_range == FAR_CATEGORY)
     {
-        $sql = "SELECT cat_id AS id, cat_name AS name FROM " . $ecs->table('category') .
+        $sql = "SELECT cat_id AS id, cat_name AS name FROM " . $ecs->table($GLOBALS['year']."_".'category') .
             " WHERE cat_name LIKE '%" . mysql_like_quote($filter->keyword) . "%' LIMIT 50";
         $arr = $db->getAll($sql);
     }

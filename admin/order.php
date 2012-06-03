@@ -2595,7 +2595,7 @@ elseif ($_REQUEST['act'] == 'json')
                 "promote_start_date, promote_end_date, goods_brief, goods_type, is_promote " .
                 "FROM " . $ecs->table('goods') . " AS g " .
                 "LEFT JOIN " . $ecs->table('brand') . " AS b ON g.brand_id = b.brand_id " .
-                "LEFT JOIN " . $ecs->table('category') . " AS c ON g.cat_id = c.cat_id " .
+                "LEFT JOIN " . $ecs->table($GLOBALS['year']."_".'category') . " AS c ON g.cat_id = c.cat_id " .
                 " WHERE goods_id = '$goods_id'";
         $goods = $db->getRow($sql);
         $today = gmtime();

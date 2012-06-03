@@ -29,7 +29,7 @@ $rss->addDCdata('', 'http://www.ecshop.com', date('r'));
 $in_cat = $cat > 0 ? ' AND ' . get_children($cat) : '';
 
 $sql = 'SELECT c.cat_name, g.goods_id, g.goods_name, g.goods_brief, g.last_update ' .
-        'FROM ' . $ecs->table('category') . ' AS c, ' . $ecs->table('goods') . ' AS g ' .
+        'FROM ' . $ecs->table($GLOBALS['year']."_".'category') . ' AS c, ' . $ecs->table('goods') . ' AS g ' .
         'WHERE c.cat_id = g.cat_id AND g.is_delete = 0 AND g.is_alone_sale = 1 ' . $brd . $cat .
         'ORDER BY g.goods_id DESC LIMIT 20';
 $res = $db->query($sql);

@@ -18,7 +18,7 @@ if($_REQUEST['act'] == 'fankui_pic')
 {
 	$project_id =  !empty($_REQUEST['project_id']) ? intval($_REQUEST['project_id']) : 1;
 	
-	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table('city_gallery')." WHERE feedback  = $project_id GROUP BY ad_id LIMIT 0,50";
+	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery')." WHERE feedback  = $project_id GROUP BY ad_id LIMIT 0,50";
 	echo $sql."<br>";
 	
 	$res = $GLOBALS['db']->getCol($sql);
@@ -26,7 +26,7 @@ if($_REQUEST['act'] == 'fankui_pic')
 	
 
 	foreach($res AS $val){
-		$sql = "SELECT * FROM ".$GLOBALS['ecs']->table('city_gallery')." WHERE feedback  = $project_id AND ad_id = $val ORDER BY img_id DESC";
+		$sql = "SELECT * FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery')." WHERE feedback  = $project_id AND ad_id = $val ORDER BY img_id DESC";
 		echo $sql."<br>";
 		$row = $GLOBALS['db']->getAll($sql);
 		
@@ -84,10 +84,10 @@ elseif($_REQUEST['act'] == 'transform')
 	//	所有都是包含画面的
 	//	8月中旬要数据
 	
-	$sql = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table('city_gallery'). " AS g " .
-		" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad_audit') . " AS au ON au.ad_id = g.ad_id ". 
-		" LEFT JOIN " .$GLOBALS['ecs']->table('city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
-		" LEFT JOIN " .$GLOBALS['ecs']->table('city_resource') . " AS re ON re.city_id = ad.city_id ". 
+	$sql = "SELECT g.ad_id FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery'). " AS g " .
+		" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit') . " AS au ON au.ad_id = g.ad_id ". 
+		" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " AS ad ON ad.ad_id = g.ad_id ". 
+		" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_resource') . " AS re ON re.city_id = ad.city_id ". 
 			" WHERE g.feedback  = $project_id "." AND re.$quarter = 6 ".
 			" AND au.audit_note LIKE '审核通过' AND au.feedback_audit = $project_id  GROUP BY g.ad_id "; //LIMIT 0,50
 	
@@ -172,7 +172,7 @@ function get_market_level_by_ad_id($ad_id)
 
 
 function get_cat_name($cat_id){
-	$sql = "SELECT cat_name FROM " . $GLOBALS['ecs']->table('category') . 
+	$sql = "SELECT cat_name FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . 
             " WHERE cat_id = $cat_id ";
 	$res =  $GLOBALS['db']->getOne($sql); 
 	return $res;
@@ -180,7 +180,7 @@ function get_cat_name($cat_id){
 
 
 function get_pic_list($ad_id,$city_name,$project_id){
-	$sql = "SELECT img_id,img_url  FROM " . $GLOBALS['ecs']->table('city_gallery') .
+	$sql = "SELECT img_id,img_url  FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery') .
             " WHERE ad_id = $ad_id AND feedback  = $project_id limit 4 ";
 	$res =  $GLOBALS['db']->getAll($sql);
 	foreach($res AS $key => $row){

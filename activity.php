@@ -68,7 +68,7 @@ while ($row = $db->fetchRow($res))
         {
             $row['act_range'] = $_LANG['far_category'];
             $row['program'] = 'category.php?id=';
-            $sql = "SELECT cat_id AS id, cat_name AS name FROM " . $ecs->table('category') .
+            $sql = "SELECT cat_id AS id, cat_name AS name FROM " . $ecs->table($GLOBALS['year']."_".'category') .
                 " WHERE cat_id " . db_create_in($row['act_range_ext']);
         }
         elseif ($row['act_range'] == FAR_BRAND)

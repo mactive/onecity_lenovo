@@ -57,7 +57,7 @@ for ($y=0;$y<count($all_sheets);$y++)
 		echo $city_id ? $city_id ."-"."<br> ": $city ."-"."<br>";
 		
 		if($city_id){
-			$sql = "INSERT INTO " . $GLOBALS['ecs']->table('category') .
+			$sql = "INSERT INTO " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') .
 					" (`cat_id`,`cat_name`,`parent_id`,`level`,`market_level`,`mature_emerging`,`mulching` ) ".
 					"VALUES (NULL, '$county', '$city_id','$level','$market_level','$mature_emerging','$mulching')";
 			echo $sql."<br>";
@@ -100,7 +100,7 @@ function act_county_array($array)
 		$tt = explode("-",$val);
 		$region_id = get_cat_id($tt[0]);
 		if($region_id){
-			$sql = "INSERT INTO " . $GLOBALS['ecs']->table('category') .
+			$sql = "INSERT INTO " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') .
 					" (`cat_id`,`cat_name`,`parent_id`,`level`,`market_level`,`mature_emerging`,`mulching` ) ".
 					"VALUES (NULL, '$tt[1]', '$region_id','$tt[2]','$tt[3]','$tt[4]','$tt[5]')";
 			echo $sql."<br>";
@@ -118,7 +118,7 @@ function act_city_array($array)
 		$tt = explode("-",$val);
 		$region_id = get_cat_id($tt[0]);
 		if($region_id){
-			$sql = "INSERT INTO " . $GLOBALS['ecs']->table('category') .
+			$sql = "INSERT INTO " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') .
 					" (`cat_id`,`cat_name`,`parent_id` ) VALUES (NULL, '$tt[1]', '$region_id')";
 			echo $sql."<br>";
 		    //$GLOBALS['db']->query($sql);
@@ -135,7 +135,7 @@ function act_province_array($province_array)
 		$tt = explode("-",$val);
 		$region_id = get_cat_id($tt[0]);
 		
-		$sql = "INSERT INTO " . $GLOBALS['ecs']->table('category') .
+		$sql = "INSERT INTO " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'category') .
 				" (`cat_id`,`cat_name`,`parent_id` ) VALUES (NULL, '$tt[1]', '$region_id')";
 		echo $sql."<br>";
 	    //$GLOBALS['db']->query($sql);
@@ -143,7 +143,7 @@ function act_province_array($province_array)
 }
 
 function get_cat_id($cat_name){
-	$sql = 'SELECT cat_id FROM ' .$GLOBALS['ecs']->table('category').
+	$sql = 'SELECT cat_id FROM ' .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category').
            " WHERE cat_name = '$cat_name' ";
 	
     return $GLOBALS['db']->getOne($sql);

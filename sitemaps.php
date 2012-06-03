@@ -57,7 +57,7 @@ else
     );
     $sitemap->item($item);
     /* 商品分类 */
-    $sql = "SELECT cat_id FROM " .$ecs->table('category'). " ORDER BY parent_id";
+    $sql = "SELECT cat_id FROM " .$ecs->table($GLOBALS['year']."_".'category'). " ORDER BY parent_id";
     $res = $db->query($sql);
 
     while ($row = $db->fetchRow($res))

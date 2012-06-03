@@ -66,7 +66,6 @@
 
 	<div id="container">
 		<div id="page-left" style="width:168px;">
-			
 			<!-- #BeginLibraryItem "/library/mycity.lbi" -->
 			>
 			<!-- #EndLibraryItem -->
@@ -197,6 +196,7 @@
 			      listTable.filter['county_name'] = document.getElementById("county_name").value;
 			      listTable.filter['market_level'] = document.getElementById("market_level").value;
 			      listTable.filter['has_new'] = document.getElementById("has_new").value;
+			      listTable.filter['year'] = {$year};
 			      listTable.filter['page'] = 1;
 			      listTable.loadList();
 			  }

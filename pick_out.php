@@ -201,7 +201,7 @@ foreach ($brand_list as $key=>$val)
 /* 获取分类 */
 $sql = "SELECT c.cat_id, c.cat_name, COUNT(g.goods_id) AS goods_num ".
        " FROM " . $ecs->table('goods') . " AS g ".
-       " LEFT JOIN " . $ecs->table('category') . " AS c ON c.cat_id = g.cat_id ".
+       " LEFT JOIN " . $ecs->table($GLOBALS['year']."_".'category') . " AS c ON c.cat_id = g.cat_id ".
        " WHERE g.is_on_sale = 1 AND g.is_alone_sale = 1 AND g.is_delete = 0  " . $in_goods .
        " GROUP BY g.cat_id ";
 

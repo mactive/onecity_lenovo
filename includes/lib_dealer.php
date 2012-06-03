@@ -55,13 +55,13 @@ function get_dealer_list($limit = 0){
     if ($filter['region_name'])
     {
         $count_sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('city_dealer') . " AS a ".
-		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS cat ON cat.cat_id = a.region_id ". 
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS cat ON cat.cat_id = a.region_id ". 
                 $where;
     }
     else
     {
         $count_sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('city_dealer') ." AS a " . 
-		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS cat ON cat.cat_id = a.region_id ". 
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS cat ON cat.cat_id = a.region_id ". 
 				$where;
 		
     }
@@ -74,7 +74,7 @@ function get_dealer_list($limit = 0){
 	
 	$sql = "SELECT a.*,cat.cat_name AS region_name ". //
 			" FROM ".$GLOBALS['ecs']->table('city_dealer') . " AS a ".
-		 	" LEFT JOIN " .$GLOBALS['ecs']->table('category') . " AS cat ON cat.cat_id = a.region_id ". 
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS cat ON cat.cat_id = a.region_id ". 
 			"$where ORDER BY a.dealer_id ASC ".
 			$limit_sql;
 	//echo $sql;	 GROUP BY ad.ad_id
@@ -167,14 +167,14 @@ function get_dealer_id($sn,$name,$is_qudit = 0){
 
 
 function get_region_id($cat_name){
-	$sql = 'SELECT cat_id FROM ' .$GLOBALS['ecs']->table('category').
+	$sql = 'SELECT cat_id FROM ' .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category').
            " WHERE cat_name LIKE '%$cat_name%' AND  parent_id = 1 ";
 	
     return $GLOBALS['db']->getOne($sql);
 }
 
 function get_region_name($cat_id){
-	$sql = 'SELECT cat_name FROM ' .$GLOBALS['ecs']->table('category').
+	$sql = 'SELECT cat_name FROM ' .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category').
            " WHERE cat_id  = $cat_id ";
 	
     return $GLOBALS['db']->getOne($sql);

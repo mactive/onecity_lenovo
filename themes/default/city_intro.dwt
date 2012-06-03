@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="{$keywords}" />
+<meta name="Description" content="{$description}" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>{$page_title}</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" href="animated_favicon.gif" type="image/gif" />
+<link href="css.css" rel="stylesheet" type="text/css" />
+<link href="themes/default/css/grade.css" rel="stylesheet" type="text/css" />
+<link href="themes/default/css/overlay-apple.css" rel="stylesheet" type="text/css" />
+
+{* 包含脚本文件 *}
+{insert_scripts files='transport.js,utils.js,jquery-1.2.6.js'}
+<script src="admin/js/listtable.js" type="text/javascript"></script>
+<script src="admin/js/common.js" type="text/javascript"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		if({$year}){
+			$('div.pad_l_20px a').addClass("disabled");
+			if({$year} == 2011){
+				$('div#F2011 a').removeClass("disabled");
+			}
+			if({$year} == 2012){
+				$('div#F2012 a').removeClass("disabled");
+			}
+		}
+
+	});
+
+</script>
+
+</head>
+
+<body>
+<div id="lite_globalWrapper">
+<div id="wrapper">
+	<!-- #BeginLibraryItem "/library/page_header.lbi" -->
+	>
+	<!-- #EndLibraryItem -->
+
+
+	<div id="container">
+		<div id="page-left" style="width:168px;">
+			
+			<!-- #BeginLibraryItem "/library/mycity.lbi" -->
+			>
+			<!-- #EndLibraryItem -->
+		</div>
+
+		<div id="page-middle">
+			<div class="yellow_notice">请先点击上面的"切换财年"按钮 然后选择下面对应财年的操作</div>
+
+			<div class="height_20px">
+			</div>
+	      
+			<h1>FY2012 {if $year == 2012}财年按钮可用{/if}</h1>
+			<div  id="F2012" class="pad_l_20px">
+			<a class="btn error" href="city_renew.php">FY12续签修改</a><br><br>
+			<a class="btn success" href="city_operate.php">查看城市</a><br><br>
+
+			<a class="btn success" href="city_operate.php">换画管理</a>
+			<a class="btn" href="city_project.php?act=list_city_to_select&project_id=1">2012Q1</a>
+			<br><br>
+
+			<a class="btn success" href="city_base_info.php?act=ad_list&project_id=9">基础信息修改</a>
+			</div>
+			<div class="height_20px"></div>
+			<div class="height_20px"></div>
+			<h1>FY2011  {if $year == 2011}财年  按钮可用{/if}</h1> 
+			<div id="F2011" class="pad_l_20px">
+			<a class="btn success" href="city_operate.php">查看城市</a><br><br>
+
+			<a class="btn success" href="city_operate.php">换画管理</a>
+			<a class="btn" href="city_project.php?act=list_city_to_select&project_id=1">2011Q1</a>
+			<a class="btn" href="city_project.php?act=list_city_to_select&project_id=2">2011Q2</a>
+			<br><br>
+
+			<a class="btn success" href="city_base_info.php?act=ad_list&project_id=9">基础信息修改</a>
+			</div>
+
+		</div>			
+		<!-- End #page-middle -->
+		
+		<div class="clear"></div>
+		
+		<!-- #BeginLibraryItem "/library/page_footer.lbi" -->
+		>
+		<!-- #EndLibraryItem -->
+	</div>
+
+</div>
+<!-- End #Wrapper -->
+</div><!-- End #globalWrapper -->
+</body>
+</html>
