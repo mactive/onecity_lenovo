@@ -59,11 +59,14 @@
 </div>
 <div>
   <ul class="mycity_ul">
-    <li><a href="city_intro.php" style="background:url(<?php echo $this->_var['img_path']; ?>ico/flagged.png) no-repeat 10px center;">欢迎页面</a></li>
   <li><a href="city_operate.php?act=export_page" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">导出报表</a></li>
 	<?php if ($this->_var['sm_session']['user_rank'] == 2): ?>
 	<li><a href="city_dealer.php" style="background:url(<?php echo $this->_var['img_path']; ?>green_arrow.png) no-repeat 10px center;">渠道管理</a></li>
 	<?php endif; ?>
+  <li><a href="download/FY12_model.rar" style="background:url(<?php echo $this->_var['img_path']; ?>ico/project.png) no-repeat 10px center;">模版下载</a></li>
+  <?php if ($this->_var['sm_session']['user_rank'] >= 4 || $this->_var['sm_session']['user_rank'] == 2): ?>
+  <li><a href="city_delete.php" style="background:url(<?php echo $this->_var['img_path']; ?>ico/project.png) no-repeat 10px center;">查看删除城市</a></li>
+  <?php endif; ?>
 	<li><a href="user.php?act=profile" style="background:url(<?php echo $this->_var['img_path']; ?>ico/delegate.png) no-repeat 10px center;">个人密码资料</a></li>
     <li><a href="user.php?act=logout" style="background:url(<?php echo $this->_var['img_path']; ?>ico/delegated.png) no-repeat 10px center;">退出</a></li>
   </ul>

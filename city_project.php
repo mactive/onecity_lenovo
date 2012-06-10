@@ -281,7 +281,7 @@ elseif ($_REQUEST['act'] == 'list_city_to_select' )
 	$children = get_city_children($user_region);
 	$smarty->assign('full_page',    1);	
 	
-    $city_list = get_project_city($children);
+    $city_list = get_project_city($children,$year);
 	$smarty->assign('city_list',    $city_list['citys']);	
     $smarty->assign('filter',       $city_list['filter']);
 	$smarty->assign('record_count', $city_list['record_count']);
@@ -384,6 +384,35 @@ elseif ($_REQUEST['act'] == 'update_ad_info')
 	
 	$smarty->display('project_view.dwt');	
 }
+elseif ($_REQUEST['act'] == 'reupload')
+{
+	if($_SESSION['user_rank'] < 4 && $_SESSION['user_rank'] != 2){
+		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
+	}
+	$ad_id = isset($_REQUEST['ad_id']) && intval($_REQUEST['ad_id']) > 0 ? intval($_REQUEST['ad_id']) : 0;
+	$project_id = isset($_REQUEST['project_id']) && intval($_REQUEST['project_id']) > 0 ? intval($_REQUEST['project_id']) : 0;
+	$url = !empty($_REQUEST['url']) ? trim($_REQUEST['url']) : 'city_operate.php';
+	$can_modify_q = "can_modify_q".$project_id;
+	if($ad_id){
+
+		$log = array();
+		$log['ad_id'] 		= $ad_id;
+		$log['user_id'] 	= $_SESSION['user_id'];
+		$log['user_rank']	= 2;
+		$log['audit_note'] 	= "删画重传";
+		$log['feedback_audit'] 	= $project_id;
+		//print_r($log);
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit'), $log, 'INSERT');
+
+	    $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery') . "WHERE ad_id =  $ad_id AND feedback = $project_id ");
+
+	    show_message("画面删除成功,状态恢复,分区可以重新上传画面", $_LANG['profile_lnk'], $url, 'info', true);
+
+	}
+
+}
+
+
 /* 更新城市的合同资料 
 elseif ($_REQUEST['act'] == 'edit_update_ad_info')
 {

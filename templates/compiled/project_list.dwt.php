@@ -116,11 +116,11 @@
 					  	<th><?php echo $this->_var['lang']['resource_title']; ?><br>点击查看</th>
 					  	<th><?php echo $this->_var['lang']['region']; ?></th>
 				      	<th width="50"><?php echo $this->_var['lang']['province']; ?></th>
-				      	<th><?php echo $this->_var['lang']['county']; ?></th>
+				      	<th width="100"><?php echo $this->_var['lang']['county']; ?></th>
 				      	<th><?php echo $this->_var['lang']['market_level']; ?></th>
 					  	<th>上报费用</th>
 					  	<th>填写</th>
-					  	<th>上传效果</th>
+					  	<th width="60">上传效果</th>
 					  	<th><?php echo $this->_var['lang']['audit_2']; ?>审核</th>
 						<th>操作</th>
 						<?php if ($this->_var['sm_session']['user_rank'] >= 2): ?>
@@ -219,6 +219,7 @@ if ($this->_foreach['index_idea']['total'] > 0):
 										<a href="city_project.php?act=update_ad_info&project_id=<?php echo $this->_var['project_id']; ?>&ad_id=<?php echo $this->_var['city']['ad_id']; ?>">查看并填写<br>报销审核</a>
 										<?php else: ?>
 										<a href="city_project.php?act=update_ad_info&project_id=<?php echo $this->_var['project_id']; ?>&ad_id=<?php echo $this->_var['city']['ad_id']; ?>">查看基础信息</a>
+										<br><a href="city_project.php?act=reupload&project_id=<?php echo $this->_var['project_id']; ?>&ad_id=<?php echo $this->_var['city']['ad_id']; ?>&url=<?php echo $this->_var['PHP_URL']; ?>" class="btn small">删画重传</a>
 										<?php endif; ?>					
 									<?php endif; ?>
 								<?php endif; ?>

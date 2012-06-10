@@ -132,6 +132,39 @@ elseif($_REQUEST['act'] == 'refreshv_lv_4_request'){
 *	当插入新的4级城市的时候才响应
 *	插入4级城市的resource数据 
 */
+elseif($_REQUEST['act'] == 'transport_delete'){
+	if($_SESSION['user_rank'] < 4){
+		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
+	}
+	$sql_1 = "SELECT d.* ".
+			" FROM ".$GLOBALS['ecs']->table("2011_".'city_delete') . " AS d ".
+			" WHERE d.ad_id > 0 ";
+	$res = $GLOBALS['db']->getAll($sql_1);
+
+	echo count($res)."<br>";
+	foreach($res AS $val){
+
+		$data = $val;
+		$data['ad_id'] = $val['ad_id'] + 50000;
+		$data['record_id'] = $data['ad_id'];
+		$data['city_id'] = $val['city_id'];
+		$data['city_name'] = $val['col_3'];
+		$data['checked_time'] = strtotime($val['delete_time']);
+		$data['is_delete'] = 1;
+		echo $data['ad_id']."   ".$data['checked_time']."<br>";
+
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table("2011_".'city_ad'), $data, 'INSERT');
+		$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table("2011_".'city'), $data, 'INSERT');
+		$GLOBALS['db']->query("DELETE FROM" . $GLOBALS['ecs']->table("2011_".'city_delete') . " WHERE ad_id = $val[ad_id]");	
+
+	}
+	
+}
+
+/* 
+*	当插入新的4级城市的时候才响应
+*	插入4级城市的resource数据 
+*/
 elseif($_REQUEST['act'] == 'refresh_lv_4_resource'){
 	if($_SESSION['user_rank'] < 4){
 		show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
@@ -149,6 +182,7 @@ elseif($_REQUEST['act'] == 'refresh_lv_4_resource'){
 	}
 	
 }
+
 
 /**
  *	如果待审核条数 有错误的时候
@@ -1304,6 +1338,27 @@ elseif($_REQUEST['act'] == 'update_q3_ad'){
 		}
 		$GLOBALS['db']->query($sql);
 	}
+}
+
+elseif($_REQUEST['act'] == "batch_delete_unpassed")
+{
+	// if($_SESSION['user_id'] != 1){
+	// 	show_message("权限不够", $_LANG['profile_lnk'], 'city_operate.php', 'info', true);        
+	// }
+	
+	$sql = "SELECT ad_id FROM ".$GLOBALS['ecs']->table("2011_".'city_ad'). " WHERE audit_status < 5 OR is_audit_confirm = 0  ";
+	$tt = $GLOBALS['db']->getAll($sql);//审核完成的广告牌子
+	foreach($tt AS $v){
+		// $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table("2012_".'city') . "WHERE ad_id =  $v[ad_id] ");
+		// $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table("2012_".'city_ad') . "WHERE ad_id =  $v[ad_id] ");
+		// $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table("2012_".'city_ad_audit') . "WHERE ad_id =  $v[ad_id] ");
+		// $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table("2012_".'city_ad_log') . "WHERE ad_id =  $v[ad_id] ");
+		// $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table("2012_".'city_material') . "WHERE ad_id =  $v[ad_id] ");	
+		// $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table("2012_".'city_gallery') . "WHERE ad_id =  $v[ad_id] ");
+	
+	}
+	echo "一共成功删除".count($tt)."座城市的原始照片";
+	    	
 }
 
 /**

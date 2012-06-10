@@ -104,7 +104,7 @@ if (!$smarty->is_cached('city_operate.dwt', $cache_id) && $_REQUEST['act'] == 's
     $smarty->assign('page_title',           $position['title']);     // 页面标题
     $smarty->assign('ur_here',              $position['ur_here']);   // 当前位置
 
-	$city_list = get_city_list($children);
+	$city_list = get_city_list($children,$year);
 	$smarty->assign('city_list',    $city_list['citys']);	
     $smarty->assign('filter',       $city_list['filter']);
 	$smarty->assign('record_count', $city_list['record_count']);
@@ -574,14 +574,18 @@ elseif($_REQUEST['act'] == 'delete_ad')
 	$ad_info = get_ad_info($ad_id);
 	$city_id = get_city_id($ad_id);
 	//echo "ad_id".$ad_id;
-	
-	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_delete'), $ad_detail, 'INSERT');
-	
-	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city') . "WHERE ad_id =  $ad_id ");
-	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . "WHERE ad_id =  $ad_id ");
-	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit') . "WHERE ad_id =  $ad_id ");
-	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_material') . "WHERE ad_id =  $ad_id ");	
-	$GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery') . "WHERE ad_id =  $ad_id ");
+
+	$data['is_delete'] = 1;
+	$data['checked_time'] = gmtime();
+	$GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad'), $data, 'UPDATE', "ad_id = '$ad_id'");
+
+
+	// $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table($GLOBALS['year']."_".'city_delete'), $ad_detail, 'INSERT');
+	// $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city') . "WHERE ad_id =  $ad_id ");
+	// $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . "WHERE ad_id =  $ad_id ");
+	// $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad_audit') . "WHERE ad_id =  $ad_id ");
+	// $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_material') . "WHERE ad_id =  $ad_id ");	
+	// $GLOBALS['db']->query("DELETE FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery') . "WHERE ad_id =  $ad_id ");
 	
 	act_city_request_delete($city_id,$ad_info['audit_status'],1);
 	

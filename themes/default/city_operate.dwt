@@ -108,7 +108,7 @@
 			{/if}
 				<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
 				    <tr>
-					  	<th width="35">{$lang.is_xz}</th>
+					  	<th width="35">{$lang.curr_stauts}</th>
 					  	<th>{$lang.region}</th>
 				      	<th>{$lang.province}</th>
 				      	<th>{$lang.county}</th>
@@ -127,7 +127,9 @@
 					<tr {if $city.is_upload}
 								class="city_upload"
 						{/if}>
-						<td>{if $city.has_new}<span class="red-block">新增</span>{/if}</td>
+						<td>{if $city.has_new}<span class="red-block">新增</span>{/if}
+							{if $city.renew_upload}<span class="red-block">续签</span>{/if}
+						</td>
 						<td>{$city.region}</td>
 						<td>{$city.province}</td>
 						<td>{$city.county}</td>

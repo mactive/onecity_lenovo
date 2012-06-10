@@ -175,7 +175,7 @@ if (!defined('INIT_NO_SMARTY'))
     if ($_SESSION['year']) {
         $year = $_SESSION['year'];
     }else{
-        $year = !empty($_REQUEST['year']) ? intval($_REQUEST['year']) : 2012;
+        $year = !empty($_REQUEST['year']) ? intval($_REQUEST['year']) : DEFAULT_YEAR;
         $_SESSION['year'] = $year;
     }
 

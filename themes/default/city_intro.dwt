@@ -59,7 +59,7 @@
 			<div class="height_20px">
 			</div>
 	      
-			<h1>FY2012 {if $year == 2012}财年按钮可用{/if}</h1>
+			<h1>FY2012 {if $year == 2012}财年{/if}</h1>
 			<div  id="F2012" class="pad_l_20px">
 			<a class="btn error" href="city_renew.php">FY12续签修改</a><br><br>
 			<a class="btn success" href="city_operate.php">查看城市</a><br><br>
@@ -72,7 +72,7 @@
 			</div>
 			<div class="height_20px"></div>
 			<div class="height_20px"></div>
-			<h1>FY2011  {if $year == 2011}财年  按钮可用{/if}</h1> 
+			<h1>FY2011  {if $year == 2011}财年{/if}</h1> 
 			<div id="F2011" class="pad_l_20px">
 			<a class="btn success" href="city_operate.php">查看城市</a><br><br>
 

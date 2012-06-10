@@ -114,7 +114,7 @@ if ($_REQUEST['act'] == 'ad_list')
 	$children = get_city_children($user_region);
 	$smarty->assign('full_page',    1);	
 	
-    $city_list = get_base_info_list($children);
+    $city_list = get_base_info_list($children,$year);
 	$smarty->assign('city_list',    $city_list['citys']);	
     $smarty->assign('filter',       $city_list['filter']);
 	$smarty->assign('record_count', $city_list['record_count']);

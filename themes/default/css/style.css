@@ -853,6 +853,7 @@ p.intro { font-weight: bold; }
 .green-color{color: #6AB30F;}
 .red-color{color: #FF1A00;}
 .red-block{background:#FF1A00;color:#fff;display:block;padding:2px 4px;height:16px;line-height:16px;}
+.red-block2{background:#FF1A00;color:#fff;padding:2px 4px;height:16px;line-height:16px;width:40px;display:inline;text-decoration: none;}
 .grey333{color:#333333;}
 .grey666{ color:#666666;}
 .grey999{ color:#999999;}
@@ -1303,7 +1304,7 @@ margin-top:10px;
   border-radius: 6px;
 }
 .btn.small {
-  padding: 7px 9px 7px;
+  padding: 4px 5px 5px;
   font-size: 11px;
 }
 .btn.huge {

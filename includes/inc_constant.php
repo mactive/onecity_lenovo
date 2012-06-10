@@ -27,7 +27,7 @@ define('MIDHKAB',       3); //MIDH-KAB-SMB-IDEA
 define('BRAND',       5); //MIDH-KAB-SMB-IDEA
 define('MICROSOFT',       6); //MIDH-KAB-SMB-IDEA
 define('NEWCITYAFTERID',		2779);
-define('DEFAULT_YEAR',		2012);
+define('DEFAULT_YEAR',		2011);
 
 
 

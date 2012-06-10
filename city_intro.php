@@ -51,15 +51,15 @@ $page = !empty($_REQUEST['page']) ? intval($_REQUEST['page']) : 1;
 if($_REQUEST['act'] == 'switch_year')
 {
 
-	$tmp = !empty($_REQUEST['year']) ? intval($_REQUEST['year']) : 2012;
+	$tmp = !empty($_REQUEST['year']) ? intval($_REQUEST['year']) : DEFAULT_YEAR;
 	$url = !empty($_REQUEST['url']) ? trim($_REQUEST['url']) : 'city_operate.php';
 	$url = urldecode($url);
-	if($tmp == 2012){
+	if($tmp == 2011){
 		$_SESSION['year'] = 2011;
-		show_message("切换成功", "打开", $url, 'info', true);
+		show_message("成功切换至FY2011财年", "打开", $url, 'info', true);
 	}else{
 		$_SESSION['year'] = 2012;
-		show_message("切换成功",  "打开",$url, 'info', true);
+		show_message("成功切换至FY2012财年",  "打开",$url, 'info', true);
 	}
 }
 elseif($_REQUEST['act'] == 'intro_page'){

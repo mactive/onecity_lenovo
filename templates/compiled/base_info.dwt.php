@@ -298,6 +298,7 @@ if ($this->_foreach['receive']['total'] > 0):
 			      listTable.filter['project_id'] = 9;
 			      listTable.filter['audit_status'] = document.getElementById("audit_status").value;
 			      listTable.filter['has_new'] = document.getElementById("has_new").value;
+			      listTable.filter['year'] = <?php echo $this->_var['year']; ?>;
 			      listTable.filter['page'] = 1;
 			      listTable.loadList();
 			  }

@@ -105,7 +105,7 @@
 			<?php endif; ?>
 				<table width="100%" id="lesson-table" class="table_border table_standard" border="1">
 				    <tr>
-					  	<th width="35"><?php echo $this->_var['lang']['is_xz']; ?></th>
+					  	<th width="35"><?php echo $this->_var['lang']['curr_stauts']; ?></th>
 					  	<th><?php echo $this->_var['lang']['region']; ?></th>
 				      	<th><?php echo $this->_var['lang']['province']; ?></th>
 				      	<th><?php echo $this->_var['lang']['county']; ?></th>
@@ -128,7 +128,9 @@ if ($this->_foreach['index_idea']['total'] > 0):
 					<tr <?php if ($this->_var['city']['is_upload']): ?>
 								class="city_upload"
 						<?php endif; ?>>
-						<td><?php if ($this->_var['city']['has_new']): ?><span class="red-block">新增</span><?php endif; ?></td>
+						<td><?php if ($this->_var['city']['has_new']): ?><span class="red-block">新增</span><?php endif; ?>
+							<?php if ($this->_var['city']['renew_upload']): ?><span class="red-block">续签</span><?php endif; ?>
+						</td>
 						<td><?php echo $this->_var['city']['region']; ?></td>
 						<td><?php echo $this->_var['city']['province']; ?></td>
 						<td><?php echo $this->_var['city']['county']; ?></td>

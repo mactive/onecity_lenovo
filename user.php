@@ -296,7 +296,7 @@ elseif ($action == 'act_login')
         recalculate_price();
         //默认登录提示
         //show_message($_LANG['login_success'] . "$user->ucdata" , $_LANG['profile_lnk'], 'city_operate.php');
-		ecs_header('Location: city_intro.php'. "\n");
+		ecs_header('Location: city_operate.php'. "\n");
         exit;
         
     }

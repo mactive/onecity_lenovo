@@ -48,7 +48,7 @@ function get_user_permission($user_region)
 
 
 /**/
-function get_city_list($children,$limit = 0){
+function get_city_list($children,$_year = DEFAULT_YEAR,$limit = 0){
 
 	$filter['start_price'] = empty($_REQUEST['start_price']) ? 0 : $_REQUEST['start_price'];
     $filter['end_price'] = empty($_REQUEST['end_price']) ? 1000000 : $_REQUEST['end_price'];
@@ -58,7 +58,7 @@ function get_city_list($children,$limit = 0){
     $filter['market_level'] = empty($_REQUEST['market_level']) ? '' : trim($_REQUEST['market_level']);
     $filter['audit_status'] = empty($_REQUEST['audit_status']) ? 0 : $_REQUEST['audit_status'];
     $filter['has_new'] = empty($_REQUEST['has_new']) ? 0 : $_REQUEST['has_new'];
-    $filter['year'] = empty($_REQUEST['year']) ? DEFAULT_YEAR : $_REQUEST['year'];
+    $filter['year'] = empty($_REQUEST['year']) ? $_year : $_REQUEST['year'];
 	
 	$filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'inv_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
@@ -142,7 +142,7 @@ function get_city_list($children,$limit = 0){
 	$request_title = "re.lv_".$_SESSION['user_rank'];
 	$limit_sql = $limit > 0 ? " LIMIT 0,$limit ": " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
 	
-	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, a.has_new, ". //
+	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, a.has_new,a.renew_upload ,  ". //
 			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
 			",$request_title AS city_request " . 
 			" FROM ".$GLOBALS['ecs']->table($filter['year']."_".'category') . " AS a ".
@@ -213,6 +213,100 @@ function get_ad_summary($ad_list)
 	return $res;
 }
 //一个城市的左右广告列表
+function get_delete_list($_year = DEFAULT_YEAR)
+{
+    $filter['county_name'] = empty($_REQUEST['county_name']) ? '' : trim($_REQUEST['county_name']);
+    $filter['city_name'] = empty($_REQUEST['city_name']) ? '' : trim($_REQUEST['city_name']);
+    $filter['region_name'] = empty($_REQUEST['region_name']) ? '' : trim($_REQUEST['region_name']);
+    $filter['market_level'] = empty($_REQUEST['market_level']) ? '' : trim($_REQUEST['market_level']);
+    $filter['audit_status'] = empty($_REQUEST['audit_status']) ? 0 : $_REQUEST['audit_status'];
+    $filter['year'] = empty($_REQUEST['year']) ? $_year : $_REQUEST['year'];
+	
+	$where = " WHERE a.sys_level = 5 AND ad.is_delete = 1  ";
+	
+    if ($filter['county_name'])
+    {
+        $where .= " AND a.cat_name LIKE '%" . mysql_like_quote($filter['county_name']) . "%'";
+    }
+	if ($filter['city_name'])
+    {
+        $where .= " AND a1.cat_name LIKE '%" . mysql_like_quote($filter['city_name']) . "%'";
+    }
+
+	if ($filter['market_level'])
+    {
+        $where .= " AND a.market_level LIKE '%" . mysql_like_quote($filter['market_level']) . "%'";
+    }
+    if ($filter['audit_status'])
+    {
+        $where .= " AND a.audit_status = $filter[audit_status] ";
+    }
+
+
+
+	/* 分页大小 */
+    $filter['page'] = empty($_REQUEST['page']) || (intval($_REQUEST['page']) <= 0) ? 1 : intval($_REQUEST['page']);
+
+
+	/**/
+    if (isset($_REQUEST['page_size']) && intval($_REQUEST['page_size']) > 0)
+    {
+        $filter['page_size'] = intval($_REQUEST['page_size']);
+    }
+    else
+    {
+        $filter['page_size'] = 50;
+    }
+	
+	
+	/* 记录总数 */
+    if ($filter['city_name'])
+    {
+        $count_sql = "SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table($filter['year']."_".'city_ad') . " AS ad ".
+        		" LEFT JOIN " .$GLOBALS['ecs']->table($filter['year']."_".'category') . " AS a ON a.cat_id = ad.city_id ".
+				" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'category') . " AS a1 ON a1.cat_id = a.parent_id "
+               . $where;
+    }
+    else
+    {
+        $count_sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table($filter['year']."_".'city_ad') ." AS ad " . 
+                	" LEFT JOIN " .$GLOBALS['ecs']->table($filter['year']."_".'category') . " AS a ON a.cat_id = ad.city_id ".
+
+				$where;
+		
+    }
+
+    $filter['record_count']   = $GLOBALS['db']->getOne($count_sql);
+    $filter['page_count']     = $filter['record_count'] > 0 ? ceil($filter['record_count'] / $filter['page_size']) : 1;
+	
+	$request_title = "re.lv_".$_SESSION['user_rank'];
+	$limit_sql = $limit > 0 ? " LIMIT 0,$limit ": " LIMIT " . ($filter['page'] - 1) * $filter['page_size'] . ",$filter[page_size]";
+	
+	$sql = "SELECT a.cat_name AS county, a.market_level, a.cat_id ,a.is_upload, a.audit_status, a.is_audit_confirm, a.has_new,a.renew_upload ,  ". //
+			"a1.cat_name AS city, a2.cat_name AS province, a3.cat_name AS region ".
+			" , ad.ad_id,ad.checked_time ".
+			" FROM ".$GLOBALS['ecs']->table($filter['year']."_".'city_ad') . " AS ad ".
+			" LEFT JOIN " .$GLOBALS['ecs']->table($filter['year']."_".'category') . " AS a ON a.cat_id = ad.city_id ".
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table($filter['year']."_".'category') . " AS a1 ON a1.cat_id = a.parent_id ". 
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table($filter['year']."_".'category') . " AS a2 ON a2.cat_id = a1.parent_id ". 
+		 	" LEFT JOIN " .$GLOBALS['ecs']->table($filter['year']."_".'category') . " AS a3 ON a3.cat_id = a2.parent_id ". 
+			
+			//" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city'). 		' AS c  ON c.city_id = a.cat_id '.
+			//" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad'). 	' AS ad ON ad.city_id = a.cat_id '.
+			"$where ORDER BY ad.checked_time DESC  ".
+			$limit_sql;
+	//echo $sql;	 GROUP BY ad.ad_id
+	
+	$res = $GLOBALS['db']->getAll($sql);
+	foreach($res AS $key => $val)
+	{
+		$res[$key]['checked_time'] = local_date('Y-m-d H:i:s ',$val['checked_time']);
+	}
+	$arr = array('citys' => $res, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count'],'sql' => $sql,'count_sql' => $count_sql, 'page_size' => $filter['page_size']);
+    return $arr;
+}
+
+//一个城市的左右广告列表
 function get_ad_list_by_cityid($city_id)
 {
 	$sql = "SELECT a.*,c.user_time,c.col_7,c.ad_sn,COUNT(g.img_id) AS photo_num ".
@@ -220,7 +314,7 @@ function get_ad_list_by_cityid($city_id)
 			" FROM ".$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_ad') . " AS a ".
 			" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city'). 		' AS c ON c.ad_id = a.ad_id '.
 			" LEFT JOIN " .$GLOBALS['ecs']->table($GLOBALS['year']."_".'city_gallery'). ' AS g ON g.ad_id = a.ad_id '.
-			" WHERE a.city_id = $city_id GROUP BY c.record_id ORDER BY a.ad_id ASC ";
+			" WHERE a.city_id = $city_id AND a.is_delete = 0 GROUP BY c.record_id ORDER BY a.ad_id ASC ";
 		// echo $sql."<br>";	
 	
 	$res = $GLOBALS['db']->getAll($sql);
@@ -351,8 +445,14 @@ function get_ad_info($ad_id = 0)
 }
 
 
-
-
+function get_delete_ad_info($ad_id = 0)
+{
+	
+	if($ad_id){
+		$ad_info = $GLOBALS['db']->getRow("SELECT * FROM " . $GLOBALS['ecs']->table($GLOBALS['year']."_".'city_delete') . " WHERE ad_id = $ad_id");
+		return $ad_info;
+	}
+}
 
 
 function get_ad_photo_info($ad_id = 0,$project = 0 ){
@@ -838,7 +938,7 @@ function get_project_info($project_id){
 }
 
 /**/
-function get_project_city($children,$limit = 0){
+function get_project_city($children,$_year = DEFAULT_YEAR,$limit = 0){
 
     $filter['county_name'] = empty($_REQUEST['county_name']) ? '' : trim($_REQUEST['county_name']);
     $filter['city_name'] = empty($_REQUEST['city_name']) ? '' : trim($_REQUEST['city_name']);
@@ -848,7 +948,7 @@ function get_project_city($children,$limit = 0){
     $filter['market_level'] = empty($_REQUEST['market_level']) ? '' : trim($_REQUEST['market_level']);
     $filter['audit_status'] = empty($_REQUEST['audit_status']) ? '' : trim($_REQUEST['audit_status']);
     $filter['has_new'] = empty($_REQUEST['has_new']) ? '' : trim($_REQUEST['has_new']);
-    $filter['year'] = empty($_REQUEST['year']) ? DEFAULT_YEAR : $_REQUEST['year'];
+    $filter['year'] = empty($_REQUEST['year']) ? $_year : $_REQUEST['year'];
 
 	$filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'inv_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
@@ -1233,7 +1333,7 @@ function pic_download($attachment) {
 }
 /* for base info*/
 /**/
-function get_base_info_list($children,$limit = 0){
+function get_base_info_list($children,$_year = DEFAULT_YEAR,$limit = 0){
 
     $filter['county_name'] = empty($_REQUEST['county_name']) ? '' : trim($_REQUEST['county_name']);
     $filter['city_name'] = empty($_REQUEST['city_name']) ? '' : trim($_REQUEST['city_name']);
@@ -1243,7 +1343,7 @@ function get_base_info_list($children,$limit = 0){
     $filter['project_id'] = empty($_REQUEST['project_id']) ? 0 : $_REQUEST['project_id'];
     $filter['audit_status'] = empty($_REQUEST['audit_status']) ? '' : trim($_REQUEST['audit_status']);
     $filter['has_new'] = empty($_REQUEST['has_new']) ? '' : intval($_REQUEST['has_new']);
-    $filter['year'] = empty($_REQUEST['year']) ? DEFAULT_YEAR : $_REQUEST['year'];
+    $filter['year'] = empty($_REQUEST['year']) ? $_year : $_REQUEST['year'];
 
 	$filter['sort_by'] = empty($_REQUEST['sort_by']) ? 'inv_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);

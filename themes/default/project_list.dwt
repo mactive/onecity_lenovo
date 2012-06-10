@@ -119,11 +119,11 @@
 					  	<th>{$lang.resource_title}<br>点击查看</th>
 					  	<th>{$lang.region}</th>
 				      	<th width="50">{$lang.province}</th>
-				      	<th>{$lang.county}</th>
+				      	<th width="100">{$lang.county}</th>
 				      	<th>{$lang.market_level}</th>
 					  	<th>上报费用</th>
 					  	<th>填写</th>
-					  	<th>上传效果</th>
+					  	<th width="60">上传效果</th>
 					  	<th>{$lang.audit_2}审核</th>
 						<th>操作</th>
 						<!--{if $sm_session.user_rank >= 2}-->
@@ -218,6 +218,7 @@
 										<a href="city_project.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}">查看并填写<br>报销审核</a>
 										<!--{else}-->
 										<a href="city_project.php?act=update_ad_info&project_id={$project_id}&ad_id={$city.ad_id}">查看基础信息</a>
+										<br><a href="city_project.php?act=reupload&project_id={$project_id}&ad_id={$city.ad_id}&url={$PHP_URL}" class="btn small">删画重传</a>
 										<!--{/if}-->					
 									<!--{/if}-->
 								<!--{/if}-->

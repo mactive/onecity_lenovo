@@ -1,11 +1,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<div class="f_left">
-		<a class="back_url" href="city_operate.php?region_name={$city_name}&has_new={$has_new}"></a>
+		<a class="back_url" href="city_operate.php?region_name={$city_name}"></a>
 	</div>
 	<div class="facebox f_left">
 		<table width="100%" class="table_border table_standard" border="1">
 		    <tr>
-		      	<th width="35">{$lang.is_xz}</th>
+		      	<th width="35">{$lang.curr_stauts}</th>
 		      	<th>{$lang.county}</th>
 		      	<th width="200">具体位置描述</th>
 			  	<th>上传时间</th>
@@ -28,7 +28,17 @@
 						class="city_upload"
 					{/if}
 				{/if}>
-				<td>{if $item.is_new}<span class="red-block">新增</span>{else}<span class="grey999">已有</span>{/if}</td>
+				<td>
+					{if $item.is_change}
+						<span class="red-block">修改</span>
+					{else}
+						{if $item.is_renew}
+						<span class="red-block">续签</span>
+						{else}
+						<span class="grey999">已有</span>
+						{/if}
+					{/if}
+				</td>
 				<td>{$item.city_name}</td>
 				<td>{$item.col_7}</td>
 				<td>{if $item.is_upload}{$item.user_time}{else}{$lang.upload_pending}{/if}</td>
